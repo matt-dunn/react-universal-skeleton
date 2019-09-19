@@ -1,0 +1,22 @@
+{
+  "name": "parcel",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "react": ">=15",
+    "react-dom": "^16.9.0",
+    "react-helmet-async": "^1.0.3",
+    "react-imported-component": "^6.1.0",
+    "react-router": "^5.0.1",
+    "react-router-dom": "^5.0.1",
+    "styled-components": "^4.3.2"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.3",
+    "react-hot-loader": "^4.12.13"
+  },
+  "scripts": {
+    "dev": "parcel app/index.html"
+  }
+}
