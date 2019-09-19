@@ -13,10 +13,30 @@
     "styled-components": "^4.3.2"
   },
   "devDependencies": {
+    "@babel/polyfill": "^7.6.0",
+    "babel-plugin-macros": "^2.6.1",
+    "cheerio": "^1.0.0-rc.3",
+    "concurrently": "^4.1.2",
+    "cross-env": "^6.0.0",
+    "express": "^4.17.1",
+    "llog": "^0.2.0",
+    "nodemon": "^1.19.2",
     "parcel-bundler": "^1.12.3",
-    "react-hot-loader": "^4.12.13"
+    "pino": "^5.13.3",
+    "react-hot-loader": "^4.12.13",
+    "rimraf": "^3.0.0",
+    "through": "^2.3.8"
   },
   "scripts": {
-    "dev": "parcel app/index.html"
+    "dev": "npm run generate-imported-components && parcel app/index.html",
+    "dev:server": "nodemon -e js,jsx,html --ignore dist --ignore app/imported.js --exec 'npm run build && npm run start'",
+
+    "build": "rimraf dist && npm run generate-imported-components && npm run create-bundles",
+    "start": "node dist/server",
+
+    "create-bundles": "concurrently \"npm run create-bundle:client\" \"npm run create-bundle:server\"",
+    "create-bundle:client": "cross-env BABEL_ENV=client parcel build app/index.html -d dist/client --public-url /dist/client",
+    "create-bundle:server": "cross-env BABEL_ENV=server parcel build server/index.js -d dist/server --public-url /dist --target=node",
+    "generate-imported-components": "imported-components app app/imported.js"
   }
 }
