@@ -6,14 +6,11 @@ import { BrowserRouter } from 'react-router-dom'
 import { rehydrateMarks } from 'react-imported-component';
 import importedComponents from './imported'; // eslint-disable-line
 
-import { GlobalStyles } from './styles'
-
 const element = document.getElementById('app')
 
 const app = (
     <HelmetProvider>
         <BrowserRouter>
-            <GlobalStyles/>
             <App />
         </BrowserRouter>
     </HelmetProvider>
