@@ -1,4 +1,5 @@
 {
+  "plugins": ["react-imported-component/babel", "babel-plugin-dynamic-import-node"],
   "env": {
     "server": {
       "plugins": ["react-imported-component/babel", "babel-plugin-dynamic-import-node"]
