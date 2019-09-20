@@ -6,13 +6,21 @@ import { BrowserRouter } from 'react-router-dom'
 import { rehydrateMarks } from 'react-imported-component';
 import importedComponents from './imported'; // eslint-disable-line
 
+import { Provider } from 'react-redux';
+
+import store from "./store";
+
+console.error(store.getState())
+
 const element = document.getElementById('app')
 
 const app = (
     <HelmetProvider>
-        <BrowserRouter>
-            <App />
-        </BrowserRouter>
+        <Provider store={store}>
+            <BrowserRouter>
+                <App />
+            </BrowserRouter>
+        </Provider>
     </HelmetProvider>
 );
 

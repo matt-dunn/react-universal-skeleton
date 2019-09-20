@@ -6,16 +6,17 @@ export const htmlPath = path.join(process.cwd(), 'dist', 'client', 'index.html')
 
 export const rawHTML = fs.readFileSync(htmlPath).toString();
 
-export const parseRawHTMLForData = (template, selector = "#js-entrypoint") => {
-    const $template = cheerio.load(template);
-    let src = $template(selector).attr('src')
+// export const parseRawHTMLForData = (template, selector = "#js-entrypoint") => {
+//     const $template = cheerio.load(template);
+//     let src = $template(selector).attr('src')
+//
+//     return {
+//         src
+//     }
+// }
 
-    return {
-        src
-    }
-}
+// const clientData = parseRawHTMLForData(rawHTML)
 
-const clientData = parseRawHTMLForData(rawHTML)
 const appString = '<div id="app"\>'
 const splitter = '###SPLIT###'
 const [
@@ -24,6 +25,11 @@ const [
 ] = rawHTML
     .replace(appString, `${appString}${splitter}`)
     .split(splitter)
+
+console.error(">>>>>",rawHTML)
+console.error(">>>>>",startingRawHTMLFragment)
+console.error(">>>>>",endingRawHTMLFragment)
+
 
 export const getHTMLFragments = ({ drainHydrateMarks }) => {
     const startingHTMLFragment = `${startingRawHTMLFragment}${drainHydrateMarks}`

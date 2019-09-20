@@ -10,18 +10,24 @@ import App from '../../app/App'
 import { getHTMLFragments } from './client'
 // import { getDataFromTree } from 'react-apollo';
 
+import { Provider } from 'react-redux';
+
+import store from "../../app/store";
+
 export default (req, res) => {
     const context = {};
     const helmetContext = {};
 
     const app = (
         <HelmetProvider context={helmetContext}>
-            <StaticRouter
-                location={req.originalUrl}
-                context={context}
-            >
-                <App/>
-            </StaticRouter>
+            <Provider store={store}>
+                <StaticRouter
+                    location={req.originalUrl}
+                    context={context}
+                >
+                    <App/>
+                </StaticRouter>
+            </Provider>
         </HelmetProvider>
     );
 

@@ -4,17 +4,37 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "app": "^0.1.0",
+    "components": "^0.1.0",
+    "flux-standard-action": "^2.1.1",
+    "immutable": "^4.0.0-rc.12",
+    "is-promise": "^2.1.0",
+    "lodash": "^4.17.15",
+    "object-path-immutable": "^4.0.0",
     "react": ">=15",
     "react-dom": "^16.9.0",
     "react-helmet-async": "^1.0.3",
     "react-imported-component": "^6.1.0",
+    "react-redux": "^7.1.1",
     "react-router": "^5.0.1",
     "react-router-dom": "^5.0.1",
-    "styled-components": "^4.3.2"
+    "redux": "^4.0.4",
+    "styled-components": "^4.3.2",
+    "typesafe-actions": "^4.4.2",
+    "typescript": "^3.6.3",
+    "uuid": "^3.3.3",
+    "web": "^0.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.6.0",
     "@babel/polyfill": "^7.6.0",
+    "@types/is-promise": "^2.1.0",
+    "@types/lodash": "^4.14.138",
+    "@types/react": "^16.9.2",
+    "@types/react-dom": "^16.9.0",
+    "@types/react-redux": "^7.1.2",
+    "@types/styled-components": "^4.1.19",
+    "@types/uuid": "^3.4.5",
     "babel-plugin-macros": "^2.6.1",
     "cheerio": "^1.0.0-rc.3",
     "concurrently": "^4.1.2",
@@ -37,5 +57,9 @@
     "create-bundle:client": "cross-env BABEL_ENV=client parcel build app/index.html -d dist/client --public-url /dist/client",
     "create-bundle:server": "cross-env BABEL_ENV=server parcel build server/index.js -d dist/server --public-url /dist --target=node",
     "generate-imported-components": "imported-components app app/imported.js"
+  },
+  "alias": {
+    "app": "./app",
+    "components": "./app/components"
   }
 }

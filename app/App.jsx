@@ -16,22 +16,25 @@ const About = importComponent(() => import("./pages/About"), {
     ErrorComponent
 });
 
-const App = () => (
-    <React.Fragment>
-        <GlobalStyles/>
+const App = (props) => {
+    console.error(props)
+    return (
+        <React.Fragment>
+            <GlobalStyles/>
 
-        <Helmet>
-            <title>Home Page</title>
-        </Helmet>
+            <Helmet>
+                <title>Home Page</title>
+            </Helmet>
 
-        <Header/>
+            <Header/>
 
-        <Switch>
-            <Route exact path="/" component={Home} />
-            <Route exact path="/about" render={() => <About />} />
-            {/*<Redirect to="/" />*/}
-        </Switch>
-    </React.Fragment>
-);
+            <Switch>
+                <Route exact path="/" component={Home} />
+                <Route exact path="/about" render={() => <About />} />
+                {/*<Redirect to="/" />*/}
+            </Switch>
+        </React.Fragment>
+    );
+}
 
 export default App;
