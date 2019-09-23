@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState, useRef} from 'react'
 import {Helmet} from 'react-helmet-async'
 
 import { connect } from 'react-redux';
@@ -16,6 +16,53 @@ import {IExampleItemState, IExampleListState} from '../reducers/__dummy__/exampl
 // import {IExampleAction} from '../container';
 import Status, { IStatus } from '../components/state-mutate-with-status/status';
 import {IExampleGetList} from "../components/api/__dummy__/example";
+import {Simulate} from "react-dom/test-utils";
+import load = Simulate.load;
+import {number} from "prop-types";
+
+const Container = styled.div`
+    position: relative;
+`
+
+const Message = styled.div`
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    padding: 3px 10px;
+    border-radius: 50px;
+    background-color: #999;
+    color: #fff;
+    transform: translate(-50%, -50%);
+`
+
+export type ILoadingProps = { children: any, Loader?: any, loading: boolean; };
+
+const Loading = ({children, loading, Loader = <Message>Loading...</Message>}: ILoadingProps) => {
+    const [show, setShow] = useState(false);
+    const t = useRef<number>();
+
+    useEffect(() => {
+        if (loading) {
+            t.current = setTimeout(() => {
+                setShow(true)
+            }, 500)
+        } else {
+            setShow(false)
+            clearTimeout(t.current)
+        }
+
+        return () => clearTimeout(t.current)
+    }, [loading])
+
+    console.log("??????????", show, loading)
+
+    return (
+        <Container>
+            {show && loading && Loader}
+            {children}
+        </Container>
+    );
+}
 
 const Title = styled.div`
     color: blue;
@@ -35,11 +82,14 @@ const About = ({items, item, onExampleGetList, $status, ...props}: IAboutProps) 
     // console.error("ABOUT", items.toJS(), item.toJS())
     console.log("PROPS", items, props)
     console.log("STATUS", Status($status))
-    const status = Status($status);
+    const {complete, isActive, processing} = Status($status);
 
     useEffect(() => {
         onExampleGetList()
     }, []);
+
+    console.log("??????????ABOUT", processing)
+
 
     return (
         <Page>
@@ -49,20 +99,21 @@ const About = ({items, item, onExampleGetList, $status, ...props}: IAboutProps) 
             <Title>
                 This is the about page
             </Title>
-            [{status.processing ? "Processing" : "Done"}]
 
-            {(!status.complete && items.length === 0 && (!status.isActive || status.processing)) &&
+            <Loading loading={processing}>
+                {(!complete && items.length === 0 && (!isActive || processing)) &&
                 <div>
-                    LIST PLACEHOLDER...
+                    LIST PLACEHOLDER
                 </div>
-            }
-            <ul>
-                {items.map(item => (
-                    <li key={item.id}>
-                        {item.name}
-                    </li>
-                ))}
-            </ul>
+                }
+                <ul>
+                    {items.map(item => (
+                        <li key={item.id}>
+                            {item.name}
+                        </li>
+                    ))}
+                </ul>
+            </Loading>
         </Page>
     )
 }

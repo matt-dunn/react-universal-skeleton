@@ -1,18 +1,25 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {Helmet} from 'react-helmet-async'
 
 import Page from '../components/Page.jsx'
 
-const Home = () => (
-    <Page>
-        <Helmet>
-            <title>Home Page</title>
-        </Helmet>
+const Home = () => {
+    console.log("******HOME RENDER")
+    useEffect(() => {
+        console.log("******HOME HOOK")
+    }, []);
 
-        <div>
-            HOME PAGE
-        </div>
-    </Page>
-)
+    return (
+        <Page>
+            <Helmet>
+                <title>Home Page</title>
+            </Helmet>
+
+            <div>
+                HOME PAGE
+            </div>
+        </Page>
+    )
+}
 
 export default Home
