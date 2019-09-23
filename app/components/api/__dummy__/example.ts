@@ -37,7 +37,7 @@ const exampleApi: IExampleApi = {
             id: '3',
             name: 'Item 3',
         },
-    ]), 4000))
+    ]), 2000))
     // example: (id, name) => new Promise<IExampleResponse>(resolve => setTimeout(() => resolve({id, name}), 6000)),
     // example: () => new Promise<any>((resolve, reject) => setTimeout(() => reject(new Error('Example API error')), 2000)),
     // exampleList: (id, name) => new Promise<IExampleResponse>(resolve => setTimeout(() => resolve({id, name}), 6000))

@@ -7,13 +7,7 @@ import { IPayload } from '../../components/redux/middleware/stateDecorator';
 
 const exampleGetList = createStandardAction('@__dummy__/EXAMPLE_GET_LIST')
     .map(() => ({
-        payload: ({ inject }: IPayload) => {
-            console.log("***********ACTION:EXAMPLE_GET_LIST")
-            const x = inject.services.exampleGetList()
-            // console.error(x)
-            // x.then(z => console.error("&&&&", z))
-            return x;
-        }
+        payload: ({ inject }: IPayload) => inject.services.exampleGetList()
     }));
 
 // const example = createStandardAction('@__dummy__/EXAMPLE')
