@@ -69,6 +69,10 @@ const Title = styled.div`
     font-size: 50px;
 `
 
+const Placeholder = styled.ul`
+    color: #ccc;
+`
+
 export type IInjectedAboutProps = {
     items: IExampleListState;
     item?: IExampleItemState;
@@ -101,18 +105,21 @@ const About = ({items, item, onExampleGetList, $status, ...props}: IAboutProps) 
             </Title>
 
             <Loading loading={processing}>
-                {(!complete && items.length === 0 && (!isActive || processing)) &&
-                <div>
-                    LIST PLACEHOLDER
-                </div>
+                {(!complete && items.length === 0 && (!isActive || processing)) ?
+                    <Placeholder>
+                        <li>xxxxxx</li>
+                        <li>xxxxxx</li>
+                        <li>xxxxxx</li>
+                    </Placeholder>
+                    :
+                    <ul>
+                        {items.map(item => (
+                            <li key={item.id}>
+                                {item.name}
+                            </li>
+                        ))}
+                    </ul>
                 }
-                <ul>
-                    {items.map(item => (
-                        <li key={item.id}>
-                            {item.name}
-                        </li>
-                    ))}
-                </ul>
             </Loading>
         </Page>
     )
