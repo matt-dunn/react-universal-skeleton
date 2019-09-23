@@ -27,8 +27,11 @@
   },
   "devDependencies": {
     "@babel/core": "^7.6.0",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/plugin-proposal-decorators": "^7.6.0",
     "@babel/polyfill": "^7.6.0",
     "@types/is-promise": "^2.1.0",
+    "@types/jest": "^24.0.18",
     "@types/lodash": "^4.14.138",
     "@types/react": "^16.9.2",
     "@types/react-dom": "^16.9.0",
@@ -39,14 +42,19 @@
     "cheerio": "^1.0.0-rc.3",
     "concurrently": "^4.1.2",
     "cross-env": "^6.0.0",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.14.0",
+    "enzyme-to-json": "^3.4.0",
     "express": "^4.17.1",
+    "jest": "^24.9.0",
     "llog": "^0.2.0",
     "nodemon": "^1.19.2",
     "parcel-bundler": "^1.12.3",
     "pino": "^5.13.3",
     "react-hot-loader": "^4.12.13",
     "rimraf": "^3.0.0",
-    "through": "^2.3.8"
+    "through": "^2.3.8",
+    "ts-jest": "^24.1.0"
   },
   "scripts": {
     "dev": "yarn generate-imported-components && parcel app/index.html",
