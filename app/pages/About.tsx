@@ -50,6 +50,12 @@ const About = ({items, item, onExampleGetList, $status, ...props}: IAboutProps) 
                 This is the about page
             </Title>
             [{status.processing ? "Processing" : "Done"}]
+
+            {(!status.complete && items.length === 0 && (!status.isActive || status.processing)) &&
+                <div>
+                    LIST PLACEHOLDER...
+                </div>
+            }
             <ul>
                 {items.map(item => (
                     <li key={item.id}>
