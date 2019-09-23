@@ -7,17 +7,11 @@ import { Dispatch } from "redux";
 
 import exec from './exec';
 
-export type IOptionsLoadingState = {
-  include: boolean;
-  timeout: number;
-}
-
 export type IDependencies = {
   [id: string]: any;
 }
 
 export type IOptions = {
-  loadingState?: IOptionsLoadingState;
   dependencies?: IDependencies
 }
 
@@ -27,10 +21,6 @@ export type IPayload = {
 
 const stateDecorator = (options: IOptions) => () => {
   const dispatchOptions = defaultsDeep({}, options, {
-    loadingState: {
-      include: true,
-      timeout: 500,
-    } as IOptionsLoadingState,
   }) as IOptions;
 
   return (next: Dispatch<FluxStandardAction<string, any, any>>) => (action: FluxStandardAction<string, any, any>) => {
@@ -57,7 +47,6 @@ const stateDecorator = (options: IOptions) => () => {
                   hasError: true,
                   complete: false,
                   processing: false,
-                  loading: false,
                   error: reason,
                 },
               },

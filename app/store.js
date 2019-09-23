@@ -35,7 +35,7 @@ const store = createStore(
     window.__INITIAL_STATE__,
     applyMiddleware(
         // promiseMiddleware,
-        stateDecorator({ loadingState: { include: true, timeout: 500 }, dependencies: { inject: {services } } }),
+        stateDecorator({ dependencies: { inject: {services } } }),
         notification({
             notify: ({
                          error: { message, code }, type, cancel, retry,

@@ -35,9 +35,9 @@ const decorateStatus = (status: IStatusTransaction, $status: IStatus = {} as ISt
 
     const updatedStatus = Status({
         ...status,
+        isActive,
         complete: isActive ? false : status.complete,
         processing: isActive ? ($status && $status.processing) || status.processing : status.processing,
-        loading: isActive ? ($status && $status.loading) || status.loading : status.loading,
         [symbolActiveTransactions]: activeTransactions,
     });
 

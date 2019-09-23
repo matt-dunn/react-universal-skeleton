@@ -14,8 +14,7 @@ describe('Next state', () => {
             meta: {
                 $status: {
                     complete: false,
-                    processing: true,
-                    loading: false
+                    processing: true
                 }
             }
         }
@@ -27,8 +26,7 @@ describe('Next state', () => {
                 text: 'item 1',
                 $status: {
                     complete: false,
-                    processing: true,
-                    loading: false
+                    processing: true
                 }
             }
         })
@@ -38,8 +36,7 @@ describe('Next state', () => {
             meta: {
                 $status: {
                     complete: true,
-                    processing: false,
-                    loading: false
+                    processing: false
                 }
             }
         }
@@ -51,8 +48,7 @@ describe('Next state', () => {
                 text: 'item 1 updated',
                 $status: {
                     complete: true,
-                    processing: false,
-                    loading: false
+                    processing: false
                 }
             }
         })
@@ -69,8 +65,7 @@ describe('Next state', () => {
                 text: 'item 1 updated',
                 $status: {
                     complete: true,
-                    processing: false,
-                    loading: false
+                    processing: false
                 }
             }
         })
@@ -80,8 +75,7 @@ describe('Next state', () => {
             meta: {
                 $status: {
                     complete: false,
-                    processing: true,
-                    loading: false
+                    processing: true
                 }
             }
         }
@@ -95,7 +89,6 @@ describe('Next state', () => {
                         $status: {
                             complete: false,
                             processing: true,
-                            loading: false
                         }
                     }
                 }
@@ -107,8 +100,7 @@ describe('Next state', () => {
             meta: {
                 $status: {
                     complete: true,
-                    processing: false,
-                    loading: false
+                    processing: false
                 }
             }
         }
@@ -122,8 +114,7 @@ describe('Next state', () => {
                         text: 'item 1 updated',
                         $status: {
                             complete: true,
-                            processing: false,
-                            loading: false
+                            processing: false
                         }
                     }
                 }
@@ -147,8 +138,7 @@ describe('Next state', () => {
                 id: 1,
                 $status: {
                     complete: false,
-                    processing: true,
-                    loading: false
+                    processing: true
                 }
             }
         }
@@ -158,8 +148,7 @@ describe('Next state', () => {
         })).toMatchObject({
             $status: {
                 complete: false,
-                processing: true,
-                loading: false
+                processing: true
             },
             items: [
                 {
@@ -174,8 +163,7 @@ describe('Next state', () => {
                 id: 1,
                 $status: {
                     complete: true,
-                    processing: false,
-                    loading: false
+                    processing: false
                 }
             }
         }
@@ -185,16 +173,14 @@ describe('Next state', () => {
         })).toMatchObject({
             $status: {
                 complete: true,
-                processing: false,
-                loading: false
+                processing: false
             },
             items: [
                 {
                     text: 'item 1 updated',
                     $status: {
                         complete: true,
-                        processing: false,
-                        loading: false
+                        processing: false
                     }
                 }
             ]
@@ -206,8 +192,7 @@ describe('Next state', () => {
                 id: 2,
                 $status: {
                     complete: true,
-                    processing: false,
-                    loading: false
+                    processing: false
                 }
             }
         }
@@ -217,8 +202,7 @@ describe('Next state', () => {
         })).toMatchObject({
             $status: {
                 complete: true,
-                processing: false,
-                loading: false
+                processing: false
             },
             items: [
                 {
@@ -236,8 +220,7 @@ describe('Next state', () => {
                 id: 2,
                 $status: {
                     complete: true,
-                    processing: false,
-                    loading: false
+                    processing: false
                 }
             }
         }
@@ -248,8 +231,7 @@ describe('Next state', () => {
         })).toMatchObject({
             $status: {
                 complete: true,
-                processing: false,
-                loading: false
+                processing: false
             },
             items: [
                 {
@@ -279,8 +261,7 @@ describe('Next state', () => {
                 $status: {
                     transactionId: '1',
                     complete: false,
-                    processing: true,
-                    loading: false
+                    processing: true
                 }
             }
         }
@@ -293,7 +274,6 @@ describe('Next state', () => {
             $status: {
                 complete: false,
                 processing: true,
-                loading: false,
                 outstandingTransactionCount: 1
             },
             items: [
@@ -310,8 +290,7 @@ describe('Next state', () => {
                 $status: {
                     transactionId: '2',
                     complete: false,
-                    processing: true,
-                    loading: false
+                    processing: true
                 }
             }
         }
@@ -322,7 +301,6 @@ describe('Next state', () => {
             $status: {
                 complete: false,
                 processing: true,
-                loading: false,
                 outstandingTransactionCount: 2
             },
             items: [

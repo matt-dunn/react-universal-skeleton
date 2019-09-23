@@ -140,7 +140,6 @@ describe('decorateStatus', () => {
             "error": undefined,
             "hasError": false,
             "isActive": false,
-            "loading": false,
             "outstandingTransactionCount": 0,
             "processing": false,
             [symbolActiveTransactions]: {}
@@ -155,7 +154,6 @@ describe('decorateStatus', () => {
             "error": undefined,
             "hasError": false,
             "isActive": false,
-            "loading": false,
             "outstandingTransactionCount": 0,
             "processing": false,
             [symbolActiveTransactions]: {}
@@ -211,7 +209,6 @@ describe('decorateStatus', () => {
             "error": undefined,
             "hasError": false,
             "isActive": false,
-            "loading": false,
             "outstandingTransactionCount": 1,
             "processing": true,
             [symbolActiveTransactions]: {
@@ -238,7 +235,6 @@ describe('decorateStatus', () => {
             "error": undefined,
             "hasError": false,
             "isActive": false,
-            "loading": false,
             "outstandingTransactionCount": 4,
             "processing": true,
             [symbolActiveTransactions]: {

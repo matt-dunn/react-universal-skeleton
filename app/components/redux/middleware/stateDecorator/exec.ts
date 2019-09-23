@@ -24,30 +24,10 @@ const exec = (
         isActive,
         hasError: false,
         complete: false,
-        processing: true,
-        loading: false,
+        processing: true
       },
     },
   });
-
-  if (dispatchOptions && dispatchOptions.loadingState && dispatchOptions.loadingState.include) {
-    timeout = <any>setTimeout(() => {
-      next({
-        type: action.type,
-        meta: {
-          ...action.meta,
-          $status: {
-            transactionId,
-            isActive,
-            hasError: false,
-            complete: false,
-            processing: true,
-            loading: true,
-          },
-        },
-      });
-    }, dispatchOptions.loadingState.timeout);
-  }
 
   return action.payload
     .then((payload: any) => {
@@ -61,8 +41,7 @@ const exec = (
             isActive: false,
             hasError: false,
             complete: true,
-            processing: false,
-            loading: false,
+            processing: false
           },
         },
       });
@@ -114,7 +93,6 @@ const exec = (
             hasError: true,
             complete: false,
             processing: false,
-            loading: false,
             error: reason,
           },
         },

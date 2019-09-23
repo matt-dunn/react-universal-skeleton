@@ -76,8 +76,7 @@ const updateState = ({
       hasError: error || false,
       error: error && payload,
       complete: true,
-      processing: false,
-      loading: false,
+      processing: false
     } as IStatusTransaction,
   } = meta || {} as IActionMeta;
 
