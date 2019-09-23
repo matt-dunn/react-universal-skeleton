@@ -8,7 +8,9 @@ import importedComponents from './imported'; // eslint-disable-line
 
 import { Provider } from 'react-redux';
 
-import store from "./store";
+import getStore from "./store";
+
+const store = getStore(window.__PRELOADED_STATE__);
 
 console.error(store.getState())
 

@@ -30,9 +30,9 @@ import rootReducer from './reducers';
 
 import services from "./components/api/__dummy__/example";
 
-const store = createStore(
+const getStore = (preloadedState = {}) => createStore(
     rootReducer,
-    {},
+    preloadedState,
     applyMiddleware(
         // promiseMiddleware,
         stateDecorator({ dependencies: { inject: {services } } }),
@@ -105,4 +105,4 @@ const store = createStore(
     ),
 );
 
-export default store;
+export default getStore;

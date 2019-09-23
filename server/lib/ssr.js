@@ -12,7 +12,9 @@ import { getHTMLFragments } from './client'
 
 import { Provider } from 'react-redux';
 
-import store from "../../app/store";
+import getStore from "../../app/store";
+
+const store = getStore();
 
 export default (req, res) => {
     const context = {};
