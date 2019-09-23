@@ -23,7 +23,7 @@ const App = (props) => {
             <GlobalStyles/>
 
             <Helmet>
-                <title>Home Page</title>
+                <title>My App</title>
             </Helmet>
 
             <Header/>
