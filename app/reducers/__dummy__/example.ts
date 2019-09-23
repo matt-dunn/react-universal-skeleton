@@ -4,7 +4,8 @@ import { Reducer } from "redux";
 import { ActionType, getType } from 'typesafe-actions';
 
 import { IActionMeta } from '../../components/state-mutate-with-status/state';
-import nextState from '../../components/state-mutate-with-status/immutable';
+// import nextState from '../../components/state-mutate-with-status/immutable';
+import nextState from '../../components/state-mutate-with-status';
 import { IStatus } from '../../components/state-mutate-with-status/status';
 
 interface IReducer<T> {
@@ -29,19 +30,23 @@ const combineReducers = <T>(initialState: T, ...reducers: IReducers<T>[]): Reduc
 
 import * as actions from '../../actions';
 
-export interface IExampleItemState extends Record<{
+// export interface IExampleItemState extends Record<{
+export interface IExampleItemState {
     id: string;
     name: string;
     $status: IStatus;
-}>{}
+}
 
-export interface IExampleListState extends List<IExampleItemState>{}
+// export interface IExampleListState extends List<IExampleItemState>{}
 
-export interface IExampleState extends Record<{
+export interface IExampleListState extends Array<IExampleItemState>{}
+
+// export interface IExampleState extends Record<{
+export interface IExampleState {
     items: IExampleListState;
-    item: IExampleItemState;
-    $status: IStatus;
-}>{}
+    item?: IExampleItemState;
+    $status?: IStatus;
+}
 
 const example = (state: IExampleState, action: FluxStandardAction<string, any, IActionMeta>): IExampleState => nextState(state, action, {
     path: 'item'
@@ -52,26 +57,10 @@ const exampleList = (state: IExampleState, action: FluxStandardAction<string, an
     addItem: (items: IExampleListState, item: IExampleItemState) => items.splice(0, 0, item),
 });
 
-const initialState = Immutable.fromJS({
-    item: {
-        id: '0',
-        name: 'Item 0',
-    },
-    items: [
-        {
-            id: '1',
-            name: 'Item 1',
-        },
-        {
-            id: '2',
-            name: 'Item 2',
-        },
-        {
-            id: '3',
-            name: 'Item 3',
-        },
-    ],
-}) as IExampleState;
+const initialState = {
+    item: undefined,
+    items: [] as Array<IExampleItemState>,
+} as IExampleState;
 
 const exampleActions = {
     [getType(actions.exampleActions.example)]: example,

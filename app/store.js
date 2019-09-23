@@ -5,8 +5,32 @@ import notification from './components/redux/middleware/notification';
 
 import rootReducer from './reducers';
 
+window.__INITIAL_STATE__ = {
+    example: {
+        item: {
+            id: '0',
+            name: 'Item 0',
+        },
+        items: [
+            {
+                id: '1',
+                name: 'Item 1',
+            },
+            {
+                id: '2',
+                name: 'Item 2',
+            },
+            {
+                id: '3',
+                name: 'Item 3',
+            },
+        ],
+    }
+};
+
 const store = createStore(
     rootReducer,
+    window.__INITIAL_STATE__,
     applyMiddleware(
         // promiseMiddleware,
         stateDecorator({ loadingState: { include: true, timeout: 500 }, dependencies: {  } }),

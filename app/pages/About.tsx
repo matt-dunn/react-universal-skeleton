@@ -23,10 +23,10 @@ const Title = styled.div`
 
 export type IInjectedAboutProps = {
     items: IExampleListState;
-    item: IExampleItemState;
+    item?: IExampleItemState;
     onExampleAction: IExampleAction;
     onExampleListAction: IExampleAction;
-    $status: IStatus;
+    $status?: IStatus;
 };
 
 export type IAboutProps = { testString: string; testNumber: number; } & IInjectedAboutProps;
@@ -43,8 +43,8 @@ const About = ({items, item}: IAboutProps) => {
             </Title>
             <ul>
                 {items.map(item => (
-                    <li key={item.get("id")}>
-                        {item.get("name")}
+                    <li key={item.id}>
+                        {item.name}
                     </li>
                 ))}
             </ul>
@@ -55,9 +55,9 @@ const About = ({items, item}: IAboutProps) => {
 export type IExampleAction = (id: string, name: string) => Promise<IExampleResponse>;
 
 const mapStateToProps = (state: IAppState) => {
-    const item = state.example.get('item');
-    const items = state.example.get('items');
-    const $status = state.example.get('$status');
+    const item = state.example.item;
+    const items = state.example.items;
+    const $status = state.example.$status;
     return { item, items, $status }
 };
 
