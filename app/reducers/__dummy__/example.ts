@@ -48,14 +48,18 @@ export interface IExampleState {
     $status?: IStatus;
 }
 
-const example = (state: IExampleState, action: FluxStandardAction<string, any, IActionMeta>): IExampleState => nextState(state, action, {
-    path: 'item'
+const exampleGetList = (state: IExampleState, action: FluxStandardAction<string, any, IActionMeta>): IExampleState => nextState(state, action, {
+    path: 'items',
 });
 
-const exampleList = (state: IExampleState, action: FluxStandardAction<string, any, IActionMeta>): IExampleState => nextState(state, action, {
-    path: 'items',
-    addItem: (items: IExampleListState, item: IExampleItemState) => items.splice(0, 0, item),
-});
+// const example = (state: IExampleState, action: FluxStandardAction<string, any, IActionMeta>): IExampleState => nextState(state, action, {
+//     path: 'item'
+// });
+//
+// const exampleList = (state: IExampleState, action: FluxStandardAction<string, any, IActionMeta>): IExampleState => nextState(state, action, {
+//     path: 'items',
+//     addItem: (items: IExampleListState, item: IExampleItemState) => items.splice(0, 0, item),
+// });
 
 const initialState = {
     item: undefined,
@@ -63,8 +67,9 @@ const initialState = {
 } as IExampleState;
 
 const exampleActions = {
-    [getType(actions.exampleActions.example)]: example,
-    [getType(actions.exampleActions.exampleList)]: exampleList,
+    [getType(actions.exampleActions.exampleGetList)]: exampleGetList,
+    // [getType(actions.exampleActions.example)]: example,
+    // [getType(actions.exampleActions.exampleList)]: exampleList,
 };
 
 export default combineReducers(initialState, exampleActions);

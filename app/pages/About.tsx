@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {Helmet} from 'react-helmet-async'
 
 import { connect } from 'react-redux';
@@ -8,13 +8,14 @@ import Page from '../components/Page.jsx'
 import styled from "styled-components";
 
 import {IAppState} from '../reducers';
-import { IExampleResponse } from '../components/api/__dummy__/example';
+// import {IExampleList, IExampleResponse} from '../components/api/__dummy__/example';
 
 import * as actions from '../actions';
 
 import {IExampleItemState, IExampleListState} from '../reducers/__dummy__/example';
 // import {IExampleAction} from '../container';
-import { IStatus } from '../components/state-mutate-with-status/status';
+import Status, { IStatus } from '../components/state-mutate-with-status/status';
+import {IExampleGetList} from "../components/api/__dummy__/example";
 
 const Title = styled.div`
     color: blue;
@@ -24,15 +25,22 @@ const Title = styled.div`
 export type IInjectedAboutProps = {
     items: IExampleListState;
     item?: IExampleItemState;
-    onExampleAction: IExampleAction;
-    onExampleListAction: IExampleAction;
+    onExampleGetList: IExampleGetList;
     $status?: IStatus;
 };
 
 export type IAboutProps = { testString: string; testNumber: number; } & IInjectedAboutProps;
 
-const About = ({items, item}: IAboutProps) => {
+const About = ({items, item, onExampleGetList, $status, ...props}: IAboutProps) => {
     // console.error("ABOUT", items.toJS(), item.toJS())
+    console.log("PROPS", items, props)
+    console.log("STATUS", Status($status))
+    const status = Status($status);
+
+    useEffect(() => {
+        onExampleGetList()
+    }, []);
+
     return (
         <Page>
             <Helmet>
@@ -41,6 +49,7 @@ const About = ({items, item}: IAboutProps) => {
             <Title>
                 This is the about page
             </Title>
+            [{status.processing ? "Processing" : "Done"}]
             <ul>
                 {items.map(item => (
                     <li key={item.id}>
@@ -52,7 +61,7 @@ const About = ({items, item}: IAboutProps) => {
     )
 }
 
-export type IExampleAction = (id: string, name: string) => Promise<IExampleResponse>;
+// export type IExampleAction = (id: string, name: string) => Promise<IExampleResponse>;
 
 const mapStateToProps = (state: IAppState) => {
     const item = state.example.item;
@@ -63,13 +72,10 @@ const mapStateToProps = (state: IAppState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch<actions.RootActions>) => {
 
-    const onExampleAction: IExampleAction = (id: string, name: string): any => dispatch(actions.exampleActions.example({ name, id }));
-
-    const onExampleListAction: IExampleAction = (id: string, name: string): any => dispatch(actions.exampleActions.exampleList({ name, id }, { username: 'test' }));
+    const onExampleGetList: IExampleGetList = (): any => dispatch(actions.exampleActions.exampleGetList());
 
     return {
-        onExampleAction,
-        onExampleListAction
+        onExampleGetList
     }
 };
 

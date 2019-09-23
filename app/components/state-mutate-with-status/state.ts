@@ -102,7 +102,7 @@ const updateState = ({
         return convertObject(nextPayload);
       }
 
-      if (isArray(update) && findIndex(update, actionId) === -1) {
+      if (actionId && isArray(update) && findIndex(update, actionId) === -1) {
         if (nextPayload) {
           return updateNewItem(state, path, updatePath, convertObject(nextPayload), $status, addItem);
         }
@@ -117,7 +117,7 @@ const updateState = ({
 
         return updateItem(
             (isArray(update) && updateItem(state, getUpdatePath(isArray, update, '', path), convertObject(nextPayload), $status)) || state,
-            updatePath,
+            (actionId && updatePath) || path,
             convertObject(nextPayload),
             $status
         );
