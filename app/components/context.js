@@ -4,7 +4,9 @@ let context = {};
 
 const useAction = (cb, id) => {
     if (process.browser) {
-        return useEffect(cb, []);
+        return useEffect(() => {
+            cb()
+        }, []);
     } else {
         if (!context[id]) {
             context[id] = cb
