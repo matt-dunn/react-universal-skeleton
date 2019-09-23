@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import Page from '../components/Page.jsx'
-import styled from "styled-components";
+import styled, {css} from "styled-components";
 
 import {IAppState} from '../reducers';
 // import {IExampleList, IExampleResponse} from '../components/api/__dummy__/example';
@@ -69,7 +69,35 @@ const Title = styled.div`
     font-size: 50px;
 `
 
-const Placeholder = styled.ul`
+const ListContainer = styled.div`
+    max-width: 400px;
+    border: 1px solid #ccc;
+    margin: 10px auto;
+`
+
+const list = css`
+    display: flex;
+    max-width: 400px;
+    min-height: 100px;
+`
+
+const List = styled.ol`
+    ${list}
+`
+
+const ListItem = styled.li`
+    padding: 10px;
+    width: 33%;
+    text-align: center;
+    border-right: 1px solid #eee;
+
+    &:last-child {
+        border-right: none;
+    }
+`
+
+const Placeholder = styled.ol`
+    ${list}
     color: #ccc;
 `
 
@@ -104,23 +132,25 @@ const About = ({items, item, onExampleGetList, $status, ...props}: IAboutProps) 
                 This is the about page
             </Title>
 
-            <Loading loading={processing}>
-                {(!complete && items.length === 0 && (!isActive || processing)) ?
-                    <Placeholder>
-                        <li>xxxxxx</li>
-                        <li>xxxxxx</li>
-                        <li>xxxxxx</li>
-                    </Placeholder>
-                    :
-                    <ul>
-                        {items.map(item => (
-                            <li key={item.id}>
-                                {item.name}
-                            </li>
-                        ))}
-                    </ul>
-                }
-            </Loading>
+            <ListContainer>
+                <Loading loading={processing}>
+                    {(!complete && items.length === 0 && (!isActive || processing)) ?
+                        <Placeholder>
+                            <ListItem>xxx</ListItem>
+                            <ListItem>xxx</ListItem>
+                            <ListItem>xxx</ListItem>
+                        </Placeholder>
+                        :
+                        <List>
+                            {items.map(item => (
+                                <ListItem key={item.id}>
+                                    {item.name}
+                                </ListItem>
+                            ))}
+                        </List>
+                    }
+                </Loading>
+            </ListContainer>
         </Page>
     )
 }
