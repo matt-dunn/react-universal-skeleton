@@ -115,7 +115,7 @@ const updateState = ({
         }
 
         return updateItem(
-            (isArray(update) && updateItem(state, getUpdatePath(isArray, update, '', path), convertObject(nextPayload), $status)) || state,
+            (isArray(update) && updateItem(state, getUpdatePath(isArray, update, '', path), convertObject(actionId ? nextPayload : undefined), $status)) || state,
             (actionId && updatePath) || path,
             convertObject(nextPayload),
             $status
@@ -145,7 +145,7 @@ const updateState = ({
 
     return updateItem(
         (isArray(update) && updateItem(state, getUpdatePath(isArray, update, '', path), useSeed && convertObject(seedPayload), $status)) || state,
-        updatePath,
+        (actionId && updatePath) || path,
         useSeed && convertObject(seedPayload),
         $status
     );
