@@ -21,7 +21,7 @@ export type IStatusTransaction = {
   readonly transactionId: string;
 } & IStatus
 
-const Status = (status: IStatus): IStatus => {
+const Status = (status: IStatus = {} as IStatus): IStatus => {
   const {
     complete = false, processing = false, loading = false, hasError = false, error, isActive = false,
   } = status;
