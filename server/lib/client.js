@@ -26,9 +26,9 @@ const [
     .replace(appString, `${appString}${splitter}`)
     .split(splitter)
 
-console.error(">>>>>",rawHTML)
-console.error(">>>>>",startingRawHTMLFragment)
-console.error(">>>>>",endingRawHTMLFragment)
+// console.error(">>>>>",rawHTML)
+// console.error(">>>>>",startingRawHTMLFragment)
+// console.error(">>>>>",endingRawHTMLFragment)
 
 
 export const getHTMLFragments = ({ drainHydrateMarks }) => {
