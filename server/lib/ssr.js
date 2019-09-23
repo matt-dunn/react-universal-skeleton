@@ -14,11 +14,11 @@ import { Provider } from 'react-redux';
 
 import getStore from "../../app/store";
 
-const store = getStore();
-
 import {getContext, endContext} from "../../app/components/context";
 
 export default (req, res) => {
+    const store = getStore();
+
     const context = {};
     const helmetContext = {};
 
