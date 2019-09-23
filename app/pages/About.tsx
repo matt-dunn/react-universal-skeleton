@@ -108,15 +108,18 @@ export type IInjectedAboutProps = {
 
 export type IAboutProps = { testString: string; testNumber: number; } & IInjectedAboutProps;
 
+import {useAction} from "../components/context";
+
 const About = ({items, item, onExampleGetList, $status, ...props}: IAboutProps) => {
     // console.error("ABOUT", items.toJS(), item.toJS())
     // console.log("PROPS", items, props)
     // console.log("STATUS", Status($status))
     const {complete, isActive, processing} = Status($status);
 
-    useEffect(() => {
-        onExampleGetList()
-    }, []);
+    // useEffect(() => {
+    //     onExampleGetList()
+    // }, []);
+    useAction(() => onExampleGetList(), "About");
 
     return (
         <Page>
