@@ -24,20 +24,23 @@ export interface IExampleApi {
 }
 
 const exampleApi: IExampleApi = {
-    exampleGetList:() => new Promise<IExampleListResponse>(resolve => setTimeout(() => resolve([
-        {
-            id: '1',
-            name: 'Item 1',
-        },
-        {
-            id: '2',
-            name: 'Item 2',
-        },
-        {
-            id: '3',
-            name: 'Item 3',
-        },
-    ]), 2000))
+    exampleGetList:() => new Promise<IExampleListResponse>(resolve => setTimeout(() => {
+        console.error("API CALLED!!!!")
+        resolve([
+            {
+                id: '1',
+                name: 'Item 1',
+            },
+            {
+                id: '2',
+                name: 'Item 2',
+            },
+            {
+                id: '3',
+                name: 'Item 3',
+            },
+        ])
+    }, 2000))
     // example: (id, name) => new Promise<IExampleResponse>(resolve => setTimeout(() => resolve({id, name}), 6000)),
     // example: () => new Promise<any>((resolve, reject) => setTimeout(() => reject(new Error('Example API error')), 2000)),
     // exampleList: (id, name) => new Promise<IExampleResponse>(resolve => setTimeout(() => resolve({id, name}), 6000))
