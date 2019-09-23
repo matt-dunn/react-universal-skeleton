@@ -54,8 +54,6 @@ const Loading = ({children, loading, Loader = <Message>Loading...</Message>}: IL
         return () => clearTimeout(t.current)
     }, [loading])
 
-    console.log("??????????", show, loading)
-
     return (
         <Container>
             {show && loading && Loader}
@@ -112,16 +110,13 @@ export type IAboutProps = { testString: string; testNumber: number; } & IInjecte
 
 const About = ({items, item, onExampleGetList, $status, ...props}: IAboutProps) => {
     // console.error("ABOUT", items.toJS(), item.toJS())
-    console.log("PROPS", items, props)
-    console.log("STATUS", Status($status))
+    // console.log("PROPS", items, props)
+    // console.log("STATUS", Status($status))
     const {complete, isActive, processing} = Status($status);
 
     useEffect(() => {
         onExampleGetList()
     }, []);
-
-    console.log("??????????ABOUT", processing)
-
 
     return (
         <Page>
