@@ -39,15 +39,16 @@ export default (req, res) => {
         </APIContextProvider>
     );
 
+    const sheet = new ServerStyleSheet()
+
     // Render here if service calls are required on server
-    renderToString(app)
+    renderToString(sheet.collectStyles(app))
 
     execAPIContext(apiContext)
         .then(() => {
             try {
                 // If you were using Apollo, you could fetch data with this
                 // await getDataFromTree(app);
-                const sheet = new ServerStyleSheet()
                 const stream = sheet.interleaveWithNodeStream(
                     renderToNodeStream(sheet.collectStyles(app))
                 )

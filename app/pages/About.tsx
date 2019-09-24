@@ -115,6 +115,7 @@ import {useAction, AboveTheFold} from "../components/context";
 import handleViewport from 'react-in-viewport';
 
 export type IViewportProps = { forwardedRef: () => {}; inViewport: boolean; };
+export type IStyledProps = { className: string; };
 
 const TheListContainer = ({forwardedRef, inViewport, items, $status, onExampleGetList, ...props}: IAboutProps & IViewportProps) => {
     const {complete, isActive, processing} = Status($status);
@@ -157,7 +158,7 @@ const ItemContainer = styled.div`
     padding: 10px;
 `
 
-const TheItemContainer = ({forwardedRef, inViewport, item, onExampleGetItem, ...props}: IAboutProps & IViewportProps) => {
+const TheItemContainer = ({className, forwardedRef, inViewport, item, onExampleGetItem, ...props}: IAboutProps & IViewportProps & IStyledProps) => {
     const {complete, isActive, processing} = (item && Status(item.$status)) || {} as IStatus;
 
     // @ts-ignore
@@ -166,20 +167,27 @@ const TheItemContainer = ({forwardedRef, inViewport, item, onExampleGetItem, ...
     }
 
     return (
-        <ItemContainer ref={forwardedRef}>
+        <ItemContainer ref={forwardedRef} className={className}>
             [{inViewport ? "YES": "NO"}]
             <Loading loading={processing}>
                 {(!complete && (!isActive || processing)) ?
                     <div>xxx</div>
                     :
-                    <div>{item && item.name}</div>
+                    <div className="item">{item && item.name}</div>
                 }
             </Loading>
         </ItemContainer>
     )
 }
 
-const TheItem = handleViewport(TheItemContainer, /** options: {}, config: {} **/);
+const TheItem = styled(handleViewport(TheItemContainer, /** options: {}, config: {} **/))`
+    background-color: red;
+    backface-visibility: hidden;
+    
+    .item {
+        border: 5px solid blue;
+    }
+`;
 
 const About = ({items, item, onExampleGetList, onExampleGetItem, $status, ...props}: IAboutProps) => {
     return (
