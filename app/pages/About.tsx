@@ -194,6 +194,8 @@ const About = ({items, item, onExampleGetList, onExampleGetItem, $status, ...pro
         <Page>
             <Helmet>
                 <title>About Page</title>
+                <meta name="description" content="Universal App About Page" />
+                <meta name="keywords" content="about,..." />
             </Helmet>
             <Title>
                 This is the about page
