@@ -16,7 +16,8 @@ Example using Parcel to bundle app with SSR and server side API calls.
     [ ] Style reuse / sharing
 * Parcel
     [ ] Comparison to other bundlers
-    [ ] Configure aliases which work client and server
+    [*] Configure aliases which work client and server
+        - use babel-plugin-module-resolver
     [ ] maps and debug lines
     [ ] babelrc config issues
         * Does not pick up the correct env config from BABEL_ENV in dev??
