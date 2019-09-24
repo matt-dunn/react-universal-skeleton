@@ -31,6 +31,10 @@ Example using Parcel to bundle app with SSR and server side API calls.
     [ ] Setup linting
     [ ] Run tests with coverage as part of production build
     [ ] 
+* Routing with react-router
+    [ ] 404
+    [ ] Handle redirects to login when auth fails
+    [ ] 403
     
         
     
