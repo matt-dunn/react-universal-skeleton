@@ -114,7 +114,9 @@ const About = ({items, item, onExampleGetList, $status, ...props}: IAboutProps) 
     // console.error("ABOUT", items.toJS(), item.toJS())
     // console.log("PROPS", items, props)
     // console.log("STATUS", Status($status))
-    const {complete, isActive, processing} = Status($status);
+    const {complete, isActive, processing, lastUpdated} = Status($status);
+
+    console.log("STATUS", Status($status), lastUpdated && `${(Date.now() - lastUpdated)}ms`)
 
     // useEffect(() => {
     //     onExampleGetList()

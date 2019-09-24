@@ -7,6 +7,7 @@ export type IActiveTransactions<T = boolean> = {
 }
 
 export type IStatus = {
+  readonly lastUpdated?: number;
   readonly complete: boolean;
   readonly processing: boolean;
   readonly hasError?: boolean;
@@ -22,12 +23,13 @@ export type IStatusTransaction = {
 
 const Status = (status: IStatus = {} as IStatus): IStatus => {
   const {
-    complete = false, processing = false, hasError = false, error, isActive = false,
+    lastUpdated, complete = false, processing = false, hasError = false, error, isActive = false,
   } = status;
 
   const activeTransactions = status[symbolActiveTransactions] || {};
 
   return {
+    lastUpdated,
     complete,
     processing,
     hasError,

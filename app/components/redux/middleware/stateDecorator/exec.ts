@@ -41,6 +41,7 @@ const exec = (
             isActive: false,
             hasError: false,
             complete: true,
+            lastUpdated: Date.now(),
             processing: false
           },
         },
