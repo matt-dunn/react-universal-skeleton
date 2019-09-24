@@ -4,22 +4,38 @@ const APIContext = React.createContext();
 
 const APIContextProvider = APIContext.Provider;
 
-const useAction = (cb, {clientOnly = false} = {}) => {
+const FoldContext = React.createContext();
+
+const FoldProvider = FoldContext.Provider;
+
+const useAction = cb => {
     if (process.browser) {
         useEffect(() => {
             cb()
         }, []);
-    } else if (!clientOnly) {
-        const context = useContext(APIContext);
+    } else {
+        const {enabled = false} = useContext(FoldContext) || {};
 
-        if (!context) {
-            throw new Error("Missing context provider...")
+        if (enabled) {
+            const context = useContext(APIContext);
+
+            if (!context) {
+                throw new Error("Missing API context provider")
+            }
+
+            context.push(cb);
         }
-
-        context.push(cb);
     }
+}
+
+const AboveTheFold = ({children}) => {
+    return (
+        <FoldProvider value={{enabled: true}}>
+            {children}
+        </FoldProvider>
+    )
 }
 
 const execAPIContext = context => Promise.all(context.map(context => context()))
 
-export {useAction, execAPIContext, APIContextProvider};
+export {useAction, execAPIContext, APIContextProvider, AboveTheFold};
