@@ -41,6 +41,7 @@
     "@types/uuid": "^3.4.5",
     "babel-plugin-macros": "^2.6.1",
     "babel-plugin-module-resolver": "^3.2.0",
+    "babel-plugin-styled-components": "^1.10.6",
     "cheerio": "^1.0.0-rc.3",
     "concurrently": "^4.1.2",
     "cross-env": "^6.0.0",
@@ -55,6 +56,10 @@
     "pino": "^5.13.3",
     "react-hot-loader": "^4.12.13",
     "rimraf": "^3.0.0",
+    "stylelint": "^11.0.0",
+    "stylelint-config-recommended": "^3.0.0",
+    "stylelint-config-styled-components": "^0.1.1",
+    "stylelint-processor-styled-components": "^1.8.0",
     "through": "^2.3.8",
     "ts-jest": "^24.1.0"
   },
@@ -66,6 +71,7 @@
     "create-bundles": "concurrently \"yarn create-bundle:client\" \"yarn create-bundle:server\"",
     "create-bundle:client": "cross-env BABEL_ENV=client parcel build app/index.html -d dist/client --public-url /dist/client",
     "create-bundle:server": "cross-env BABEL_ENV=server parcel build server/index.js -d dist/server --public-url /dist --target=node",
-    "generate-imported-components": "imported-components app app/imported.js"
+    "generate-imported-components": "imported-components app app/imported.js",
+    "lint:css":"stylelint './app/**/*.(js|jsx|ts|tsx)'"
   }
 }

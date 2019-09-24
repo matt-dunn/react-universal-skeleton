@@ -80,7 +80,7 @@ const exec = (
         },
       };
 
-      if (<unknown>next({
+      if (next<any>({
         type: action.type,
         error: true,
         payload: reason,
