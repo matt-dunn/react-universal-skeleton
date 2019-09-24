@@ -26,6 +26,7 @@ Example using Parcel to bundle app with SSR and server side API calls.
         * When running in server mode?
 * SSR
     [ ] API calls on server options
+        * https://github.com/ctrlplusb/react-tree-walker instead of a render?
     [ ] Use https://github.com/smooth-code/loadable-components instead
     [ ] How efficient is express + react render? Would a more robust / scalable solution need to be used in a mid/high traffic env? e.g https://github.com/airbnb/hypernova
 * Build
