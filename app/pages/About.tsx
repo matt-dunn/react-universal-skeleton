@@ -154,7 +154,7 @@ const TheList = handleViewport(TheListContainer, /** options: {}, config: {} **/
 const ItemContainer = styled.div`
     max-width: 400px;
     border: 1px solid #ccc;
-    margin: 120vh auto 10px auto;
+    margin: 10px auto;
     padding: 10px;
 `
 
@@ -202,6 +202,8 @@ const About = ({items, item, onExampleGetList, onExampleGetItem, $status, ...pro
             <AboveTheFold>
                 <TheList items={items} item={item} onExampleGetList={onExampleGetList} $status={$status}/>
             </AboveTheFold>
+
+            <div style={{height: "110vh"}}/>
 
             <TheItem item={item} onExampleGetItem={onExampleGetItem}/>
 
