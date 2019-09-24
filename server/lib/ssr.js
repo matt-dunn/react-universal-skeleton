@@ -14,7 +14,7 @@ import { Provider } from 'react-redux';
 
 import getStore from "../../app/store";
 
-import {getContext, endContext} from "../../app/components/context";
+import {execAPIContext, APIContextProvider} from "../../app/components/context";
 
 export default (req, res) => {
     const store = getStore();
@@ -22,23 +22,27 @@ export default (req, res) => {
     const context = {};
     const helmetContext = {};
 
+    const apiContext = [];
+
     const app = (
-        <HelmetProvider context={helmetContext}>
-            <Provider store={store}>
-                <StaticRouter
-                    location={req.originalUrl}
-                    context={context}
-                >
-                    <App/>
-                </StaticRouter>
-            </Provider>
-        </HelmetProvider>
+        <APIContextProvider value={apiContext}>
+            <HelmetProvider context={helmetContext}>
+                <Provider store={store}>
+                    <StaticRouter
+                        location={req.originalUrl}
+                        context={context}
+                    >
+                        <App/>
+                    </StaticRouter>
+                </Provider>
+            </HelmetProvider>
+        </APIContextProvider>
     );
 
     // Render here if service calls are required on server
     renderToString(app)
 
-    Promise.all(Object.values(getContext()).map(context => context()))
+    execAPIContext(apiContext)
         .then(() => {
             try {
                 // If you were using Apollo, you could fetch data with this
@@ -74,7 +78,6 @@ export default (req, res) => {
                                     )
                                     this.queue(endingHTMLFragment)
                                     this.queue(null)
-                                    endContext();
                                 }
                             )
                         )

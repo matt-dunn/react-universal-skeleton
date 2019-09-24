@@ -119,7 +119,9 @@ const About = ({items, item, onExampleGetList, $status, ...props}: IAboutProps) 
     // useEffect(() => {
     //     onExampleGetList()
     // }, []);
-    useAction(() => onExampleGetList(), "About");
+    if (!complete) {
+        useAction(() => onExampleGetList(), {clientOnly: false});
+    }
 
     return (
         <Page>

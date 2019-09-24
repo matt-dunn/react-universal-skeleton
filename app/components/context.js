@@ -1,21 +1,25 @@
-import {useEffect} from "react";
+import React, {useEffect, useContext} from "react";
 
-let context = {};
+const APIContext = React.createContext();
 
-const useAction = (cb, id) => {
+const APIContextProvider = APIContext.Provider;
+
+const useAction = (cb, {clientOnly = false} = {}) => {
     if (process.browser) {
-        return useEffect(() => {
+        useEffect(() => {
             cb()
         }, []);
-    } else {
-        if (!context[id]) {
-            context[id] = cb
+    } else if (!clientOnly) {
+        const context = useContext(APIContext);
+
+        if (!context) {
+            throw new Error("Missing context provider...")
         }
+
+        context.push(cb);
     }
 }
 
-const getContext = () => context;
+const execAPIContext = context => Promise.all(context.map(context => context()))
 
-const endContext = () => context = {};
-
-export {useAction, getContext, endContext};
+export {useAction, execAPIContext, APIContextProvider};
