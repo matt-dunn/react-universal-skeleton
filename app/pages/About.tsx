@@ -110,23 +110,22 @@ export type IAboutProps = { testString?: string; testNumber?: number; } & IInjec
 
 import {useAction, AboveTheFold} from "../components/context";
 
-const TheList = ({items, item, onExampleGetList, $status, ...props}: IAboutProps) => {
-    // console.error("ABOUT", items.toJS(), item.toJS())
-    // console.log("PROPS", items, props)
-    // console.log("STATUS", Status($status))
-    const {complete, isActive, processing, lastUpdated} = Status($status);
+// @ts-ignore
+import handleViewport from 'react-in-viewport';
 
-    console.log("STATUS", Status($status), lastUpdated && `${(Date.now() - lastUpdated)}ms`)
+export type IViewportProps = { forwardedRef: () => {}; inViewport: boolean; };
 
-    // useEffect(() => {
-    //     onExampleGetList()
-    // }, []);
-    if (!complete) {
+const TheListContainer = ({forwardedRef, inViewport, items, $status, onExampleGetList, ...props}: IAboutProps & IViewportProps) => {
+    const {complete, isActive, processing} = Status($status);
+
+    // @ts-ignore
+    if (!complete && (inViewport || !process.browser)) {
         useAction(() => onExampleGetList());
     }
 
     return (
-        <ListContainer>
+        <ListContainer ref={forwardedRef}>
+            [{inViewport ? "YES": "NO"}]
             <Loading loading={processing}>
                 {(!complete && items.length === 0 && (!isActive || processing)) ?
                     <Placeholder>
@@ -147,6 +146,8 @@ const TheList = ({items, item, onExampleGetList, $status, ...props}: IAboutProps
         </ListContainer>
     )
 }
+
+const TheList = handleViewport(TheListContainer, /** options: {}, config: {} **/);
 
 const About = ({items, item, onExampleGetList, $status, ...props}: IAboutProps) => {
     return (
