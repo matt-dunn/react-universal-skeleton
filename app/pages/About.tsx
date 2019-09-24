@@ -15,7 +15,7 @@ import * as actions from '../actions';
 import {IExampleItemState, IExampleListState} from '../reducers/__dummy__/example';
 // import {IExampleAction} from '../container';
 import Status, { IStatus } from '../components/state-mutate-with-status/status';
-import {IExampleGetList} from "../components/api/__dummy__/example";
+import {IExampleGetList, IExampleGetItem} from "../components/api/__dummy__/example";
 import {Simulate} from "react-dom/test-utils";
 import load = Simulate.load;
 import {number} from "prop-types";
@@ -103,6 +103,7 @@ export type IInjectedAboutProps = {
     items: IExampleListState;
     item?: IExampleItemState;
     onExampleGetList: IExampleGetList;
+    onExampleGetItem: IExampleGetItem;
     $status?: IStatus;
 };
 
@@ -149,7 +150,38 @@ const TheListContainer = ({forwardedRef, inViewport, items, $status, onExampleGe
 
 const TheList = handleViewport(TheListContainer, /** options: {}, config: {} **/);
 
-const About = ({items, item, onExampleGetList, $status, ...props}: IAboutProps) => {
+const ItemContainer = styled.div`
+    max-width: 400px;
+    border: 1px solid #ccc;
+    margin: 120vh auto 10px auto;
+    padding: 10px;
+`
+
+const TheItemContainer = ({forwardedRef, inViewport, item, onExampleGetItem, ...props}: IAboutProps & IViewportProps) => {
+    const {complete, isActive, processing} = (item && Status(item.$status)) || {} as IStatus;
+
+    // @ts-ignore
+    if (!complete && (inViewport || !process.browser)) {
+        useAction(() => onExampleGetItem());
+    }
+
+    return (
+        <ItemContainer ref={forwardedRef}>
+            [{inViewport ? "YES": "NO"}]
+            <Loading loading={processing}>
+                {(!complete && (!isActive || processing)) ?
+                    <div>xxx</div>
+                    :
+                    <div>{item && item.name}</div>
+                }
+            </Loading>
+        </ItemContainer>
+    )
+}
+
+const TheItem = handleViewport(TheItemContainer, /** options: {}, config: {} **/);
+
+const About = ({items, item, onExampleGetList, onExampleGetItem, $status, ...props}: IAboutProps) => {
     return (
         <Page>
             <Helmet>
@@ -162,6 +194,8 @@ const About = ({items, item, onExampleGetList, $status, ...props}: IAboutProps) 
             <AboveTheFold>
                 <TheList items={items} item={item} onExampleGetList={onExampleGetList} $status={$status}/>
             </AboveTheFold>
+
+            <TheItem item={item} onExampleGetItem={onExampleGetItem}/>
 
             <p>END.</p>
         </Page>
@@ -180,9 +214,11 @@ const mapStateToProps = (state: IAppState) => {
 const mapDispatchToProps = (dispatch: Dispatch<actions.RootActions>) => {
 
     const onExampleGetList: IExampleGetList = (): any => dispatch(actions.exampleActions.exampleGetList());
+    const onExampleGetItem: IExampleGetItem = (): any => dispatch(actions.exampleActions.exampleGetItem());
 
     return {
-        onExampleGetList
+        onExampleGetList,
+        onExampleGetItem
     }
 };
 

@@ -52,6 +52,10 @@ const exampleGetList = (state: IExampleState, action: FluxStandardAction<string,
     path: 'items',
 });
 
+const exampleGetItem = (state: IExampleState, action: FluxStandardAction<string, any, IActionMeta>): IExampleState => nextState(state, action, {
+    path: 'item',
+});
+
 // const example = (state: IExampleState, action: FluxStandardAction<string, any, IActionMeta>): IExampleState => nextState(state, action, {
 //     path: 'item'
 // });
@@ -68,6 +72,7 @@ const initialState = {
 
 const exampleActions = {
     [getType(actions.exampleActions.exampleGetList)]: exampleGetList,
+    [getType(actions.exampleActions.exampleGetItem)]: exampleGetItem,
     // [getType(actions.exampleActions.example)]: example,
     // [getType(actions.exampleActions.exampleList)]: exampleList,
 };

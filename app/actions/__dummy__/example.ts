@@ -10,6 +10,11 @@ const exampleGetList = createStandardAction('@__dummy__/EXAMPLE_GET_LIST')
         payload: ({ inject }: IPayload) => inject.services.exampleGetList()
     }));
 
+const exampleGetItem = createStandardAction('@__dummy__/EXAMPLE_GET_ITEM')
+    .map(() => ({
+        payload: ({ inject }: IPayload) => inject.services.exampleGetItem()
+    }));
+
 // const example = createStandardAction('@__dummy__/EXAMPLE')
 //     .map(({ id, name }: IExampleResponse) => ({
 //         payload: ({ inject }: IPayload) => inject('service')((service: any) => service.exampleApi.example(id, name)),
@@ -27,4 +32,4 @@ const exampleGetList = createStandardAction('@__dummy__/EXAMPLE_GET_LIST')
 //         meta: { id, ...meta },
 //     }));
 
-export { exampleGetList };
+export { exampleGetList, exampleGetItem };
