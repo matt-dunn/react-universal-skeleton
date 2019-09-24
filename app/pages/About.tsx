@@ -106,11 +106,11 @@ export type IInjectedAboutProps = {
     $status?: IStatus;
 };
 
-export type IAboutProps = { testString: string; testNumber: number; } & IInjectedAboutProps;
+export type IAboutProps = { testString?: string; testNumber?: number; } & IInjectedAboutProps;
 
-import {useAction} from "../components/context";
+import {useAction, AboveTheFold} from "../components/context";
 
-const About = ({items, item, onExampleGetList, $status, ...props}: IAboutProps) => {
+const TheList = ({items, item, onExampleGetList, $status, ...props}: IAboutProps) => {
     // console.error("ABOUT", items.toJS(), item.toJS())
     // console.log("PROPS", items, props)
     // console.log("STATUS", Status($status))
@@ -122,9 +122,33 @@ const About = ({items, item, onExampleGetList, $status, ...props}: IAboutProps) 
     //     onExampleGetList()
     // }, []);
     if (!complete) {
-        useAction(() => onExampleGetList(), {clientOnly: false});
+        useAction(() => onExampleGetList());
     }
 
+    return (
+        <ListContainer>
+            <Loading loading={processing}>
+                {(!complete && items.length === 0 && (!isActive || processing)) ?
+                    <Placeholder>
+                        <ListItem>xxx</ListItem>
+                        <ListItem>xxx</ListItem>
+                        <ListItem>xxx</ListItem>
+                    </Placeholder>
+                    :
+                    <List>
+                        {items.map(item => (
+                            <ListItem key={item.id}>
+                                {item.name}
+                            </ListItem>
+                        ))}
+                    </List>
+                }
+            </Loading>
+        </ListContainer>
+    )
+}
+
+const About = ({items, item, onExampleGetList, $status, ...props}: IAboutProps) => {
     return (
         <Page>
             <Helmet>
@@ -134,25 +158,11 @@ const About = ({items, item, onExampleGetList, $status, ...props}: IAboutProps) 
                 This is the about page
             </Title>
 
-            <ListContainer>
-                <Loading loading={processing}>
-                    {(!complete && items.length === 0 && (!isActive || processing)) ?
-                        <Placeholder>
-                            <ListItem>xxx</ListItem>
-                            <ListItem>xxx</ListItem>
-                            <ListItem>xxx</ListItem>
-                        </Placeholder>
-                        :
-                        <List>
-                            {items.map(item => (
-                                <ListItem key={item.id}>
-                                    {item.name}
-                                </ListItem>
-                            ))}
-                        </List>
-                    }
-                </Loading>
-            </ListContainer>
+            <AboveTheFold>
+                <TheList items={items} item={item} onExampleGetList={onExampleGetList} $status={$status}/>
+            </AboveTheFold>
+
+            <p>END.</p>
         </Page>
     )
 }
