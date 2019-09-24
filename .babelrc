@@ -1,5 +1,12 @@
 {
   "plugins": [
+    ["module-resolver", {
+      "root": ["./"],
+      "alias": {
+        "@app": "./app",
+        "@components": "./app/components"
+      }
+    }],
     "react-imported-component/babel",
     [
       "@babel/plugin-proposal-decorators",

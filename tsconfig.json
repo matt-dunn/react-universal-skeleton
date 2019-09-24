@@ -16,6 +16,8 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": "./",
     "paths": {
+      "@app": ["./app"],
+      "@components": ["./app/components"]
     }
   },
   "include": [
