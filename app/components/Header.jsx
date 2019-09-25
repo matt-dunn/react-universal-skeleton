@@ -3,17 +3,12 @@ import styled from 'styled-components'
 import { NavLink } from 'react-router-dom';
 
 const Header = styled.header`
-  z-index: 100;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  max-width: 90vw;
   margin: 0 auto;
-  padding: 1em 0;
+  padding: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-bottom: 3px solid #eee;
 `
 
 const Brand = styled.h1`
@@ -34,7 +29,7 @@ const MenuLink = styled.li`
 
 export default () => (
     <Header>
-        <Brand>Stream all the things!</Brand>
+        <Brand>Universal App Test</Brand>
         <Menu>
             <MenuLink>
                 <NavLink

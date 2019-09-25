@@ -109,7 +109,7 @@ export type IInjectedAboutProps = {
 
 export type IAboutProps = { testString?: string; testNumber?: number; } & IInjectedAboutProps;
 
-import {useAction, AboveTheFold} from "../components/context";
+import {useAction, AboveTheFold, ClientOnly} from "../components/context";
 
 // @ts-ignore
 import handleViewport from 'react-in-viewport';
@@ -204,6 +204,9 @@ const About = ({items, item, onExampleGetList, onExampleGetItem, $status, ...pro
 
             <AboveTheFold>
                 <TheList items={items} item={item} onExampleGetList={onExampleGetList} $status={$status}/>
+
+                <ClientOnly>
+                </ClientOnly>
             </AboveTheFold>
 
             <div style={{height: "110vh"}}/>

@@ -7,7 +7,6 @@ html {
 }
 body {
   font-size: 1.6rem;
-  padding: 50px !important;
 }/* Relative Type Scale */
 /* https://blog.envylabs.com/responsive-typographic-scales-in-css-b9f60431d1c4 */
 :root {

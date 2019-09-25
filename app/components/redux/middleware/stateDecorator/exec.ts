@@ -13,8 +13,6 @@ const exec = (
 ) => {
   const { meta: { retryCount = 1, $status: { isActive = false } = {} } = {} } = action;
 
-  let timeout: number;
-
   next({
     type: action.type,
     meta: {
@@ -102,9 +100,6 @@ const exec = (
       } else if (!reject) {
         throw reason;
       }
-    })
-    .finally(() => {
-      clearTimeout(timeout);
     });
 };
 
