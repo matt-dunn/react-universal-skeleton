@@ -1,4 +1,5 @@
 import React, {useEffect, useContext} from "react";
+import { renderToStaticMarkup } from 'react-dom/server'
 
 const APIContext = React.createContext();
 
@@ -36,6 +37,19 @@ const AboveTheFold = ({children}) => {
     )
 }
 
-const execAPIContext = context => Promise.all(context.map(context => context()))
+const execAPIContext = app => {
+    const apiContext = [];
 
-export {useAction, execAPIContext, APIContextProvider, AboveTheFold};
+    const html = renderToStaticMarkup(
+        React.createElement(
+            APIContextProvider,
+            {value: apiContext},
+            app
+        )
+    );
+
+    return Promise.all(apiContext.map(context => context()))
+        .then(() => html)
+}
+
+export {useAction, execAPIContext, AboveTheFold};

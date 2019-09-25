@@ -1,5 +1,5 @@
 import React from 'react'
-import { renderToNodeStream, renderToString } from 'react-dom/server'
+import { renderToNodeStream } from 'react-dom/server'
 import { HelmetProvider } from 'react-helmet-async'
 import { StaticRouter } from 'react-router-dom'
 import { ServerStyleSheet } from 'styled-components'
@@ -14,7 +14,7 @@ import { Provider } from 'react-redux';
 
 import getStore from "../../app/store";
 
-import {execAPIContext, APIContextProvider} from "../../app/components/context";
+import {execAPIContext} from "../../app/components/context";
 
 export default async (req, res) => {
     const store = getStore();
@@ -22,33 +22,27 @@ export default async (req, res) => {
     const context = {};
     const helmetContext = {};
 
-    const apiContext = [];
-
     const app = (
-        <APIContextProvider value={apiContext}>
-            <HelmetProvider context={helmetContext}>
-                <Provider store={store}>
-                    <StaticRouter
-                        location={req.originalUrl}
-                        context={context}
-                    >
-                        <App/>
-                    </StaticRouter>
-                </Provider>
-            </HelmetProvider>
-        </APIContextProvider>
+        <HelmetProvider context={helmetContext}>
+            <Provider store={store}>
+                <StaticRouter
+                    location={req.originalUrl}
+                    context={context}
+                >
+                    <App/>
+                </StaticRouter>
+            </Provider>
+        </HelmetProvider>
     );
 
-    const sheet = new ServerStyleSheet()
-
-    // Render here if service calls are required on server
-    renderToString(sheet.collectStyles(app))
-
-    await execAPIContext(apiContext);
-
     try {
+        const sheet = new ServerStyleSheet()
+
+        await execAPIContext(sheet.collectStyles(app));
+
         // If you were using Apollo, you could fetch data with this
         // await getDataFromTree(app);
+
         const stream = sheet.interleaveWithNodeStream(
             renderToNodeStream(sheet.collectStyles(app))
         )
@@ -72,8 +66,8 @@ export default async (req, res) => {
             res.status(200)
             res.write(`
                 ${open}
-                ${helmet.title.toString()}
-                ${helmet.meta.toString()}
+                ${helmet && helmet.title.toString()}
+                ${helmet && helmet.meta.toString()}
                 ${close}
             `.trim())
             stream
