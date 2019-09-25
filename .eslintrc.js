@@ -15,7 +15,10 @@ module.exports =  {
             "files": ["*.ts", "*.tsx"],
             extends:  [
                 'plugin:@typescript-eslint/recommended',
-            ]
+            ],
+            rules:  {
+                "@typescript-eslint/interface-name-prefix": "off",
+            },
         }
     ],
     "settings": {
@@ -34,7 +37,5 @@ module.exports =  {
         // }
     },
     rules:  {
-        // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
-        // e.g. "@typescript-eslint/explicit-function-return-type": "off",
     },
 };

@@ -1,7 +1,7 @@
-import Immutable, { List, Record } from 'immutable';
+// import Immutable, { List, Record } from 'immutable';
 import { FluxStandardAction } from 'flux-standard-action';
 import { Reducer } from "redux";
-import { ActionType, getType } from 'typesafe-actions';
+import { getType } from 'typesafe-actions';
 
 import { IActionMeta } from '../../components/state-mutate-with-status/state';
 // import nextState from '../../components/state-mutate-with-status/immutable';
