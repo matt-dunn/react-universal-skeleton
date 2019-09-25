@@ -78,7 +78,7 @@
     "create-bundle:server": "cross-env BABEL_ENV=server parcel build server/index.js -d dist/server --public-url /dist --target=node",
     "generate-imported-components": "imported-components app app/imported.js",
     "lint:css": "stylelint './app/**/*.(js|jsx|ts|tsx)'",
-    "lint:js": "./node_modules/eslint/bin/eslint.js ./ --ext .jsx,.js,.ts,.tsx",
+    "lint:js": "./node_modules/eslint/bin/eslint.js ./ --fix --ext .jsx,.js,.ts,.tsx",
     "lint": "yarn lint:css && yarn lint:js"
   }
 }

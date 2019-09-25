@@ -1,8 +1,7 @@
 module.exports =  {
     parser:  '@typescript-eslint/parser',
     extends:  [
-        'plugin:react/recommended',
-        'plugin:@typescript-eslint/recommended',
+        'plugin:react/recommended'
     ],
     parserOptions:  {
         ecmaVersion:  2018,
@@ -11,6 +10,14 @@ module.exports =  {
             jsx:  true,
         },
     },
+    "overrides": [
+        {
+            "files": ["*.ts", "*.tsx"],
+            extends:  [
+                'plugin:@typescript-eslint/recommended',
+            ]
+        }
+    ],
     "settings": {
         "react": {
             "version": "detect"
