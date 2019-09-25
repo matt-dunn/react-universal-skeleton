@@ -35,7 +35,7 @@ const Message = styled.div`
     transform: translate(-50%, -50%);
 `
 
-export type ILoadingProps = { children: any, Loader?: any, loading: boolean; };
+export type ILoadingProps = { children: any; Loader?: any; loading: boolean };
 
 const Loading = ({children, loading, Loader = <Message>Loading...</Message>}: ILoadingProps) => {
     const [show, setShow] = useState(false);
@@ -106,15 +106,15 @@ export type IInjectedAboutProps = {
     $status?: IStatus;
 };
 
-export type IAboutProps = { testString?: string; testNumber?: number; } & IInjectedAboutProps;
+export type IAboutProps = { testString?: string; testNumber?: number } & IInjectedAboutProps;
 
 import {useAction, AboveTheFold, ClientOnly} from "../components/context";
 
 // @ts-ignore
 import handleViewport from 'react-in-viewport';
 
-export type IViewportProps = { forwardedRef: () => {}; inViewport: boolean; };
-export type IStyledProps = { className: string; };
+export type IViewportProps = { forwardedRef: () => {}; inViewport: boolean };
+export type IStyledProps = { className: string };
 
 const TheListContainer = ({forwardedRef, inViewport = true, items, $status, onExampleGetList, ...props}: IAboutProps & IViewportProps) => {
     const {complete, isActive, processing, hasError, error} = Status($status);

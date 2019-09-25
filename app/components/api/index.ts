@@ -1,6 +1,6 @@
-export interface IAPPError extends Error { readonly name: string; readonly code: string; }
+export interface IAPPError extends Error { readonly name: string; readonly code: string }
 
-export interface IAPIError extends IAPPError { readonly status: number; }
+export interface IAPIError extends IAPPError { readonly status: number }
 
 export class APPError extends Error implements IAPPError {
   __proto__: Error;

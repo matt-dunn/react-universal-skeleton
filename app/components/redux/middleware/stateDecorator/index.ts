@@ -12,7 +12,7 @@ export type IDependencies = {
 }
 
 export type IOptions = {
-  dependencies?: IDependencies
+  dependencies?: IDependencies;
 }
 
 export type IPayload = {

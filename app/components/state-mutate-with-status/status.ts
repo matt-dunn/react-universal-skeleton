@@ -13,7 +13,7 @@ export type IStatus = {
   readonly hasError?: boolean;
   readonly error?: IAPPError;
   readonly isActive: boolean;
-  readonly outstandingTransactionCount: number,
+  readonly outstandingTransactionCount: number;
   readonly [symbolActiveTransactions]: IActiveTransactions;
 }
 

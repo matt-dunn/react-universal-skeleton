@@ -4,7 +4,7 @@ import {
 
 export interface IError { message: string; code: string; status: string }
 
-export interface INotify { error: IError; type: string; cancel: Function; retry: Function; }
+export interface INotify { error: IError; type: string; cancel: Function; retry: Function }
 
 export type TNotify = (notification: INotify) => boolean;
 
