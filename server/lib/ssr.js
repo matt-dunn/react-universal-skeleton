@@ -15,6 +15,21 @@ import getStore from "../../app/store";
 
 import {getDataFromTree} from "../../app/components/context";
 
+const parseHelmetTemplate = helmet => (template, ...vars) => {
+    const matcher = /{(\w*)}/g;
+
+    return helmet && template && template.map(
+        item => item.trim()
+            .replace(matcher, (value, prop) => (helmet[prop] && helmet[prop].toString()) || "")
+    )
+        .reduce((acc, item, i) => {
+            acc.push(item);
+            vars[i] && acc.push(vars[i])
+            return acc;
+        }, [])
+        .join("") || "";
+};
+
 export default async (req, res) => {
     const store = getStore();
 
@@ -51,20 +66,23 @@ export default async (req, res) => {
                 endingHTMLFragment
             ] = getHTMLFragments({drainHydrateMarks: printDrainHydrateMarks()})
 
-            const appString = "<head>"
+            const headString = "<head>"
             const splitter = '###SPLIT###'
-            const [open, close] =startingHTMLFragment
-                .replace(appString, `${appString}${splitter}`)
+
+            const [openHead, closeHead] = startingHTMLFragment
+                .replace(headString, `${headString}${splitter}`)
                 .split(splitter)
 
             const {helmet} = helmetContext;
 
             res.status(200)
             res.write(`
-                ${open}
-                ${helmet && helmet.title.toString()}
-                ${helmet && helmet.meta.toString()}
-                ${close}
+                ${openHead}
+                ${parseHelmetTemplate(helmet)`
+                {title}{meta}
+                <link rel="canonical" href="${req.protocol}://${req.hostname}${req.originalUrl}" />
+                `}
+                ${closeHead}
             `.trim())
             stream
                 .pipe(

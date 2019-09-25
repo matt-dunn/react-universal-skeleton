@@ -20,11 +20,7 @@ const useAction = cb => {
         if (enabled) {
             const context = useContext(APIContext);
 
-            if (!context) {
-                throw new Error("Missing API context provider")
-            }
-
-            context.push(cb);
+            context && context.push(cb);
         }
     }
 }
