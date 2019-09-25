@@ -18,9 +18,9 @@ const getStore = (preloadedState = {}) => createStore(
         stateDecorator({ dependencies: { inject: {services } } }),
         notification({
             notify: (
-                {error: { message, code }, type, cancel, retry}
+                {error: { message, code, status }, type, cancel, retry}
             ) => {
-                if (process.browser && message !== 'Whoops') {
+                if (process.browser) {
                     let retrying = false;
 
                     toast(
@@ -30,9 +30,7 @@ const getStore = (preloadedState = {}) => createStore(
                             </p>
                             <p>
                                 <small>
-                                    REF:
-                                    {' '}
-                                    {code || type}
+                                    {`REF: ${[(code || type), status].filter(value => value).join("-")}`}
                                 </small>
                             </p>
                             <p

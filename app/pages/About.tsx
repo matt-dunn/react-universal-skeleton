@@ -167,7 +167,7 @@ const ItemContainer = styled.div`
 `
 
 const TheItemContainer = ({className, forwardedRef, inViewport = true, item, onExampleGetItem, ...props}: IAboutProps & IViewportProps & IStyledProps) => {
-    const {complete, isActive, processing} = (item && Status(item.$status)) || {} as IStatus;
+    const {complete, isActive, processing, hasError, error} = (item && Status(item.$status)) || {} as IStatus;
 
     // @ts-ignore
     if (!complete && (inViewport || !process.browser)) {
@@ -185,6 +185,7 @@ const TheItemContainer = ({className, forwardedRef, inViewport = true, item, onE
     return (
         <ItemContainer ref={forwardedRef} className={className}>
             [{inViewport ? "YES": "NO"}]
+            {hasError && `Error occurred: ${error && error.message}`}
             <Loading loading={processing}>
                 {(!complete && (!isActive || processing)) ?
                     <div>xxx</div>

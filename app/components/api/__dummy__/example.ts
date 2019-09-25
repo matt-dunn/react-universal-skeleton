@@ -1,3 +1,5 @@
+import {APIError, APPError} from "../index";
+
 export interface IExampleResponse {
     id: string;
     name: string;
@@ -43,6 +45,7 @@ const exampleApi: IExampleApi = {
     }),
     exampleGetItem:() => new Promise<IExampleResponse>(resolve => {
         // throw new Error("bugger")
+        // throw new APIError("Authentication Failed", "auth", 401)
         setTimeout(() => {
             console.error("API CALLED: exampleGetItem")
             resolve({
