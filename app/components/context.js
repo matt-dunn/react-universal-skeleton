@@ -37,7 +37,8 @@ const AboveTheFold = ({children}) => {
     )
 }
 
-const execAPIContext = app => {
+// Similar idea to getDataFromTree from 'react-apollo'
+const getDataFromTree = app => {
     const apiContext = [];
 
     const html = renderToStaticMarkup(
@@ -52,4 +53,4 @@ const execAPIContext = app => {
         .then(() => html)
 }
 
-export {useAction, execAPIContext, AboveTheFold};
+export {useAction, getDataFromTree, AboveTheFold};

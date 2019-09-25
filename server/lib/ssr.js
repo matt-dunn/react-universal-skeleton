@@ -8,13 +8,12 @@ import log from 'llog'
 import through from 'through'
 import App from '../../app/App'
 import { getHTMLFragments } from './client'
-// import { getDataFromTree } from 'react-apollo';
 
 import { Provider } from 'react-redux';
 
 import getStore from "../../app/store";
 
-import {execAPIContext} from "../../app/components/context";
+import {getDataFromTree} from "../../app/components/context";
 
 export default async (req, res) => {
     const store = getStore();
@@ -38,10 +37,7 @@ export default async (req, res) => {
     try {
         const sheet = new ServerStyleSheet()
 
-        await execAPIContext(sheet.collectStyles(app));
-
-        // If you were using Apollo, you could fetch data with this
-        // await getDataFromTree(app);
+        await getDataFromTree(sheet.collectStyles(app));
 
         const stream = sheet.interleaveWithNodeStream(
             renderToNodeStream(sheet.collectStyles(app))
