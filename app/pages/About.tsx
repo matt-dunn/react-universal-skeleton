@@ -121,7 +121,15 @@ const TheListContainer = ({forwardedRef, inViewport = true, items, $status, onEx
 
     // @ts-ignore
     if (!complete && (inViewport || !process.browser)) {
-        useAction(() => onExampleGetList());
+        useAction(() => onExampleGetList()
+            .then(e => {
+                console.log("DONE",e)
+                return e;
+            })
+            .catch(ex => {
+                console.log("ERROR", ex)
+            })
+        );
     }
 
     return (
@@ -163,7 +171,15 @@ const TheItemContainer = ({className, forwardedRef, inViewport = true, item, onE
 
     // @ts-ignore
     if (!complete && (inViewport || !process.browser)) {
-        useAction(() => onExampleGetItem());
+        useAction(() => onExampleGetItem()
+            .then(e => {
+                console.log("DONE",e)
+                return e;
+            })
+            .catch(ex => {
+                console.log("ERROR", ex)
+            })
+        );
     }
 
     return (

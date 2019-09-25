@@ -41,13 +41,16 @@ const exampleApi: IExampleApi = {
             ])
         }, 2000)
     }),
-    exampleGetItem:() => new Promise<IExampleResponse>(resolve => setTimeout(() => {
-        console.error("API CALLED: exampleGetItem")
-        resolve({
-            id: '4',
-            name: 'Item 4',
-        })
-    }, 1000))
+    exampleGetItem:() => new Promise<IExampleResponse>(resolve => {
+        // throw new Error("bugger")
+        setTimeout(() => {
+            console.error("API CALLED: exampleGetItem")
+            resolve({
+                id: '4',
+                name: 'Item 4',
+            })
+        }, 1000)
+    })
 }
 
 export default exampleApi;
