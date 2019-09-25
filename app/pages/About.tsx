@@ -62,9 +62,8 @@ const Loading = ({children, loading, Loader = <Message>Loading...</Message>}: IL
     );
 }
 
-const Title = styled.div`
-    color: blue;
-    font-size: 50px;
+const Title = styled.h1`
+    color: #ccc;
 `
 
 const ListContainer = styled.div`
