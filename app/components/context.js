@@ -47,6 +47,7 @@ const getDataFromTree = app => {
 
     return Promise.all(apiContext.map(context => context()))
         .then(() => html)
+        .catch(ex => console.error(ex))
 }
 
 export {useAction, getDataFromTree, AboveTheFold};
