@@ -6,6 +6,8 @@ import { BrowserRouter } from 'react-router-dom'
 import { rehydrateMarks } from 'react-imported-component';
 import importedComponents from './imported'; // eslint-disable-line
 
+import { ToastContainer } from 'react-toastify';
+
 import { Provider } from 'react-redux';
 
 import getStore from "./store";
@@ -19,6 +21,10 @@ const element = document.getElementById('app')
 const app = (
     <HelmetProvider>
         <Provider store={store}>
+            <ToastContainer
+                hideProgressBar
+                pauseOnHover
+            />
             <BrowserRouter>
                 <App />
             </BrowserRouter>

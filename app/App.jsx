@@ -10,6 +10,7 @@ import LoadingComponent from './pages/Loading'
 import ErrorComponent from './pages/Error'
 
 import { GlobalStyles } from './styles'
+import { ToastifyStyles } from './styles/toasify'
 
 const About = importComponent(() => import("./pages/About"), {
     LoadingComponent,
@@ -21,6 +22,7 @@ const App = (props) => {
     return (
         <React.Fragment>
             <GlobalStyles/>
+            <ToastifyStyles/>
 
             <Helmet>
                 <title>My App</title>
