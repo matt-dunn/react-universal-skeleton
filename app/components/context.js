@@ -33,6 +33,14 @@ const AboveTheFold = ({children}) => {
     )
 }
 
+const ClientOnly = ({children}) => {
+    return (
+        <FoldProvider value={{enabled: false}}>
+            {children}
+        </FoldProvider>
+    )
+}
+
 // Similar idea to getDataFromTree from 'react-apollo'
 const getDataFromTree = app => {
     const apiContext = [];
@@ -50,4 +58,4 @@ const getDataFromTree = app => {
         .catch(ex => console.error(ex))
 }
 
-export {useAction, getDataFromTree, AboveTheFold};
+export {useAction, getDataFromTree, AboveTheFold, ClientOnly};
