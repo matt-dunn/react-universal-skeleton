@@ -1,11 +1,13 @@
 import React, {useEffect, useContext} from "react";
+import PropTypes from "prop-types";
+
 import { renderToStaticMarkup } from 'react-dom/server'
 
-const APIContext = React.createContext();
+const APIContext = React.createContext(undefined);
 
 const APIContextProvider = APIContext.Provider;
 
-const FoldContext = React.createContext();
+const FoldContext = React.createContext(undefined);
 
 const FoldProvider = FoldContext.Provider;
 
@@ -33,6 +35,13 @@ const AboveTheFold = ({children}) => {
     )
 }
 
+AboveTheFold.propTypes = {
+    children: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.node),
+        PropTypes.node
+    ])
+};
+
 const ClientOnly = ({children}) => {
     return (
         <FoldProvider value={{enabled: false}}>
@@ -40,6 +49,13 @@ const ClientOnly = ({children}) => {
         </FoldProvider>
     )
 }
+
+ClientOnly.propTypes = {
+    children: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.node),
+        PropTypes.node
+    ])
+};
 
 // Similar idea to getDataFromTree from 'react-apollo'
 const getDataFromTree = app => {

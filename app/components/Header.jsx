@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components'
 import { NavLink } from 'react-router-dom';
 
-const Header = styled.header`
+const Container = styled.header`
   margin: 0 auto;
   padding: 20px;
   display: flex;
@@ -28,8 +28,8 @@ const MenuLink = styled.li`
   text-decoration: none;
 `
 
-export default () => (
-    <Header>
+const Header = () => (
+    <Container>
         <Brand>Universal App Test</Brand>
         <Menu>
             <MenuLink>
@@ -45,5 +45,7 @@ export default () => (
                 >About</NavLink>
             </MenuLink>
         </Menu>
-    </Header>
+    </Container>
 )
+
+export default Header;
