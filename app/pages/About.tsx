@@ -117,7 +117,7 @@ import handleViewport from 'react-in-viewport';
 export type IViewportProps = { forwardedRef: () => {}; inViewport: boolean; };
 export type IStyledProps = { className: string; };
 
-const TheListContainer = ({forwardedRef, inViewport, items, $status, onExampleGetList, ...props}: IAboutProps & IViewportProps) => {
+const TheListContainer = ({forwardedRef, inViewport = true, items, $status, onExampleGetList, ...props}: IAboutProps & IViewportProps) => {
     const {complete, isActive, processing} = Status($status);
 
     // @ts-ignore
@@ -158,7 +158,7 @@ const ItemContainer = styled.div`
     padding: 10px;
 `
 
-const TheItemContainer = ({className, forwardedRef, inViewport, item, onExampleGetItem, ...props}: IAboutProps & IViewportProps & IStyledProps) => {
+const TheItemContainer = ({className, forwardedRef, inViewport = true, item, onExampleGetItem, ...props}: IAboutProps & IViewportProps & IStyledProps) => {
     const {complete, isActive, processing} = (item && Status(item.$status)) || {} as IStatus;
 
     // @ts-ignore
