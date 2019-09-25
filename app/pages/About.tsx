@@ -127,7 +127,7 @@ const TheListContainer = ({forwardedRef, inViewport = true, items, $status, onEx
                 return e;
             })
             .catch(ex => {
-                console.log("ERROR", ex)
+                console.log("ERROR", ex.message)
             })
         );
     }
@@ -177,7 +177,7 @@ const TheItemContainer = ({className, forwardedRef, inViewport = true, item, onE
                 return e;
             })
             .catch(ex => {
-                console.log("ERROR", ex)
+                console.log("ERROR", ex.message)
             })
         );
     }
