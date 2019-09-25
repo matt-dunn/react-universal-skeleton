@@ -5,6 +5,7 @@ import importComponent from 'react-imported-component';
 
 import Header from './components/Header'
 
+import Error404 from './pages/404';
 import Home from './pages/Home';
 import LoadingComponent from './pages/Loading'
 import ErrorComponent from './pages/Error'
@@ -33,6 +34,7 @@ const App = (props) => {
             <Switch>
                 <Route exact path="/" component={Home} />
                 <Route exact path="/about" render={() => <About />} />
+                <Route component={Error404} />
                 {/*<Redirect to="/" />*/}
             </Switch>
         </React.Fragment>
