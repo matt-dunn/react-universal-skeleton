@@ -9,6 +9,7 @@ const Header = styled.header`
   justify-content: space-between;
   align-items: center;
   border-bottom: 3px solid #eee;
+  background-color: #f5f5f5;
 `
 
 const Brand = styled.h1`

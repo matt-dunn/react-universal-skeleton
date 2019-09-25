@@ -69,9 +69,7 @@ export const ToastifyStyles = createGlobalStyle`
   padding: 8px;
   border-radius: 1px;
   box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.1), 0 2px 15px 0 rgba(0, 0, 0, 0.05);
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-pack: justify;
   justify-content: space-between;
   max-height: 800px;
   overflow: hidden;
@@ -109,7 +107,6 @@ export const ToastifyStyles = createGlobalStyle`
 
 .Toastify__toast-body {
   margin: auto 0;
-  -ms-flex: 1;
   flex: 1;
 
   h1 {
@@ -139,7 +136,6 @@ export const ToastifyStyles = createGlobalStyle`
   cursor: pointer;
   opacity: 0.7;
   transition: 0.3s ease;
-  -ms-flex-item-align: start;
   align-self: flex-start;
 }
 
@@ -564,4 +560,4 @@ export const ToastifyStyles = createGlobalStyle`
 .Toastify__slide-exit--bottom-center {
   animation-name: Toastify__slideOutDown;
 }
-}`
+`
