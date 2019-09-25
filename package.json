@@ -40,6 +40,8 @@
     "@types/react-redux": "^7.1.2",
     "@types/styled-components": "^4.1.19",
     "@types/uuid": "^3.4.5",
+    "@typescript-eslint/eslint-plugin": "^2.3.1",
+    "@typescript-eslint/parser": "^2.3.1",
     "babel-plugin-macros": "^2.6.1",
     "babel-plugin-module-resolver": "^3.2.0",
     "babel-plugin-styled-components": "^1.10.6",
@@ -49,6 +51,8 @@
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
     "enzyme-to-json": "^3.4.0",
+    "eslint": "^6.4.0",
+    "eslint-plugin-react": "^7.14.3",
     "express": "^4.17.1",
     "jest": "^24.9.0",
     "llog": "^0.2.0",
@@ -73,6 +77,8 @@
     "create-bundle:client": "cross-env BABEL_ENV=client parcel build app/index.html -d dist/client --public-url /dist/client",
     "create-bundle:server": "cross-env BABEL_ENV=server parcel build server/index.js -d dist/server --public-url /dist --target=node",
     "generate-imported-components": "imported-components app app/imported.js",
-    "lint:css": "stylelint './app/**/*.(js|jsx|ts|tsx)'"
+    "lint:css": "stylelint './app/**/*.(js|jsx|ts|tsx)'",
+    "lint:js": "./node_modules/eslint/bin/eslint.js ./ --ext .jsx,.js,.ts,.tsx",
+    "lint": "yarn lint:css && yarn lint:js"
   }
 }
