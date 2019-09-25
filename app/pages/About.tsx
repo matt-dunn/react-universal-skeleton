@@ -118,7 +118,7 @@ export type IViewportProps = { forwardedRef: () => {}; inViewport: boolean; };
 export type IStyledProps = { className: string; };
 
 const TheListContainer = ({forwardedRef, inViewport = true, items, $status, onExampleGetList, ...props}: IAboutProps & IViewportProps) => {
-    const {complete, isActive, processing} = Status($status);
+    const {complete, isActive, processing, hasError, error} = Status($status);
 
     // @ts-ignore
     if (!complete && (inViewport || !process.browser)) {
@@ -128,6 +128,7 @@ const TheListContainer = ({forwardedRef, inViewport = true, items, $status, onEx
     return (
         <ListContainer ref={forwardedRef}>
             [{inViewport ? "YES": "NO"}]
+            {hasError && `Error occurred: ${error && error.message}`}
             <Loading loading={processing}>
                 {(!complete && items.length === 0 && (!isActive || processing)) ?
                     <Placeholder>
