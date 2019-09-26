@@ -157,7 +157,7 @@ const TheListContainer = ({forwardedRef, inViewport = true, items, $status, onEx
     )
 }
 
-const TheList = handleViewport(TheListContainer, /** options: {}, config: {} **/);
+const TheList = React.memo(handleViewport(TheListContainer, /** options: {}, config: {} **/));
 
 const ItemContainer = styled.div`
     max-width: 400px;
@@ -197,14 +197,14 @@ const TheItemContainer = ({className, forwardedRef, inViewport = true, item, onE
     )
 }
 
-const TheItem = styled(handleViewport(TheItemContainer, /** options: {}, config: {} **/))`
+const TheItem = React.memo(styled(handleViewport(TheItemContainer, /** options: {}, config: {} **/))`
     background-color: red;
     backface-visibility: hidden;
-    
+
     .item {
         border: 5px solid blue;
     }
-`;
+`);
 
 const About = ({items, item, onExampleGetList, onExampleGetItem, $status, ...props}: IAboutProps) => {
     return (
@@ -219,7 +219,7 @@ const About = ({items, item, onExampleGetList, onExampleGetItem, $status, ...pro
             </Title>
 
             <AboveTheFold>
-                <TheList items={items} item={item} onExampleGetList={onExampleGetList} $status={$status}/>
+                <TheList items={items} onExampleGetList={onExampleGetList} $status={$status}/>
 
                 <ClientOnly>
                 </ClientOnly>
