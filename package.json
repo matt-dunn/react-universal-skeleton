@@ -33,6 +33,7 @@
     "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@babel/plugin-proposal-decorators": "^7.6.0",
     "@babel/polyfill": "^7.6.0",
+    "@types/enzyme": "^3.10.3",
     "@types/is-promise": "^2.1.0",
     "@types/jest": "^24.0.18",
     "@types/lodash": "^4.14.138",
