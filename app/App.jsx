@@ -18,6 +18,11 @@ const About = importComponent(() => import("./pages/About"), {
     ErrorComponent
 });
 
+const Login = importComponent(() => import("./pages/Login"), {
+    LoadingComponent,
+    ErrorComponent
+});
+
 const App = (props) => {
     console.error(props)
     return (
@@ -34,6 +39,7 @@ const App = (props) => {
             <Switch>
                 <Route exact path="/" component={Home} />
                 <Route exact path="/about" render={() => <About />} />
+                <Route exact path="/login" render={() => <Login />} />
                 <Route component={Error404} />
                 {/*<Redirect to="/" />*/}
             </Switch>
