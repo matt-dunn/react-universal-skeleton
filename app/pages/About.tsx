@@ -124,18 +124,16 @@ const TheListContainer = ({forwardedRef, inViewport = true, items, $status, onEx
     useWhatChanged(TheListContainer, { forwardedRef, inViewport, items, $status, onExampleGetList, ...props });
 
     useAction(
+        () => (!complete && !processing && !hasError && inViewport),
         () => {
-            // @ts-ignore
-            if (!complete && !processing && !hasError && (inViewport || !process.browser)) {
-                return onExampleGetList()
-                    .then(e => {
-                        console.log("DONE", e)
-                        return e;
-                    })
-                    .catch(ex => {
-                        console.log("ERROR", ex.message)
-                    })
-            }
+            return onExampleGetList()
+                .then(e => {
+                    console.log("DONE", e)
+                    return e;
+                })
+                .catch(ex => {
+                    console.log("ERROR", ex.message)
+                })
         },
         [complete, processing, hasError, inViewport]
     );
@@ -180,18 +178,16 @@ const TheItemContainer = ({className, forwardedRef, inViewport = true, item, onE
     useWhatChanged(TheItemContainer, { className, forwardedRef, inViewport, item, onExampleGetItem });
 
     useAction(
+        () => (!complete && !processing && !hasError && inViewport),
         () => {
-            // @ts-ignore
-            if (!complete && !processing && !hasError && (inViewport || !process.browser)) {
-                return onExampleGetItem()
-                    .then(e => {
-                        console.log("DONE",e)
-                        return e;
-                    })
-                    .catch(ex => {
-                        console.log("ERROR", ex.message)
-                    })
-            }
+            return onExampleGetItem()
+                .then(e => {
+                    console.log("DONE",e)
+                    return e;
+                })
+                .catch(ex => {
+                    console.log("ERROR", ex.message)
+                })
         },
         [complete, processing, hasError, inViewport]
     );

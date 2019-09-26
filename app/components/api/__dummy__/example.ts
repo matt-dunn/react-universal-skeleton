@@ -54,7 +54,7 @@ const exampleApi: IExampleApi = {
                 id: '4',
                 name: 'Item 4',
             })
-        }, 2000)
+        }, 3000)
     })
 }
 

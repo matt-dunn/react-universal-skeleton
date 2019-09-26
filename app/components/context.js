@@ -11,19 +11,18 @@ const FoldContext = React.createContext(undefined);
 
 const FoldProvider = FoldContext.Provider;
 
-const useAction = (cb, deps) => {
+const useAction = (test, action, deps = []) => {
     if (process.browser) {
         useEffect(() => {
-            console.log("CALL ACTION*****")
-            cb()
-        }, deps || []);
+            test() && action()
+        }, deps);
     } else {
         const {enabled = false} = useContext(FoldContext) || {};
 
         if (enabled) {
             const context = useContext(APIContext);
 
-            context && context.push(cb);
+            context && context.push(action);
         }
     }
 }
