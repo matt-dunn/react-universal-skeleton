@@ -30,6 +30,21 @@ const parseHelmetTemplate = helmet => (template, ...vars) => {
         .join("") || "";
 };
 
+if (!('toJSON' in Error.prototype)) {
+    Object.defineProperty(Error.prototype, 'toJSON', {
+        value: function () {
+            const {stack, ...rest} = Object.getOwnPropertyNames(this).reduce((o, key) => {
+                o[key] = this[key];
+                return o;
+            }, {});
+
+            return rest;
+        },
+        configurable: true,
+        writable: true
+    });
+}
+
 export default async (req, res) => {
     const store = getStore();
 
