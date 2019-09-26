@@ -11,7 +11,7 @@ const exec = (
     dispatchOptions: IOptions,
     { resolve , reject }: any = {}
 ) => {
-  const { meta: { retryCount = 1, $status: { isActive = false } = {} } = {} } = action;
+  const { meta: { retryCount = 1, $status: { isActive = true } = {} } = {} } = action;
 
   next({
     type: action.type,

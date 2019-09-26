@@ -31,13 +31,12 @@ const decorateStatus = (status: IStatusTransaction, $status: IStatus = {} as ISt
         delete activeTransactions[status.transactionId];
     }
 
-    const isActive = activeTransactions && Object.keys(activeTransactions).length > 0;
+    const hasActiveTransactions = activeTransactions && Object.keys(activeTransactions).length > 0;
 
     const updatedStatus = Status({
         ...status,
-        isActive,
-        complete: isActive ? false : status.complete,
-        processing: isActive ? ($status && $status.processing) || status.processing : status.processing,
+        complete: hasActiveTransactions ? false : status.complete,
+        processing: hasActiveTransactions ? ($status && $status.processing) || status.processing : status.processing,
         [symbolActiveTransactions]: activeTransactions,
     });
 
