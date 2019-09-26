@@ -121,20 +121,24 @@ export type IStyledProps = { className: string };
 const TheListContainer = ({forwardedRef, inViewport = true, items, $status, onExampleGetList, ...props}: IAboutProps & IViewportProps) => {
     const {complete, isActive, processing, hasError, error} = Status($status);
 
-    // @ts-ignore
-    if (!complete && (inViewport || !process.browser)) {
-        useAction(() => onExampleGetList()
-            .then(e => {
-                console.log("DONE",e)
-                return e;
-            })
-            .catch(ex => {
-                console.log("ERROR", ex.message)
-            })
-        );
-    }
-    useWhatChanged(TheListContainer, { forwardedRef, inViewport = true, items, $status, onExampleGetList, ...props });
+    useWhatChanged(TheListContainer, { forwardedRef, inViewport, items, $status, onExampleGetList, ...props });
 
+    useAction(
+        () => {
+            // @ts-ignore
+            if (!complete && !processing && !hasError && (inViewport || !process.browser)) {
+                return onExampleGetList()
+                    .then(e => {
+                        console.log("DONE", e)
+                        return e;
+                    })
+                    .catch(ex => {
+                        console.log("ERROR", ex.message)
+                    })
+            }
+        },
+        [complete, processing, hasError, inViewport]
+    );
 
     return (
         <ListContainer ref={forwardedRef}>
@@ -173,20 +177,24 @@ const ItemContainer = styled.div`
 const TheItemContainer = ({className, forwardedRef, inViewport = true, item, onExampleGetItem}: IAboutProps & IViewportProps & IStyledProps) => {
     const {complete, isActive, processing, hasError, error} = (item && Status(item.$status)) || {} as IStatus;
 
-    // @ts-ignore
-    if (!complete && (inViewport || !process.browser)) {
-        useAction(() => onExampleGetItem()
-            .then(e => {
-                console.log("DONE",e)
-                return e;
-            })
-            .catch(ex => {
-                console.log("ERROR", ex.message)
-            })
-        );
-    }
     useWhatChanged(TheItemContainer, { className, forwardedRef, inViewport, item, onExampleGetItem });
 
+    useAction(
+        () => {
+            // @ts-ignore
+            if (!complete && !processing && !hasError && (inViewport || !process.browser)) {
+                return onExampleGetItem()
+                    .then(e => {
+                        console.log("DONE",e)
+                        return e;
+                    })
+                    .catch(ex => {
+                        console.log("ERROR", ex.message)
+                    })
+            }
+        },
+        [complete, processing, hasError, inViewport]
+    );
 
     return (
         <ItemContainer ref={forwardedRef} className={className}>

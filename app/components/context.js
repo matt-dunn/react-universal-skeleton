@@ -11,12 +11,12 @@ const FoldContext = React.createContext(undefined);
 
 const FoldProvider = FoldContext.Provider;
 
-const useAction = cb => {
+const useAction = (cb, deps) => {
     if (process.browser) {
         useEffect(() => {
             console.log("CALL ACTION*****")
             cb()
-        }, []);
+        }, deps || []);
     } else {
         const {enabled = false} = useContext(FoldContext) || {};
 
