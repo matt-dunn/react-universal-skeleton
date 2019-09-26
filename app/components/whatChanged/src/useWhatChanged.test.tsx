@@ -37,11 +37,11 @@ describe('useWhatChanged', () => {
             testString: 'updated'
         });
 
-        expect(spyConsoleGroup).toHaveBeenNthCalledWith(1, '%ctestNumber', '');
+        expect(spyConsoleGroup).toHaveBeenNthCalledWith(1, '%ctestNumber', 'background-color:#999;color:#000;border-radius:1em;padding:2px 5px;');
         expect(spyConsoleLog).toHaveBeenNthCalledWith(1, '%cbefore', 'font-weight: bold;', 2);
         expect(spyConsoleLog).toHaveBeenNthCalledWith(2, '%cafter', 'font-weight: bold;', 3);
 
-        expect(spyConsoleGroup).toHaveBeenNthCalledWith(2, '%ctestString', '');
+        expect(spyConsoleGroup).toHaveBeenNthCalledWith(2, '%ctestString', 'background-color:#999;color:#000;border-radius:1em;padding:2px 5px;');
         expect(spyConsoleLog).toHaveBeenNthCalledWith(3, '%cbefore', 'font-weight: bold;', 'str');
         expect(spyConsoleLog).toHaveBeenNthCalledWith(4, '%cafter', 'font-weight: bold;', 'updated');
 

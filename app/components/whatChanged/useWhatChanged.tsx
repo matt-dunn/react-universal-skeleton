@@ -10,28 +10,7 @@
  * @module Lib
  */
 
-import { useEffect, useRef } from 'react';
-
-import { outputPathParts, deepDiff, getIdentifier, IOptions } from './';
-
-function usePrevious(value: any) {
-  const ref = useRef(value);
-  useEffect(() => {
-    ref.current = value;
-  });
-  return ref.current;
-}
-
-export default function useWhatChanged<T>(Component: (...args: any[]) => {}, value: T, options?: IOptions) {
-  const prevValue = usePrevious(value);
-
-  const diff = deepDiff(
-      prevValue,
-      value,
-      `RE-RENDER: ${(Component.name || 'ANONYMOUS').replace(/\./g, '__@@__')}${getIdentifier(options && options.idProp, value)}`,
-  );
-
-  outputPathParts(diff);
-
-  return diff;
-}
+module.exports =
+    process.env.NODE_ENV === "production"
+        ? require('./src/useWhatChanged.prod')
+        : require('./src/useWhatChanged');
