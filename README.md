@@ -22,14 +22,14 @@ Example using Parcel to bundle app with SSR and server side API calls.
     [ ] maps and debug lines
     [ ] babelrc config issues
         * Does not pick up the correct env config from BABEL_ENV in dev??
-    *** [ ] Hot-reloading
+    [ ] Hot-reloading
         * Does not seem to work correctly with TS files?
         * When running in server mode?
 * SSR
     [ ] API calls on server options
         * https://github.com/ctrlplusb/react-tree-walker instead of a render?
     [ ] Use https://github.com/smooth-code/loadable-components instead
-    *** [ ] How efficient is express + react render? Would a more robust / scalable solution need to be used in a mid/high traffic env? e.g https://github.com/airbnb/hypernova
+    [ ] How efficient is express + react render? Would a more robust / scalable solution need to be used in a mid/high traffic env? e.g https://github.com/airbnb/hypernova
 * Build
     [ ] Setup linting
     [ ] Run tests with coverage as part of production build
@@ -39,12 +39,24 @@ Example using Parcel to bundle app with SSR and server side API calls.
     [ ] Handle redirects to login when auth fails
     [ ] 403
 * Features
-    *** [ ] Suspense
+    [ ] Suspense
         - With action promises
-    *** [ ] Error boundaries
+    [ ] Error boundaries
         - With action promises
         
-    
+
+
+##### Priority:
+
+1. Understand the magic of useEffect
+    - it seems to call the cb every time until the promise has fullfilled?
+2. Error boundaries
+    - use for authentication and for handing server errors and redirects (e.g. 401)?
+3. Suspense
+    - Use cases and does it _really_ expect promises to be thrown instead of errors??
+4. Hot-reloading (above)
+5. Scalable server rendering (above)
+  
     
     
     
