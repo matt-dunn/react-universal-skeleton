@@ -41,7 +41,7 @@ const exampleApi: IExampleApi = {
                     name: 'Item 3',
                 },
             ])
-        }, 2000)
+        }, 1500)
     }),
     exampleGetItem:() => new Promise<IExampleResponse>(resolve => {
         // throw new Error("bugger")

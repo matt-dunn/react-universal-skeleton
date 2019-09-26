@@ -14,6 +14,7 @@ const FoldProvider = FoldContext.Provider;
 const useAction = cb => {
     if (process.browser) {
         useEffect(() => {
+            console.log("CALL ACTION*****")
             cb()
         }, []);
     } else {
