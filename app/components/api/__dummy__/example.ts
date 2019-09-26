@@ -26,6 +26,7 @@ const exampleApi: IExampleApi = {
     exampleGetList:() => new Promise<IExampleListResponse>(resolve => {
         console.log("API CALL: exampleGetList")
         // throw new Error("bugger")
+        // throw new APIError("Authentication Failed", "auth", 402)
         setTimeout(() => {
             console.log("API CALL COMPLETE: exampleGetList")
             resolve([
