@@ -24,9 +24,10 @@ export interface IExampleApi {
 
 const exampleApi: IExampleApi = {
     exampleGetList:() => new Promise<IExampleListResponse>(resolve => {
+        console.log("API CALL: exampleGetList")
         // throw new Error("bugger")
         setTimeout(() => {
-            console.error("API CALLED: exampleGetList")
+            console.log("API CALL COMPLETE: exampleGetList")
             resolve([
                 {
                     id: '1',
@@ -44,15 +45,16 @@ const exampleApi: IExampleApi = {
         }, 1500)
     }),
     exampleGetItem:() => new Promise<IExampleResponse>(resolve => {
+        console.log("API CALL: exampleGetItem")
         // throw new Error("bugger")
         // throw new APIError("Authentication Failed", "auth", 401)
         setTimeout(() => {
-            console.error("API CALLED: exampleGetItem")
+            console.log("API CALL COMPLETE: exampleGetItem")
             resolve({
                 id: '4',
                 name: 'Item 4',
             })
-        }, 1000)
+        }, 2000)
     })
 }
 
