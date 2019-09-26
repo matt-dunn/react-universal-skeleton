@@ -145,7 +145,7 @@ const TheListContainer = ({forwardedRef, inViewport = true, items, $status, onEx
             [{inViewport ? "YES": "NO"}]
             {hasError && `Error occurred: ${error && error.message}`}
             <Loading loading={processing}>
-                {(!complete && items.length === 0 && (!isActive || processing)) ?
+                {!complete ?
                     <Placeholder>
                         <ListItem>xxx</ListItem>
                         <ListItem>xxx</ListItem>
@@ -165,7 +165,7 @@ const TheListContainer = ({forwardedRef, inViewport = true, items, $status, onEx
     )
 }
 
-const TheList = React.memo(handleViewport(TheListContainer, /** options: {}, config: {} **/));
+const TheList = React.memo(handleViewport(TheListContainer, {}, {disconnectOnLeave: true}));
 
 const ItemContainer = styled.div`
     max-width: 400px;
@@ -200,7 +200,7 @@ const TheItemContainer = ({className, forwardedRef, inViewport = true, item, onE
             [{inViewport ? "YES": "NO"}]
             {hasError && `Error occurred: ${error && error.message}`}
             <Loading loading={processing}>
-                {(!complete && (!isActive || processing)) ?
+                {!complete ?
                     <div>xxx</div>
                     :
                     <div className="item">{item && item.name}</div>
@@ -210,7 +210,7 @@ const TheItemContainer = ({className, forwardedRef, inViewport = true, item, onE
     )
 }
 
-const TheItem = React.memo(styled(handleViewport(TheItemContainer, /** options: {}, config: {} **/))`
+const TheItem = React.memo(styled(handleViewport(TheItemContainer, undefined, {disconnectOnLeave: true}))`
     background-color: red;
     backface-visibility: hidden;
 

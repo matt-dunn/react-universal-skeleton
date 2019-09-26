@@ -14,6 +14,7 @@
     const applicationImports = assignImportedComponents([
            [() => import('./actions'), '', './app/actions', false],
       [() => import('./pages/About'), '', './app/pages/About', false],
+      [() => import('./pages/Login'), '', './app/pages/Login', false],
     ]);
     
     export default applicationImports;

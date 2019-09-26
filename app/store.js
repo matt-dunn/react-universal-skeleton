@@ -20,7 +20,7 @@ const getStore = (preloadedState = {}) => createStore(
             notify: (
                 {error: { message, code, status }, type, cancel, retry}
             ) => {
-                if (process.browser) {
+                if (process.browser && (!status || status >= 500)) {
                     let retrying = false;
 
                     toast(

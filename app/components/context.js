@@ -100,7 +100,7 @@ class ErrorHandler extends React.PureComponent {
             handleError: ex => {
                 console.log("HANDLE ERROR!****", ex.message, ex.status, this)
                 if (ex.status === 401) {
-                    this.props.history.replace("/login")
+                    this.props.history.push("/login")
                 }
             }
         }
