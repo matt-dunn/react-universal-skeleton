@@ -111,7 +111,7 @@ export type IInjectedAboutProps = {
 
 export type IAboutProps = { testString?: string; testNumber?: number } & IInjectedAboutProps;
 
-import {useAction, AboveTheFold, ClientOnly} from "../components/context";
+import {useAction, AboveTheFold, ClientOnly, ErrorHandler} from "../components/context";
 
 // @ts-ignore
 import handleViewport from 'react-in-viewport';
@@ -134,6 +134,7 @@ const TheListContainer = ({forwardedRef, inViewport = true, items, $status, onEx
                 })
                 .catch(ex => {
                     console.log("ERROR", ex.message)
+                    throw ex;
                 })
         },
         [complete, processing, hasError, inViewport]
@@ -188,6 +189,7 @@ const TheItemContainer = ({className, forwardedRef, inViewport = true, item, onE
                 })
                 .catch(ex => {
                     console.log("ERROR", ex.message)
+                    throw ex;
                 })
         },
         [complete, processing, hasError, inViewport]
@@ -229,16 +231,18 @@ const About = ({items, item, onExampleGetList, onExampleGetItem, $status, ...pro
                 This is the about page
             </Title>
 
-            <AboveTheFold>
-                <TheList items={items} onExampleGetList={onExampleGetList} $status={$status}/>
+            <ErrorHandler>
+                <AboveTheFold>
+                    <TheList items={items} onExampleGetList={onExampleGetList} $status={$status}/>
 
-                <ClientOnly>
-                </ClientOnly>
-            </AboveTheFold>
+                    <ClientOnly>
+                    </ClientOnly>
+                </AboveTheFold>
 
-            <div style={{height: "110vh"}}/>
+                <div style={{height: "110vh"}}/>
 
-            <TheItem item={item} onExampleGetItem={onExampleGetItem}/>
+                <TheItem item={item} onExampleGetItem={onExampleGetItem}/>
+            </ErrorHandler>
 
             <p>END.</p>
         </Page>

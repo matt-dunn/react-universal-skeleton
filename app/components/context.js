@@ -11,10 +11,25 @@ const FoldContext = React.createContext(undefined);
 
 const FoldProvider = FoldContext.Provider;
 
+const ErrorContext = React.createContext(undefined);
+
+const ErrorProvider = ErrorContext.Provider;
+
 const useAction = (test, action, deps = []) => {
     if (process.browser) {
+        const {handleError} = useContext(ErrorContext) || {};
+
         useEffect(() => {
-            test() && action()
+            if (test()) {
+                action()
+                    .catch(ex => {
+                        if (handleError) {
+                            handleError(ex)
+                        } else {
+                            throw ex;
+                        }
+                    })
+            }
         }, deps);
     } else {
         const {enabled = false} = useContext(FoldContext) || {};
@@ -74,4 +89,32 @@ const getDataFromTree = app => {
         .catch(ex => console.error(ex))
 }
 
-export {useAction, getDataFromTree, AboveTheFold, ClientOnly};
+import { withRouter } from "react-router";
+
+@withRouter
+class ErrorHandler extends React.PureComponent {
+    constructor(props) {
+        super(props);
+
+        this.handler = {
+            handleError: ex => {
+                console.log("HANDLE ERROR!****", ex.message, ex.status, this)
+                if (ex.status === 401) {
+                    this.props.history.replace("/login")
+                }
+            }
+        }
+    }
+
+    render() {
+        const {children} = this.props;
+
+        return (
+            <ErrorProvider value={this.handler}>
+                {children}
+            </ErrorProvider>
+        )
+    }
+}
+
+export {useAction, getDataFromTree, AboveTheFold, ClientOnly, ErrorHandler};
