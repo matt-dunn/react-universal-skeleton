@@ -163,9 +163,10 @@ export const outputPathParts = (o: any, parent?: any) => {
       if (isObject(o[key]) && !o[key].__VALUE__) {
         outputPathParts(o[key], o);
       } else if (o[key].warning) {
-        console.warn(o[key].warning);
-        console.warn('%cbefore', 'font-weight: bold;', o[key].before);
-        console.warn('%cafter', 'font-weight: bold;', o[key].after);
+        console.group(`%c${o[key].warning}`, 'background-color:red;color:white;border-radius:1em;padding:2px 5px;');
+        console.log('%cbefore', 'font-weight: bold;', o[key].before);
+        console.log('%cafter', 'font-weight: bold;', o[key].after);
+        console.groupEnd();
       } else {
         console.log('%cbefore', 'font-weight: bold;', o[key].before);
         console.log('%cafter', 'font-weight: bold;', o[key].after);
