@@ -1,6 +1,8 @@
 import React, {useEffect, useState, useRef} from 'react'
 import {Helmet} from 'react-helmet-async'
 
+import useWhatChanged from "../components/whatChanged/useWhatChanged";
+
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
@@ -131,6 +133,8 @@ const TheListContainer = ({forwardedRef, inViewport = true, items, $status, onEx
             })
         );
     }
+    useWhatChanged(TheListContainer, { forwardedRef, inViewport = true, items, $status, onExampleGetList, ...props });
+
 
     return (
         <ListContainer ref={forwardedRef}>
@@ -166,7 +170,7 @@ const ItemContainer = styled.div`
     padding: 10px;
 `
 
-const TheItemContainer = ({className, forwardedRef, inViewport = true, item, onExampleGetItem, ...props}: IAboutProps & IViewportProps & IStyledProps) => {
+const TheItemContainer = ({className, forwardedRef, inViewport = true, item, onExampleGetItem}: IAboutProps & IViewportProps & IStyledProps) => {
     const {complete, isActive, processing, hasError, error} = (item && Status(item.$status)) || {} as IStatus;
 
     // @ts-ignore
@@ -181,6 +185,8 @@ const TheItemContainer = ({className, forwardedRef, inViewport = true, item, onE
             })
         );
     }
+    useWhatChanged(TheItemContainer, { className, forwardedRef, inViewport, item, onExampleGetItem });
+
 
     return (
         <ItemContainer ref={forwardedRef} className={className}>
