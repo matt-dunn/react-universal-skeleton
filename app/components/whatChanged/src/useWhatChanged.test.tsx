@@ -3,7 +3,7 @@ import { shallow } from "enzyme";
 
 import useWhatChanged from "./useWhatChanged";
 
-export type IDummyProps = { testString: string; testNumber: number; };
+export type IDummyProps = { testString: string; testNumber: number };
 
 function Dummy({ testNumber, testString}: IDummyProps) {
     useWhatChanged(Dummy, { testNumber, testString });

@@ -60,7 +60,7 @@ type BaseDiffObject = {
   state?: any;
 }
 
-export const deepDiff = (o1: BaseDiffObject, o2: BaseDiffObject, p: string, path?: string, changesInBranch: boolean = false) => {
+export const deepDiff = (o1: BaseDiffObject, o2: BaseDiffObject, p: string, path?: string, changesInBranch = false) => {
   let changes = {};
 
   if (o1 !== o2) {

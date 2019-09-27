@@ -81,6 +81,7 @@
     "generate-imported-components": "imported-components app app/imported.js",
     "lint:css": "stylelint './app/**/*.(js|jsx|ts|tsx)'",
     "lint:js": "./node_modules/eslint/bin/eslint.js ./ --fix --ext .jsx,.js,.ts,.tsx",
+    "lint:jsonly": "./node_modules/eslint/bin/eslint.js ./ --fix --ext .jsx,.js",
     "lint": "yarn lint:css && yarn lint:js"
   }
 }
