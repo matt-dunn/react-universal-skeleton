@@ -23,11 +23,11 @@ const useAction = (test, action, deps = []) => {
             if (test()) {
                 action()
                     .catch(ex => {
-                        if (handleError) {
-                            handleError(ex)
-                        } else {
-                            throw ex;
+                        if(handleError && handleError(ex) === true) {   // Handled errors should not throw on client
+                            console.error(ex);
                         }
+
+                        throw ex;
                     })
             }
         }, deps);
@@ -36,18 +36,17 @@ const useAction = (test, action, deps = []) => {
 
         if (enabled) {
             const context = useContext(APIContext);
-            const promise = action();
 
-            promise
-                .catch(ex => {
-                    if (handleError) {
-                        handleError(ex)
-                    } else {
-                        throw ex;
-                    }
-                })
+            context && context.push(
+                action()
+                    .catch(ex => {
+                        if(handleError && handleError(ex) === true) {   // Handled errors should throw on the server so getDataFromTree will immediately bail
+                            throw ex;
+                        }
 
-            context && context.push(promise);
+                        console.error(ex);
+                    })
+            );
         }
     }
 }

@@ -25,7 +25,7 @@ export interface IExampleApi {
 const exampleApi: IExampleApi = {
     exampleGetList:() => new Promise<IExampleListResponse>(resolve => {
         console.log("API CALL: exampleGetList")
-        // throw new Error("bugger")
+        // throw new Error("Error in exampleGetList")
         // throw new APIError("Authentication Failed", "auth", 401)
         setTimeout(() => {
             console.log("API CALL COMPLETE: exampleGetList")
@@ -47,7 +47,7 @@ const exampleApi: IExampleApi = {
     }),
     exampleGetItem:() => new Promise<IExampleResponse>(resolve => {
         console.log("API CALL: exampleGetItem")
-        // throw new Error("bugger")
+        // throw new Error("Error in exampleGetItem")
         // throw new APIError("Authentication Failed", "auth", 401)
         setTimeout(() => {
             console.log("API CALL COMPLETE: exampleGetItem")

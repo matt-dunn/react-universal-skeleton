@@ -74,6 +74,7 @@ export default async (req, res) => {
         )
 
         if (context.url) {
+            console.log("REDIRECT:", context.url)
             res.redirect(301, context.url);
         } else {
             const [
