@@ -1,13 +1,24 @@
 import React from 'react'
 
 import Page from '../components/Page.jsx'
-import { useRouteMatch } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 
 const Login = () => {
-    console.log("MATCH", useRouteMatch())
+    const {from} = useParams() || "/";
+    const history = useHistory();
+
     return (
         <Page>
             Login
+
+            <button
+                onClick={() => {
+                    window.authenticated = true;
+                    history.replace(decodeURIComponent(from))
+                }}
+            >
+                LOGIN
+            </button>
         </Page>
     )
 }
