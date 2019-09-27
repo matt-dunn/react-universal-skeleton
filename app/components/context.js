@@ -25,6 +25,7 @@ const useAction = (test, action, deps = []) => {
                     .catch(ex => {
                         if(handleError && handleError(ex) === true) {   // Handled errors should not throw on client
                             console.error(ex);
+                            return;
                         }
 
                         throw ex;
