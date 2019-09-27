@@ -16,9 +16,9 @@ const ErrorContext = React.createContext(undefined);
 const ErrorProvider = ErrorContext.Provider;
 
 const useAction = (test, action, deps = []) => {
-    if (process.browser) {
-        const {handleError} = useContext(ErrorContext) || {};
+    const {handleError} = useContext(ErrorContext) || {};
 
+    if (process.browser) {
         useEffect(() => {
             if (test()) {
                 action()
@@ -36,8 +36,18 @@ const useAction = (test, action, deps = []) => {
 
         if (enabled) {
             const context = useContext(APIContext);
+            const promise = action();
 
-            context && context.push(action);
+            promise
+                .catch(ex => {
+                    if (handleError) {
+                        handleError(ex)
+                    } else {
+                        throw ex;
+                    }
+                })
+
+            context && context.push(promise);
         }
     }
 }
@@ -84,9 +94,9 @@ const getDataFromTree = app => {
         )
     );
 
-    return Promise.all(apiContext.map(context => context()))
+    return Promise.all(apiContext)
         .then(() => html)
-        .catch(ex => console.error(ex))
+        .catch(ex => console.error(ex)) // Swallow exceptions - they should be handled by the app...
 }
 
 import { withRouter } from "react-router";
