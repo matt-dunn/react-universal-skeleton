@@ -99,17 +99,21 @@ const getDataFromTree = app => {
         .catch(ex => console.error(ex)) // Swallow exceptions - they should be handled by the app...
 }
 
-import { withRouter } from "react-router";
+import { withRouter } from "react-router-dom";
 
 @withRouter
 class ErrorHandler extends React.PureComponent {
     constructor(props) {
         super(props);
 
-        const {handler, location, match} = this.props;
+        const {handler, location: {pathname, search, hash}, history} = this.props;
 
         this.handler = {
-            handleError: ex => handler(ex, location, match)
+            handleError: ex => handler(
+                ex,
+                `${pathname}${(search && `?${encodeURIComponent(search.substr(1))}`) || ""}${(hash && `#${encodeURIComponent(hash.substr(1))}`) || ""}`,
+                history
+            )
         }
     }
 

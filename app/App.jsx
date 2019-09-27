@@ -25,11 +25,10 @@ const Login = importComponent(() => import("./pages/Login"), {
     ErrorComponent
 });
 
-const handler = ({code, status}, location, match) => {
-    console.log(code, status, location, match)
+const handler = ({code, status}, location, history) => {
+    console.log(code, status, location, history)
     if (status === 401) {
-        console.log("PATH:", generatePath("/login/:from?", {from: "moose", loose: "/xxx/?3=3"}))
-        // this.props.history.push("/login", {from: "moose"})
+        history.push(generatePath("/login/:from?", {from: location}))
         return true;
     }
 }
