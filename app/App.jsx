@@ -13,6 +13,8 @@ import ErrorComponent from './pages/Error'
 import { GlobalStyles } from './styles'
 import { ToastifyStyles } from './styles/toasify'
 
+import {ErrorHandler} from "./components/context";
+
 const About = importComponent(() => import("./pages/About"), {
     LoadingComponent,
     ErrorComponent
@@ -36,13 +38,15 @@ const App = (props) => {
 
             <Header/>
 
-            <Switch>
-                <Route exact path="/" component={Home} />
-                <Route exact path="/about" render={() => <About />} />
-                <Route exact path="/login" render={() => <Login />} />
-                <Route component={Error404} />
-                {/*<Redirect to="/" />*/}
-            </Switch>
+            <ErrorHandler>
+                <Switch>
+                    <Route exact path="/" component={Home} />
+                    <Route exact path="/about" render={() => <About />} />
+                    <Route path="/login/:from?" render={() => <Login />} />
+                    <Route component={Error404} />
+                    {/*<Redirect to="/" />*/}
+                </Switch>
+            </ErrorHandler>
         </React.Fragment>
     );
 }
