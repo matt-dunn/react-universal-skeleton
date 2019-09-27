@@ -1,6 +1,6 @@
 import React from 'react'
 import {Helmet} from 'react-helmet-async';
-import {Switch, Route} from 'react-router-dom'
+import {Switch, Route, generatePath} from 'react-router-dom'
 import importComponent from 'react-imported-component';
 
 import Header from './components/Header'
@@ -25,6 +25,15 @@ const Login = importComponent(() => import("./pages/Login"), {
     ErrorComponent
 });
 
+const handler = ({code, status}, location, match) => {
+    console.log(code, status, location, match)
+    if (status === 401) {
+        console.log("PATH:", generatePath("/login/:from?", {from: "moose", loose: "/xxx/?3=3"}))
+        // this.props.history.push("/login", {from: "moose"})
+        return true;
+    }
+}
+
 const App = (props) => {
     console.error(props)
     return (
@@ -38,7 +47,7 @@ const App = (props) => {
 
             <Header/>
 
-            <ErrorHandler>
+            <ErrorHandler handler={handler}>
                 <Switch>
                     <Route exact path="/" component={Home} />
                     <Route exact path="/about" render={() => <About />} />

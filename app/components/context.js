@@ -106,13 +106,10 @@ class ErrorHandler extends React.PureComponent {
     constructor(props) {
         super(props);
 
+        const {handler, location, match} = this.props;
+
         this.handler = {
-            handleError: ex => {
-                console.log("HANDLE ERROR!****", ex.message, ex.status, this)
-                if (ex.status === 401) {
-                    this.props.history.push("/login")
-                }
-            }
+            handleError: ex => handler(ex, location, match)
         }
     }
 
@@ -126,5 +123,18 @@ class ErrorHandler extends React.PureComponent {
         )
     }
 }
+
+ErrorHandler.propTypes = {
+    children: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.node),
+        PropTypes.node
+    ]),
+
+    handler: PropTypes.func.isRequired,
+
+    location: PropTypes.object,
+
+    match: PropTypes.object
+};
 
 export {useAction, getDataFromTree, AboveTheFold, ClientOnly, ErrorHandler};
