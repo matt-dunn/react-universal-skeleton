@@ -125,7 +125,6 @@ const TheListContainer = ({forwardedRef, inViewport = true, items, $status, onEx
     useWhatChanged(TheListContainer, { forwardedRef, inViewport, items, $status, onExampleGetList, ...props });
 
     useAction(
-        () => (!complete && !processing && !hasError && inViewport),
         () => {
             return onExampleGetList()
                 .then(e => {
@@ -137,7 +136,8 @@ const TheListContainer = ({forwardedRef, inViewport = true, items, $status, onEx
                     throw ex;
                 })
         },
-        [complete, processing, hasError, inViewport]
+        // () => (!complete && !processing && !hasError && inViewport),
+        // [complete, processing, hasError, inViewport]
     );
 
     return (
@@ -180,7 +180,6 @@ const TheItemContainer = ({className, forwardedRef, inViewport = true, item, onE
     useWhatChanged(TheItemContainer, { className, forwardedRef, inViewport, item, onExampleGetItem });
 
     useAction(
-        () => (!complete && !processing && !hasError && inViewport),
         () => {
             return onExampleGetItem()
                 .then(e => {
@@ -192,7 +191,8 @@ const TheItemContainer = ({className, forwardedRef, inViewport = true, item, onE
                     throw ex;
                 })
         },
-        [complete, processing, hasError, inViewport]
+        // () => (!complete && !processing && !hasError && inViewport),
+        // [complete, processing, hasError, inViewport]
     );
 
     return (

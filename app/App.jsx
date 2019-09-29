@@ -36,7 +36,7 @@ const handler = ({code, status}, location, history) => {
 const App = (props) => {
     console.error(props)
     return (
-        <React.Fragment>
+        <>
             <GlobalStyles/>
             <ToastifyStyles/>
 
@@ -55,7 +55,7 @@ const App = (props) => {
                     {/*<Redirect to="/" />*/}
                 </Switch>
             </ErrorHandler>
-        </React.Fragment>
+        </>
     );
 }
 

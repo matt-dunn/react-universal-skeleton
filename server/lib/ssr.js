@@ -113,6 +113,7 @@ export default async (req, res) => {
                                     /</g,
                                     '\\u003c'
                                 )}
+                                    window.__PRERENDERED_SSR__ = true;
                                 </script>`
                             )
                             this.queue(endingHTMLFragment)

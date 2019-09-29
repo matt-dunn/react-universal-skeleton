@@ -15,12 +15,13 @@ const ErrorContext = React.createContext(undefined);
 
 const ErrorProvider = ErrorContext.Provider;
 
-const useAction = (test, action, deps = []) => {
+const useAction = (action, test) => {
     const {handleError} = useContext(ErrorContext) || {};
+    const {processOnServer = false} = useContext(FoldContext) || {};
 
     if (process.browser) {
         useEffect(() => {
-            if (test()) {
+            if ((!processOnServer || !window.__PRERENDERED_SSR__) && (!test || test())) {
                 action()
                     .catch(ex => {
                         if(handleError && handleError(ex) === true) {   // Handled errors should not throw on client
@@ -31,11 +32,9 @@ const useAction = (test, action, deps = []) => {
                         throw ex;
                     })
             }
-        }, deps);
+        }, []);
     } else {
-        const {enabled = false} = useContext(FoldContext) || {};
-
-        if (enabled) {
+        if (processOnServer) {
             const context = useContext(APIContext);
 
             context && context.push(
@@ -54,7 +53,7 @@ const useAction = (test, action, deps = []) => {
 
 const AboveTheFold = ({children}) => {
     return (
-        <FoldProvider value={{enabled: true}}>
+        <FoldProvider value={{processOnServer: true}}>
             {children}
         </FoldProvider>
     )
@@ -69,7 +68,7 @@ AboveTheFold.propTypes = {
 
 const ClientOnly = ({children}) => {
     return (
-        <FoldProvider value={{enabled: false}}>
+        <FoldProvider value={{processOnServer: false}}>
             {children}
         </FoldProvider>
     )
@@ -115,6 +114,16 @@ class ErrorHandler extends React.PureComponent {
                 history
             )
         }
+
+        // TODO: move somewhere better...!
+        this.unlisten = history.listen(({ pathname }) => {
+            window.__PRERENDERED_SSR__ = false;
+            this.unlisten();
+        })
+    }
+
+    componentWillUnmount() {
+        this.unlisten()
     }
 
     render() {
