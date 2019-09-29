@@ -38,28 +38,27 @@ const useAction = (action, test) => {
                 }
             }
         }, []);
-    } else {
-        if (processOnServer) {
-            const context = useContext(APIContext);
+    } else if (processOnServer) {
+        const context = useContext(APIContext);
 
-            if (context) {
-                const payload = action();
+        if (context) {
+            const payload = action();
 
-                if (isPromise(payload)) {
-                    context.push(
-                        payload
-                            .catch(ex => {
-                                if (handleError && handleError(ex) === true) {   // Handled errors should throw on the server so getDataFromTree will immediately bail
-                                    throw ex;
-                                }
+            if (isPromise(payload)) {
+                context.push(
+                    payload
+                        .catch(ex => {
+                            if (handleError && handleError(ex) === true) {   // Handled errors should throw on the server so getDataFromTree will immediately bail
+                                throw ex;
+                            }
 
-                                console.error(ex);
-                            })
-                    );
-                }
+                            console.error(ex);
+                        })
+                );
             }
         }
     }
+
 }
 
 const AboveTheFold = ({children}) => {
