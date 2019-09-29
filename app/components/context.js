@@ -1,5 +1,6 @@
 import React, {useEffect, useContext} from "react";
 import PropTypes from "prop-types";
+import isPromise from 'is-promise';
 
 import { renderToStaticMarkup } from 'react-dom/server'
 
@@ -22,31 +23,41 @@ const useAction = (action, test) => {
     if (process.browser) {
         useEffect(() => {
             if ((!processOnServer || !window.__PRERENDERED_SSR__) && (!test || test())) {
-                action()
-                    .catch(ex => {
-                        if(handleError && handleError(ex) === true) {   // Handled errors should not throw on client
-                            console.error(ex);
-                            return;
-                        }
+                const payload = action()
 
-                        throw ex;
-                    })
+                if (isPromise(payload)) {
+                    payload
+                        .catch(ex => {
+                            if (handleError && handleError(ex) === true) {   // Handled errors should not throw on client
+                                console.error(ex);
+                                return;
+                            }
+
+                            throw ex;
+                        })
+                }
             }
         }, []);
     } else {
         if (processOnServer) {
             const context = useContext(APIContext);
 
-            context && context.push(
-                action()
-                    .catch(ex => {
-                        if(handleError && handleError(ex) === true) {   // Handled errors should throw on the server so getDataFromTree will immediately bail
-                            throw ex;
-                        }
+            if (context) {
+                const payload = action();
 
-                        console.error(ex);
-                    })
-            );
+                if (isPromise(payload)) {
+                    context.push(
+                        payload
+                            .catch(ex => {
+                                if (handleError && handleError(ex) === true) {   // Handled errors should throw on the server so getDataFromTree will immediately bail
+                                    throw ex;
+                                }
+
+                                console.error(ex);
+                            })
+                    );
+                }
+            }
         }
     }
 }
