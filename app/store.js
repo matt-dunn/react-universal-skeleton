@@ -8,14 +8,15 @@ import notification from './components/redux/middleware/notification';
 
 import rootReducer from './reducers';
 
-import services from "./components/api/__dummy__/example";
+import servicesExample from "./components/api/__dummy__/example";
+import servicesAuth from "./components/api/auth";
 
 const getStore = (preloadedState = {}) => createStore(
     rootReducer,
     preloadedState,
     applyMiddleware(
         // promiseMiddleware,
-        stateDecorator({ dependencies: { inject: {services } } }),
+        stateDecorator({ dependencies: { inject: {services: {...servicesExample, ...servicesAuth} } } }),
         notification({
             notify: (
                 {error: { message, code, status }, type, cancel, retry}

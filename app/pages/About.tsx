@@ -191,8 +191,8 @@ const TheItemContainer = ({className, forwardedRef, inViewport = true, item, onE
                     throw ex;
                 })
         },
-        // () => (!complete && !processing && !hasError && inViewport),
-        // [complete, processing, hasError, inViewport]
+        () => inViewport,
+        [inViewport]
     );
 
     return (

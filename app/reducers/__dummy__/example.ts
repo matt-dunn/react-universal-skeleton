@@ -8,27 +8,9 @@ import { IActionMeta } from '../../components/state-mutate-with-status/state';
 import nextState from '../../components/state-mutate-with-status';
 import { IStatus } from '../../components/state-mutate-with-status/status';
 
-interface IReducer<T> {
-    (state: T, action: FluxStandardAction<string, any, any>): T;
-}
+import {combineReducers} from "../combineReducers"
 
-interface IReducers<T> {
-    [key: string]: IReducer<T>;
-}
-
-const combineReducers = <T>(initialState: T, ...reducers: IReducers<T>[]): Reducer<T> => {
-    const allReducers: IReducers<T> = Object.assign({}, ...reducers);
-
-    return (state: T = initialState, action: FluxStandardAction<string, any, any>): T => {
-        const reducer = allReducers[action.type];
-
-        return (reducer && reducer(state, action)) || state;
-    };
-};
-
-
-
-import * as actions from '../../actions';
+import {exampleActions as actions} from '../../actions';
 
 // export interface IExampleItemState extends Record<{
 export interface IExampleItemState {
@@ -71,8 +53,8 @@ const initialState = {
 } as IExampleState;
 
 const exampleActions = {
-    [getType(actions.exampleActions.exampleGetList)]: exampleGetList,
-    [getType(actions.exampleActions.exampleGetItem)]: exampleGetItem,
+    [getType(actions.exampleGetList)]: exampleGetList,
+    [getType(actions.exampleGetItem)]: exampleGetItem,
     // [getType(actions.exampleActions.example)]: example,
     // [getType(actions.exampleActions.exampleList)]: exampleList,
 };
