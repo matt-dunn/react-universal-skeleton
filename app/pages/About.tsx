@@ -136,8 +136,8 @@ const TheListContainer = ({forwardedRef, inViewport = true, items, $status, onEx
                     throw ex;
                 })
         },
-        // () => (!complete && !processing && !hasError && inViewport),
-        // [complete, processing, hasError, inViewport]
+        () => inViewport,
+        [inViewport]
     );
 
     return (
@@ -180,19 +180,9 @@ const TheItemContainer = ({className, forwardedRef, inViewport = true, item, onE
     useWhatChanged(TheItemContainer, { className, forwardedRef, inViewport, item, onExampleGetItem });
 
     useAction(
-        () => {
-            return onExampleGetItem()
-                .then(e => {
-                    console.log("DONE",e)
-                    return e;
-                })
-                .catch(ex => {
-                    console.log("ERROR", ex.message)
-                    throw ex;
-                })
-        },
-        () => inViewport,
-        [inViewport]
+        () => onExampleGetItem(),
+        () => inViewport && !complete,
+        [inViewport, complete]
     );
 
     return (
