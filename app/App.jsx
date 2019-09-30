@@ -33,10 +33,13 @@ const handler = ({code, status}, location, history) => {
     }
 }
 
+import AuthProvider from "./components/auth"
+
 const App = (props) => {
-    console.error(props)
+    // const counter = useSelector(state => state.auth)
+    // console.log(props)
     return (
-        <>
+        <AuthProvider>
             <GlobalStyles/>
             <ToastifyStyles/>
 
@@ -55,7 +58,7 @@ const App = (props) => {
                     {/*<Redirect to="/" />*/}
                 </Switch>
             </ErrorHandler>
-        </>
+        </AuthProvider>
     );
 }
 

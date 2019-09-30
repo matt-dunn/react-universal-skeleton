@@ -13,6 +13,7 @@ import {IStatus} from "../../components/state-mutate-with-status/status";
 export interface AuthenticatedUser {
     id: string;
     name: string;
+    email: string;
     $status: IStatus;
 }
 

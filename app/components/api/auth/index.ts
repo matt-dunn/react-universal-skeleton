@@ -3,6 +3,7 @@ import {APIError, APPError} from "../index";
 export interface AuthUserResponse {
     id: string;
     name: string;
+    email: string
 }
 
 export interface Login {
@@ -22,7 +23,8 @@ const exampleApi: AuthApi = {
             console.log("API CALL COMPLETE: login")
             resolve({
                 id: "123",
-                name: `Clem Fandango (${username})`
+                name: `Clem Fandango`,
+                email: username
             })
         }, 1500)
     })

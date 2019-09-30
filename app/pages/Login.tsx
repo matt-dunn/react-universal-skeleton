@@ -13,7 +13,6 @@ import Status from "../components/state-mutate-with-status/status";
 export type LoginProps = { auth: AuthState, onLogin: (username: string, password: string) => any };
 
 const Login = ({auth, onLogin}: LoginProps) => {
-    console.log(auth)
     const {from} = useParams() || "/";
     const history = useHistory();
     const {complete, isActive, processing, hasError, error} = Status(auth.authenticatedUser && auth.authenticatedUser.$status);
@@ -25,7 +24,7 @@ const Login = ({auth, onLogin}: LoginProps) => {
             <button
                 disabled={processing}
                 onClick={() => {
-                    onLogin("bob", "xxx")
+                    onLogin("clem@demo.com", "xxx")
                         .then(() => {
                             // @ts-ignore
                             window.authenticated = true;
