@@ -115,18 +115,21 @@ class ErrorHandler extends React.PureComponent {
     constructor(props) {
         super(props);
 
-        const {handler, location: {pathname, search, hash}, history} = this.props;
-
         this.handler = {
-            handleError: ex => handler(
-                ex,
-                `${pathname}${(search && `?${encodeURIComponent(search.substr(1))}`) || ""}${(hash && `#${encodeURIComponent(hash.substr(1))}`) || ""}`,
-                history
-            )
+            handleError: ex => {
+                const {handler, location: {pathname, search, hash}, history} = this.props;
+
+                return handler(
+                    ex,
+                    `${pathname}${(search && `?${encodeURIComponent(search.substr(1))}`) || ""}${(hash && `#${encodeURIComponent(hash.substr(1))}`) || ""}`,
+                    history
+                )
+            }
         }
 
         // TODO: move somewhere better...!
-        this.unlisten = history.listen(({ pathname }) => {
+        const {history} = this.props;
+        this.unlisten = history.listen(() => {
             window.__PRERENDERED_SSR__ = false;
             this.unlisten();
         })
