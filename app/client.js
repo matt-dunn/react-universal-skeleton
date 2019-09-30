@@ -1,8 +1,8 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
 import { HelmetProvider } from 'react-helmet-async';
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, withRouter } from 'react-router-dom'
 import { rehydrateMarks } from 'react-imported-component';
 import importedComponents from './imported'; // eslint-disable-line
 
@@ -18,6 +18,14 @@ console.error(store.getState())
 
 const element = document.getElementById('app')
 
+const ScrollToTop = withRouter(({ children, location: { pathname } }) => {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+        }, [pathname]);
+
+    return children;
+});
+
 const app = (
     <HelmetProvider>
         <Provider store={store}>
@@ -26,7 +34,9 @@ const app = (
                 pauseOnHover
             />
             <BrowserRouter>
-                <App />
+                <ScrollToTop>
+                    <App />
+                </ScrollToTop>
             </BrowserRouter>
         </Provider>
     </HelmetProvider>
