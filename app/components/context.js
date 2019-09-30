@@ -1,4 +1,4 @@
-import React, {useEffect, useContext} from "react";
+import React, {useEffect, useContext, useRef} from "react";
 import PropTypes from "prop-types";
 import isPromise from 'is-promise';
 
@@ -16,14 +16,18 @@ const ErrorContext = React.createContext(undefined);
 
 const ErrorProvider = ErrorContext.Provider;
 
-const useAction = (action, test) => {
+const useAction = (action, test, deps = []) => {
     const {handleError} = useContext(ErrorContext) || {};
     const {processOnServer = false} = useContext(FoldContext) || {};
 
     if (process.browser) {
+        const isCalled = useRef(false);
+
         useEffect(() => {
-            if ((!processOnServer || !window.__PRERENDERED_SSR__) && (!test || test())) {
-                const payload = action()
+            if ((!processOnServer || !window.__PRERENDERED_SSR__) && (!test || test()) && !isCalled.current) {
+                isCalled.current = true;
+
+                const payload = action();
 
                 if (isPromise(payload)) {
                     payload
@@ -37,7 +41,7 @@ const useAction = (action, test) => {
                         })
                 }
             }
-        }, []);
+        }, deps);
     } else if (processOnServer) {
         const context = useContext(APIContext);
 
