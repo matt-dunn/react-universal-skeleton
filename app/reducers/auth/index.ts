@@ -5,7 +5,7 @@ import { IActionMeta } from '../../components/state-mutate-with-status/state';
 
 import nextState from '../../components/state-mutate-with-status';
 
-import {combineReducers} from "../combineReducers"
+import {createReducer} from "../../components/redux/utils"
 
 import {authActions as actions} from '../../actions';
 import {IStatus} from "../../components/state-mutate-with-status/status";
@@ -34,4 +34,4 @@ const authActions = {
     [getType(actions.login)]: login
 };
 
-export default combineReducers(initialState, authActions);
+export default createReducer(initialState, authActions);
