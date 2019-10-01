@@ -2,7 +2,7 @@ import React, {useEffect, useState, useRef} from 'react'
 import {Helmet} from 'react-helmet-async'
 
 // @ts-ignore
-import useWhatChanged from "../components/whatChanged/useWhatChanged";
+import useWhatChanged from "components/whatChanged/useWhatChanged";
 
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
