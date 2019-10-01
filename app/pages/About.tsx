@@ -14,7 +14,7 @@ import {IAppState} from '../reducers';
 
 import * as actions from '../actions';
 
-import {IExampleItemState, IExampleListState} from '../reducers/__dummy__/example';
+import {IExampleItemState} from '../reducers/__dummy__/example';
 // import {IExampleAction} from '../container';
 import Status, { IStatus } from 'components/state-mutate-with-status/status';
 import {IExampleGetList, IExampleGetItem} from "../components/api/__dummy__/example";
@@ -96,12 +96,12 @@ const ListItem = styled.li`
 `
 
 const Placeholder = styled.ol`
-    ${list}
+    ${list};
     color: #ccc;
 `
 
 export type IInjectedAboutProps = {
-    items: IExampleListState;
+    items: IExampleItemState[];
     item?: IExampleItemState;
     onExampleGetList: IExampleGetList;
     onExampleGetItem: IExampleGetItem;
