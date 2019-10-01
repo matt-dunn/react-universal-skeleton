@@ -1,6 +1,5 @@
 // import Immutable, { List, Record } from 'immutable';
 import { FluxStandardAction } from 'flux-standard-action';
-import { Reducer } from "redux";
 import { getType } from 'typesafe-actions';
 
 import { IActionMeta } from 'components/state-mutate-with-status/state';
@@ -21,11 +20,9 @@ export interface IExampleItemState {
 
 // export interface IExampleListState extends List<IExampleItemState>{}
 
-export interface IExampleListState extends Array<IExampleItemState>{}
-
 // export interface IExampleState extends Record<{
 export interface IExampleState {
-    items: IExampleListState;
+    items: IExampleItemState[];
     item?: IExampleItemState;
     $status?: IStatus;
 }
