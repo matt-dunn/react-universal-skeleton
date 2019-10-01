@@ -34,7 +34,7 @@ const Header = () => {
 
     return (
         <Container>
-            <Brand>Universal App Test {authenticatedUser && authenticatedUser.name} {authenticatedUser && <small>{authenticatedUser.email}</small>} </Brand>
+            <Brand>Universal App Example {authenticatedUser && authenticatedUser.name} {authenticatedUser && <small>{authenticatedUser.email}</small>} </Brand>
             <Menu>
                 <MenuLink>
                     <NavLink
