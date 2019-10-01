@@ -1,4 +1,5 @@
-import React, {useContext, useMemo} from "react";
+import React, {useContext} from "react";
+import PropTypes from "prop-types";
 import { useSelector } from 'react-redux'
 
 const AuthContext = React.createContext(undefined);
@@ -12,6 +13,13 @@ const AuthProvider = ({children}) => {
         </AuthContext.Provider>
     );
 }
+
+AuthProvider.propTypes = {
+    children: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.node),
+        PropTypes.node
+    ])
+};
 
 export const useAuthenticatedUser = () => {
     const {authenticatedUser} = useContext(AuthContext);

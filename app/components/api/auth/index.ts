@@ -3,7 +3,7 @@ import {APIError, APPError} from "../index";
 export interface AuthUserResponse {
     id: string;
     name: string;
-    email: string
+    email: string;
 }
 
 export interface Login {

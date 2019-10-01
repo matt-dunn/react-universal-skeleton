@@ -12,7 +12,7 @@ import Status from "components/state-mutate-with-status/status";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
-export type LoginProps = { auth: AuthState, onLogin: (username: string, password: string) => any };
+export type LoginProps = { auth: AuthState; onLogin: (username: string, password: string) => any };
 
 const Login = ({auth, onLogin}: LoginProps, ...props: any[]) => {
     const {from} = useParams() || "/";

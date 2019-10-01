@@ -12,7 +12,6 @@
 
 /* eslint no-underscore-dangle: "off" */
 /* eslint no-console: "off" */
-import React, { ComponentType, PureComponent } from 'react';
 
 import {
   merge, isFunction, isString, isObject, union, keys, isEmpty, get, set,

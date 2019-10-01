@@ -52,6 +52,8 @@ ErrorHandler.propTypes = {
 
     handler: PropTypes.func.isRequired,
 
+    history: PropTypes.object,
+
     location: PropTypes.object,
 
     match: PropTypes.object
