@@ -9,13 +9,16 @@ import {connect} from "react-redux";
 
 import {AuthState} from "../reducers/auth";
 import Status from "../components/state-mutate-with-status/status";
+import useWhatChanged from "../components/whatChanged/useWhatChanged";
 
 export type LoginProps = { auth: AuthState, onLogin: (username: string, password: string) => any };
 
-const Login = ({auth, onLogin}: LoginProps) => {
+const Login = ({auth, onLogin}: LoginProps, ...props) => {
     const {from} = useParams() || "/";
     const history = useHistory();
     const {complete, isActive, processing, hasError, error} = Status(auth.authenticatedUser && auth.authenticatedUser.$status);
+
+    useWhatChanged(Login, { auth, onLogin, ...props });
 
     return (
         <Page>
