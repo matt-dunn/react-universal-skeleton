@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Page from '../components/Page.jsx'
+import Page from '../styles/Page'
 
 const Error = () => (
     <Page>

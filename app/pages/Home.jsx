@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react'
 import {Helmet} from 'react-helmet-async'
 
-import Page from '../components/Page.jsx'
+import Page from '../styles/Page'
 
 const Home = () => {
     console.log("******HOME RENDER")

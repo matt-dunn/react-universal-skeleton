@@ -1,12 +1,12 @@
 import React from 'react'
 
-import Page from '../components/Page.jsx'
 import { useParams, useHistory } from "react-router-dom";
-import {IAppState} from "../reducers";
 import {Dispatch} from "redux";
-import * as actions from "../actions";
 import {connect} from "react-redux";
 
+import {IAppState} from "../reducers";
+import * as actions from "../actions";
+import Page from '../styles/Page'
 import {AuthState} from "../reducers/auth";
 import Status from "components/state-mutate-with-status/status";
 

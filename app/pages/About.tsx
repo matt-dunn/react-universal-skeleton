@@ -6,7 +6,7 @@ import useWhatChanged from "components/whatChanged/useWhatChanged";
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import Page from '../components/Page.jsx'
+import Page from '../styles/Page'
 import styled, {css} from "styled-components";
 
 import {IAppState} from '../reducers';

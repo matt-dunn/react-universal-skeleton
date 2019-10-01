@@ -1,7 +1,7 @@
 import React from 'react'
-
-import Page from '../components/Page.jsx'
 import styled from "styled-components";
+
+import Page from '../styles/Page'
 
 const Title = styled.div`
     color: red;
