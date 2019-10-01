@@ -5,7 +5,7 @@ import { IActionMeta } from '../../components/state-mutate-with-status/state';
 
 import nextState from '../../components/state-mutate-with-status';
 
-import {createReducer} from "../../components/redux/utils"
+import {createReducer} from "components/redux/utils"
 
 import {authActions as actions} from '../../actions';
 import {IStatus} from "../../components/state-mutate-with-status/status";

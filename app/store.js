@@ -3,8 +3,8 @@ import { createStore, applyMiddleware } from 'redux';
 import React from 'react'
 import { toast } from 'react-toastify';
 
-import stateDecorator from './components/redux/middleware/stateDecorator';
-import notification from './components/redux/middleware/notification';
+import stateDecorator from 'components/redux/middleware/stateDecorator';
+import notification from 'components/redux/middleware/notification';
 
 import rootReducer from './reducers';
 

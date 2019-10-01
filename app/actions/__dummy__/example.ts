@@ -1,6 +1,6 @@
 import { createStandardAction } from 'typesafe-actions';
 
-import { IPayload } from '../../components/redux/middleware/stateDecorator';
+import { IPayload } from 'components/redux/middleware/stateDecorator';
 
 const exampleGetList = createStandardAction('@__dummy__/EXAMPLE_GET_LIST')
     .map(() => ({

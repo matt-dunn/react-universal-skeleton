@@ -8,7 +8,7 @@ import { IActionMeta } from '../../components/state-mutate-with-status/state';
 import nextState from '../../components/state-mutate-with-status';
 import { IStatus } from '../../components/state-mutate-with-status/status';
 
-import {createReducer} from "../../components/redux/utils"
+import {createReducer} from "components/redux/utils"
 
 import {exampleActions as actions} from '../../actions';
 
