@@ -4,7 +4,7 @@ import App from './App'
 import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter, withRouter } from 'react-router-dom'
 import { rehydrateMarks } from 'react-imported-component';
-import importedComponents from './imported'; // eslint-disable-line
+import './.imported';
 
 import { ToastContainer } from 'react-toastify';
 
