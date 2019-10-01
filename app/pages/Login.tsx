@@ -8,7 +8,7 @@ import * as actions from "../actions";
 import {connect} from "react-redux";
 
 import {AuthState} from "../reducers/auth";
-import Status from "../components/state-mutate-with-status/status";
+import Status from "components/state-mutate-with-status/status";
 // @ts-ignore
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 

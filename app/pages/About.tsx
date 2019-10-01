@@ -17,7 +17,7 @@ import * as actions from '../actions';
 
 import {IExampleItemState, IExampleListState} from '../reducers/__dummy__/example';
 // import {IExampleAction} from '../container';
-import Status, { IStatus } from '../components/state-mutate-with-status/status';
+import Status, { IStatus } from 'components/state-mutate-with-status/status';
 import {IExampleGetList, IExampleGetItem} from "../components/api/__dummy__/example";
 import {Simulate} from "react-dom/test-utils";
 import load = Simulate.load;
