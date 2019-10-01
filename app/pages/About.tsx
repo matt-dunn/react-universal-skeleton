@@ -229,9 +229,7 @@ const About = ({items, item, onExampleGetList, onExampleGetItem, $status, ...pro
 
             <div style={{height: "110vh"}}/>
 
-            <AboveTheFold>
             <TheItem item={item} onExampleGetItem={onExampleGetItem}/>
-            </AboveTheFold>
 
             <p>END.</p>
         </Page>
