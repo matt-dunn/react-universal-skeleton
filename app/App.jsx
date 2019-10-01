@@ -13,7 +13,7 @@ import ErrorComponent from './pages/Error'
 import { GlobalStyles } from './styles'
 import { ToastifyStyles } from './styles/toasify'
 
-import {ErrorHandler} from "./components/context";
+import ErrorHandler from "components/actions/ErrorHandler";
 
 const About = importComponent(() => import("./pages/About"), {
     LoadingComponent,

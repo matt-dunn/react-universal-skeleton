@@ -13,7 +13,7 @@ import { Provider } from 'react-redux';
 
 import getStore from "../../app/store";
 
-import {getDataFromTree} from "../../app/components/context";
+import {getDataFromTree} from "components/actions";
 
 const parseHelmetTemplate = helmet => (template, ...vars) => {
     const matcher = /{(\w*)}/g;

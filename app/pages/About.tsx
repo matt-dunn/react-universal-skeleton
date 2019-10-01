@@ -110,7 +110,7 @@ export type IInjectedAboutProps = {
 
 export type IAboutProps = { testString?: string; testNumber?: number } & IInjectedAboutProps;
 
-import {useAction, AboveTheFold, ClientOnly} from "../components/context";
+import {usePerformAction, AboveTheFold, ClientOnly} from "components/actions";
 
 // @ts-ignore
 import handleViewport from 'react-in-viewport';
@@ -123,7 +123,7 @@ const TheListContainer = ({forwardedRef, inViewport = true, items, $status, onEx
 
     useWhatChanged(TheListContainer, { forwardedRef, inViewport, items, $status, onExampleGetList, ...props });
 
-    useAction(
+    usePerformAction(
         () => {
             return onExampleGetList()
                 .then(e => {
@@ -178,7 +178,7 @@ const TheItemContainer = ({className, forwardedRef, inViewport = true, item, onE
 
     useWhatChanged(TheItemContainer, { className, forwardedRef, inViewport, item, onExampleGetItem });
 
-    useAction(
+    usePerformAction(
         () => onExampleGetItem(),
         () => inViewport && !complete,
         [inViewport, complete]
@@ -229,7 +229,9 @@ const About = ({items, item, onExampleGetList, onExampleGetItem, $status, ...pro
 
             <div style={{height: "110vh"}}/>
 
+            <AboveTheFold>
             <TheItem item={item} onExampleGetItem={onExampleGetItem}/>
+            </AboveTheFold>
 
             <p>END.</p>
         </Page>
