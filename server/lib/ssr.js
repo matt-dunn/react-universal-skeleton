@@ -46,6 +46,7 @@ if (!('toJSON' in Error.prototype)) {
 }
 
 export default async (req, res) => {
+    const t1 = Date.now();
     const store = getStore();
 
     const context = {};
@@ -118,6 +119,7 @@ export default async (req, res) => {
                             )
                             this.queue(endingHTMLFragment)
                             this.queue(null)
+                            console.log("----DONE", Date.now() - t1)
                         }
                     )
                 )
