@@ -9,7 +9,7 @@ import {connect} from "react-redux";
 
 import {AuthState} from "../reducers/auth";
 import Status from "components/state-mutate-with-status/status";
-// @ts-ignore
+
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
 export type LoginProps = { auth: AuthState, onLogin: (username: string, password: string) => any };
