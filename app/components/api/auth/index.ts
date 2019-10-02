@@ -14,6 +14,9 @@ export interface AuthApi {
     login: Login;
 }
 
+// @ts-ignore
+window.authenticated = true;
+
 const exampleApi: AuthApi = {
     login:(username, password) => new Promise<AuthUserResponse>(resolve => {
         console.log("API CALL: login", username, password)
@@ -21,6 +24,8 @@ const exampleApi: AuthApi = {
         // throw new APIError("Authentication Failed", "auth", 401)
         setTimeout(() => {
             console.log("API CALL COMPLETE: login")
+            // @ts-ignore
+            window.authenticated = true;
             resolve({
                 id: "123",
                 name: `Clem Fandango`,

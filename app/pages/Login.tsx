@@ -30,8 +30,6 @@ const Login = ({auth, onLogin}: LoginProps, ...props: any[]) => {
                 onClick={() => {
                     onLogin("clem@demo.com", "xxx")
                         .then(() => {
-                            // @ts-ignore
-                            window.authenticated = true;
                             from && history.replace(decodeURIComponent(from))
                         })
                 }}
