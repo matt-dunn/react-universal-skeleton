@@ -4,7 +4,7 @@ import { getType } from 'typesafe-actions';
 
 import { IActionMeta } from 'components/state-mutate-with-status/state';
 // import nextState from 'components/state-mutate-with-status/immutable';
-import nextState from 'components/state-mutate-with-status';
+import nextState from 'components/state-mutate-with-status/nativeFrozen';
 import { IStatus } from 'components/state-mutate-with-status/status';
 
 import {createReducer} from "components/redux/utils"
