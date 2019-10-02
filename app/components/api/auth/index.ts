@@ -1,4 +1,4 @@
-import {APIError, APPError} from "../index";
+import {APIError, APPError} from "components/api";
 
 export interface AuthUserResponse {
     id: string;
@@ -15,7 +15,7 @@ export interface AuthApi {
 }
 
 // @ts-ignore
-window.authenticated = true;
+(typeof window !== 'undefined') && (window.authenticated = true);
 
 const exampleApi: AuthApi = {
     login:(username, password) => new Promise<AuthUserResponse>(resolve => {
@@ -23,9 +23,9 @@ const exampleApi: AuthApi = {
         // throw new Error("Error in login")
         // throw new APIError("Authentication Failed", "auth", 401)
         setTimeout(() => {
-            console.log("API CALL COMPLETE: login")
+            console.log("API CALL COMPLETE: login");
             // @ts-ignore
-            window.authenticated = true;
+            (typeof window === 'undefined') && (window.authenticated = true);
             resolve({
                 id: "123",
                 name: `Clem Fandango`,
