@@ -14,8 +14,10 @@
 /* eslint no-console: "off" */
 
 import {
-  merge, isFunction, isString, isObject, union, keys, isEmpty, get, set,
+  merge, isFunction, isString, isObject, union, keys as _keys, isEmpty, get, set
 } from 'lodash';
+
+const keys = (o: any): any => (Object.getOwnPropertySymbols(o) as (Symbol|string)[]).concat(_keys(o));
 
 const getObjectProp = (o: any, name: string) => {
   if (o.get && o.keySeq) {
@@ -27,7 +29,12 @@ const getObjectProp = (o: any, name: string) => {
 
 const getObject = (o: any) => {
   if (isFunction(o)) {
-    return 'function';
+    return 'Function';
+  } else if (isObject(o)) {
+    return keys(o).reduce((acc: any, key: string) => {
+      acc[key.toString()] = (o as {[index: string]:any})[key];
+      return acc;
+    }, {})
   }
   return o;
 };
@@ -74,13 +81,13 @@ export const deepDiff = (o1: BaseDiffObject, o2: BaseDiffObject, p: string, path
             { props: o1.props, state: o1.state },
             { props: o2.props, state: o2.state },
             getType(o1).replace(/\./g, '__@@__'),
-            (path ? `${path}.` : '') + p,
+            (path ? `${path}.` : '') + p.toString(),
         );
       } else {
         unionKeys.forEach((key: string) => {
           const o1normalised = getObjectProp(o1, key);
           const o2normalised = getObjectProp(o2, key);
-          const propertyChanges = deepDiff(o1normalised, o2normalised, key, (path ? `${path}.` : '') + p, (path && o1normalised !== o2normalised) || false);
+          const propertyChanges = deepDiff(o1normalised, o2normalised, key, (path ? `${path}.` : '') + p.toString(), (path && o1normalised !== o2normalised) || false);
 
           if (!changesInBranch && isEmpty(propertyChanges) && o1normalised !== o2normalised) {
             set(propertyChanges, `${(path ? `${path}.` : '') + p}.${key}`, {
@@ -109,7 +116,7 @@ export const deepDiff = (o1: BaseDiffObject, o2: BaseDiffObject, p: string, path
 
 const countAvoidable = (o: any) => {
   if (!o.__VALUE__) {
-    return keys(o).reduce((acc, key) => {
+    return keys(o).reduce((acc: any, key: string) => {
       if (isObject(o[key]) && !o[key].__VALUE__) {
         const counts = countAvoidable(o[key]);
 
@@ -136,7 +143,7 @@ const countAvoidable = (o: any) => {
 };
 
 export const outputPathParts = (o: any, parent?: any) => {
-  keys(o).sort().forEach(key => {
+  keys(o).sort().forEach((key: string) => {
     let groupStyle = (parent && 'background-color:#999;color:#000;border-radius:1em;padding:2px 5px;') || 'background-color:#ccc;color:#000;border-radius:1em;padding:2px 5px;';
     let groupTitleSubText = '';
 
