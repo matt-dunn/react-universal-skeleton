@@ -1,4 +1,4 @@
-import { IAPPError } from '../api';
+import { IAPPError } from 'components/api';
 
 const symbolActiveTransactions = Symbol('activeTransactions');
 

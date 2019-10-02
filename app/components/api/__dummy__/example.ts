@@ -1,4 +1,4 @@
-import {APIError, APPError} from "../index";
+import {APIError, APPError} from "components/api";
 
 export interface IExampleResponse {
     id: string;
