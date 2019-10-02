@@ -32,7 +32,7 @@ export default function useWhatChanged<T>(Component: FunctionComponent<any>, val
   );
 
   outputPathParts(
-      `${(Component.displayName || Component.name || 'ANONYMOUS')}${(options && getIdentifier(options.idProp, value)) || ""}`,
+      `${(Component.displayName || Component.name || 'Unknown')}${(options && getIdentifier(options.idProp, value)) || ""}`,
       diff
   );
 

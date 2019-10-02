@@ -23,7 +23,7 @@ export default (
       class WhatChanged extends PureComponent<P> {
         componentDidUpdate = (prevProps: P, prevState: P): void => {
             outputPathParts(
-                `${(WrappedComponent.displayName || WrappedComponent.name || 'ANONYMOUS')}${(options && getIdentifier(options.idProp, this.props)) || ""}`,
+                `${(WrappedComponent.displayName || WrappedComponent.name || 'Unknown')}${(options && getIdentifier(options.idProp, this.props)) || ""}`,
                 deepDiff(
                     {props: prevProps, state: prevState},
                     {props: this.props, state: this.state},

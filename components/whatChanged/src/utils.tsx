@@ -90,7 +90,7 @@ export const deepDiff = (o1: BaseDiffObject, o2: BaseDiffObject, p: string, path
           const propertyChanges = deepDiff(o1normalised, o2normalised, key, (path ? `${path}.` : '') + p.toString(), (path && o1normalised !== o2normalised) || false);
 
           if (!changesInBranch && isEmpty(propertyChanges) && o1normalised !== o2normalised) {
-            set(propertyChanges, `${(path ? `${path}.` : '') + p}.${key}`, {
+            set(propertyChanges, `${(path ? `${path}.` : '') + p.toString()}.${key.toString()}`, {
               warning: 'AVOIDABLE',
               avoidable: true,
               __VALUE__: true,
@@ -103,7 +103,7 @@ export const deepDiff = (o1: BaseDiffObject, o2: BaseDiffObject, p: string, path
         });
       }
     } else {
-      set(changes, `${path}.${p}`, {
+      set(changes, `${path}.${p.toString()}`, {
         __VALUE__: true,
         before: getObject(o1 && o1.toJS ? o1.toJS() : o1),
         after: getObject(o2 && o2.toJS ? o2.toJS() : o2),
