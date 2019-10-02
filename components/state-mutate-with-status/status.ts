@@ -1,4 +1,9 @@
-import { IAPPError } from 'components/api';
+type ErrorLike = {
+  message: string;
+  name?: string;
+  code?: string;
+  status?: number;
+}
 
 const symbolActiveTransactions = Symbol('activeTransactions');
 
@@ -12,7 +17,7 @@ export type IStatus = {
   readonly processedOnServer: boolean;
   readonly processing: boolean;
   readonly hasError?: boolean;
-  readonly error?: IAPPError;
+  readonly error: ErrorLike;
   readonly isActive: boolean;
   readonly outstandingTransactionCount: number;
   readonly [symbolActiveTransactions]: IActiveTransactions;
@@ -21,6 +26,15 @@ export type IStatus = {
 export type IStatusTransaction = {
   readonly transactionId: string;
 } & IStatus
+
+const errorLike = (error: ErrorLike & {[index: string]:any}): ErrorLike => {
+  const {stack, ...rest} = Object.getOwnPropertyNames(error).reduce((o: any, key: string) => {
+    o[key] = error[key];
+    return o;
+  }, {});
+
+  return rest;
+};
 
 const Status = (status: IStatus = {} as IStatus): IStatus => {
   const {
@@ -36,7 +50,7 @@ const Status = (status: IStatus = {} as IStatus): IStatus => {
     hasError,
     isActive,
     processedOnServer,
-    error,
+    error: error && errorLike(error),
     outstandingTransactionCount: Object.keys(activeTransactions).length,
     [symbolActiveTransactions]: { ...activeTransactions },
   };
