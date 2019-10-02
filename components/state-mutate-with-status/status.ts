@@ -27,7 +27,7 @@ export type IStatusTransaction = {
   readonly transactionId: string;
 } & IStatus
 
-const errorLike = (error: ErrorLike & {[index: string]:any}): ErrorLike => {
+const errorLike = (error: ErrorLike & {[index: string]: any}): ErrorLike => {
   const {stack, ...rest} = Object.getOwnPropertyNames(error).reduce((o: any, key: string) => {
     o[key] = error[key];
     return o;

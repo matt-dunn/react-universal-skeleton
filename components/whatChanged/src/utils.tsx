@@ -17,7 +17,7 @@ import {
   merge, isFunction, isString, isObject, union, keys as _keys, isEmpty, get, set
 } from 'lodash';
 
-const keys = (o: any): any => (Object.getOwnPropertySymbols(o) as (Symbol|string)[]).concat(_keys(o));
+const keys = (o: any): any => (Object.getOwnPropertySymbols(o) as (symbol|string)[]).concat(_keys(o));
 
 const getObjectProp = (o: any, name: string) => {
   if (o.get && o.keySeq) {
@@ -32,7 +32,7 @@ const getObject = (o: any) => {
     return 'Function';
   } else if (isObject(o)) {
     return keys(o).reduce((acc: any, key: string) => {
-      acc[key.toString()] = (o as {[index: string]:any})[key];
+      acc[key.toString()] = (o as {[index: string]: any})[key];
       return acc;
     }, {})
   }
@@ -42,19 +42,19 @@ const getObject = (o: any) => {
 const getType = (o: any) => {
   const parts = [];
 
-  if (o.type && o.type.displayName) {
-    parts.push(o.type && o.type.displayName);
-  } else {
-    if (isString(o.type)) {
-      parts.push(o.type);
-    }
-
-    if (o.$$typeof.toString) {
-      parts.push(o.$$typeof.toString());
-    }
+  if (o.type && (o.type.displayName || o.type.name)) {
+    parts.push(o.type.displayName || o.type.name);
   }
 
-  return parts.join('.') + (o.key ? `[${o.key}]` : '');
+  if (isString(o.type)) {
+    parts.push(o.type);
+  }
+
+  if (o.$$typeof && o.$$typeof.toString) {
+    parts.push(o.$$typeof.toString());
+  }
+
+  return parts.join(' ') + (o.key ? `[${o.key}]` : '');
 };
 
 type BaseDiffObject = {
@@ -142,7 +142,7 @@ const countAvoidable = (o: any) => {
   return 0;
 };
 
-export const outputPathParts = (o: any, parent?: any) => {
+export const outputPathParts = (id: string, o: any, parent?: any) => {
   keys(o).sort().forEach((key: string) => {
     let groupStyle = (parent && 'background-color:#999;color:#000;border-radius:1em;padding:2px 5px;') || 'background-color:#ccc;color:#000;border-radius:1em;padding:2px 5px;';
     let groupTitleSubText = '';
@@ -163,11 +163,11 @@ export const outputPathParts = (o: any, parent?: any) => {
       if (parent) {
         console.group(`%c${key.replace(/__@@__/g, '.')}${groupTitleSubText}`, groupStyle);
       } else {
-        console.groupCollapsed(`%c${key.replace(/__@@__/g, '.')}${groupTitleSubText}`, groupStyle);
+        console.groupCollapsed(`%c${key.replace(/__@@__/g, '.')}${(id && (": " + id)) || ""}${groupTitleSubText}`, groupStyle);
       }
 
       if (isObject(o[key]) && !o[key].__VALUE__) {
-        outputPathParts(o[key], o);
+        outputPathParts(id, o[key], o);
       } else if (o[key].warning) {
         console.group(`%c${o[key].warning}`, 'background-color:red;color:white;border-radius:1em;padding:2px 5px;');
         console.log('%cbefore', 'font-weight: bold;', o[key].before);
@@ -183,7 +183,23 @@ export const outputPathParts = (o: any, parent?: any) => {
   });
 };
 
-export const getIdentifier = (idProp: any, props: any) => (idProp && ` - (${isFunction(idProp) ? idProp(props) : get(props, idProp)})`) || '';
+const parseObject = (o: any) => {
+  if (isFunction(o)) {
+    return 'Function';
+  } else if (isObject(o)) {
+    return keys(o).reduce((acc: any, key: string) => {
+      acc.push(`${key}=${(o as {[index: string]: any})[key]}`)
+      return acc;
+    }, []).join(", ")
+  }
+  return o;
+};
+
+export const getIdentifier = (idProp: Function | string, props: any) => {
+  const identifier = (isFunction(idProp) && idProp(props)) || get(props, idProp as string);
+  // if (isObject(identifier))
+  return ` - (${parseObject(identifier)})`;
+}
 
 export interface IOptions {
   idProp: Function | string;

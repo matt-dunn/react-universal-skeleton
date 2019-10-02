@@ -10,7 +10,7 @@
  * @module Lib
  */
 
-import { useEffect, useRef } from 'react';
+import {FunctionComponent, useEffect, useRef} from 'react';
 
 import { outputPathParts, deepDiff, getIdentifier, IOptions } from './utils';
 
@@ -22,16 +22,19 @@ function usePrevious(value: any) {
   return ref.current;
 }
 
-export default function useWhatChanged<T>(Component: (...args: any[]) => {}, value: T, options?: IOptions) {
+export default function useWhatChanged<T>(Component: FunctionComponent<any>, value: T, options?: IOptions) {
   const prevValue = usePrevious(value);
 
   const diff = deepDiff(
       prevValue,
       value,
-      `RE-RENDER: ${(Component.name || 'ANONYMOUS').replace(/\./g, '__@@__')}${getIdentifier(options && options.idProp, value)}`,
+      "RE-RENDER"
   );
 
-  outputPathParts(diff);
+  outputPathParts(
+      `${(Component.displayName || Component.name || 'ANONYMOUS')}${(options && getIdentifier(options.idProp, value)) || ""}`,
+      diff
+  );
 
   return diff;
 }

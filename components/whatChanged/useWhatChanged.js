@@ -6,13 +6,9 @@
  *
  */
 
-import {IOptions} from "./src/utils";
-
 /**
  * @module Lib
  */
-
-// export default interface useWhatChanged<T> {}
 
 module.exports =
     process.env.NODE_ENV === "production"
