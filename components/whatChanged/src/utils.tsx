@@ -31,10 +31,28 @@ const getObject = (o: any) => {
   if (isFunction(o)) {
     return 'Function';
   } else if (isObject(o)) {
-    return keys(o).reduce((acc: any, key: string) => {
-      acc[key.toString()] = (o as {[index: string]: any})[key];
+    const seenObjects: any[] = [];
+
+    const convert = (o: any) => keys(o).reduce((acc: any, key: string) => {
+
+      const value = (o as { [index: string]: any })[key];
+
+      if (seenObjects.indexOf(value) === -1) {
+        seenObjects.push(value);
+
+        if (isObject(value)) {
+          acc[key.toString()] = convert(value);
+        } else {
+          acc[key.toString()] = value;
+        }
+      } else {
+        acc[key.toString()] = value;
+      }
+
       return acc;
-    }, {})
+    }, {});
+
+    return convert(o);
   }
   return o;
 };
