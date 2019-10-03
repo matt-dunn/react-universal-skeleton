@@ -7,6 +7,10 @@ declare namespace handleViewport {
     };
 }
 
-declare function handleViewport<T>(Component: FunctionComponent<T>, options?: object, config?: object): FunctionComponent<any>;
+type Config = {
+    disconnectOnLeave?: boolean;
+}
+
+declare function handleViewport<T>(Component: FunctionComponent<T>, options?: IntersectionObserverInit, config?: Config): FunctionComponent<any>;
 
 export = handleViewport;
