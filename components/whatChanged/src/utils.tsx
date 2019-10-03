@@ -34,17 +34,11 @@ const getObject = (o: any) => {
     const seenObjects: any[] = [];
 
     const convert = (o: any) => keys(o).reduce((acc: any, key: string) => {
-
       const value = (o as { [index: string]: any })[key];
 
-      if (seenObjects.indexOf(value) === -1) {
+      if (isObject(value) && seenObjects.indexOf(value) === -1) {
         seenObjects.push(value);
-
-        if (isObject(value)) {
-          acc[key.toString()] = convert(value);
-        } else {
-          acc[key.toString()] = value;
-        }
+        acc[key.toString()] = convert(value);
       } else {
         acc[key.toString()] = value;
       }
