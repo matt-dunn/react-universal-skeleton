@@ -9,7 +9,7 @@ export interface Login {
 
 const login = createStandardAction('@auth/LOGIN')
     .map(({username, password}: Login) => ({
-        payload: ({ inject }: IPayload) => inject.services.login(username, password)
+        payload: ({ services }: IPayload) => services.login(username, password)
     }));
 
 export { login };

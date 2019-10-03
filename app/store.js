@@ -16,7 +16,7 @@ const getStore = (initialState = {}) => createStore(
     initialState,
     applyMiddleware(
         // promiseMiddleware,
-        stateDecorator({ dependencies: { inject: {services: {...servicesExample, ...servicesAuth} } } }),
+        stateDecorator({ dependencies: { services: {...servicesExample, ...servicesAuth} } }),
         notification({notify}),
         // thunkMiddleware,
         // loggerMiddleware,
