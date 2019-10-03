@@ -95,4 +95,4 @@ const List = ({forwardedRef, inViewport = true, items, $status, onExampleGetList
     )
 }
 
-export default React.memo(handleViewport(List, {}, {disconnectOnLeave: true}));
+export default React.memo<ListProps>(handleViewport(List, {}, {disconnectOnLeave: true}));

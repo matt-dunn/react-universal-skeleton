@@ -51,11 +51,4 @@ const Item = ({className, forwardedRef, inViewport = true, item, onExampleGetIte
     )
 }
 
-export default React.memo(styled(handleViewport(Item, undefined, {disconnectOnLeave: true}))`
-    background-color: red;
-    backface-visibility: hidden;
-
-    .item {
-        border: 5px solid blue;
-    }
-`);
+export default React.memo<ItemProps>(handleViewport(Item, {}, {disconnectOnLeave: true}));
