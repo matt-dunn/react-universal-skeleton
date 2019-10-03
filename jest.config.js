@@ -3,15 +3,17 @@ module.exports = {
   testEnvironment: 'node',
   verbose: true,
   collectCoverageFrom: [
-    '**/*.{js,jsx,ts,tsx}',
+    'app/**/*.{js,jsx,ts,tsx}',
+    'components/**/*.{js,jsx,ts,tsx}',
     '!**/node_modules/**',
     '!**/dist/**',
     '!**/test/**'
   ],
+  coverageDirectory: "./reports/coverage",
   setupFiles: ['./test/setupTests.js'],
   snapshotSerializers: ['enzyme-to-json/serializer'],
   reporters: [
     'default',
-    ['jest-junit', { outputDirectory: './target' }],
+    ['jest-junit', { outputDirectory: './reports' }],
   ],
 };

@@ -142,7 +142,9 @@ describe('decorateStatus', () => {
             "isActive": false,
             "outstandingTransactionCount": 0,
             "processing": false,
-            [symbolActiveTransactions]: {}
+            [symbolActiveTransactions]: {},
+            "lastUpdated": undefined,
+            "processedOnServer": false
         })
 
         expect(decoratedStatus).toStrictEqual(currentStatus);
@@ -156,7 +158,9 @@ describe('decorateStatus', () => {
             "isActive": false,
             "outstandingTransactionCount": 0,
             "processing": false,
-            [symbolActiveTransactions]: {}
+            [symbolActiveTransactions]: {},
+            "lastUpdated": undefined,
+            "processedOnServer": false
         })
 
         expect(decoratedStatusWithCurrentStatus).toStrictEqual(currentStatus);
@@ -213,7 +217,9 @@ describe('decorateStatus', () => {
             "processing": true,
             [symbolActiveTransactions]: {
                 '1': true
-            }
+            },
+            "lastUpdated": undefined,
+            "processedOnServer": false
         })
     });
 
@@ -242,7 +248,9 @@ describe('decorateStatus', () => {
                 '2': true,
                 '3': true,
                 '4': true
-            }
+            },
+            "lastUpdated": undefined,
+            "processedOnServer": false
         })
     });
 });

@@ -60,6 +60,7 @@
     "eslint-plugin-react": "^7.14.3",
     "express": "^4.17.1",
     "jest": "^24.9.0",
+    "jest-junit": "^8.0.0",
     "llog": "^0.2.0",
     "nodemon": "^1.19.2",
     "parcel-bundler": "^1.12.3",
@@ -77,7 +78,7 @@
     "dev": "yarn generate-imported-components && parcel app/index.html",
     "dev:server": "nodemon -e js,jsx,html,ts,tsx --ignore dist/ --ignore app/.imported.js --exec 'yarn dev:build && yarn start'",
     "dev:build": "rimraf dist && yarn generate-imported-components && yarn create-bundles",
-    "build": "rimraf dist && yarn lint && yarn type-check && yarn generate-imported-components && yarn create-bundles",
+    "build": "rimraf dist && yarn lint && yarn type-check && yarn coverage && yarn generate-imported-components && yarn create-bundles",
     "start": "node dist/server",
     "create-bundles": "concurrently \"yarn create-bundle:client\" \"yarn create-bundle:server\"",
     "create-bundle:client": "cross-env BABEL_ENV=client parcel build app/index.html -d dist/client --public-url /dist/client",
@@ -87,7 +88,9 @@
     "lint:js": "./node_modules/eslint/bin/eslint.js ./ --fix --ext .jsx,.js,.ts,.tsx",
     "lint:jsonly": "./node_modules/eslint/bin/eslint.js ./ --fix --ext .jsx,.js",
     "lint": "yarn lint:css && yarn lint:js",
-    "type-check": "tsc --noEmit --skipLibCheck"
+    "type-check": "tsc --noEmit --skipLibCheck",
+    "test": "jest",
+    "coverage": "jest --collectCoverage"
   },
   "alias": {
     "react-dom": "@hot-loader/react-dom"
