@@ -20,7 +20,7 @@ export const notify = ({error: { message, code, status }, type, cancel, retry}) 
         let retrying = false;
 
         toast(
-            <div>
+            <>
                 <p>
                     {message}
                 </p>
@@ -52,7 +52,7 @@ export const notify = ({error: { message, code, status }, type, cancel, retry}) 
                         </Button>
                     )}
                 </p>
-            </div>,
+            </>,
             {
                 autoClose: !(cancel || retry),
                 type: 'error',
