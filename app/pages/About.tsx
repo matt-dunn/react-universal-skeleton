@@ -5,10 +5,13 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
 import { IStatus } from 'components/state-mutate-with-status/status';
+import {AboveTheFold, ClientOnly} from "components/actions";
+import List from "app/components/List";
+import Item from "app/components/Item";
 
 import Page from '../styles/Page'
-import {IAppState} from '../reducers';
 import * as actions from '../actions';
+import {IAppState} from '../reducers';
 import {IExampleItemState} from '../reducers/__dummy__/example';
 import {IExampleGetList, IExampleGetItem} from "../components/api/__dummy__/example";
 
@@ -24,12 +27,7 @@ const Title = styled.h1`
     color: #ccc;
 `;
 
-import {AboveTheFold, ClientOnly} from "components/actions";
-
-import List from "app/components/List";
-import Item from "app/components/Item";
-
-const About = ({items, item, onExampleGetList, onExampleGetItem, $status, ...props}: AboutProps) => {
+const About = ({items, item, onExampleGetList, onExampleGetItem, $status}: AboutProps) => {
     return (
         <Page>
             <Helmet>
