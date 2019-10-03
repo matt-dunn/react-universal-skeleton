@@ -34,6 +34,7 @@
     "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@babel/plugin-proposal-decorators": "^7.6.0",
     "@babel/polyfill": "^7.6.0",
+    "@hot-loader/react-dom": "^16.9.0",
     "@types/enzyme": "^3.10.3",
     "@types/is-promise": "^2.1.0",
     "@types/jest": "^24.0.18",
@@ -87,5 +88,8 @@
     "lint:jsonly": "./node_modules/eslint/bin/eslint.js ./ --fix --ext .jsx,.js",
     "lint": "yarn lint:css && yarn lint:js",
     "type-check": "tsc --noEmit --skipLibCheck"
+  },
+  "alias": {
+    "react-dom": "@hot-loader/react-dom"
   }
 }

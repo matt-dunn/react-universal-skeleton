@@ -1,3 +1,4 @@
+import { hot } from 'react-hot-loader';
 import React from 'react'
 import {Helmet} from 'react-helmet-async';
 import {Switch, Route, generatePath} from 'react-router-dom'
@@ -62,4 +63,4 @@ const App = (props) => {
     );
 }
 
-export default App;
+export default hot(module)(App);
