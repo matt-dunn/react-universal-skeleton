@@ -14,7 +14,6 @@ import useWhatChanged from "components/whatChanged/useWhatChanged";
 export type ItemProps = {
     item?: IExampleItemState;
     onExampleGetItem: IExampleGetItem;
-    $status?: IStatus;
     className?: string;
 };
 
