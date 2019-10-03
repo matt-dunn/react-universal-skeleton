@@ -23,6 +23,10 @@ const ItemContainer = styled.div`
     border: 1px solid #ccc;
     margin: 10px auto;
     padding: 10px;
+
+    .item {
+        background-color: orange;
+    }
 `
 
 const Item = ({className, forwardedRef, inViewport = true, item, onExampleGetItem}: ItemProps & ReactInViewportProps) => {
