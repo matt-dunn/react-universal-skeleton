@@ -74,7 +74,8 @@
   },
   "scripts": {
     "dev": "yarn generate-imported-components && parcel app/index.html",
-    "dev:server": "nodemon -e js,jsx,html,ts,tsx --ignore dist/ --ignore app/.imported.js --exec 'yarn build && yarn start'",
+    "dev:server": "nodemon -e js,jsx,html,ts,tsx --ignore dist/ --ignore app/.imported.js --exec 'yarn dev:build && yarn start'",
+    "dev:build": "rimraf dist && yarn generate-imported-components && yarn create-bundles",
     "build": "rimraf dist && yarn lint && yarn type-check && yarn generate-imported-components && yarn create-bundles",
     "start": "node dist/server",
     "create-bundles": "concurrently \"yarn create-bundle:client\" \"yarn create-bundle:server\"",
