@@ -77,7 +77,7 @@ const updateState = ({
       error: error && payload,
       complete: true,
       processing: false
-    } as IStatusTransaction,
+    } as unknown as IStatusTransaction,
   } = meta || {} as IActionMeta;
 
   const update = getValueByPath(state, path);

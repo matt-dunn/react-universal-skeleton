@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import React from "react";
-import handleViewport from "react-in-viewport";
+import handleViewport, {ReactInViewportProps} from "react-in-viewport";
 
 import Loading from "components/Loading";
 import {usePerformAction} from "components/actions";
@@ -15,9 +15,7 @@ export type ItemProps = {
     item?: IExampleItemState;
     onExampleGetItem: IExampleGetItem;
     $status?: IStatus;
-    forwardedRef: () => {};
-    inViewport: boolean;
-    className?: string
+    className?: string;
 };
 
 const ItemContainer = styled.div`
@@ -27,7 +25,7 @@ const ItemContainer = styled.div`
     padding: 10px;
 `
 
-const Item = ({className, forwardedRef, inViewport = true, item, onExampleGetItem}: ItemProps) => {
+const Item = ({className, forwardedRef, inViewport = true, item, onExampleGetItem}: ItemProps & ReactInViewportProps) => {
     const {complete, isActive, processing, hasError, error} = (item && Status(item.$status)) || {} as IStatus;
 
     useWhatChanged(Item, { className, forwardedRef, inViewport, item, onExampleGetItem });

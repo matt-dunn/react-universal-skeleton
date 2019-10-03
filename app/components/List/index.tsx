@@ -1,6 +1,6 @@
 import React from "react";
 import styled, {css} from "styled-components";
-import handleViewport from 'react-in-viewport';
+import handleViewport, {ReactInViewportProps} from 'react-in-viewport';
 
 import Status, {IStatus} from "components/state-mutate-with-status/status";
 import Loading from "components/Loading";
@@ -15,8 +15,6 @@ export type ListProps = {
     items: IExampleItemState[];
     onExampleGetList: IExampleGetList;
     $status?: IStatus;
-    forwardedRef: () => {};
-    inViewport: boolean;
 };
 
 const ListContainer = styled.div`
@@ -51,7 +49,7 @@ const Placeholder = styled.ol`
     color: #ccc;
 `
 
-const List = ({forwardedRef, inViewport = true, items, $status, onExampleGetList, ...props}: ListProps) => {
+const List = ({forwardedRef, inViewport = true, items, $status, onExampleGetList, ...props}: ListProps & ReactInViewportProps) => {
     const {complete, isActive, processing, hasError, error} = Status($status);
 
     useWhatChanged(List, { forwardedRef, inViewport, items, $status, onExampleGetList, ...props });

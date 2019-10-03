@@ -14,8 +14,7 @@ export interface AuthApi {
     login: Login;
 }
 
-// @ts-ignore
-(typeof window !== 'undefined') && (window.authenticated = true);
+(typeof window !== 'undefined') && ((window as any).authenticated = true);
 
 const exampleApi: AuthApi = {
     login:(username, password) => new Promise<AuthUserResponse>(resolve => {
@@ -24,8 +23,7 @@ const exampleApi: AuthApi = {
         // throw new APIError("Authentication Failed", "auth", 401)
         setTimeout(() => {
             console.log("API CALL COMPLETE: login");
-            // @ts-ignore
-            (typeof window === 'undefined') && (window.authenticated = true);
+            (typeof window === 'undefined') && ((window as any).authenticated = true);
             resolve({
                 id: "123",
                 name: `Clem Fandango`,

@@ -48,8 +48,7 @@ const exampleApi: IExampleApi = {
     exampleGetItem:() => new Promise<IExampleResponse>(resolve => {
         console.log("API CALL: exampleGetItem")
         // throw new Error("Error in exampleGetItem")
-        // @ts-ignore
-        if (typeof window === 'undefined' || !window.authenticated) {
+        if (typeof window === 'undefined' || !(window as any).authenticated) {
             throw new APIError("Authentication Failed", "auth", 401)
         }
         setTimeout(() => {
