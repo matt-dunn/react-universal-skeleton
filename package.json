@@ -1,8 +1,8 @@
 {
   "name": "parcel",
-  "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
+  "version": "1.0.1",
+  "main": "app/index.html",
+  "private": true,
   "dependencies": {
     "app": "^0.1.0",
     "components": "^0.1.0",
