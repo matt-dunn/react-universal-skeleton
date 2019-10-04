@@ -16,8 +16,6 @@ const store = getStore(window.__PRELOADED_STATE__);
 
 console.error(store.getState())
 
-const element = document.getElementById('app')
-
 const ScrollToTop = withRouter(({ children, location: { pathname } }) => {
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -41,6 +39,8 @@ const app = (
         </Provider>
     </HelmetProvider>
 );
+
+const element = document.getElementById('app');
 
 if (process.env.NODE_ENV === 'production') {
     // rehydrate the bundle marks
