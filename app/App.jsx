@@ -46,7 +46,7 @@ const App = (props) => {
 
             <Helmet>
                 <title>My App</title>
-                <meta name="build.version" content={process.env.npm_package_version || "DEV"}/>
+                <meta name="build.version" content={process.env.npm_package_version + ((process.env.NODE_ENV !== "production" && "-dev") || "")}/>
             </Helmet>
 
             <Header/>
