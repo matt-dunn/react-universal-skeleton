@@ -19,17 +19,23 @@ export type IPayload = {
   retryCount?: number;
 } & IDependencies
 
+export type Meta = {
+  hasRetry?: boolean;
+}
+
 const stateDecorator = (options: IOptions) => () => {
   const dispatchOptions = defaultsDeep({}, options, {
   }) as IOptions;
 
-  return (next: Dispatch<FluxStandardAction<string, any, any>>) => (action: FluxStandardAction<string, any, any>) => {
+  return (next: Dispatch<FluxStandardAction<string, any, any>>) => (action: FluxStandardAction<string, any, Meta>) => {
     const actionPayload = typeof action.payload === 'function' ? action.payload({ ...dispatchOptions.dependencies }) : action.payload;
 
     if (isFSA(action) && isPromise(actionPayload)) {
       const transactionId = uuid.v4();
 
-      if (typeof action.payload === 'function') {
+      const {hasRetry = false} = action.meta || {} as Meta;
+
+      if (typeof action.payload === 'function' && hasRetry) {
         return new Promise((resolve, reject) => exec(next, transactionId, action.payload, { ...action, payload: actionPayload }, dispatchOptions, {
           resolve,
           reject,

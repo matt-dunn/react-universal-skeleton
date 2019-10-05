@@ -9,7 +9,10 @@ const exampleGetList = createStandardAction('@__dummy__/EXAMPLE_GET_LIST')
 
 const exampleGetItem = createStandardAction('@__dummy__/EXAMPLE_GET_ITEM')
     .map(() => ({
-        payload: ({ services }: IPayload) => services.exampleGetItem()
+        payload: ({ services }: IPayload) => services.exampleGetItem(),
+        meta: {
+            hasRetry: true
+        }
     }));
 
 export { exampleGetList, exampleGetItem };
