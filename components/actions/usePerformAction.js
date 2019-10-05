@@ -3,7 +3,7 @@ import isPromise from 'is-promise';
 
 import {APIContext, ErrorContext, FoldContext} from "./contexts";
 
-const useAction = (action, test, deps = []) => {
+const usePerformAction = (action, test, deps = []) => {
     const {handleError} = useContext(ErrorContext) || {};
     const {processOnServer = false} = useContext(FoldContext) || {};
 
@@ -52,4 +52,4 @@ const useAction = (action, test, deps = []) => {
 
 }
 
-export default useAction;
+export default usePerformAction;
