@@ -11,6 +11,6 @@
  */
 
 module.exports =
-    process.env.NODE_ENV === "production"
+    process.env.NODE_ENV === "production" && !process.env.DEBUG
         ? require('./src/hoc.prod')
         : require('./src/hoc');
