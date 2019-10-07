@@ -132,7 +132,12 @@ const updateState = ({
     return updatedState;
   } else if (!update || typeof update === 'object') {
     if (error && activeTransactionState[$status.transactionId] && !$status.isActive) {
-      const errorState = updateItem(state, updatePath, convertObject(activeTransactionState[$status.transactionId]), $status);
+      const errorState = updateItem(
+          (isArray(update) && updateItem(state, getUpdatePath(isArray, update, '', path), useSeed && convertObject(seedPayload), $status)) || state,
+          (actionId && updatePath) || path,
+          convertObject(activeTransactionState[$status.transactionId]),
+          $status
+      );
 
       delete activeTransactionState[$status.transactionId];
 
@@ -140,12 +145,17 @@ const updateState = ({
     }
 
     if (!update) {
-      return updateNewItem(state, path, updatePath, useSeed && convertObject(seedPayload), $status);
+      return updateNewItem(
+          state,
+          path,
+          updatePath,
+          useSeed && convertObject(seedPayload), $status
+      );
     }
 
     return updateItem(
         (isArray(update) && updateItem(state, getUpdatePath(isArray, update, '', path), useSeed && convertObject(seedPayload), $status)) || state,
-        updatePath,
+        (actionId && updatePath) || path,
         useSeed && convertObject(seedPayload),
         $status
     );
