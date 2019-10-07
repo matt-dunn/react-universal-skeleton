@@ -35,14 +35,9 @@ const exampleGetItem = (state: IExampleState, action: FluxStandardAction<string,
     path: 'item',
 });
 
-// const example = (state: IExampleState, action: FluxStandardAction<string, any, IActionMeta>): IExampleState => nextState(state, action, {
-//     path: 'item'
-// });
-//
-// const exampleList = (state: IExampleState, action: FluxStandardAction<string, any, IActionMeta>): IExampleState => nextState(state, action, {
-//     path: 'items',
-//     addItem: (items: IExampleListState, item: IExampleItemState) => items.splice(0, 0, item),
-// });
+const exampleEditItem = (state: IExampleState, action: FluxStandardAction<string, any, IActionMeta>): IExampleState => nextState(state, action, {
+    path: 'items',
+});
 
 const initialState = {
     item: undefined,
@@ -52,8 +47,7 @@ const initialState = {
 const exampleActions = {
     [getType(actions.exampleGetList)]: exampleGetList,
     [getType(actions.exampleGetItem)]: exampleGetItem,
-    // [getType(actions.exampleActions.example)]: example,
-    // [getType(actions.exampleActions.exampleList)]: exampleList,
+    [getType(actions.exampleEditItem)]: exampleEditItem,
 };
 
 export default createReducer(initialState, exampleActions);

@@ -1,6 +1,7 @@
 import { createStandardAction } from 'typesafe-actions';
 
 import { IPayload } from 'components/redux/middleware/stateDecorator';
+import {IExampleItemState} from "../../reducers/__dummy__/example";
 
 const exampleGetList = createStandardAction('@__dummy__/EXAMPLE_GET_LIST')
     .map(() => ({
@@ -15,4 +16,12 @@ const exampleGetItem = createStandardAction('@__dummy__/EXAMPLE_GET_ITEM')
         }
     }));
 
-export { exampleGetList, exampleGetItem };
+const exampleEditItem = createStandardAction('@__dummy__/EXAMPLE_EDIT_ITEM')
+    .map((item: IExampleItemState) => ({
+        payload: ({ services }: IPayload) => services.exampleEditItem(item),
+        meta: {
+            id: item.id
+        }
+    }));
+
+export { exampleGetList, exampleGetItem, exampleEditItem };

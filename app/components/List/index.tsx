@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useCallback, useState} from "react";
 import styled, {css} from "styled-components";
 import handleViewport, {ReactInViewportProps} from 'react-in-viewport';
 
@@ -7,13 +7,16 @@ import Loading from "components/Loading";
 import {usePerformAction} from "components/actions";
 
 import {IExampleItemState} from "../../reducers/__dummy__/example";
-import {IExampleGetList} from "../api/__dummy__/example";
+import {ExampleEditItem, IExampleGetList} from "../api/__dummy__/example";
+
+import Item from "./Item";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
 export type ListProps = {
     items: IExampleItemState[];
     onExampleGetList: IExampleGetList;
+    onExampleEditItem: ExampleEditItem;
     $status?: IStatus;
 };
 
@@ -49,10 +52,12 @@ const Placeholder = styled.ol`
     color: #ccc;
 `
 
-const List = ({forwardedRef, inViewport = true, items, $status, onExampleGetList, ...props}: ListProps & ReactInViewportProps) => {
+const List = ({forwardedRef, inViewport = true, items, $status, onExampleGetList, onExampleEditItem, ...props}: ListProps & ReactInViewportProps) => {
+    useWhatChanged(List, { forwardedRef, inViewport, items, $status, onExampleGetList, onExampleEditItem, ...props });
+
     const {complete, isActive, processing, hasError, error} = Status($status);
 
-    useWhatChanged(List, { forwardedRef, inViewport, items, $status, onExampleGetList, ...props });
+    const [editId, setEditId] = useState();
 
     usePerformAction(
         () => {
@@ -70,6 +75,20 @@ const List = ({forwardedRef, inViewport = true, items, $status, onExampleGetList
         [inViewport]
     );
 
+    const handleEdit = useCallback(
+        (item: IExampleItemState) => {
+            setEditId(item.id)
+        },
+        []
+    );
+
+    const handleComplete = useCallback(
+        (item: IExampleItemState) => {
+            setEditId(undefined)
+        },
+        []
+    );
+
     return (
         <ListContainer ref={forwardedRef}>
             [{inViewport ? "YES": "NO"}]
@@ -85,7 +104,13 @@ const List = ({forwardedRef, inViewport = true, items, $status, onExampleGetList
                     <ListItems>
                         {items.map(item => (
                             <ListItem key={item.id}>
-                                {item.name}
+                                <Item
+                                    item={item}
+                                    isEditing={editId === item.id}
+                                    onChange={onExampleEditItem}
+                                    onEdit={handleEdit}
+                                    onComplete={handleComplete}
+                                />
                             </ListItem>
                         ))}
                     </ListItems>

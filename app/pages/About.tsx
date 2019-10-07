@@ -13,13 +13,14 @@ import Page from '../styles/Page'
 import * as actions from '../actions';
 import {IAppState} from '../reducers';
 import {IExampleItemState} from '../reducers/__dummy__/example';
-import {IExampleGetList, IExampleGetItem} from "../components/api/__dummy__/example";
+import {IExampleGetList, IExampleGetItem, ExampleEditItem} from "../components/api/__dummy__/example";
 
 export type AboutProps = {
     items: IExampleItemState[];
     item?: IExampleItemState;
     onExampleGetList: IExampleGetList;
     onExampleGetItem: IExampleGetItem;
+    onExampleEditItem: ExampleEditItem;
     $status?: IStatus;
 };
 
@@ -27,7 +28,7 @@ const Title = styled.h1`
     color: #ccc;
 `;
 
-const About = ({items, item, onExampleGetList, onExampleGetItem, $status}: AboutProps) => {
+const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditItem, $status}: AboutProps) => {
     return (
         <Page>
             <Helmet>
@@ -40,7 +41,7 @@ const About = ({items, item, onExampleGetList, onExampleGetItem, $status}: About
             </Title>
 
             <AboveTheFold>
-                <List items={items} onExampleGetList={onExampleGetList} $status={$status}/>
+                <List items={items} onExampleGetList={onExampleGetList} onExampleEditItem={onExampleEditItem} $status={$status}/>
 
                 <ClientOnly>
                 </ClientOnly>
@@ -66,10 +67,12 @@ const mapDispatchToProps = (dispatch: Dispatch<actions.RootActions>) => {
 
     const onExampleGetList: IExampleGetList = (): any => dispatch(actions.exampleActions.exampleGetList());
     const onExampleGetItem: IExampleGetItem = (): any => dispatch(actions.exampleActions.exampleGetItem());
+    const onExampleEditItem: ExampleEditItem = (item: IExampleItemState): any => dispatch(actions.exampleActions.exampleEditItem(item));
 
     return {
         onExampleGetList,
-        onExampleGetItem
+        onExampleGetItem,
+        onExampleEditItem
     }
 };
 
