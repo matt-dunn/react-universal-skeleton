@@ -80,4 +80,6 @@ const Item = ({item, isEditing = false, onChange, onComplete, onEdit}: ItemProps
     )
 }
 
+Item.displayName = "Items.Item";
+
 export default React.memo<ItemProps>(Item);

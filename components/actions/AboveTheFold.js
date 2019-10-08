@@ -3,9 +3,11 @@ import React from "react";
 
 import {FoldContext} from "./contexts";
 
+const value = {processOnServer: true};
+
 const AboveTheFold = ({children}) => {
     return (
-        <FoldContext.Provider value={{processOnServer: true}}>
+        <FoldContext.Provider value={value}>
             {children}
         </FoldContext.Provider>
     )
