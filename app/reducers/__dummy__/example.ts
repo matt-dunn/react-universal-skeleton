@@ -2,7 +2,7 @@
 import { FluxStandardAction } from 'flux-standard-action';
 import { getType } from 'typesafe-actions';
 
-import { IActionMeta } from 'components/state-mutate-with-status/state';
+import { ActionMeta } from 'components/state-mutate-with-status/state';
 // import nextState from 'components/state-mutate-with-status/immutable';
 import nextState from 'components/state-mutate-with-status/nativeFrozen';
 import { IStatus } from 'components/state-mutate-with-status/status';
@@ -27,15 +27,15 @@ export interface IExampleState {
     $status?: IStatus;
 }
 
-const exampleGetList = (state: IExampleState, action: FluxStandardAction<string, any, IActionMeta>): IExampleState => nextState(state, action, {
+const exampleGetList = (state: IExampleState, action: FluxStandardAction<string, any, ActionMeta>): IExampleState => nextState(state, action, {
     path: 'items',
 });
 
-const exampleGetItem = (state: IExampleState, action: FluxStandardAction<string, any, IActionMeta>): IExampleState => nextState(state, action, {
+const exampleGetItem = (state: IExampleState, action: FluxStandardAction<string, any, ActionMeta>): IExampleState => nextState(state, action, {
     path: 'item',
 });
 
-const exampleEditItem = (state: IExampleState, action: FluxStandardAction<string, any, IActionMeta>): IExampleState => nextState(state, action, {
+const exampleEditItem = (state: IExampleState, action: FluxStandardAction<string, any, ActionMeta>): IExampleState => nextState(state, action, {
     path: 'items',
 });
 

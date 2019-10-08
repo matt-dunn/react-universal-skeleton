@@ -1,203 +1,87 @@
-import isPromise from 'is-promise';
+import immutable from 'object-path-immutable';
+import { get } from 'lodash';
 import { FluxStandardAction } from 'flux-standard-action';
 
 import { IStatusTransaction, IActiveTransactions } from './status';
-import { decorateStatus, getUpdatePath, findIndex, parsePath } from './utils';
 
-interface GetValueByPath {
-  (state: any, path: string): any;
-}
+import { decorateStatus } from './utils';
 
-interface ConvertObject {
-  (state: any): any;
-}
-
-interface IsArray {
-  (state: any): boolean;
-}
-
-interface UpdateNewItem {
-  (state: any, path: string, updatePath: string, item: any, $status: IStatusTransaction, addItem?: Function): any;
-}
-
-interface DeleteItem {
-  (state: any, path: string): any;
-}
-
-interface UpdateItem {
-  (state: any, updatePath: string, item: any, $status: IStatusTransaction): any;
-}
-
-export interface IUpdateState {
-  getValueByPath: GetValueByPath;
-  convertObject: ConvertObject;
-  isArray: IsArray;
-  updateNewItem: UpdateNewItem;
-  deleteItem: DeleteItem;
-  updateItem: UpdateItem;
-}
-
-export interface IPayload<U> {
-  (payload: U, actionId: string, meta: any): any;
-}
-
-export interface ITransformState<T = any, U = any> {
-  (state: T, payload: U, meta: any): U;
-}
-
-export interface IAddItem {
-  (parent: any, obj: any): any;
-}
-
-export interface IActionMeta {
+export interface ActionMeta {
   id: string;
   $status: IStatusTransaction;
   seedPayload?: any;
 }
 
-export interface IOptions<T> {
-  transformPayload?: IPayload<T>;
-  transformState?: ITransformState;
+export interface Options<T> {
   path?: string;
-  addItem?: IAddItem;
-  useSeed?: boolean;
+}
+
+type UpdatedStatus<S, P> = {
+  updatedState: S;
+  originalState?: P | null;
 }
 
 const activeTransactionState = {} as IActiveTransactions<any>;
 
-const updateState2 = ({
- getValueByPath, convertObject, isArray, updateNewItem, deleteItem, updateItem,
-}: IUpdateState) => <T, U>(state: T, { meta, error, payload = {} as U }: FluxStandardAction<string, U, IActionMeta>, options?: IOptions<U>): T => {
-  const { transformPayload, transformState, path = '', addItem, useSeed = true } = options || {} as IOptions<U>;
-  const {
-    id: actionId,
-    seedPayload,
-    $status = {
-      hasError: error || false,
-      error: error && payload,
-      complete: true,
-      processing: false
-    } as unknown as IStatusTransaction,
-  } = meta || {} as IActionMeta;
-
-  const update = getValueByPath(state, path);
-  const updatePath = getUpdatePath(isArray, update, actionId, path);
-
-  if (seedPayload && $status.transactionId && !activeTransactionState[$status.transactionId]) {
-    activeTransactionState[$status.transactionId] = getValueByPath(state, updatePath);
+const getPayload = <S extends IStatusTransaction, P>(status: S, payload: P, seedPayload?: P): P | undefined | null => {
+  if (status.isActive) {
+    return payload || seedPayload
+  } else if (status.hasError) {
+    return activeTransactionState[status.transactionId];
   }
 
-  if ($status.complete && !error) {
-    if (payload && isPromise(payload)) {
-      throw new Error('Promise returned as action payload; middleware not configured or action is not a valid FSA');
-    }
-
-    delete activeTransactionState[$status.transactionId];
-
-    const done = () => {
-      const nextPayload = transformPayload ? transformPayload(payload, actionId, meta) : payload;
-
-      if (update && typeof update !== 'object') {
-        return convertObject(nextPayload);
-      }
-
-      if (actionId && isArray(update) && findIndex(update, actionId) === -1) {
-        if (nextPayload) {
-          return updateNewItem(state, path, updatePath, convertObject(nextPayload), $status, addItem);
-        }
-      } else {
-        if (isArray(update) && !nextPayload) {
-          return deleteItem(state, updatePath);
-        }
-
-        if (!update) {
-          return updateNewItem(state, path, updatePath, convertObject(nextPayload), $status);
-        }
-
-        return updateItem(
-            (isArray(update) && updateItem(state, getUpdatePath(isArray, update, '', path), convertObject(actionId ? nextPayload : undefined), $status)) || state,
-            (actionId && updatePath) || path,
-            convertObject(nextPayload),
-            $status
-        );
-      }
-    };
-
-    const updatedState = done();
-
-    if (transformState) {
-      return updateItem(state, updatePath, transformState(getValueByPath(updatedState, path), payload, meta), $status);
-    }
-
-    return updatedState;
-  } else if (!update || typeof update === 'object') {
-    if (error && activeTransactionState[$status.transactionId] && !$status.isActive) {
-      const errorState = updateItem(
-          (isArray(update) && updateItem(state, getUpdatePath(isArray, update, '', path), useSeed && convertObject(seedPayload), $status)) || state,
-          (actionId && updatePath) || path,
-          convertObject(activeTransactionState[$status.transactionId]),
-          $status
-      );
-
-      delete activeTransactionState[$status.transactionId];
-
-      return errorState;
-    }
-
-    if (!update) {
-      return updateNewItem(
-          state,
-          path,
-          updatePath,
-          useSeed && convertObject(seedPayload), $status
-      );
-    }
-
-    return updateItem(
-        (isArray(update) && updateItem(state, getUpdatePath(isArray, update, '', path), useSeed && convertObject(seedPayload), $status)) || state,
-        (actionId && updatePath) || path,
-        useSeed && convertObject(seedPayload),
-        $status
-    );
-  }
-
-  return state;
+  return payload
 };
 
-import immutable from 'object-path-immutable';
-import { get } from 'lodash';
+const getUpdatedState = <S, P, U extends IStatusTransaction>(state: S, payload: P, status: U, path: string, actionId: string): UpdatedStatus<S, P> => {
+  if (actionId) {
+    const array = get(state, path);
 
-const merge = (o1: any, o2: any) => {
-  // console.log(">>>", o1, o2)
-  if (Array.isArray(o1)) {
-    const x = (Array.isArray(o2) && [...o1, ...o2]) || [...o1];
-    // x.$status = {a:42}
-    return x
+    if (Array.isArray(array)) {
+      const index = array.findIndex(item => item.id === actionId);
+
+      if (index === -1) {
+        if (payload) {
+          return {
+            updatedState: immutable.insert(state, path, Object.assign({}, payload, {$status: decorateStatus(status)}), array.length),
+            originalState: null // Ensure final payload is not set so this item can be removed from the array on failure
+          }
+        }
+      } else if (!payload) {
+        return {
+          updatedState: immutable.del(
+              state,
+              `${path}.${index}`,
+          ) as any
+        };
+      } else {
+        return {
+          updatedState: immutable.update(
+              (payload && immutable.assign(state, `${path}.${index}`, payload as any)) || state,
+              `${path}.${index}.$status`,
+              state => decorateStatus(status, state && state.$status)
+          ) as any,
+          originalState: get(state, `${path}.${index}`)
+        };
+      }
+    } else {
+      throw new TypeError(`Item in state at ${path} must be an array when meta.id (${actionId}) is specified`);
+    }
+
+    return {
+      updatedState: state
+    };
+  } else {
+    return {
+      updatedState: (payload && immutable.assign(state, path, payload as any)) || state,
+      originalState: get(state, path)
+    };
   }
+};
 
-  return {...o1, ...o2};
-}
+const updateState = <S, P>(state: S, { meta, error, payload }: FluxStandardAction<string, P, ActionMeta>, options?: Options<P>): S => {
+  const { path = '' } = options || {} as Options<P>;
 
-const assignStatus = (o: any, $status: any) => {
-  // console.log(">>>", o1, o2)
-  // if (Array.isArray(o)) {
-  if (o) {
-    o.$status = $status
-    return o;
-  }
-
-  return {$status}
-  // }
-
-  // return {...o1, ...o2};
-}
-
-const decorateState = (o: any, $status: any) => {
-  return immutable.update(o, "$status", value => decorateStatus($status, value))
-}
-
-const updateState = <T, U>(state: T, { meta, error, payload }: FluxStandardAction<string, U, IActionMeta>, options?: IOptions<U>): T => {
-  const { transformPayload, transformState, path = '', addItem, useSeed = true } = options || {} as IOptions<U>;
   const {
     id: actionId,
     seedPayload,
@@ -207,153 +91,31 @@ const updateState = <T, U>(state: T, { meta, error, payload }: FluxStandardActio
       complete: true,
       processing: false
     } as unknown as IStatusTransaction,
-  } = meta || {} as IActionMeta;
-
-  // let xx = state;
-  // if (actionId) {
-  //   const array = get(state, path);
-  //
-  //   if (Array.isArray(array)) {
-  //     const index = array.findIndex(item => {
-  //       console.log("_______", item)
-  //       return item.id === actionId
-  //     });
-  //
-  //     if (index === -1) {
-  //
-  //     } else {
-  //
-  //       const $s = get(state, path + ".$status")
-  //
-  //       console.log("------UPDATE PATH",`${path}.${index}`, payload)
-  //       xx = immutable.update(state, `${path}.${index}`, state => {
-  //         return immutable.set(
-  //             merge(state, payload),
-  //             "$status",
-  //             decorateStatus({...$status}, state && {...state.$status})
-  //         );
-  //       });
-  //
-  //       xx = immutable.set(xx, path + ".$status", $s)
-  //
-  //       console.error(state,xx)
-  //     }
-  //   }
-  // }
-
-  // return (payload && immutable.assign(state, path, payload)) || state
-
-  // const $status
-
-  /*
-
-  p = payload || seedPayload
-
-  if array
-    if actionId and in array
-      update item with p
-    else if p
-      insert item with p
-
-
-
-
-   */
-
-
+  } = meta || {} as ActionMeta;
 
   const $status = get(state, `${path}.$status`);
-  // const updateState = get(state, path);
 
-  console.log("@@@@@", payload)
+  const {updatedState , originalState} = getUpdatedState(
+      state,
+      getPayload(status, payload, seedPayload),
+      status,
+      path,
+      actionId
+  );
 
-  const originalState = status.hasError && activeTransactionState[status.transactionId];
-
-  if (actionId) {
-    const array = get(state, path);
-
-    if (Array.isArray(array)) {
-      const index = array.findIndex(item => item.id === actionId);
-
-      if (index === -1) {
-        if (status.hasError) {
-          return immutable.set(
-              state,
-              `${path}.$status`,
-              decorateStatus(status, $status)
-          )
-        } else if (payload || seedPayload) {
-          activeTransactionState[status.transactionId] = {actionId};
-
-          const updatedState = immutable.insert(state, path, Object.assign({}, payload || seedPayload, {$status: decorateStatus(status)}), array.length)
-          return immutable.set(
-              updatedState,
-              `${path}.$status`,
-              decorateStatus(status, $status)
-          )
-        }
-      } else {
-        console.error(originalState, status)
-        if (activeTransactionState[status.transactionId] && activeTransactionState[status.transactionId].actionId) {
-          if (!status.isActive) {
-            delete activeTransactionState[status.transactionId];
-
-            const updatedState = immutable.del(
-                state,
-                `${path}.${index}`,
-            ) as any;
-
-            return immutable.set(
-                updatedState,
-                `${path}.$status`,
-                decorateStatus(status, $status)
-            )
-          } else {
-            return immutable.set(
-                state,
-                `${path}.$status`,
-                decorateStatus(status, $status)
-            )
-          }
-        } else {
-          if (status.processing) {
-            activeTransactionState[status.transactionId] = get(state, `${path}.${index}`);
-          } else {
-            delete activeTransactionState[status.transactionId];
-          }
-          const updatedState = immutable.update(
-              ((payload || seedPayload) && immutable.assign(state, `${path}.${index}`, originalState || payload || seedPayload as any)) || state,
-              `${path}.${index}.$status`,
-              state => decorateStatus(status, state && state.$status)
-          ) as any;
-
-          return immutable.set(
-              updatedState,
-              `${path}.$status`,
-              decorateStatus(status, $status)
-          )
-        }
-      }
-    } else {
-      throw new TypeError(`Item in state at ${path} must be an array when meta.id (${actionId}) is specified`);
+  if (status.isActive) {
+    if (activeTransactionState[status.transactionId] === undefined) {
+      activeTransactionState[status.transactionId] = originalState;
     }
   } else {
-    if (status.processing) {
-      activeTransactionState[status.transactionId] = get(state, path);
-    } else {
-      delete activeTransactionState[status.transactionId];
-    }
-
-    return immutable.set(
-        ((payload || seedPayload) && immutable.assign(state, path, originalState || payload || seedPayload as any)) || state,
-        `${path}.$status`,
-        decorateStatus(status, $status)
-    ) as any;
+    delete activeTransactionState[status.transactionId];
   }
 
-  return state;
-}
+  return immutable.set(
+      updatedState,
+      `${path}.$status`,
+      decorateStatus(status, $status)
+  ) as any;
+};
 
 export default updateState;
-
-export { parsePath, decorateStatus };

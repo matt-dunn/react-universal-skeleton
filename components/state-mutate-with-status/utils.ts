@@ -2,26 +2,6 @@ import isEqual from 'lodash/isEqual';
 
 import Status, {IStatus, IStatusTransaction, symbolActiveTransactions} from "./status";
 
-const parsePath = (path: string): string[] => (path && path.split('.')) || [];
-
-const makePath = (pathArray: (string | number)[]): string => pathArray.join('.');
-
-const findIndex = (obj: any[], id: string): number => obj.findIndex((item: any) =>
-    ((item.get && item.get('id')) || item.id) === id);
-
-const getUpdatePath = (isArray: Function, obj: any, id: string, path: string): string => {
-    if (path && isArray(obj)) {
-        const index = findIndex(obj, id);
-
-        if (index === -1) {
-            return makePath(parsePath(path).slice(0, -1));
-        }
-        return makePath([path, index]);
-    }
-
-    return path;
-};
-
 const decorateStatus = (status: IStatusTransaction, $status: IStatus = {} as IStatus): IStatus => {
     const activeTransactions = { ...$status[symbolActiveTransactions] };
 
@@ -32,9 +12,6 @@ const decorateStatus = (status: IStatusTransaction, $status: IStatus = {} as ISt
     }
 
     const hasActiveTransactions = activeTransactions && Object.keys(activeTransactions).length > 0;
-
-
-    // console.log("@@@@",activeTransactions)
 
     const updatedStatus = Status({
         ...status,
@@ -50,4 +27,4 @@ const decorateStatus = (status: IStatusTransaction, $status: IStatus = {} as ISt
     return updatedStatus;
 };
 
-export { parsePath, makePath, findIndex, getUpdatePath, decorateStatus };
+export { decorateStatus };
