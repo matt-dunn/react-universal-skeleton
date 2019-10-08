@@ -1,11 +1,11 @@
 import {useCallback, useRef} from "react";
 
 type Options = {
-    delay?: number
+    delay?: number;
 };
 
 type Action<T> = {
-    (...args: any[]): Promise<T>
+    (...args: any[]): Promise<T>;
 }
 
 function useAutosave<T = any>(action: Action<T>, options?: Options): Action<T> {
