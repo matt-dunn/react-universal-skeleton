@@ -3,9 +3,11 @@ import React from "react";
 
 import {FoldContext} from "./contexts";
 
+const value = {processOnServer: false};
+
 const ClientOnly = ({children}) => {
     return (
-        <FoldContext.Provider value={{processOnServer: false}}>
+        <FoldContext.Provider value={value}>
             {children}
         </FoldContext.Provider>
     )
