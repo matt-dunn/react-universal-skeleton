@@ -71,9 +71,9 @@ const exampleApi: IExampleApi = {
 
         setTimeout(() => {
             console.log("API CALL COMPLETE: exampleEditItem")
-            // reject(new Error("Error in exampleEditItem"))
+            reject(new Error("Error in exampleEditItem"))
             resolve(item)
-        }, 10000)
+        }, 1500)
     })
 }
 

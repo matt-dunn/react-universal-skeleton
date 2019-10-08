@@ -23,6 +23,7 @@ const exampleEditItem = createStandardAction('@__dummy__/EXAMPLE_EDIT_ITEM')
     .map((item: IExampleItemState) => ({
         payload: ({ services }: IPayload) => services.exampleEditItem(item),
         meta: {
+            hasRetry: true,
             id: item.id,
             seedPayload: item
         }

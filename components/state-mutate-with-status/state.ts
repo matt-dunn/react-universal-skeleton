@@ -245,30 +245,113 @@ const updateState = <T, U>(state: T, { meta, error, payload }: FluxStandardActio
 
   // const $status
 
+  /*
+
+  p = payload || seedPayload
+
+  if array
+    if actionId and in array
+      update item with p
+    else if p
+      insert item with p
+
+
+
+
+   */
+
+
+
   const $status = get(state, `${path}.$status`);
-  const updateState = get(state, path);
+  // const updateState = get(state, path);
 
+  console.log("@@@@@", payload)
 
+  const originalState = status.hasError && activeTransactionState[status.transactionId];
 
-  const p =  assignStatus(payload, decorateStatus(status, $status))
-  // console.log("!!!!",p)
+  if (actionId) {
+    const array = get(state, path);
 
-  // return immutable.assign(state, path, p as any);
+    if (Array.isArray(array)) {
+      const index = array.findIndex(item => item.id === actionId);
 
-  return immutable.update(
-      // (payload && immutable.assign(state, path, payload as any)) || state,
-      immutable.assign(state, path, payload as any),
-      `${path}.$status`,
-      state => decorateStatus({...status}, state && {...state.$status})
-  ) as any;
+      if (index === -1) {
+        if (status.hasError) {
+          return immutable.set(
+              state,
+              `${path}.$status`,
+              decorateStatus(status, $status)
+          )
+        } else if (payload || seedPayload) {
+          activeTransactionState[status.transactionId] = {actionId};
 
-  return immutable.update(state, path, state => {
+          const updatedState = immutable.insert(state, path, Object.assign({}, payload || seedPayload, {$status: decorateStatus(status)}), array.length)
+          return immutable.set(
+              updatedState,
+              `${path}.$status`,
+              decorateStatus(status, $status)
+          )
+        }
+      } else {
+        console.error(originalState, status)
+        if (activeTransactionState[status.transactionId] && activeTransactionState[status.transactionId].actionId) {
+          if (!status.isActive) {
+            delete activeTransactionState[status.transactionId];
+
+            const updatedState = immutable.del(
+                state,
+                `${path}.${index}`,
+            ) as any;
+
+            return immutable.set(
+                updatedState,
+                `${path}.$status`,
+                decorateStatus(status, $status)
+            )
+          } else {
+            return immutable.set(
+                state,
+                `${path}.$status`,
+                decorateStatus(status, $status)
+            )
+          }
+        } else {
+          if (status.processing) {
+            activeTransactionState[status.transactionId] = get(state, `${path}.${index}`);
+          } else {
+            delete activeTransactionState[status.transactionId];
+          }
+          const updatedState = immutable.update(
+              ((payload || seedPayload) && immutable.assign(state, `${path}.${index}`, originalState || payload || seedPayload as any)) || state,
+              `${path}.${index}.$status`,
+              state => decorateStatus(status, state && state.$status)
+          ) as any;
+
+          return immutable.set(
+              updatedState,
+              `${path}.$status`,
+              decorateStatus(status, $status)
+          )
+        }
+      }
+    } else {
+      throw new TypeError(`Item in state at ${path} must be an array when meta.id (${actionId}) is specified`);
+    }
+  } else {
+    if (status.processing) {
+      activeTransactionState[status.transactionId] = get(state, path);
+    } else {
+      delete activeTransactionState[status.transactionId];
+    }
+
     return immutable.set(
-        merge(state, payload),
-        "$status",
-        decorateStatus({...status}, state && {...state.$status})
-    );
-  }) as any;
+        ((payload || seedPayload) && immutable.assign(state, path, originalState || payload || seedPayload as any)) || state,
+        `${path}.$status`,
+        decorateStatus(status, $status)
+    ) as any;
+  }
+
+  return state;
 }
 
 export default updateState;

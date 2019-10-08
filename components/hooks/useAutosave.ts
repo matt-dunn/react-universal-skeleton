@@ -29,13 +29,17 @@ function useAutosave<T = any>(action: Action<T>, options?: Options): Action<T> {
                                 .then(payload => {
                                     if (pending.current) {
                                         exec(...pending.current)
-                                        pending.current = undefined
+                                        pending.current = undefined;
                                     } else {
                                         isActive.current = false;
                                         resolve(payload)
                                     }
                                 })
-                                .catch(reject);
+                                .catch(reason => {
+                                    pending.current = undefined;
+                                    isActive.current = false;
+                                    reject(reason);
+                                });
                         };
 
                         exec(...args);
