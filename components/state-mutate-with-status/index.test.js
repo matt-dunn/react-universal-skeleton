@@ -1,4 +1,4 @@
-import nextState from './native';
+import nextState from './index';
 
 describe('Next state', () => {
     it('should update object state from payload', () => {
