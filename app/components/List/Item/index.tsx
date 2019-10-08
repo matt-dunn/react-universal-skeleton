@@ -1,8 +1,10 @@
 import React, {useCallback, useState, useRef, useEffect} from "react";
 
 import Status from "components/state-mutate-with-status/status";
+import useAutosave from "components/hooks/useAutosave";
 
 import {IExampleItemState} from "../../../reducers/__dummy__/example";
+import {IExampleResponse} from "../../api/__dummy__/example";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
@@ -10,7 +12,7 @@ export type ItemProps = {
     item: IExampleItemState;
     isEditing?: boolean;
     onEdit?: (item: IExampleItemState) => void;
-    onChange?: (item: IExampleItemState) => void;
+    onChange?: (item: IExampleItemState) => Promise<IExampleResponse>;
     onComplete?: (item: IExampleItemState) => void;
 };
 
@@ -22,27 +24,30 @@ const Item = ({item, isEditing = false, onChange, onComplete, onEdit}: ItemProps
 
     const inputEl = useRef<HTMLInputElement>(null);
 
+    const save = onChange && useAutosave(onChange);
+
     const handleChange = useCallback(
         ({currentTarget: {value}}: React.FormEvent<HTMLInputElement>) => {
             setValue(value);
 
-            onChange && onChange({...item, name: value});
+            save && save({...item, name: value})
+                .then(a => console.log("SAVE COMPLETE", a.name))
         },
-        [item]
+        []
     );
 
     const handleEdit = useCallback(
         () => {
             onEdit && onEdit(item);
         },
-        [item]
+        []
     );
 
     const handleBlur = useCallback(
         () => {
             onComplete && onComplete(item);
         },
-        [item]
+        []
     );
 
     useEffect(() => {

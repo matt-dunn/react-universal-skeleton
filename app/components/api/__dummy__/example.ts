@@ -65,14 +65,13 @@ const exampleApi: IExampleApi = {
             })
         }, 3000)
     }),
-    exampleEditItem:(item: IExampleItemState) => new Promise<IExampleResponse>(resolve => {
-        console.log("API CALL: exampleEditItem")
-        // throw new Error("Error in exampleGetItem")
-        // if (typeof window === 'undefined' || !(window as any).authenticated) {
-        //     throw new APIError("Authentication Failed", "auth", 401)
-        // }
+    exampleEditItem:(item: IExampleItemState) => new Promise<IExampleResponse>((resolve, reject) => {
+        console.log("API CALL: exampleEditItem", item.name)
+        // throw new Error("Error in exampleEditItem")
+
         setTimeout(() => {
             console.log("API CALL COMPLETE: exampleEditItem")
+            // reject(new Error("Error in exampleEditItem"))
             resolve(item)
         }, 1000)
     })
