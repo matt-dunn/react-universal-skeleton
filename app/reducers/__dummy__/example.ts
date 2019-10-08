@@ -2,9 +2,9 @@
 import { FluxStandardAction } from 'flux-standard-action';
 import { getType } from 'typesafe-actions';
 
-import { ActionMeta } from 'components/state-mutate-with-status/state';
+import { ActionMeta } from 'components/state-mutate-with-status';
 // import nextState from 'components/state-mutate-with-status/immutable';
-import nextState from 'components/state-mutate-with-status/nativeFrozen';
+import nextState from 'components/state-mutate-with-status/frozen';
 import { IStatus } from 'components/state-mutate-with-status/status';
 
 import {createReducer} from "components/redux/utils"
