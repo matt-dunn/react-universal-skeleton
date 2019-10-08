@@ -10,7 +10,7 @@ describe('Next state', () => {
         }
 
         const actionProcessing = {
-            payload: { text: 'item 1 updated'},
+            // payload: { text: 'item 1 updated'},
             meta: {
                 $status: {
                     complete: false,
@@ -143,19 +143,13 @@ describe('Next state', () => {
             }
         }
 
-        expect(nextState(state, actionProcessing, {
+        expect([...nextState(state, actionProcessing, {
             path: 'items'
-        })).toMatchObject({
-            $status: {
-                complete: false,
-                processing: true
-            },
-            items: [
-                {
-                    text: 'item 1',
-                }
-            ]
-        })
+        }).items]).toMatchObject([
+            {
+                text: 'item 1 updated',
+            }
+        ]);
 
         const actionComplete = {
             payload: { text: 'item 1 updated'},
@@ -168,23 +162,17 @@ describe('Next state', () => {
             }
         }
 
-        expect(nextState(state, actionComplete, {
+        expect([...nextState(state, actionComplete, {
             path: 'items'
-        })).toMatchObject({
-            $status: {
-                complete: true,
-                processing: false
-            },
-            items: [
-                {
-                    text: 'item 1 updated',
-                    $status: {
-                        complete: true,
-                        processing: false
-                    }
+        }).items]).toMatchObject([
+            {
+                text: 'item 1 updated',
+                $status: {
+                    complete: true,
+                    processing: false
                 }
-            ]
-        })
+            }
+        ])
 
         const actionCompleteNewItem = {
             payload: { text: 'item 2'},
@@ -197,25 +185,19 @@ describe('Next state', () => {
             }
         }
 
-        expect(nextState(state, actionCompleteNewItem, {
+        expect([...nextState(state, actionCompleteNewItem, {
             path: 'items'
-        })).toMatchObject({
-            $status: {
-                complete: true,
-                processing: false
+        }).items]).toMatchObject([
+            {
+                text: 'item 1'
             },
-            items: [
-                {
-                    text: 'item 1'
-                },
-                {
-                    text: 'item 2'
-                }
-            ]
-        })
+            {
+                text: 'item 2'
+            }
+        ]);
 
         const actionCompleteNewItemFirst = {
-            payload: { text: 'item 2'},
+            payload: { text: 'item 2 updated'},
             meta: {
                 id: 2,
                 $status: {
@@ -225,23 +207,17 @@ describe('Next state', () => {
             }
         }
 
-        expect(nextState(state, actionCompleteNewItemFirst, {
+        expect([...nextState(state, actionCompleteNewItemFirst, {
             path: 'items',
             addItem: (items, item) => [item, ...items],
-        })).toMatchObject({
-            $status: {
-                complete: true,
-                processing: false
+        }).items]).toMatchObject([
+            {
+                text: 'item 1'
             },
-            items: [
-                {
-                    text: 'item 2'
-                },
-                {
-                    text: 'item 1'
-                }
-            ]
-        })
+            {
+                text: 'item 2 updated'
+            }
+        ]);
     });
 
     it('should handle multiple transactions', () => {
@@ -270,18 +246,11 @@ describe('Next state', () => {
             path: 'items'
         });
 
-        expect(updatedState).toMatchObject({
-            $status: {
-                complete: false,
-                processing: true,
-                outstandingTransactionCount: 1
-            },
-            items: [
-                {
-                    text: 'item 1',
-                }
-            ]
-        })
+        expect([...updatedState.items]).toMatchObject([
+            {
+                text: 'item 1 updated',
+            }
+        ]);
 
         const actionProcessingSecond = {
             payload: { text: 'item 1 updated'},
@@ -295,19 +264,12 @@ describe('Next state', () => {
             }
         }
 
-        expect(nextState(updatedState, actionProcessingSecond, {
+        expect([...nextState(updatedState, actionProcessingSecond, {
             path: 'items'
-        })).toMatchObject({
-            $status: {
-                complete: false,
-                processing: true,
-                outstandingTransactionCount: 2
-            },
-            items: [
-                {
-                    text: 'item 1',
-                }
-            ]
-        })
+        }).items]).toMatchObject([
+            {
+                text: 'item 1 updated',
+            }
+        ]);
     });
 });
