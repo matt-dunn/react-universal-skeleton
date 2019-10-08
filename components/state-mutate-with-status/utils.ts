@@ -33,6 +33,9 @@ const decorateStatus = (status: IStatusTransaction, $status: IStatus = {} as ISt
 
     const hasActiveTransactions = activeTransactions && Object.keys(activeTransactions).length > 0;
 
+
+    // console.log("@@@@",activeTransactions)
+
     const updatedStatus = Status({
         ...status,
         complete: hasActiveTransactions ? false : status.complete,

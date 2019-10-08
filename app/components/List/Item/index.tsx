@@ -57,7 +57,7 @@ const Item = ({item, isEditing = false, onChange, onComplete, onEdit}: ItemProps
     }, [isEditing]);
 
 
-    useWhatChanged(Item, {item, isEditing, onChange, onComplete, onEdit, value, handleChange, handleEdit, handleBlur});
+    // useWhatChanged(Item, {item, isEditing, onChange, onComplete, onEdit, value, handleChange, handleEdit, handleBlur, save}, {idProp: "item.id"});
 
     return (
         <span>

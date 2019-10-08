@@ -13,8 +13,11 @@ import Item from "./Item";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
+interface IExampleItemStateList<T> extends Array<T> {
+    $status?: IStatus;
+}
 export type ListProps = {
-    items: IExampleItemState[];
+    items: IExampleItemStateList<IExampleItemState>;
     onExampleGetList: IExampleGetList;
     onExampleEditItem: ExampleEditItem;
     $status?: IStatus;
@@ -53,9 +56,9 @@ const Placeholder = styled.ol`
 `
 
 const List = ({forwardedRef, inViewport = true, items, $status, onExampleGetList, onExampleEditItem, ...props}: ListProps & ReactInViewportProps) => {
-    useWhatChanged(List, { forwardedRef, inViewport, items, $status, onExampleGetList, onExampleEditItem, ...props });
+    const {complete, isActive, processing, hasError, error} = Status(items.$status);
 
-    const {complete, isActive, processing, hasError, error} = Status($status);
+    console.log("#####ITEMS", items)
 
     const [editId, setEditId] = useState();
 
@@ -89,12 +92,14 @@ const List = ({forwardedRef, inViewport = true, items, $status, onExampleGetList
         []
     );
 
+    useWhatChanged(List, { forwardedRef, inViewport, items, $status, onExampleGetList, onExampleEditItem, usePerformAction, handleEdit, handleComplete, editId, ...props });
+
     return (
         <ListContainer ref={forwardedRef}>
             [{inViewport ? "YES": "NO"}]
             {hasError && `Error occurred: ${error && error.message}`}
             <Loading loading={processing}>
-                {!complete ?
+                {(!items || items.length === 0) ?
                     <Placeholder>
                         <ListItem>xxx</ListItem>
                         <ListItem>xxx</ListItem>

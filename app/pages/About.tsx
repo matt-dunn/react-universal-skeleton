@@ -41,7 +41,7 @@ const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIt
             </Title>
 
             <AboveTheFold>
-                <List items={items} onExampleGetList={onExampleGetList} onExampleEditItem={onExampleEditItem} $status={$status}/>
+                <List items={items} onExampleGetList={onExampleGetList} onExampleEditItem={onExampleEditItem}/>
 
                 <ClientOnly>
                 </ClientOnly>

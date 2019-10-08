@@ -65,7 +65,7 @@ export interface IOptions<T> {
 
 const activeTransactionState = {} as IActiveTransactions<any>;
 
-const updateState = ({
+const updateState2 = ({
  getValueByPath, convertObject, isArray, updateNewItem, deleteItem, updateItem,
 }: IUpdateState) => <T, U>(state: T, { meta, error, payload = {} as U }: FluxStandardAction<string, U, IActionMeta>, options?: IOptions<U>): T => {
   const { transformPayload, transformState, path = '', addItem, useSeed = true } = options || {} as IOptions<U>;
@@ -163,6 +163,113 @@ const updateState = ({
 
   return state;
 };
+
+import immutable from 'object-path-immutable';
+import { get } from 'lodash';
+
+const merge = (o1: any, o2: any) => {
+  // console.log(">>>", o1, o2)
+  if (Array.isArray(o1)) {
+    const x = (Array.isArray(o2) && [...o1, ...o2]) || [...o1];
+    // x.$status = {a:42}
+    return x
+  }
+
+  return {...o1, ...o2};
+}
+
+const assignStatus = (o: any, $status: any) => {
+  // console.log(">>>", o1, o2)
+  // if (Array.isArray(o)) {
+  if (o) {
+    o.$status = $status
+    return o;
+  }
+
+  return {$status}
+  // }
+
+  // return {...o1, ...o2};
+}
+
+const decorateState = (o: any, $status: any) => {
+  return immutable.update(o, "$status", value => decorateStatus($status, value))
+}
+
+const updateState = <T, U>(state: T, { meta, error, payload }: FluxStandardAction<string, U, IActionMeta>, options?: IOptions<U>): T => {
+  const { transformPayload, transformState, path = '', addItem, useSeed = true } = options || {} as IOptions<U>;
+  const {
+    id: actionId,
+    seedPayload,
+    $status: status = {
+      hasError: error || false,
+      error: error && payload,
+      complete: true,
+      processing: false
+    } as unknown as IStatusTransaction,
+  } = meta || {} as IActionMeta;
+
+  // let xx = state;
+  // if (actionId) {
+  //   const array = get(state, path);
+  //
+  //   if (Array.isArray(array)) {
+  //     const index = array.findIndex(item => {
+  //       console.log("_______", item)
+  //       return item.id === actionId
+  //     });
+  //
+  //     if (index === -1) {
+  //
+  //     } else {
+  //
+  //       const $s = get(state, path + ".$status")
+  //
+  //       console.log("------UPDATE PATH",`${path}.${index}`, payload)
+  //       xx = immutable.update(state, `${path}.${index}`, state => {
+  //         return immutable.set(
+  //             merge(state, payload),
+  //             "$status",
+  //             decorateStatus({...$status}, state && {...state.$status})
+  //         );
+  //       });
+  //
+  //       xx = immutable.set(xx, path + ".$status", $s)
+  //
+  //       console.error(state,xx)
+  //     }
+  //   }
+  // }
+
+  // return (payload && immutable.assign(state, path, payload)) || state
+
+  // const $status
+
+  const $status = get(state, `${path}.$status`);
+  const updateState = get(state, path);
+
+
+
+  const p =  assignStatus(payload, decorateStatus(status, $status))
+  // console.log("!!!!",p)
+
+  // return immutable.assign(state, path, p as any);
+
+  return immutable.update(
+      // (payload && immutable.assign(state, path, payload as any)) || state,
+      immutable.assign(state, path, payload as any),
+      `${path}.$status`,
+      state => decorateStatus({...status}, state && {...state.$status})
+  ) as any;
+
+  return immutable.update(state, path, state => {
+    return immutable.set(
+        merge(state, payload),
+        "$status",
+        decorateStatus({...status}, state && {...state.$status})
+    );
+  }) as any;
+}
 
 export default updateState;
 

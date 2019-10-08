@@ -73,7 +73,7 @@ const exampleApi: IExampleApi = {
             console.log("API CALL COMPLETE: exampleEditItem")
             // reject(new Error("Error in exampleEditItem"))
             resolve(item)
-        }, 1000)
+        }, 10000)
     })
 }
 

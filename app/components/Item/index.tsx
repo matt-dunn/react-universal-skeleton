@@ -31,7 +31,7 @@ const ItemContainer = styled.div`
 const Item = ({className, forwardedRef, inViewport = true, item, onExampleGetItem}: ItemProps & ReactInViewportProps) => {
     const {complete, isActive, processing, hasError, error} = (item && Status(item.$status)) || {} as IStatus;
 
-    useWhatChanged(Item, { className, forwardedRef, inViewport, item, onExampleGetItem });
+    // useWhatChanged(Item, { className, forwardedRef, inViewport, item, onExampleGetItem });
 
     usePerformAction(
         () => onExampleGetItem(),
