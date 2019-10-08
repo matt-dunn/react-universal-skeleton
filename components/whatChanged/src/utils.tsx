@@ -44,7 +44,7 @@ const getObject = (o: any) => {
       }
 
       return acc;
-    }, {});
+    }, (Array.isArray(o) && []) || {});
 
     return convert(o);
   }
@@ -109,9 +109,9 @@ export const deepDiff = (o1: BaseDiffObject, o2: BaseDiffObject, p: string, path
               before: getObject(o1normalised && o1normalised.toJS ? o1normalised.toJS() : o1normalised),
               after: getObject(o2normalised && o2normalised.toJS ? o2normalised.toJS() : o2normalised),
             });
+          } else if (!isEmpty(propertyChanges)) {
+            set(changes, `${(path ? `${path}.` : '') + p.toString()}.${key.toString()}`, get(propertyChanges, `${(path ? `${path}.` : '') + p.toString()}.${key.toString()}`));
           }
-
-          changes = merge({}, changes, propertyChanges);
         });
       }
     } else {
