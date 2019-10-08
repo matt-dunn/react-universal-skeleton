@@ -25,7 +25,7 @@ const activeTransactionState = {} as IActiveTransactions<any>;
 
 const getPayload = <S extends IStatusTransaction, P>(status: S, payload: P, seedPayload?: P): P | undefined | null => {
   if (status.isActive) {
-    return payload || seedPayload
+    return status.hasError ? seedPayload : payload || seedPayload
   } else if (status.hasError) {
     return activeTransactionState[status.transactionId];
   }
@@ -47,7 +47,7 @@ const getUpdatedState = <S, P, U extends IStatusTransaction>(state: S, payload: 
             originalState: null // Ensure final payload is not set so this item can be removed from the array on failure
           }
         }
-      } else if (!payload) {
+      } else if (payload === null) {
         return {
           updatedState: immutable.del(
               state,
