@@ -12,7 +12,9 @@ import { Provider } from 'react-redux';
 
 import getStore from "./store";
 
-const store = getStore(window.__PRELOADED_STATE__);
+import {deserialize} from "components/state-mutate-with-status/utils";
+
+const store = getStore(deserialize(JSON.stringify(window.__PRELOADED_STATE__)));
 
 console.error(store.getState())
 

@@ -8,6 +8,7 @@ import log from 'llog'
 import through from 'through'
 import App from '../../app/App'
 import { getHTMLFragments } from './client'
+import {serialize} from "components/state-mutate-with-status/utils";
 
 import { Provider } from 'react-redux';
 
@@ -95,7 +96,7 @@ export default async (req, res) => {
                         function end() {
                             this.queue(
                                 `<script>
-                                    window.__PRELOADED_STATE__ = ${JSON.stringify(store.getState()).replace(
+                                    window.__PRELOADED_STATE__ = ${serialize(store.getState()).replace(
                                     /</g,
                                     '\\u003c'
                                 )}
