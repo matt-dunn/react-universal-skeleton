@@ -2,7 +2,9 @@ import immutable from 'object-path-immutable';
 import { get } from 'lodash';
 import { FluxStandardAction } from 'flux-standard-action';
 
-import { IStatusTransaction, IActiveTransactions } from './status';
+import { IStatusTransaction } from './status';
+
+import {getPendingState, setPendingState} from "./pendingTransactionState";
 
 import { decorateStatus } from './utils';
 
@@ -28,13 +30,11 @@ type UpdatedStatus<S, P> = {
   originalState?: P | null;
 }
 
-const activeTransactionState = {} as IActiveTransactions<any>;
-
 const getPayload = <S extends IStatusTransaction, P>(status: S, payload: P, seedPayload?: P): P | undefined | null => {
   if (status.isActive) {
     return status.hasError ? seedPayload : payload || seedPayload
   } else if (status.hasError) {
-    return activeTransactionState[status.transactionId];
+    return getPendingState(status.transactionId);
   }
 
   return status.complete ? payload : seedPayload
@@ -113,13 +113,7 @@ const updateState = <S, P>(state: S, { meta, error, payload }: FluxStandardActio
       options
   );
 
-  if (status.isActive) {
-    if (activeTransactionState[status.transactionId] === undefined) {
-      activeTransactionState[status.transactionId] = originalState;
-    }
-  } else {
-    delete activeTransactionState[status.transactionId];
-  }
+  setPendingState(status, originalState);
 
   return immutable.set(
       updatedState,
