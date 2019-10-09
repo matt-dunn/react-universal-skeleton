@@ -24,25 +24,35 @@ export type ListProps = {
 };
 
 const ListContainer = styled.div`
-    max-width: 400px;
+    max-width: 700px;
     border: 1px solid #ccc;
     margin: 10px auto;
 `;
 
 const list = css`
-    display: flex;
-    max-width: 400px;
     min-height: 100px;
 `;
 
-const ListItems = styled.ol`
+const ListItemsWrapper = styled.ol`
+    display: flex;
     ${list}
 `;
 
-const ListItem = styled.li`
+const ListItems = ({children, className}: {children: any, className?: string}) => {
+    const cols = children.length || 1;
+
+    return (
+        <ListItemsWrapper className={className}>
+            {React.Children.map(children, (child) => React.cloneElement(child, {
+                cols
+            }))}
+        </ListItemsWrapper>
+    )
+}
+
+const ListItem = styled.li<{cols?: number;}>`
     padding: 10px;
-    width: 33%;
-    text-align: center;
+    width: ${({cols}) => (cols && `${100 / cols}%`) || 0};
     border-right: 1px solid #eee;
 
     &:last-child {
@@ -50,9 +60,9 @@ const ListItem = styled.li`
     }
 `;
 
-const Placeholder = styled.ol`
-    ${list};
+const Placeholder = styled(ListItems)`
     color: #ccc;
+    text-align: center;
 `
 
 const List = ({forwardedRef, inViewport = true, items, $status, onExampleGetList, onExampleEditItem, ...props}: ListProps & ReactInViewportProps) => {

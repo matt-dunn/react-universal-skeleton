@@ -1,4 +1,5 @@
 import React, {useCallback, useState, useRef, useEffect} from "react";
+import styled, {css} from "styled-components";
 
 import Status from "components/state-mutate-with-status/status";
 import useAutosave from "components/hooks/useAutosave";
@@ -15,6 +16,29 @@ export type ItemProps = {
     onChange?: (item: IExampleItemState) => Promise<IExampleResponse>;
     onComplete?: (item: IExampleItemState) => void;
 };
+
+const Container = styled.div`
+  display: flex;
+`;
+
+const valueStyle = css`
+  font-size: inherit;
+  border: none;
+  font-weight: inherit;
+  font-family: inherit;
+  padding: 0;
+  flex-grow: 1;
+`
+
+const Value = styled.div`
+  ${valueStyle};
+`;
+
+const Input = styled.input`
+  ${valueStyle};
+  background-color: #eee;
+  outline: none;
+`;
 
 const Item = ({item, isEditing = false, onChange, onComplete, onEdit}: ItemProps) => {
     const {id, name, $status} = item;
@@ -57,26 +81,29 @@ const Item = ({item, isEditing = false, onChange, onComplete, onEdit}: ItemProps
     }, [isEditing]);
 
 
-    // useWhatChanged(Item, {item, isEditing, onChange, onComplete, onEdit, value, handleChange, handleEdit, handleBlur, save}, {idProp: "item.id"});
+    useWhatChanged(Item, {item, isEditing, onChange, onComplete, onEdit, value, handleChange, handleEdit, handleBlur, save}, {idProp: "item.id"});
 
     return (
-        <span>
+        <Container
+            onClick={handleEdit}
+        >
+            <label htmlFor={item.id}>
             ITEM:
+            </label>
             {isEditing ?
-                <input
+                <Input
+                    id={item.id}
                     ref={inputEl}
                     value={value}
                     onChange={handleChange}
                     onBlur={handleBlur}
                 />
                 :
-                <span
-                    onClick={handleEdit}
-                >
+                <Value>
                     {name}
-                </span>
+                </Value>
             }
-        </span>
+        </Container>
     )
 }
 
