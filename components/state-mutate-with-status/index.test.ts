@@ -10,7 +10,7 @@ describe('Next state', () => {
         }
 
         const actionProcessing = {
-            // payload: { text: 'item 1 updated'},
+            payload: { text: 'item 1 updated'},
             meta: {
                 $status: {
                     complete: false,
@@ -18,6 +18,10 @@ describe('Next state', () => {
                 }
             }
         }
+
+        console.log("*******HELLO",JSON.stringify(nextState(state, actionProcessing, {
+            path: 'item'
+        })))
 
         expect(nextState(state, actionProcessing, {
             path: 'item'
@@ -147,7 +151,7 @@ describe('Next state', () => {
             path: 'items'
         }).items]).toMatchObject([
             {
-                text: 'item 1 updated',
+                text: 'item 1',
             }
         ]);
 
@@ -248,7 +252,7 @@ describe('Next state', () => {
 
         expect([...updatedState.items]).toMatchObject([
             {
-                text: 'item 1 updated',
+                text: 'item 1',
             }
         ]);
 
@@ -268,7 +272,7 @@ describe('Next state', () => {
             path: 'items'
         }).items]).toMatchObject([
             {
-                text: 'item 1 updated',
+                text: 'item 1',
             }
         ]);
     });
