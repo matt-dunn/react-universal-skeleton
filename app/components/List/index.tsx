@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from "react";
+import React, {ReactNode, useCallback, useState} from "react";
 import styled, {css} from "styled-components";
 import handleViewport, {ReactInViewportProps} from 'react-in-viewport';
 
@@ -33,26 +33,17 @@ const list = css`
     min-height: 100px;
 `;
 
-const ListItemsWrapper = styled.ol`
+const ListItems = styled.ol<{children: ReactNode[]}>`
     display: flex;
     ${list}
+    
+    li {
+      width: ${({children}) => (children && `${100 / children.length}%`) || 0};
+    }
 `;
 
-const ListItems = ({children, className}: {children: any, className?: string}) => {
-    const cols = children.length || 1;
-
-    return (
-        <ListItemsWrapper className={className}>
-            {React.Children.map(children, (child) => React.cloneElement(child, {
-                cols
-            }))}
-        </ListItemsWrapper>
-    )
-}
-
-const ListItem = styled.li<{cols?: number;}>`
+const ListItem = styled.li`
     padding: 10px;
-    width: ${({cols}) => (cols && `${100 / cols}%`) || 0};
     border-right: 1px solid #eee;
 
     &:last-child {
@@ -63,7 +54,7 @@ const ListItem = styled.li<{cols?: number;}>`
 const Placeholder = styled(ListItems)`
     color: #ccc;
     text-align: center;
-`
+`;
 
 const List = ({forwardedRef, inViewport = true, items, $status, onExampleGetList, onExampleEditItem, ...props}: ListProps & ReactInViewportProps) => {
     const {complete, isActive, processing, hasError, error} = Status(items.$status);
