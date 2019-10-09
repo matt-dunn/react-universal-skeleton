@@ -28,15 +28,15 @@ export interface IExampleState {
 }
 
 const exampleGetList = (state: IExampleState, action: FluxStandardAction<string, any, ActionMeta>): IExampleState => nextState(state, action, {
-    path: 'items',
+    path: ['items'],
 });
 
 const exampleGetItem = (state: IExampleState, action: FluxStandardAction<string, any, ActionMeta>): IExampleState => nextState(state, action, {
-    path: 'item',
+    path: ['item'],
 });
 
 const exampleEditItem = (state: IExampleState, action: FluxStandardAction<string, any, ActionMeta>): IExampleState => nextState(state, action, {
-    path: 'items',
+    path: ['items'],
 });
 
 const initialState = {

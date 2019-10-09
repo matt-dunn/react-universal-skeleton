@@ -6,14 +6,16 @@ import { IStatusTransaction, IActiveTransactions } from './status';
 
 import { decorateStatus } from './utils';
 
+export type Path = ReadonlyArray<string>;
+
 export interface ActionMeta {
   id: string;
   $status: IStatusTransaction;
   seedPayload?: any;
 }
 
-export interface Options<T> {
-  path?: string;
+export interface Options {
+  path?: Path;
 }
 
 type UpdatedStatus<S, P> = {
@@ -33,7 +35,7 @@ const getPayload = <S extends IStatusTransaction, P>(status: S, payload: P, seed
   return payload
 };
 
-const getUpdatedState = <S, P, U extends IStatusTransaction>(state: S, payload: P, status: U, path: string, actionId: string): UpdatedStatus<S, P> => {
+const getUpdatedState = <S, P, U extends IStatusTransaction>(state: S, payload: P, status: U, path: Path, actionId: string): UpdatedStatus<S, P> => {
   if (actionId) {
     const array = get(state, path);
 
@@ -51,21 +53,21 @@ const getUpdatedState = <S, P, U extends IStatusTransaction>(state: S, payload: 
         return {
           updatedState: immutable.del(
               state,
-              `${path}.${index}`,
+              [...path, index.toString()]
           ) as any
         };
       } else {
         return {
           updatedState: immutable.update(
-              (payload && immutable.assign(state, `${path}.${index}`, payload as any)) || state,
-              `${path}.${index}.$status`,
+              (payload && immutable.assign(state, [...path, index.toString()], payload as any)) || state,
+              [...path, index.toString(), '$status'],
               state => decorateStatus(status, state && state.$status)
           ) as any,
-          originalState: get(state, `${path}.${index}`)
+          originalState: get(state, [...path, index.toString()])
         };
       }
     } else {
-      throw new TypeError(`Item in state at ${path} must be an array when meta.id (${actionId}) is specified`);
+      throw new TypeError(`Item in state at ${path.join('.')} must be an array when meta.id (${actionId}) is specified`);
     }
 
     return {
@@ -79,8 +81,8 @@ const getUpdatedState = <S, P, U extends IStatusTransaction>(state: S, payload: 
   }
 };
 
-const updateState = <S, P>(state: S, { meta, error, payload }: FluxStandardAction<string, P, ActionMeta>, options?: Options<P>): S => {
-  const { path = '' } = options || {} as Options<P>;
+const updateState = <S, P>(state: S, { meta, error, payload }: FluxStandardAction<string, P, ActionMeta>, options?: Options): S => {
+  const { path = [] } = options || {} as Options;
 
   const {
     id: actionId,
@@ -93,7 +95,7 @@ const updateState = <S, P>(state: S, { meta, error, payload }: FluxStandardActio
     } as unknown as IStatusTransaction,
   } = meta || {} as ActionMeta;
 
-  const $status = get(state, `${path}.$status`);
+  const $status = get(state, [...path, '$status']);
 
   const {updatedState , originalState} = getUpdatedState(
       state,
@@ -113,7 +115,7 @@ const updateState = <S, P>(state: S, { meta, error, payload }: FluxStandardActio
 
   return immutable.set(
       updatedState,
-      `${path}.$status`,
+      [...path, '$status'],
       decorateStatus(status, $status)
   ) as any;
 };

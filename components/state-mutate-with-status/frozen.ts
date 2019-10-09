@@ -4,7 +4,7 @@ import {ActionMeta, Options} from "./index";
 
 import updateState from "./index";
 
-const frozenUpdateState = <T, U>(state: T, action: FluxStandardAction<string, U, ActionMeta>, options?: Options<U>): Readonly<T> =>
+const frozenUpdateState = <S, P>(state: S, action: FluxStandardAction<string, P, ActionMeta>, options?: Options): Readonly<S> =>
     simpleDeepFreeze(updateState(state, action, options));
 
 export default frozenUpdateState;

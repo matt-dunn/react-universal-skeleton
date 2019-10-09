@@ -22,7 +22,7 @@ export interface AuthState {
 }
 
 const login = (state: AuthState, action: FluxStandardAction<string, any, ActionMeta>): AuthState => nextState(state, action, {
-    path: 'authenticatedUser',
+    path: ['authenticatedUser'],
 });
 
 
