@@ -1,3 +1,5 @@
+import { FluxStandardAction } from 'flux-standard-action';
+
 import nextState from './index';
 
 describe('Next state', () => {
@@ -9,22 +11,20 @@ describe('Next state', () => {
             }
         }
 
-        const actionProcessing = {
+        const actionProcessing: FluxStandardAction<string, any, any> = {
+            type: "TEST",
             payload: { text: 'item 1 updated'},
             meta: {
                 $status: {
+                    transactionId: "1",
                     complete: false,
                     processing: true
                 }
             }
         }
 
-        console.log("*******HELLO",JSON.stringify(nextState(state, actionProcessing, {
-            path: 'item'
-        })))
-
         expect(nextState(state, actionProcessing, {
-            path: 'item'
+            path: ['item']
         })).toMatchObject({
             item: {
                 text: 'item 1',
@@ -35,7 +35,8 @@ describe('Next state', () => {
             }
         })
 
-        const actionComplete = {
+        const actionComplete: FluxStandardAction<string, any, any> = {
+            type: "TEST",
             payload: { text: 'item 1 updated'},
             meta: {
                 $status: {
@@ -46,7 +47,7 @@ describe('Next state', () => {
         }
 
         expect(nextState(state, actionComplete, {
-            path: 'item'
+            path: ['item']
         })).toMatchObject({
             item: {
                 text: 'item 1 updated',
@@ -58,12 +59,13 @@ describe('Next state', () => {
         })
 
 
-        const actionWithDefaultStatus = {
+        const actionWithDefaultStatus: FluxStandardAction<string, any, any> = {
+            type: "TEST",
             payload: { text: 'item 1 updated'}
         }
 
         expect(nextState(state, actionWithDefaultStatus, {
-            path: 'item'
+            path: ['item']
         })).toMatchObject({
             item: {
                 text: 'item 1 updated',
@@ -74,7 +76,8 @@ describe('Next state', () => {
             }
         })
 
-        const actionNestedState = {
+        const actionNestedState: FluxStandardAction<string, any, any> = {
+            type: "TEST",
             payload: { text: 'item 1 updated'},
             meta: {
                 $status: {
@@ -85,7 +88,7 @@ describe('Next state', () => {
         }
 
         expect(nextState(state, actionNestedState, {
-            path: 'nested.deep.item'
+            path: ['nested', 'deep', 'item']
         })).toMatchObject({
             nested: {
                 deep: {
@@ -99,7 +102,8 @@ describe('Next state', () => {
             }
         })
 
-        const actionNestedStateComplete = {
+        const actionNestedStateComplete: FluxStandardAction<string, any, any> = {
+            type: "TEST",
             payload: { text: 'item 1 updated'},
             meta: {
                 $status: {
@@ -110,7 +114,7 @@ describe('Next state', () => {
         }
 
         expect(nextState(state, actionNestedStateComplete, {
-            path: 'nested.deep.item'
+            path: ['nested', 'deep', 'item']
         })).toMatchObject({
             nested: {
                 deep: {
@@ -136,7 +140,8 @@ describe('Next state', () => {
             ]
         }
 
-        const actionProcessing = {
+        const actionProcessing: FluxStandardAction<string, any, any> = {
+            type: "TEST",
             payload: { text: 'item 1 updated'},
             meta: {
                 id: 1,
@@ -148,14 +153,15 @@ describe('Next state', () => {
         }
 
         expect([...nextState(state, actionProcessing, {
-            path: 'items'
+            path: ['items']
         }).items]).toMatchObject([
             {
                 text: 'item 1',
             }
         ]);
 
-        const actionComplete = {
+        const actionComplete: FluxStandardAction<string, any, any> = {
+            type: "TEST",
             payload: { text: 'item 1 updated'},
             meta: {
                 id: 1,
@@ -167,7 +173,7 @@ describe('Next state', () => {
         }
 
         expect([...nextState(state, actionComplete, {
-            path: 'items'
+            path: ['items']
         }).items]).toMatchObject([
             {
                 text: 'item 1 updated',
@@ -178,7 +184,8 @@ describe('Next state', () => {
             }
         ])
 
-        const actionCompleteNewItem = {
+        const actionCompleteNewItem: FluxStandardAction<string, any, any> = {
+            type: "TEST",
             payload: { text: 'item 2'},
             meta: {
                 id: 2,
@@ -190,7 +197,7 @@ describe('Next state', () => {
         }
 
         expect([...nextState(state, actionCompleteNewItem, {
-            path: 'items'
+            path: ['items']
         }).items]).toMatchObject([
             {
                 text: 'item 1'
@@ -200,7 +207,8 @@ describe('Next state', () => {
             }
         ]);
 
-        const actionCompleteNewItemFirst = {
+        const actionCompleteNewItemFirst: FluxStandardAction<string, any, any> = {
+            type: "TEST",
             payload: { text: 'item 2 updated'},
             meta: {
                 id: 2,
@@ -212,8 +220,8 @@ describe('Next state', () => {
         }
 
         expect([...nextState(state, actionCompleteNewItemFirst, {
-            path: 'items',
-            addItem: (items, item) => [item, ...items],
+            path: ['items'],
+            // addItem: (items, item) => [item, ...items],
         }).items]).toMatchObject([
             {
                 text: 'item 1'
@@ -234,7 +242,8 @@ describe('Next state', () => {
             ]
         }
 
-        const actionProcessingFirst = {
+        const actionProcessingFirst: FluxStandardAction<string, any, any> = {
+            type: "TEST",
             payload: { text: 'item 1 updated'},
             meta: {
                 id: 1,
@@ -247,7 +256,7 @@ describe('Next state', () => {
         }
 
         const updatedState = nextState(state, actionProcessingFirst, {
-            path: 'items'
+            path: ['items']
         });
 
         expect([...updatedState.items]).toMatchObject([
@@ -256,7 +265,8 @@ describe('Next state', () => {
             }
         ]);
 
-        const actionProcessingSecond = {
+        const actionProcessingSecond: FluxStandardAction<string, any, any> = {
+            type: "TEST",
             payload: { text: 'item 1 updated'},
             meta: {
                 id: 1,
@@ -269,7 +279,7 @@ describe('Next state', () => {
         }
 
         expect([...nextState(updatedState, actionProcessingSecond, {
-            path: 'items'
+            path: ['items']
         }).items]).toMatchObject([
             {
                 text: 'item 1',
