@@ -16,8 +16,8 @@ export type IStatus = {
   readonly complete: boolean;
   readonly processedOnServer: boolean;
   readonly processing: boolean;
-  readonly hasError?: boolean;
-  readonly error: ErrorLike;
+  readonly hasError: boolean;
+  readonly error?: ErrorLike;
   readonly isActive: boolean;
   readonly outstandingTransactionCount: number;
   readonly [symbolActiveTransactions]: IActiveTransactions;

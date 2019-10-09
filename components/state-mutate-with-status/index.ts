@@ -9,7 +9,7 @@ import { decorateStatus } from './utils';
 export type Path = ReadonlyArray<string>;
 
 export interface ActionMeta {
-  id: string;
+  id?: string;
   $status: IStatusTransaction;
   seedPayload?: any;
 }
@@ -35,7 +35,7 @@ const getPayload = <S extends IStatusTransaction, P>(status: S, payload: P, seed
   return payload
 };
 
-const getUpdatedState = <S, P, U extends IStatusTransaction>(state: S, payload: P, status: U, path: Path, actionId: string): UpdatedStatus<S, P> => {
+const getUpdatedState = <S, P, U extends IStatusTransaction>(state: S, payload: P, status: U, path: Path, actionId?: string): UpdatedStatus<S, P> => {
   if (actionId) {
     const array = get(state, path);
 
