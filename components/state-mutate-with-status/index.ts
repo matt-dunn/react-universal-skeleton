@@ -14,8 +14,13 @@ export interface ActionMeta {
   seedPayload?: any;
 }
 
-export interface Options {
+export interface GetNewItemIndex<P> {
+  (array: any[], payload: P): number;
+}
+
+export interface Options<P> {
   path?: Path;
+  getNewItemIndex?: GetNewItemIndex<P>;
 }
 
 type UpdatedStatus<S, P> = {
@@ -35,7 +40,7 @@ const getPayload = <S extends IStatusTransaction, P>(status: S, payload: P, seed
   return status.complete ? payload : seedPayload
 };
 
-const getUpdatedState = <S, P, U extends IStatusTransaction>(state: S, payload: P, status: U, path: Path, actionId?: string): UpdatedStatus<S, P> => {
+const getUpdatedState = <S, P, U extends IStatusTransaction>(state: S, payload: P, status: U, path: Path, actionId?: string, options?: Options<P>): UpdatedStatus<S, P> => {
   if (actionId) {
     const array = get(state, path);
 
@@ -44,8 +49,10 @@ const getUpdatedState = <S, P, U extends IStatusTransaction>(state: S, payload: 
 
       if (index === -1) {
         if (payload) {
+          const { getNewItemIndex } = options || {} as Options<P>;
+
           return {
-            updatedState: immutable.insert(state, path, Object.assign({}, payload, {$status: decorateStatus(status)}), array.length),
+            updatedState: immutable.insert(state, path, Object.assign({}, payload, {$status: decorateStatus(status)}), getNewItemIndex ? getNewItemIndex(array, payload) : array.length),
             originalState: null // Ensure final payload is not set so this item can be removed from the array on failure
           }
         }
@@ -81,8 +88,8 @@ const getUpdatedState = <S, P, U extends IStatusTransaction>(state: S, payload: 
   }
 };
 
-const updateState = <S, P>(state: S, { meta, error, payload }: FluxStandardAction<string, P, ActionMeta>, options?: Options): S => {
-  const { path = [] } = options || {} as Options;
+const updateState = <S, P>(state: S, { meta, error, payload }: FluxStandardAction<string, P, ActionMeta>, options?: Options<P>): S => {
+  const { path = [] } = options || {} as Options<P>;
 
   const {
     id: actionId,
@@ -102,7 +109,8 @@ const updateState = <S, P>(state: S, { meta, error, payload }: FluxStandardActio
       getPayload(status, payload, seedPayload),
       status,
       path,
-      actionId
+      actionId,
+      options
   );
 
   if (status.isActive) {
