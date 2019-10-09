@@ -1,5 +1,6 @@
 import React, {useCallback, useState, useRef, useEffect} from "react";
 import styled, {css} from "styled-components";
+import ContentEditable, {ContentEditableEvent} from 'react-contenteditable'
 
 import Status from "components/state-mutate-with-status/status";
 import useAutosave from "components/hooks/useAutosave";
@@ -28,16 +29,16 @@ const valueStyle = css`
   font-family: inherit;
   padding: 0;
   flex-grow: 1;
+  word-break: break-word;
 `
 
-const Value = styled.div`
+const Value = styled(ContentEditable)`
   ${valueStyle};
-`;
 
-const Input = styled.input`
-  ${valueStyle};
-  background-color: #eee;
-  outline: none;
+  &[contenteditable=true] {
+    background-color: #eee;
+    outline: none;
+  }
 `;
 
 const Item = ({item, isEditing = false, onChange, onComplete, onEdit}: ItemProps) => {
@@ -46,32 +47,38 @@ const Item = ({item, isEditing = false, onChange, onComplete, onEdit}: ItemProps
 
     const [value, setValue] = useState(name);
 
+    useEffect(() => {
+        setValue(name)
+    }, [name])
+
     const inputEl = useRef<HTMLInputElement>(null);
 
     const save = onChange && useAutosave(onChange);
 
     const handleChange = useCallback(
-        ({currentTarget: {value}}: React.FormEvent<HTMLInputElement>) => {
-            setValue(value);
+        ({target: {value: v}}: ContentEditableEvent) => {
+            if (v !== value) {
+                setValue(v);
 
-            save && save({...item, name: value})
-                .then(a => console.log("SAVE COMPLETE", a.name))
+                save && save({...item, name: v})
+                    .then(a => console.log("SAVE COMPLETE", a.name))
+            }
         },
         []
     );
 
     const handleEdit = useCallback(
         () => {
-            onEdit && onEdit(item);
+            !isEditing && onEdit && onEdit(item);
         },
-        []
+        [isEditing]
     );
 
     const handleBlur = useCallback(
         () => {
-            onComplete && onComplete(item);
+            isEditing && onComplete && onComplete(item);
         },
-        []
+        [isEditing]
     );
 
     useEffect(() => {
@@ -81,7 +88,7 @@ const Item = ({item, isEditing = false, onChange, onComplete, onEdit}: ItemProps
     }, [isEditing]);
 
 
-    useWhatChanged(Item, {item, isEditing, onChange, onComplete, onEdit, value, handleChange, handleEdit, handleBlur, save}, {idProp: "item.id"});
+    useWhatChanged(Item, {inputEl, item, isEditing, onChange, onComplete, onEdit, value, handleChange, handleEdit, handleBlur, save}, {idProp: "item.id"});
 
     return (
         <Container
@@ -90,19 +97,16 @@ const Item = ({item, isEditing = false, onChange, onComplete, onEdit}: ItemProps
             <label htmlFor={item.id}>
             ITEM:
             </label>
-            {isEditing ?
-                <Input
-                    id={item.id}
-                    ref={inputEl}
-                    value={value}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                />
-                :
-                <Value>
-                    {name}
-                </Value>
-            }
+
+            <Value
+                id={item.id}
+                innerRef={inputEl}
+                html={value}
+                disabled={!isEditing}
+                tagName='article'
+                onChange={handleChange}
+                onBlur={handleBlur}
+            />
         </Container>
     )
 }

@@ -68,8 +68,6 @@ const Placeholder = styled(ListItems)`
 const List = ({forwardedRef, inViewport = true, items, $status, onExampleGetList, onExampleEditItem, ...props}: ListProps & ReactInViewportProps) => {
     const {complete, isActive, processing, hasError, error} = Status(items.$status);
 
-    console.log("#####ITEMS", items)
-
     const [editId, setEditId] = useState();
 
     usePerformAction(
