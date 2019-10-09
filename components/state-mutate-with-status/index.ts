@@ -32,7 +32,7 @@ const getPayload = <S extends IStatusTransaction, P>(status: S, payload: P, seed
     return activeTransactionState[status.transactionId];
   }
 
-  return payload
+  return status.complete ? payload : seedPayload
 };
 
 const getUpdatedState = <S, P, U extends IStatusTransaction>(state: S, payload: P, status: U, path: Path, actionId?: string): UpdatedStatus<S, P> => {
