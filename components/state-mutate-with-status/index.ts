@@ -3,9 +3,7 @@ import { get } from 'lodash';
 import { FluxStandardAction } from 'flux-standard-action';
 
 import { IStatusTransaction } from './status';
-
 import {setPendingState} from "./pendingTransactionState";
-
 import {decorateStatus, getPayload, getUpdatedState} from './utils';
 
 export type Path = ReadonlyArray<string>;

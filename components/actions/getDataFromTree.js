@@ -17,6 +17,6 @@ export const getDataFromTree = app => {
     return Promise.all(apiContext)
         .then(() => html)
         .catch(ex => console.error(ex)) // Swallow exceptions - they should be handled by the app...
-}
+};
 
 export default getDataFromTree;

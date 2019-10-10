@@ -1,5 +1,5 @@
-import styled from "styled-components";
 import React, {ReactNode, useEffect, useRef, useState} from "react";
+import styled from "styled-components";
 
 import Spinner from "./Spinner";
 

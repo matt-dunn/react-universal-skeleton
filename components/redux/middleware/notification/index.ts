@@ -2,9 +2,9 @@ import {
   Dispatch, Middleware,
 } from 'redux';
 
-export interface IError { message: string; code: string; status: string }
+import {ErrorLike} from "components/error";
 
-export interface INotify { error: IError; type: string; cancel: Function; retry: Function }
+export interface INotify { error: ErrorLike; type: string; cancel: Function; retry: Function }
 
 export type TNotify = (notification: INotify) => boolean;
 

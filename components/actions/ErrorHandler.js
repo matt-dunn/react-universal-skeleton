@@ -1,8 +1,8 @@
 import React, {useContext, useEffect, useRef, useState} from "react";
 import PropTypes from "prop-types";
+import {useHistory, useLocation} from "react-router";
 
 import {ErrorHandlerContext, ErrorContext} from "./contexts";
-import {useHistory, useLocation} from "react-router";
 
 const callHandler = (ex, handler, location, history, props) => {
     const {pathname, search, hash} = location;
@@ -57,7 +57,7 @@ const ErrorHandler = ({handler, children, ...props}) => {
             {component || children}
         </ErrorHandlerContext.Provider>
     )
-}
+};
 
 ErrorHandler.propTypes = {
     children: PropTypes.oneOfType([
