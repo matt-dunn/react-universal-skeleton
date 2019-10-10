@@ -1,4 +1,4 @@
-declare function usePerformAction (action: any, test: any, deps: any[]): void;
+declare function usePerformAction (action: () => Promise<any>, test?: () => boolean, deps?: any[]): void;
 
 export = usePerformAction;
 
