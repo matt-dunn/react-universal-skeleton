@@ -48,6 +48,10 @@ const exampleApi: IExampleApi = {
                     id: '3',
                     name: 'Item 3',
                 },
+                {
+                    id: '4',
+                    name: 'Item 4',
+                }
             ])
         }, 1500)
     }),
@@ -72,8 +76,9 @@ const exampleApi: IExampleApi = {
         setTimeout(() => {
             console.log("API CALL COMPLETE: exampleEditItem")
             // reject(new Error("Error in exampleEditItem"))
+            // reject(new APIError("Authentication Failed", "auth", 403))
             resolve(item)
-        }, 1500)
+        }, 3000)
     })
 }
 
