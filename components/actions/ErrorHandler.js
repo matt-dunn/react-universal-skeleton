@@ -9,15 +9,28 @@ class ErrorHandler extends React.PureComponent {
     constructor(props) {
         super(props);
 
+        this.state = {
+            component: undefined
+        };
+
         this.handler = {
             handleError: ex => {
                 const {handler, location: {pathname, search, hash}, history} = this.props;
 
-                return handler(
+                const ret = handler(
                     ex,
                     `${pathname}${(search && `?${encodeURIComponent(search.substr(1))}`) || ""}${(hash && `#${encodeURIComponent(hash.substr(1))}`) || ""}`,
-                    history
-                )
+                    history,
+                    props
+                );
+
+                if (ret !== false && ret !== true && ret) {
+                    this.setState({component: ret})
+
+                    return true;
+                }
+
+                return ret;
             }
         }
 
@@ -25,7 +38,8 @@ class ErrorHandler extends React.PureComponent {
         const {history} = this.props;
         this.unlisten = history.listen(() => {
             window.__PRERENDERED_SSR__ = false;
-            this.unlisten();
+            // this.unlisten();
+            this.setState({component: undefined})
         })
     }
 
@@ -34,6 +48,12 @@ class ErrorHandler extends React.PureComponent {
     }
 
     render() {
+        const {component} = this.state;
+
+        if (component) {
+            return component;
+        }
+
         const {children} = this.props;
 
         return (

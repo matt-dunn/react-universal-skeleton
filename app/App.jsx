@@ -6,7 +6,9 @@ import importComponent from 'react-imported-component';
 
 import Header from './components/Header'
 
+import Error403 from './pages/403';
 import Error404 from './pages/404';
+
 import Home from './pages/Home';
 import LoadingComponent from './pages/Loading'
 import ErrorComponent from './pages/Error'
@@ -26,11 +28,13 @@ const Login = importComponent(() => import("./pages/Login"), {
     ErrorComponent
 });
 
-const handler = ({code, status}, location, history) => {
+const handler = ({code, status}, location, history, props) => {
     console.log(code, status, location, history)
     if (status === 401) {
         history.push(generatePath("/login/:from?", {from: location}))
         return true;
+    } else if (status === 403) {
+        return <Error403/>;
     }
 }
 
