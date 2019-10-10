@@ -57,7 +57,7 @@ const Placeholder = styled(ListItems)`
 `;
 
 const List = ({forwardedRef, inViewport = true, items, $status, onExampleGetList, onExampleEditItem, ...props}: ListProps & ReactInViewportProps) => {
-    const {complete, isActive, processing, hasError, error} = Status(items.$status);
+    const {complete, isActive, processing, hasError, error, outstandingTransactionCount} = Status(items.$status);
 
     const [editId, setEditId] = useState();
 
@@ -96,6 +96,8 @@ const List = ({forwardedRef, inViewport = true, items, $status, onExampleGetList
     return (
         <ListContainer ref={forwardedRef}>
             [{inViewport ? "YES": "NO"}]
+            [{!processing && outstandingTransactionCount > 0 ? "CHILDREN UPDATING": "CHILDREN DONE"}]
+            [{processing ? "UPDATING": "DONE"}]
             {hasError && `Error occurred: ${error && error.message}`}
             <Loading loading={processing}>
                 {(!items || items.length === 0) ?

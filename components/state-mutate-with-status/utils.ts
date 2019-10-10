@@ -9,13 +9,14 @@ import {Options, Path} from "./index";
 export type UpdatedStatus<S, P> = {
     updatedState: S;
     originalState?: P | null;
+    isCurrent?: boolean;
 }
 
-export const decorateStatus = (status: IStatusTransaction, $status: IStatus = {} as IStatus): IStatus => {
+export const decorateStatus = (status: IStatusTransaction, $status: IStatus = {} as IStatus, isCurrent = true): IStatus => {
     const activeTransactions = { ...$status[symbolActiveTransactions] };
 
     if (status.processing) {
-        activeTransactions[status.transactionId] = true;
+        activeTransactions[status.transactionId] = isCurrent;
     } else {
         delete activeTransactions[status.transactionId];
     }
@@ -25,7 +26,7 @@ export const decorateStatus = (status: IStatusTransaction, $status: IStatus = {}
     const updatedStatus = Status({
         ...status,
         complete: hasActiveTransactions ? false : status.complete,
-        processing: hasActiveTransactions ? ($status && $status.processing) || status.processing : status.processing,
+        processing: activeTransactions[status.transactionId] === true,
         [symbolActiveTransactions]: activeTransactions,
     });
 
@@ -128,7 +129,8 @@ export const getUpdatedState = <S, P, U extends IStatusTransaction>(state: S, pa
     } else {
         return {
             updatedState: (payload && immutable.assign(state, path, payload as any)) || state,
-            originalState: get(state, path)
+            originalState: get(state, path),
+            isCurrent: true
         };
     }
 };

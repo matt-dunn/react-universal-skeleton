@@ -41,7 +41,7 @@ const updateState = <S, P>(state: S, { meta, error, payload }: FluxStandardActio
 
   const $status = get(state, [...path, '$status']);
 
-  const {updatedState , originalState} = getUpdatedState(
+  const {updatedState , originalState, isCurrent} = getUpdatedState(
       state,
       getPayload(status, payload, seedPayload),
       status,
@@ -55,7 +55,7 @@ const updateState = <S, P>(state: S, { meta, error, payload }: FluxStandardActio
   return immutable.set(
       updatedState,
       [...path, '$status'],
-      decorateStatus(status, $status)
+      decorateStatus(status, $status, isCurrent === true)
   ) as any;
 };
 
