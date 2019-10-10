@@ -39,7 +39,7 @@ const exec = (
             isActive: false,
             hasError: false,
             complete: true,
-            processedOnServer: (process as any).browser !== true,
+            processedOnServer: !(process as any).browser,
             lastUpdated: Date.now(),
             processing: false
           },
@@ -94,7 +94,7 @@ const exec = (
             complete: false,
             processing: false,
             lastUpdated: Date.now(),
-            processedOnServer: (process as any).browser !== true,
+            processedOnServer: !(process as any).browser,
             error: reason,
           },
         },

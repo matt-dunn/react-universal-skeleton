@@ -54,7 +54,7 @@ const stateDecorator = (options: IOptions) => () => {
                   complete: false,
                   processing: false,
                   lastUpdated: Date.now(),
-                  processedOnServer: (process as any).browser !== true,
+                  processedOnServer: !(process as any).browser,
                   error: reason,
                 },
               },
