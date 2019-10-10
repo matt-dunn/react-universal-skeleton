@@ -7,13 +7,14 @@ export type LoadingProps = {
     children: ReactNode | ReactNode[];
     Loader?: ReactNode;
     loading: boolean;
+    timeout?: number;
 };
 
 const Container = styled.div`
     position: relative;
-`
+`;
 
-const Loading = ({children, loading, Loader = <Spinner/>}: LoadingProps) => {
+const Loading = ({children, loading, Loader = <Spinner/>, timeout = 500}: LoadingProps) => {
     const [show, setShow] = useState(false);
     const t = useRef<number>();
 
@@ -21,14 +22,14 @@ const Loading = ({children, loading, Loader = <Spinner/>}: LoadingProps) => {
         if (loading) {
             t.current = setTimeout(() => {
                 setShow(true)
-            }, 500)
+            }, timeout)
         } else {
             setShow(false)
             clearTimeout(t.current)
         }
 
         return () => clearTimeout(t.current)
-    }, [loading])
+    }, [loading]);
 
     return (
         <Container>
@@ -36,6 +37,6 @@ const Loading = ({children, loading, Loader = <Spinner/>}: LoadingProps) => {
             {children}
         </Container>
     );
-}
+};
 
 export default Loading;
