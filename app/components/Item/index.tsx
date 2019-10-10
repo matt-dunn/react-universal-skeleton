@@ -3,7 +3,7 @@ import React from "react";
 import handleViewport, {ReactInViewportProps} from "react-in-viewport";
 
 import Loading from "components/Loading";
-import {usePerformAction} from "components/actions";
+import usePerformAction from "components/actions/usePerformAction";
 import Status, {IStatus} from "components/state-mutate-with-status/status";
 
 import {IExampleItemState} from "../../reducers/__dummy__/example";
