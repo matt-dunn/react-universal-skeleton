@@ -28,7 +28,7 @@ const usePerformAction = (action, test, deps = []) => {
                         })
                 }
             }
-        }, deps);
+        }, [action, handleError, processOnServer, test, ...deps]);
     } else if (processOnServer) {
         const context = useContext(APIContext);
         const errorContext = useContext(ErrorContext)
@@ -59,7 +59,6 @@ const usePerformAction = (action, test, deps = []) => {
             }
         }
     }
-
 }
 
 export default usePerformAction;

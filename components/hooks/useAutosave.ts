@@ -8,7 +8,7 @@ export type Action<T> = {
     (...args: any[]): Promise<T>;
 }
 
-function useAutosave<T = any>(action: Action<T>, options?: Options): Action<T> {
+function useAutosave<T = any>(action?: Action<T>, options?: Options): Action<T> {
     const timeout = useRef<number>();
     const isActive = useRef<boolean>(false);
     const pending = useRef<any>();
@@ -17,6 +17,10 @@ function useAutosave<T = any>(action: Action<T>, options?: Options): Action<T> {
 
     return useCallback(
         (...args): any => {
+            if (!action) {
+                return Promise.resolve();
+            }
+
             return new Promise<T>((resolve, reject) => {
                 if (!isActive.current) {
                     clearTimeout(timeout.current);
@@ -49,7 +53,7 @@ function useAutosave<T = any>(action: Action<T>, options?: Options): Action<T> {
                 }
             })
         },
-        []
+        [action, delay]
     )
 }
 

@@ -29,7 +29,7 @@ const Loading = ({children, loading, Loader = <Spinner/>, timeout = 500}: Loadin
         }
 
         return () => clearTimeout(t.current)
-    }, [loading]);
+    }, [loading, timeout]);
 
     return (
         <Container>

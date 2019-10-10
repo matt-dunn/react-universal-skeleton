@@ -55,7 +55,7 @@ const Item = ({item, isEditing = false, onChange, onComplete, onEdit}: ItemProps
 
     const inputEl = useRef<HTMLInputElement>(null);
 
-    const save = onChange && useAutosave(onChange);
+    const save = useAutosave(onChange);
 
     const handleChange = useCallback(
         ({target: {value: v}}: ContentEditableEvent) => {
@@ -66,21 +66,21 @@ const Item = ({item, isEditing = false, onChange, onComplete, onEdit}: ItemProps
                     .then(a => console.log("SAVE COMPLETE", a.name))
             }
         },
-        []
+        [item, save, value]
     );
 
     const handleEdit = useCallback(
         () => {
             !isEditing && onEdit && onEdit(item);
         },
-        [isEditing]
+        [isEditing, item, onEdit]
     );
 
     const handleBlur = useCallback(
         () => {
             isEditing && onComplete && onComplete(item);
         },
-        [isEditing]
+        [isEditing, item, onComplete]
     );
 
     useEffect(() => {

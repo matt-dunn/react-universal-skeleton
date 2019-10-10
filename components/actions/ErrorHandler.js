@@ -38,7 +38,7 @@ const ErrorHandler = ({handler, children, ...props}) => {
         return () => {
             unlisten.current();
         }
-    }, []);
+    }, [errorContext.error, history]);
 
     const handleError = useRef({
         handleError: ex => {

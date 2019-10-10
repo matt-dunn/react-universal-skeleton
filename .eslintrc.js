@@ -1,4 +1,7 @@
 module.exports =  {
+    "plugins": [
+        "react-hooks"
+    ],
     parser:  '@typescript-eslint/parser',
     extends:  [
         'plugin:react/recommended'
@@ -37,5 +40,7 @@ module.exports =  {
         // }
     },
     rules:  {
-    },
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn"
+    }
 };
