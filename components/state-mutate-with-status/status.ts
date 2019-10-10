@@ -1,9 +1,4 @@
-type ErrorLike = {
-  message: string;
-  name?: string;
-  code?: string;
-  status?: number;
-}
+import {errorLike, ErrorLike} from "components/error";
 
 const symbolActiveTransactions = Symbol('activeTransactions');
 
@@ -26,15 +21,6 @@ export type IStatus = {
 export type IStatusTransaction = {
   readonly transactionId: string;
 } & IStatus
-
-const errorLike = (error: ErrorLike & {[index: string]: any}): ErrorLike => {
-  const {stack, ...rest} = Object.getOwnPropertyNames(error).reduce((o: any, key: string) => {
-    o[key] = error[key];
-    return o;
-  }, {});
-
-  return rest;
-};
 
 const Status = (status: IStatus = {} as IStatus): IStatus => {
   const {
