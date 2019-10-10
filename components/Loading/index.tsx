@@ -1,24 +1,19 @@
 import styled from "styled-components";
-import React, {useEffect, useRef, useState} from "react";
+import React, {ReactNode, useEffect, useRef, useState} from "react";
 
-export type LoadingProps = { children: any; Loader?: any; loading: boolean };
+import Spinner from "./Spinner";
+
+export type LoadingProps = {
+    children: ReactNode | ReactNode[];
+    Loader?: ReactNode;
+    loading: boolean;
+};
 
 const Container = styled.div`
     position: relative;
 `
 
-const Message = styled.div`
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    padding: 3px 10px;
-    border-radius: 50px;
-    background-color: #999;
-    color: #fff;
-    transform: translate(-50%, -50%);
-`
-
-const Loading = ({children, loading, Loader = <Message>Loading...</Message>}: LoadingProps) => {
+const Loading = ({children, loading, Loader = <Spinner/>}: LoadingProps) => {
     const [show, setShow] = useState(false);
     const t = useRef<number>();
 

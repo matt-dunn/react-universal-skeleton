@@ -4,6 +4,8 @@ import ContentEditable, {ContentEditableEvent} from 'react-contenteditable'
 
 import Status from "components/state-mutate-with-status/status";
 import useAutosave from "components/hooks/useAutosave";
+import Loading from "components/Loading";
+import Loader from "components/Loading/Pulse";
 
 import {IExampleItemState} from "../../../reducers/__dummy__/example";
 import {IExampleResponse} from "../../api/__dummy__/example";
@@ -91,23 +93,25 @@ const Item = ({item, isEditing = false, onChange, onComplete, onEdit}: ItemProps
     useWhatChanged(Item, {inputEl, item, isEditing, onChange, onComplete, onEdit, value, handleChange, handleEdit, handleBlur, save}, {idProp: "item.id"});
 
     return (
-        <Container
-            onClick={handleEdit}
-        >
-            <label htmlFor={item.id}>
-            ITEM:
-            </label>
+        <Loading loading={processing} Loader={<Loader/>}>
+            <Container
+                onClick={handleEdit}
+            >
+                <label htmlFor={item.id}>
+                ITEM:
+                </label>
 
-            <Value
-                id={item.id}
-                innerRef={inputEl}
-                html={value}
-                disabled={!isEditing}
-                tagName='article'
-                onChange={handleChange}
-                onBlur={handleBlur}
-            />
-        </Container>
+                <Value
+                    id={item.id}
+                    innerRef={inputEl}
+                    html={value}
+                    disabled={!isEditing}
+                    tagName='article'
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                />
+            </Container>
+        </Loading>
     )
 }
 
