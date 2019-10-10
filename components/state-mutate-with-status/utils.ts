@@ -31,6 +31,7 @@ export const serialize = (o: any): string => {
     return o && JSON.stringify(o, (key: string, value: any) => {
         if (Array.isArray(value)) {
             const keys = Object.keys(value);
+
             if (keys.length !== value.length) {
                 return {
                     $$arr: {
@@ -53,11 +54,12 @@ export const serialize = (o: any): string => {
 export const deserialize = (s: string): any => {
     return s && JSON.parse(s, (key, value) => {
         if (value && value.$$arr) {
-            const {$: array, _: values} = value.$$arr;
+            const {$: array = [], _: values} = value.$$arr;
 
-            Object.keys(values).forEach(key => {
+            values && Object.keys(values).forEach(key => {
                 array[key] = values[key]
-            })
+            });
+
             return array
         }
         return value;
