@@ -26,6 +26,8 @@ const ScrollToTop = withRouter(({ children, location: { pathname } }) => {
     return children;
 });
 
+window.STORE = store;
+
 const app = (
     <HelmetProvider>
         <Provider store={store}>
