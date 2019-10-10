@@ -29,20 +29,21 @@ const Login = importComponent(() => import("./pages/Login"), {
 });
 
 const handler = ({code, status}, location, history, props) => {
-    console.log(code, status, location, history)
+    console.log("HANDLE ERROR", code, status, location, history)
+
     if (status === 401) {
         history.push(generatePath("/login/:from?", {from: location}))
         return true;
     } else if (status === 403) {
         return <Error403/>;
+    } else if (status === 404) {
+        return <Error404/>;
     }
 }
 
 import AuthProvider from "./components/auth"
 
-const App = (props) => {
-    // const counter = useSelector(state => state.auth)
-    // console.log(props)
+const App = () => {
     return (
         <AuthProvider>
             <GlobalStyles/>
