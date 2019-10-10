@@ -1,4 +1,4 @@
-import {errorLike, ErrorLike} from "components/error";
+import {errorLike, ErrorLike} from "../error";
 
 const symbolActiveTransactions = Symbol('activeTransactions');
 
