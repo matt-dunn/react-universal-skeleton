@@ -1,10 +1,10 @@
 import React, {useEffect, useContext, useRef} from "react";
 import isPromise from 'is-promise';
 
-import {APIContext, ErrorContext, FoldContext} from "./contexts";
+import {APIContext, ErrorContext, ErrorHandlerContext, FoldContext} from "./contexts";
 
 const usePerformAction = (action, test, deps = []) => {
-    const {handleError} = useContext(ErrorContext) || {};
+    const {handleError} = useContext(ErrorHandlerContext) || {};
     const {processOnServer = false} = useContext(FoldContext) || {};
 
     if (process.browser) {
@@ -31,6 +31,7 @@ const usePerformAction = (action, test, deps = []) => {
         }, deps);
     } else if (processOnServer) {
         const context = useContext(APIContext);
+        const errorContext = useContext(ErrorContext)
 
         if (context) {
             const payload = action();
@@ -39,8 +40,17 @@ const usePerformAction = (action, test, deps = []) => {
                 context.push(
                     payload
                         .catch(ex => {
-                            if (handleError && handleError(ex) === true) {   // Handled errors should throw on the server so getDataFromTree will immediately bail
-                                throw ex;
+                            if (handleError) {
+                                const ret = handleError(ex);
+
+                                if (ret !== false && ret !== true && ret) {
+                                    errorContext.error = ex;
+                                    throw ex;
+                                }
+
+                                if (ret === true) {   // Handled errors should throw on the server so getDataFromTree will immediately bail
+                                    throw ex;
+                                }
                             }
 
                             console.error(ex);

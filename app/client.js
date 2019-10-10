@@ -4,17 +4,18 @@ import App from './App'
 import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter, withRouter } from 'react-router-dom'
 import { rehydrateMarks } from 'react-imported-component';
-import './.imported';
-
 import { ToastContainer } from 'react-toastify';
-
 import { Provider } from 'react-redux';
+
+import ErrorProvider from "components/actions/ErrorProvider";
+import {deserialize} from "components/state-mutate-with-status/utils";
+
+import './.imported';
 
 import getStore from "./store";
 
-import {deserialize} from "components/state-mutate-with-status/utils";
-
 const store = getStore(deserialize(JSON.stringify(window.__PRELOADED_STATE__)));
+const error = window.__ERROR_STATE__;
 
 console.error(store.getState())
 
@@ -29,19 +30,21 @@ const ScrollToTop = withRouter(({ children, location: { pathname } }) => {
 window.STORE = store;
 
 const app = (
-    <HelmetProvider>
-        <Provider store={store}>
-            <ToastContainer
-                hideProgressBar
-                pauseOnHover
-            />
-            <BrowserRouter>
-                <ScrollToTop>
-                    <App />
-                </ScrollToTop>
-            </BrowserRouter>
-        </Provider>
-    </HelmetProvider>
+    <ErrorProvider value={{error}}>
+        <HelmetProvider>
+            <Provider store={store}>
+                <ToastContainer
+                    hideProgressBar
+                    pauseOnHover
+                />
+                <BrowserRouter>
+                    <ScrollToTop>
+                        <App />
+                    </ScrollToTop>
+                </BrowserRouter>
+            </Provider>
+        </HelmetProvider>
+    </ErrorProvider>
 );
 
 const element = document.getElementById('app');

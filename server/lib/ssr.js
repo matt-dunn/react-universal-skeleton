@@ -15,6 +15,8 @@ import { Provider } from 'react-redux';
 import getStore from "../../app/store";
 
 import {getDataFromTree} from "components/actions";
+import ErrorProvider from "components/actions/ErrorProvider";
+import {errorLike} from "components/error";
 
 const parseHelmetTemplate = helmet => (template, ...vars) => {
     const matcher = /{(\w*)}/g;
@@ -37,18 +39,21 @@ export default async (req, res) => {
 
     const context = {};
     const helmetContext = {};
+    const errorContext = {};
 
     const app = (
-        <HelmetProvider context={helmetContext}>
-            <Provider store={store}>
-                <StaticRouter
-                    location={req.originalUrl}
-                    context={context}
-                >
-                    <App/>
-                </StaticRouter>
-            </Provider>
-        </HelmetProvider>
+        <ErrorProvider value={errorContext}>
+            <HelmetProvider context={helmetContext}>
+                <Provider store={store}>
+                    <StaticRouter
+                        location={req.originalUrl}
+                        context={context}
+                    >
+                        <App/>
+                    </StaticRouter>
+                </Provider>
+            </HelmetProvider>
+        </ErrorProvider>
     );
 
     try {
@@ -101,6 +106,7 @@ export default async (req, res) => {
                                     '\\u003c'
                                 )}
                                     window.__PRERENDERED_SSR__ = true;
+                                    window.__ERROR_STATE__ = ${JSON.stringify(errorContext && errorContext.error && errorLike(errorContext.error))}
                                 </script>`
                             )
                             this.queue(endingHTMLFragment)

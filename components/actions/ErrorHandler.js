@@ -1,67 +1,62 @@
-import React from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import PropTypes from "prop-types";
-import { withRouter } from "react-router-dom";
 
-import {ErrorContext} from "./contexts";
+import {ErrorHandlerContext, ErrorContext} from "./contexts";
+import {useHistory, useLocation} from "react-router";
 
-@withRouter
-class ErrorHandler extends React.PureComponent {
-    constructor(props) {
-        super(props);
+const callHandler = (ex, handler, location, history, props) => {
+    const {pathname, search, hash} = location;
 
-        this.state = {
-            component: undefined
-        };
+    return handler(
+        ex,
+        `${pathname}${(search && `?${encodeURIComponent(search.substr(1))}`) || ""}${(hash && `#${encodeURIComponent(hash.substr(1))}`) || ""}`,
+        history,
+        props
+    );
+};
 
-        this.handler = {
-            handleError: ex => {
-                const {handler, location: {pathname, search, hash}, history} = this.props;
+const getInitialComponent = (ex, handler, location, history, props) => {
+    const ret = callHandler(ex, handler, location, history, props);
 
-                const ret = handler(
-                    ex,
-                    `${pathname}${(search && `?${encodeURIComponent(search.substr(1))}`) || ""}${(hash && `#${encodeURIComponent(hash.substr(1))}`) || ""}`,
-                    history,
-                    props
-                );
+    return (ret !== false && ret !== true && ret && ret)
+};
 
-                if (ret !== false && ret !== true && ret) {
-                    this.setState({component: ret})
+const ErrorHandler = ({handler, children, ...props}) => {
+    const history = useHistory();
+    const location = useLocation();
+    const unlisten = useRef(null);
+    const errorContext = useContext(ErrorContext)
+    const [component, setComponent] = useState(errorContext && errorContext.error && getInitialComponent(errorContext.error, handler, location, history, props));
 
-                    return true;
-                }
-
-                return ret;
-            }
-        }
-
-        // TODO: move somewhere better...!
-        const {history} = this.props;
-        this.unlisten = history.listen(() => {
+    useEffect(() => {
+        unlisten.current = history.listen(() => {
             window.__PRERENDERED_SSR__ = false;
-            // this.unlisten();
-            this.setState({component: undefined})
-        })
-    }
+            setComponent(undefined);
+            errorContext.error = undefined;
+        });
 
-    componentWillUnmount() {
-        this.unlisten()
-    }
-
-    render() {
-        const {component} = this.state;
-
-        if (component) {
-            return component;
+        return () => {
+            unlisten.current();
         }
+    }, []);
 
-        const {children} = this.props;
+    const handleError = useRef({
+        handleError: ex => {
+            const ret = callHandler(ex, handler, location, history, props);
 
-        return (
-            <ErrorContext.Provider value={this.handler}>
-                {children}
-            </ErrorContext.Provider>
-        )
-    }
+            if (ret !== false && ret !== true && ret) {
+                setComponent(ret);
+            }
+
+            return ret;
+        }
+    });
+
+    return (
+        <ErrorHandlerContext.Provider value={handleError.current}>
+            {component || children}
+        </ErrorHandlerContext.Provider>
+    )
 }
 
 ErrorHandler.propTypes = {
@@ -70,13 +65,7 @@ ErrorHandler.propTypes = {
         PropTypes.node
     ]),
 
-    handler: PropTypes.func.isRequired,
-
-    history: PropTypes.object,
-
-    location: PropTypes.object,
-
-    match: PropTypes.object
+    handler: PropTypes.func.isRequired
 };
 
-export default ErrorHandler;
+export default React.memo(ErrorHandler);
