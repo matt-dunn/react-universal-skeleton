@@ -4,7 +4,7 @@ import handleViewport, {ReactInViewportProps} from 'react-in-viewport';
 
 import Status, {IStatus} from "components/state-mutate-with-status/status";
 import Loading from "components/Loading";
-import usePerformAction from "components/actions/usePerformAction";
+import {usePerformAction} from "components/actions";
 
 import {IExampleItemState} from "../../reducers/__dummy__/example";
 import {ExampleEditItem, IExampleGetList} from "../api/__dummy__/example";
