@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import React from "react";
+import React, {useCallback} from "react";
 import handleViewport, {ReactInViewportProps} from "react-in-viewport";
 
 import Loading from "components/Loading";
@@ -34,9 +34,8 @@ const Item = ({className, forwardedRef, inViewport = true, item, onExampleGetIte
     useWhatChanged(Item, { className, forwardedRef, inViewport, item, onExampleGetItem, ...props });
 
     usePerformAction(
-        () => onExampleGetItem(),
-        () => inViewport && !complete,
-        [inViewport, complete]
+        onExampleGetItem,
+        useCallback(() => inViewport && !complete, [complete, inViewport])
     );
 
     return (

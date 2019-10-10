@@ -62,7 +62,7 @@ const List = ({forwardedRef, inViewport = true, items, $status, onExampleGetList
     const [editId, setEditId] = useState();
 
     usePerformAction(
-        () => {
+        useCallback(() => {
             return onExampleGetList()
                 .then(e => {
                     console.log("DONE", e)
@@ -72,9 +72,8 @@ const List = ({forwardedRef, inViewport = true, items, $status, onExampleGetList
                     console.log("ERROR", ex.message)
                     throw ex;
                 })
-        },
-        () => inViewport,
-        [inViewport]
+        }, [onExampleGetList]),
+        useCallback(() => inViewport, [inViewport])
     );
 
     const handleEdit = useCallback(

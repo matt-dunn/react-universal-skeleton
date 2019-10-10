@@ -3,7 +3,7 @@ import isPromise from 'is-promise';
 
 import {ErrorHandlerContext, FoldContext} from "../contexts";
 
-const usePerformAction = (action, test, deps = []) => {
+const usePerformAction = (action, test) => {
     const {handleError} = useContext(ErrorHandlerContext) || {};
     const {processOnServer = false} = useContext(FoldContext) || {};
 
@@ -27,7 +27,7 @@ const usePerformAction = (action, test, deps = []) => {
                     })
             }
         }
-    }, [action, handleError, processOnServer, test, ...deps]);
+    }, [action, handleError, processOnServer, test]);
 }
 
 export default usePerformAction;
