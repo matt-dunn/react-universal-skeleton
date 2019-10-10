@@ -1,10 +1,10 @@
 import {useCallback, useRef} from "react";
 
-type Options = {
+export type Options = {
     delay?: number;
 };
 
-type Action<T> = {
+export type Action<T> = {
     (...args: any[]): Promise<T>;
 }
 
