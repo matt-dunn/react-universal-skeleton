@@ -29,7 +29,7 @@ export interface IExampleApi {
 }
 
 const exampleApi: IExampleApi = {
-    exampleGetList:(page = 0, count = 4) => new Promise<IExampleListResponse>((resolve, reject) => {
+    exampleGetList:(page = 0, count = 3) => new Promise<IExampleListResponse>((resolve, reject) => {
         console.log("API CALL: exampleGetList")
         // throw new Error("Error in exampleGetList")
         // throw new APIError("Authentication Failed", "auth", 401)
