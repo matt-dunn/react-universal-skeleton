@@ -125,7 +125,6 @@ const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditIt
     return (
         <ListContainer>
             <div style={{color: "#aaa", fontSize: "9px", padding: "4px", borderBottom: "1px solid #eee"}}>
-                [{isShown ? "YES": "NO"}]
                 [{!processing && outstandingTransactionCount > 0 ? "CHILDREN UPDATING": "CHILDREN DONE"}]
                 [{processing ? "UPDATING": "DONE"}]
                 {hasError && `Error occurred: ${error && error.message}`}

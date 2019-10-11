@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, {css} from "styled-components";
 import React, {useCallback} from "react";
 
 import Loading from "components/Loading";
@@ -17,14 +17,16 @@ export type ItemProps = {
     isShown?: boolean;
 };
 
-const ItemContainer = styled.div`
+const ItemContainer = styled.div<{processing?: boolean}>`
     max-width: 400px;
     border: 1px solid #ccc;
     margin: 10px auto;
-    padding: 10px;
 
     .item {
+      ${({processing}) => processing && css`
         background-color: orange;
+      `}
+      padding: 10px;
     }
 `
 
@@ -41,12 +43,14 @@ const Item = ({className, isShown = true, item, onExampleGetItem, ...props}: Ite
     );
 
     return (
-        <ItemContainer className={className}>
-            [{isShown ? "YES": "NO"}]
-            {hasError && `Error occurred: ${error && error.message}`}
+        <ItemContainer className={className} processing={processing}>
+            <div style={{color: "#aaa", fontSize: "9px", padding: "4px", borderBottom: "1px solid #eee"}}>
+                [{processing ? "UPDATING": "DONE"}]
+                {hasError && `Error occurred: ${error && error.message}`}
+            </div>
             <Loading loading={processing}>
                 {!complete ?
-                    <div>xxx</div>
+                    <div className="item">xxx</div>
                     :
                     <div className="item">{item && item.name}</div>
                 }

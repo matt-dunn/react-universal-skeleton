@@ -29,12 +29,13 @@ export interface IExampleApi {
 }
 
 const exampleApi: IExampleApi = {
-    exampleGetList:(page = 0, count = 4) => new Promise<IExampleListResponse>(resolve => {
+    exampleGetList:(page = 0, count = 4) => new Promise<IExampleListResponse>((resolve, reject) => {
         console.log("API CALL: exampleGetList")
         // throw new Error("Error in exampleGetList")
         // throw new APIError("Authentication Failed", "auth", 401)
         setTimeout(() => {
             console.log("API CALL COMPLETE: exampleGetList");
+            // reject(new Error("Error in exampleGetList"))
 
             resolve(Array.from(Array(count).keys()).map(index => {
                 const i = index + (page * count);
@@ -45,13 +46,14 @@ const exampleApi: IExampleApi = {
             }));
         }, 1500)
     }),
-    exampleGetItem:() => new Promise<IExampleResponse>(resolve => {
+    exampleGetItem:() => new Promise<IExampleResponse>((resolve, reject) => {
         console.log("API CALL: exampleGetItem")
         // throw new Error("Error in exampleGetItem")
         // if (typeof window === 'undefined' || !(window as any).authenticated) {
         //     throw new APIError("Authentication Failed", "auth", 401)
         // }
         setTimeout(() => {
+            // reject(new Error("Error in exampleGetItem"))
             console.log("API CALL COMPLETE: exampleGetItem")
             resolve({
                 id: '4',
