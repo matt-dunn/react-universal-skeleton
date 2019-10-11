@@ -11,7 +11,7 @@ interface IExampleListResponse {
 }
 
 export interface IExampleGetList {
-    (): Promise<IExampleListResponse>;
+    (page?: number, count?: number): Promise<IExampleListResponse>;
 }
 
 export interface IExampleGetItem {
@@ -29,30 +29,20 @@ export interface IExampleApi {
 }
 
 const exampleApi: IExampleApi = {
-    exampleGetList:() => new Promise<IExampleListResponse>(resolve => {
+    exampleGetList:(page = 0, count = 4) => new Promise<IExampleListResponse>(resolve => {
         console.log("API CALL: exampleGetList")
         // throw new Error("Error in exampleGetList")
         // throw new APIError("Authentication Failed", "auth", 401)
         setTimeout(() => {
-            console.log("API CALL COMPLETE: exampleGetList")
-            resolve([
-                {
-                    id: '1',
-                    name: 'Item 1',
-                },
-                {
-                    id: '2',
-                    name: 'Item 2',
-                },
-                {
-                    id: '3',
-                    name: 'Item 3',
-                },
-                {
-                    id: '4',
-                    name: 'Item 4',
+            console.log("API CALL COMPLETE: exampleGetList");
+
+            resolve(Array.from(Array(count).keys()).map(index => {
+                const i = index + (page * count);
+                return {
+                    id: `item-${i}`,
+                    name: `Item ${i + 1}`
                 }
-            ])
+            }));
         }, 1500)
     }),
     exampleGetItem:() => new Promise<IExampleResponse>(resolve => {

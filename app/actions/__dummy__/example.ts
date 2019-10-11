@@ -4,8 +4,8 @@ import { IPayload } from 'components/redux/middleware/stateDecorator';
 import {IExampleItemState} from "../../reducers/__dummy__/example";
 
 const exampleGetList = createStandardAction('@__dummy__/EXAMPLE_GET_LIST')
-    .map(() => ({
-        payload: ({ services }: IPayload) => services.exampleGetList(),
+    .map((page?: number) => ({
+        payload: ({ services }: IPayload) => services.exampleGetList(page),
         meta: {
             hasRetry: true
         }

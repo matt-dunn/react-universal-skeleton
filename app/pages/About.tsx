@@ -71,7 +71,7 @@ const mapStateToProps = (state: IAppState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch<actions.RootActions>) => {
 
-    const onExampleGetList: IExampleGetList = (): any => dispatch(actions.exampleActions.exampleGetList());
+    const onExampleGetList: IExampleGetList = (page?: number): any => dispatch(actions.exampleActions.exampleGetList(page));
     const onExampleGetItem: IExampleGetItem = (): any => dispatch(actions.exampleActions.exampleGetItem());
     const onExampleEditItem: ExampleEditItem = (item: IExampleItemState): any => dispatch(actions.exampleActions.exampleEditItem(item));
 

@@ -11,7 +11,7 @@ describe('Example actions', () => {
 
     describe('exampleGetList', () => {
         it('should return FSA', () => {
-            const action = exampleGetList(/*{id: 's', name: 'x'}, { username: '4' }*/);
+            const action = exampleGetList(0);
 
             expect(action.payload({services: { exampleGetList: () => [12] }})).toEqual([12]);
         });

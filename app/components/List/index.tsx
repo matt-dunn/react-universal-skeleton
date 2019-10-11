@@ -56,14 +56,36 @@ const Placeholder = styled(ListItems)`
     text-align: center;
 `;
 
+const Pagination = styled.ol<{disabled?: boolean}>`
+  display: flex;
+  color: #666;
+  border-top: 3px solid #eee;
+
+  ${({disabled}) => disabled && css`
+    color: #ccc;
+    pointer-events:none;
+  `};
+`;
+
+const Page = styled.li<{active?: boolean}>`
+  padding: 5px;
+  cursor: pointer;
+
+  ${({active}) => active && css`
+    font-weight: bold;
+    color: #222;
+  `};
+`;
+
 const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditItem, ...props}: ListProps) => {
     const {complete, isActive, processing, hasError, error, outstandingTransactionCount} = Status(items.$status);
 
     const [editId, setEditId] = useState();
+    const [activePage, setPage] = useState(0);
 
     usePerformAction(
         useCallback(() => {
-            return onExampleGetList()
+            return onExampleGetList(activePage)
                 .then(e => {
                     console.log("DONE", e)
                     return e;
@@ -72,7 +94,7 @@ const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditIt
                     console.log("ERROR", ex.message)
                     throw ex;
                 })
-        }, [onExampleGetList]),
+        }, [onExampleGetList, activePage]),
         useCallback(() => isShown, [isShown])
     );
 
@@ -90,14 +112,24 @@ const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditIt
         []
     );
 
-    useWhatChanged(List, { isShown, items, $status, onExampleGetList, onExampleEditItem, usePerformAction, handleEdit, handleComplete, editId, ...props });
+    const handlePageChange = useCallback(
+        (e: React.PointerEvent<HTMLLIElement>) => {
+            const page = e.currentTarget.getAttribute("data-id");
+            page && setPage(parseInt(page, 10));
+        },
+        []
+    );
+
+    useWhatChanged(List, { activePage, isShown, items, $status, onExampleGetList, onExampleEditItem, usePerformAction, handlePageChange, handleEdit, handleComplete, editId, ...props });
 
     return (
         <ListContainer>
-            [{isShown ? "YES": "NO"}]
-            [{!processing && outstandingTransactionCount > 0 ? "CHILDREN UPDATING": "CHILDREN DONE"}]
-            [{processing ? "UPDATING": "DONE"}]
-            {hasError && `Error occurred: ${error && error.message}`}
+            <div style={{color: "#aaa", fontSize: "9px", padding: "4px", borderBottom: "1px solid #eee"}}>
+                [{isShown ? "YES": "NO"}]
+                [{!processing && outstandingTransactionCount > 0 ? "CHILDREN UPDATING": "CHILDREN DONE"}]
+                [{processing ? "UPDATING": "DONE"}]
+                {hasError && `Error occurred: ${error && error.message}`}
+            </div>
             <Loading loading={processing}>
                 {(!items || items.length === 0) ?
                     <Placeholder>
@@ -121,6 +153,20 @@ const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditIt
                     </ListItems>
                 }
             </Loading>
+
+            <Pagination disabled={processing}>
+                {Array.from(Array(5).keys()).map(page => (
+                    <Page
+                        key={page}
+                        data-id={page}
+                        active={page === activePage}
+
+                        onClick={handlePageChange}
+                    >
+                        {page + 1}
+                    </Page>
+                ))}
+            </Pagination>
         </ListContainer>
     )
 }
