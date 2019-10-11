@@ -32,7 +32,7 @@ const valueStyle = css`
   padding: 0;
   flex-grow: 1;
   word-break: break-word;
-`
+`;
 
 const Value = styled(ContentEditable)`
   ${valueStyle};
@@ -43,11 +43,16 @@ const Value = styled(ContentEditable)`
   }
 `;
 
+const Saving = styled.div`
+  font-size: 10px;
+`;
+
 const Item = ({item, isEditing = false, onChange, onComplete, onEdit}: ItemProps) => {
     const {id, name, $status} = item;
-    const {complete, isActive, processing, hasError, error} = Status($status);
+    const {complete, isActive, processing, hasError, error, lastUpdated} = Status($status);
 
     const [value, setValue] = useState(name);
+    const [saving, setSaving] = useState(false);
 
     useEffect(() => {
         setValue(name)
@@ -55,7 +60,10 @@ const Item = ({item, isEditing = false, onChange, onComplete, onEdit}: ItemProps
 
     const inputEl = useRef<HTMLInputElement>(null);
 
-    const save = useAutosave(onChange);
+    const save = useAutosave(onChange, {
+        onSaving: () => setSaving(true),
+        onComplete: () => setSaving(false),
+    });
 
     const handleChange = useCallback(
         ({target: {value: v}}: ContentEditableEvent) => {
@@ -63,7 +71,7 @@ const Item = ({item, isEditing = false, onChange, onComplete, onEdit}: ItemProps
                 setValue(v);
 
                 save && save({...item, name: v})
-                    .then(a => console.log("SAVE COMPLETE", a.name))
+                    .then(a => console.log("SAVE COMPLETE", a.name));
             }
         },
         [item, save, value]
@@ -90,10 +98,10 @@ const Item = ({item, isEditing = false, onChange, onComplete, onEdit}: ItemProps
     }, [isEditing]);
 
 
-    useWhatChanged(Item, {inputEl, item, isEditing, onChange, onComplete, onEdit, value, handleChange, handleEdit, handleBlur, save}, {idProp: "item.id"});
+    useWhatChanged(Item, {saving, inputEl, item, isEditing, onChange, onComplete, onEdit, value, handleChange, handleEdit, handleBlur, save}, {idProp: "item.id"});
 
     return (
-        <Loading loading={processing} Loader={<Loader/>}>
+        <Loading loading={processing || saving} Loader={<Loader/>}>
             <Container
                 onClick={handleEdit}
             >
@@ -111,6 +119,11 @@ const Item = ({item, isEditing = false, onChange, onComplete, onEdit}: ItemProps
                     onBlur={handleBlur}
                 />
             </Container>
+            {saving &&
+                <Saving>
+                    Saving...
+                </Saving>
+            }
         </Loading>
     )
 }
