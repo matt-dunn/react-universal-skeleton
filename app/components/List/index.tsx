@@ -1,5 +1,6 @@
 import React, {ReactNode, useCallback, useState} from "react";
 import styled, {css} from "styled-components";
+import { Link } from 'react-router-dom';
 
 import Status, {IStatus} from "components/state-mutate-with-status/status";
 import Loading from "components/Loading";
@@ -21,6 +22,7 @@ export type ListProps = {
     onExampleEditItem: ExampleEditItem;
     $status?: IStatus;
     isShown?: boolean;
+    activePage?: number;
 };
 
 const ListContainer = styled.div`
@@ -58,7 +60,8 @@ const Placeholder = styled(ListItems)`
 
 const Pagination = styled.ol<{disabled?: boolean}>`
   display: flex;
-  color: #666;
+  justify-content: center;
+  color: #888;
   border-top: 3px solid #eee;
 
   ${({disabled}) => disabled && css`
@@ -67,21 +70,29 @@ const Pagination = styled.ol<{disabled?: boolean}>`
   `};
 `;
 
-const Page = styled.li<{active?: boolean}>`
+const Page = styled.li`
   padding: 5px;
-  cursor: pointer;
-
-  ${({active}) => active && css`
-    font-weight: bold;
-    color: #222;
-  `};
+  display: flex;
+  align-self: center;
 `;
 
-const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditItem, ...props}: ListProps) => {
+const PageLink = styled(Link)`
+  text-decoration: none;
+  font-size: 0.8em;
+  
+  &.active {
+    font-size: 1em;
+    font-weight: bold;
+    color: #222;
+    pointer-events:none;
+    cursor: default;
+  }
+`;
+
+const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditItem, activePage, ...props}: ListProps) => {
     const {complete, isActive, processing, hasError, error, outstandingTransactionCount} = Status(items.$status);
 
     const [editId, setEditId] = useState();
-    const [activePage, setPage] = useState(0);
 
     usePerformAction(
         useCallback(() => {
@@ -112,15 +123,7 @@ const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditIt
         []
     );
 
-    const handlePageChange = useCallback(
-        (e: React.PointerEvent<HTMLLIElement>) => {
-            const page = e.currentTarget.getAttribute("data-id");
-            page && setPage(parseInt(page, 10));
-        },
-        []
-    );
-
-    useWhatChanged(List, { activePage, isShown, items, $status, onExampleGetList, onExampleEditItem, usePerformAction, handlePageChange, handleEdit, handleComplete, editId, ...props });
+    useWhatChanged(List, { activePage, isShown, items, $status, onExampleGetList, onExampleEditItem, usePerformAction, handleEdit, handleComplete, editId, ...props });
 
     return (
         <ListContainer>
@@ -158,11 +161,13 @@ const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditIt
                     <Page
                         key={page}
                         data-id={page}
-                        active={page === activePage}
-
-                        onClick={handlePageChange}
                     >
-                        {page + 1}
+                        <PageLink
+                            className={(page === activePage && "active") || ""}
+                            to={`/about/${page}`}
+                        >
+                            {page + 1}
+                        </PageLink>
                     </Page>
                 ))}
             </Pagination>

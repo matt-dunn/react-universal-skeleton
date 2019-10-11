@@ -59,7 +59,7 @@ const App = () => {
             <ErrorHandler handler={handler}>
                 <Switch>
                     <Route exact path="/" component={Home} />
-                    <Route exact path="/about" render={() => <About />} />
+                    <Route exact path="/about/:page?" render={() => <About />} />
                     <Route path="/login/:from?" render={() => <Login />} />
                     <Route component={Error404} />
                     {/*<Redirect to="/" />*/}

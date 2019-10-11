@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import TrackVisibility from 'react-on-screen';
+import { useParams} from "react-router";
 
 import { IStatus } from 'components/state-mutate-with-status/status';
 import {AboveTheFold, ClientOnly} from "components/actions";
@@ -30,6 +31,8 @@ const Title = styled.h2`
 `;
 
 const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditItem, $status}: AboutProps) => {
+    const { page } = useParams();
+
     return (
         <Page>
             <Helmet>
@@ -42,7 +45,7 @@ const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIt
             </Title>
 
             <AboveTheFold>
-                <List items={items} onExampleGetList={onExampleGetList} onExampleEditItem={onExampleEditItem}/>
+                <List items={items} onExampleGetList={onExampleGetList} onExampleEditItem={onExampleEditItem} activePage={parseInt(page || "0", 10)}/>
                 {/*<TrackVisibility once={true} partialVisibility={true}>*/}
                 {/*    {({ isVisible }) => <List isShown={isVisible} items={items} onExampleGetList={onExampleGetList} onExampleEditItem={onExampleEditItem}/>}*/}
                 {/*</TrackVisibility>*/}
