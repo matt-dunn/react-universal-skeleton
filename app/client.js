@@ -52,8 +52,12 @@ const element = document.getElementById('app');
 if (process.env.NODE_ENV === 'production') {
     // rehydrate the bundle marks
     rehydrateMarks().then(() => {
-        ReactDOM.hydrate(app, element);
+        ReactDOM.hydrate(app, element, () => {
+            window.__PRERENDERED_SSR__ = false;
+        });
     });
 } else {
-    ReactDOM.render(app, element);
+    ReactDOM.render(app, element, () => {
+        window.__PRERENDERED_SSR__ = false;
+    });
 }

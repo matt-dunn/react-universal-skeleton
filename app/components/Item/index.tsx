@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import React, {useCallback} from "react";
-import handleViewport, {ReactInViewportProps} from "react-in-viewport";
 
 import Loading from "components/Loading";
 import {usePerformAction} from "components/actions";
@@ -15,6 +14,7 @@ export type ItemProps = {
     item?: IExampleItemState;
     onExampleGetItem: IExampleGetItem;
     className?: string;
+    isShown?: boolean;
 };
 
 const ItemContainer = styled.div`
@@ -28,19 +28,21 @@ const ItemContainer = styled.div`
     }
 `
 
-const Item = ({className, forwardedRef, inViewport = true, item, onExampleGetItem, ...props}: ItemProps & ReactInViewportProps) => {
+const Item = ({className, isShown = true, item, onExampleGetItem, ...props}: ItemProps) => {
     const {complete, isActive, processing, hasError, error} = (item && Status(item.$status)) || {} as IStatus;
 
-    useWhatChanged(Item, { className, forwardedRef, inViewport, item, onExampleGetItem, ...props });
+    useWhatChanged(Item, { className, isShown, item, onExampleGetItem, ...props });
+
+    const itemId = item && item.id;
 
     usePerformAction(
         onExampleGetItem,
-        useCallback(() => inViewport && !complete, [complete, inViewport])
+        useCallback(() => isShown && !itemId, [isShown, itemId])
     );
 
     return (
-        <ItemContainer ref={forwardedRef} className={className}>
-            [{inViewport ? "YES": "NO"}]
+        <ItemContainer className={className}>
+            [{isShown ? "YES": "NO"}]
             {hasError && `Error occurred: ${error && error.message}`}
             <Loading loading={processing}>
                 {!complete ?
@@ -53,4 +55,4 @@ const Item = ({className, forwardedRef, inViewport = true, item, onExampleGetIte
     )
 }
 
-export default React.memo<ItemProps>(handleViewport(Item, {}, {disconnectOnLeave: true}));
+export default React.memo<ItemProps>(Item);

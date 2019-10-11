@@ -3,6 +3,7 @@ import {Helmet} from 'react-helmet-async'
 import styled from "styled-components";
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
+import TrackVisibility from 'react-on-screen';
 
 import { IStatus } from 'components/state-mutate-with-status/status';
 import {AboveTheFold, ClientOnly} from "components/actions";
@@ -42,6 +43,9 @@ const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIt
 
             <AboveTheFold>
                 <List items={items} onExampleGetList={onExampleGetList} onExampleEditItem={onExampleEditItem}/>
+                {/*<TrackVisibility once={true} partialVisibility={true}>*/}
+                {/*    {({ isVisible }) => <List isShown={isVisible} items={items} onExampleGetList={onExampleGetList} onExampleEditItem={onExampleEditItem}/>}*/}
+                {/*</TrackVisibility>*/}
 
                 <ClientOnly>
                 </ClientOnly>
@@ -49,7 +53,9 @@ const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIt
 
             <div style={{height: "110vh"}}/>
 
-            <Item item={item} onExampleGetItem={onExampleGetItem}/>
+            <TrackVisibility once={true} partialVisibility={true}>
+                {({ isVisible }) => <Item isShown={isVisible} item={item} onExampleGetItem={onExampleGetItem}/>}
+            </TrackVisibility>
 
             <p>END.</p>
         </Page>

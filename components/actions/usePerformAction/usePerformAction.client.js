@@ -7,12 +7,10 @@ const usePerformAction = (action, test) => {
     const {handleError} = useContext(ErrorHandlerContext) || {};
     const {processOnServer = false} = useContext(FoldContext) || {};
 
-    const isCalled = useRef(false);
+    const skipInitial = useRef((processOnServer && window.__PRERENDERED_SSR__) || false);
 
     useEffect(() => {
-        if ((!processOnServer || !window.__PRERENDERED_SSR__) && (!test || test()) && !isCalled.current) {
-            isCalled.current = true;
-
+        if (!skipInitial.current && (!test || test())) {
             const payload = action();
 
             if (isPromise(payload)) {
@@ -27,7 +25,9 @@ const usePerformAction = (action, test) => {
                     })
             }
         }
-    }, [action, handleError, processOnServer, test]);
-}
+
+        skipInitial.current = false;
+    }, [action, test, handleError, processOnServer]);
+};
 
 export default usePerformAction;

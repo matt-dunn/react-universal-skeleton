@@ -1,6 +1,5 @@
 import React, {ReactNode, useCallback, useState} from "react";
 import styled, {css} from "styled-components";
-import handleViewport, {ReactInViewportProps} from 'react-in-viewport';
 
 import Status, {IStatus} from "components/state-mutate-with-status/status";
 import Loading from "components/Loading";
@@ -21,6 +20,7 @@ export type ListProps = {
     onExampleGetList: IExampleGetList;
     onExampleEditItem: ExampleEditItem;
     $status?: IStatus;
+    isShown?: boolean;
 };
 
 const ListContainer = styled.div`
@@ -56,7 +56,7 @@ const Placeholder = styled(ListItems)`
     text-align: center;
 `;
 
-const List = ({forwardedRef, inViewport = true, items, $status, onExampleGetList, onExampleEditItem, ...props}: ListProps & ReactInViewportProps) => {
+const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditItem, ...props}: ListProps) => {
     const {complete, isActive, processing, hasError, error, outstandingTransactionCount} = Status(items.$status);
 
     const [editId, setEditId] = useState();
@@ -73,7 +73,7 @@ const List = ({forwardedRef, inViewport = true, items, $status, onExampleGetList
                     throw ex;
                 })
         }, [onExampleGetList]),
-        useCallback(() => inViewport, [inViewport])
+        useCallback(() => isShown, [isShown])
     );
 
     const handleEdit = useCallback(
@@ -90,11 +90,11 @@ const List = ({forwardedRef, inViewport = true, items, $status, onExampleGetList
         []
     );
 
-    useWhatChanged(List, { forwardedRef, inViewport, items, $status, onExampleGetList, onExampleEditItem, usePerformAction, handleEdit, handleComplete, editId, ...props });
+    useWhatChanged(List, { isShown, items, $status, onExampleGetList, onExampleEditItem, usePerformAction, handleEdit, handleComplete, editId, ...props });
 
     return (
-        <ListContainer ref={forwardedRef}>
-            [{inViewport ? "YES": "NO"}]
+        <ListContainer>
+            [{isShown ? "YES": "NO"}]
             [{!processing && outstandingTransactionCount > 0 ? "CHILDREN UPDATING": "CHILDREN DONE"}]
             [{processing ? "UPDATING": "DONE"}]
             {hasError && `Error occurred: ${error && error.message}`}
@@ -125,4 +125,4 @@ const List = ({forwardedRef, inViewport = true, items, $status, onExampleGetList
     )
 }
 
-export default React.memo<ListProps>(handleViewport(List, {}, {disconnectOnLeave: true}));
+export default React.memo<ListProps>(List);

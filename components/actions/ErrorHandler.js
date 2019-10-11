@@ -30,7 +30,6 @@ const ErrorHandler = ({handler, children, ...props}) => {
 
     useEffect(() => {
         unlisten.current = history.listen(() => {
-            window.__PRERENDERED_SSR__ = false;
             setComponent(undefined);
             errorContext.error = undefined;
         });
