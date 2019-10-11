@@ -25,7 +25,7 @@ export type AboutProps = {
     $status?: IStatus;
 };
 
-const Title = styled.h1`
+const Title = styled.h2`
     color: #ccc;
 `;
 
@@ -38,7 +38,7 @@ const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIt
                 <meta name="keywords" content="about,..." />
             </Helmet>
             <Title>
-                This is the about page
+                About page
             </Title>
 
             <AboveTheFold>

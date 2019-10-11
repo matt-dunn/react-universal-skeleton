@@ -4,8 +4,8 @@ import styled from "styled-components";
 import Page from '../styles/Page'
 
 const Title = styled.div`
-    color: red;
-    font-size: 50px;
+    color: #ccc;
+    font-size: 10px;
 `
 
 const Loading = () => (

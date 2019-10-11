@@ -1,8 +1,12 @@
 import React, {useEffect} from 'react'
 import {Helmet} from 'react-helmet-async'
+import styled from "styled-components";
 
 import Page from '../styles/Page'
 
+const Title = styled.h2`
+    color: #ccc;
+`;
 const Home = () => {
     console.log("******HOME RENDER")
     useEffect(() => {
@@ -15,9 +19,9 @@ const Home = () => {
                 <title>Home Page</title>
             </Helmet>
 
-            <div>
-                HOME PAGE
-            </div>
+            <Title>
+                Home page
+            </Title>
         </Page>
     )
 }
