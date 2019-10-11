@@ -24,7 +24,7 @@ const ItemContainer = styled.div<{processing?: boolean}>`
 
     .item {
       ${({processing}) => processing && css`
-        background-color: orange;
+        background-color: rgba(255, 165, 0, 0.5);
       `}
       padding: 10px;
     }
