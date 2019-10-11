@@ -57,7 +57,7 @@ function useAutosave<T = any>(action?: Action<T>, options?: Options): Action<T> 
                 }
             })
         },
-        [action, delay]
+        [action, delay, onComplete, onSaving]
     )
 }
 
