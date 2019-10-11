@@ -15,7 +15,6 @@ import ErrorComponent from './pages/Error'
 
 import { GlobalStyles } from './styles'
 import { ToastifyStyles } from './styles/toasify'
-import { ReactResponsiveUI } from './styles/react-responsive-ui'
 
 import ErrorHandler from "components/actions/ErrorHandler";
 
@@ -44,12 +43,14 @@ const handler = ({code, status}, location, history, props) => {
 
 import AuthProvider from "./components/auth"
 
+// Parcel seems to need the node_modules path prefixed otherwise server bundle get Unexpected Token error... :(
+import '/node_modules/react-responsive-ui/style.css';
+
 const App = () => {
     return (
         <AuthProvider>
             <GlobalStyles/>
             <ToastifyStyles/>
-            <ReactResponsiveUI/>
 
             <Helmet>
                 <title>My App</title>
