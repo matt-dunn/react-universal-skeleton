@@ -1,11 +1,10 @@
 import React, {useCallback, useState, useRef, useEffect} from "react";
 import styled, {css} from "styled-components";
-import ContentEditable, {ContentEditableEvent} from 'react-contenteditable'
+// @ts-ignore
+import TextInput from 'react-responsive-ui/modules/TextInput'
 
 import Status from "components/state-mutate-with-status/status";
 import useAutosave from "components/hooks/useAutosave";
-import Loading from "components/Loading";
-import Loader from "components/Loading/Pulse";
 
 import {IExampleItemState} from "../../../reducers/__dummy__/example";
 import {IExampleResponse} from "../../api/__dummy__/example";
@@ -14,32 +13,18 @@ import useWhatChanged from "components/whatChanged/useWhatChanged";
 
 export type ItemProps = {
     item: IExampleItemState;
-    isEditing?: boolean;
-    onEdit?: (item: IExampleItemState) => void;
     onChange?: (item: IExampleItemState) => Promise<IExampleResponse>;
-    onComplete?: (item: IExampleItemState) => void;
 };
 
 const Container = styled.div`
   display: flex;
 `;
 
-const valueStyle = css`
-  font-size: inherit;
-  border: none;
-  font-weight: inherit;
-  font-family: inherit;
-  padding: 0;
-  flex-grow: 1;
-  word-break: break-word;
-`;
-
-const Value = styled(ContentEditable)`
-  ${valueStyle};
-
-  &[contenteditable=true] {
-    background-color: #eee;
-    outline: none;
+const Value = styled(TextInput)`
+  margin: 10px 0;
+  
+  textarea {
+    background-color: transparent;
   }
 `;
 
@@ -47,7 +32,7 @@ const Saving = styled.div`
   font-size: 10px;
 `;
 
-const Item = ({item, isEditing = false, onChange, onComplete, onEdit}: ItemProps) => {
+const Item = ({item, onChange}: ItemProps) => {
     const {id, name, $status} = item;
     const {complete, isActive, processing, hasError, error, lastUpdated} = Status($status);
 
@@ -66,7 +51,7 @@ const Item = ({item, isEditing = false, onChange, onComplete, onEdit}: ItemProps
     });
 
     const handleChange = useCallback(
-        ({target: {value: v}}: ContentEditableEvent) => {
+        (v) => {
             if (v !== value) {
                 setValue(v);
 
@@ -77,46 +62,16 @@ const Item = ({item, isEditing = false, onChange, onComplete, onEdit}: ItemProps
         [item, save, value]
     );
 
-    const handleEdit = useCallback(
-        () => {
-            !isEditing && onEdit && onEdit(item);
-        },
-        [isEditing, item, onEdit]
-    );
-
-    const handleBlur = useCallback(
-        () => {
-            isEditing && onComplete && onComplete(item);
-        },
-        [isEditing, item, onComplete]
-    );
-
-    useEffect(() => {
-        if (isEditing && inputEl && inputEl.current) {
-            inputEl.current.focus();
-        }
-    }, [isEditing]);
-
-
-    useWhatChanged(Item, {saving, inputEl, item, isEditing, onChange, onComplete, onEdit, value, handleChange, handleEdit, handleBlur, save}, {idProp: "item.id"});
+    useWhatChanged(Item, {saving, inputEl, item, onChange, value, handleChange, save}, {idProp: "item.id"});
 
     return (
-        <Loading loading={processing || saving} Loader={<Loader/>}>
-            <Container
-                onClick={handleEdit}
-            >
-                <label htmlFor={item.id}>
-                ITEM:
-                </label>
-
+        <>
+            <Container>
                 <Value
-                    id={item.id}
-                    innerRef={inputEl}
-                    html={value}
-                    disabled={!isEditing}
-                    tagName='article'
+                    multiline
+                    label="Item"
+                    value={value}
                     onChange={handleChange}
-                    onBlur={handleBlur}
                 />
             </Container>
             {saving &&
@@ -124,7 +79,7 @@ const Item = ({item, isEditing = false, onChange, onComplete, onEdit}: ItemProps
                     Saving...
                 </Saving>
             }
-        </Loading>
+        </>
     )
 }
 

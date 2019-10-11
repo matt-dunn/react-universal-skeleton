@@ -15,6 +15,7 @@ import ErrorComponent from './pages/Error'
 
 import { GlobalStyles } from './styles'
 import { ToastifyStyles } from './styles/toasify'
+import { ReactResponsiveUI } from './styles/react-responsive-ui'
 
 import ErrorHandler from "components/actions/ErrorHandler";
 
@@ -48,6 +49,7 @@ const App = () => {
         <AuthProvider>
             <GlobalStyles/>
             <ToastifyStyles/>
+            <ReactResponsiveUI/>
 
             <Helmet>
                 <title>My App</title>

@@ -1,4 +1,4 @@
-import React, {ReactNode, useCallback, useState} from "react";
+import React, {ReactNode, useCallback} from "react";
 import styled, {css} from "styled-components";
 import { Link } from 'react-router-dom';
 
@@ -92,8 +92,6 @@ const PageLink = styled(Link)`
 const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditItem, activePage, ...props}: ListProps) => {
     const {complete, isActive, processing, hasError, error, outstandingTransactionCount} = Status(items.$status);
 
-    const [editId, setEditId] = useState();
-
     usePerformAction(
         useCallback(() => {
             return onExampleGetList(activePage)
@@ -109,21 +107,7 @@ const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditIt
         useCallback(() => isShown, [isShown])
     );
 
-    const handleEdit = useCallback(
-        (item: IExampleItemState) => {
-            setEditId(item.id)
-        },
-        []
-    );
-
-    const handleComplete = useCallback(
-        (item: IExampleItemState) => {
-            setEditId(undefined)
-        },
-        []
-    );
-
-    useWhatChanged(List, { activePage, isShown, items, $status, onExampleGetList, onExampleEditItem, usePerformAction, handleEdit, handleComplete, editId, ...props });
+    useWhatChanged(List, { activePage, isShown, items, $status, onExampleGetList, onExampleEditItem, usePerformAction, ...props });
 
     return (
         <ListContainer>
@@ -145,10 +129,7 @@ const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditIt
                             <ListItem key={item.id}>
                                 <Item
                                     item={item}
-                                    isEditing={editId === item.id}
                                     onChange={onExampleEditItem}
-                                    onEdit={handleEdit}
-                                    onComplete={handleComplete}
                                 />
                             </ListItem>
                         ))}
