@@ -89,41 +89,39 @@ const parsedRule = (strings, args, props) => strings.reduce((rule, part, index) 
     return rule;
 }, []).join("");
 
-const myStyled = (Component) => {
-    return (strings, ...args) => {
-        let prevClassName;
-        let prevHash;
+const myStyled = Component => (strings, ...args) => {
+    let prevClassName;
+    let prevHash;
 
-        const updateRule = props => {
-            const rule = parsedRule(strings, args, props);
-            const hash = createHash(rule);
+    const updateRule = props => {
+        const rule = parsedRule(strings, args, props);
+        const hash = createHash(rule);
 
-            if (hash === prevHash) {
-                return prevClassName;
-            }
+        if (hash === prevHash) {
+            return prevClassName;
+        }
 
-            const oldIndex = getStyleIndex(sheet, `.${prevClassName}`);
-            oldIndex !== -1 && sheet.deleteRule(oldIndex);
+        const oldIndex = getStyleIndex(sheet, `.${prevClassName}`);
+        oldIndex !== -1 && sheet.deleteRule(oldIndex);
 
-            const className = `${Component.displayName || Component.name || Component.type || Component}__${hash}`;
+        const className = `${Component.displayName || Component.name || Component.type || Component}__${hash}`;
 
-            prevClassName = className;
-            prevHash = hash;
+        prevClassName = className;
+        prevHash = hash;
 
-            const index = getStyleIndex(sheet, `.${className}`);
+        const index = getStyleIndex(sheet, `.${className}`);
 
-            index !== -1 && sheet.deleteRule(index);
+        index !== -1 && sheet.deleteRule(index);
 
-            sheet.insertRule(
-                `.${className} {${rule}}`,
-                index === -1 ? 0 : index
-            );
+        sheet.insertRule(
+            `.${className} {${rule}}`,
+            index === -1 ? 0 : index
+        );
 
-            return className;
-        };
+        return className;
+    };
 
-        return ({children, ...props}) => React.createElement(Component, {...props, className: updateRule(props)}, children);
-    }
+    return ({children, ...props}) => React.createElement(Component, {...props, className: updateRule(props)}, children);
 }
 
 const Fancy = ({children, className}) => {
