@@ -8,7 +8,7 @@ import {usePerformAction} from "components/actions";
 
 import {IExampleItemState} from "../../reducers/__dummy__/example";
 import {ExampleEditItem, IExampleGetList} from "../api/__dummy__/example";
-import PlaceHolderItem from "app/components/Placeholder/item";
+import PlaceHolderItem from "app/components/Placeholder/Item";
 
 import Item from "./Item";
 
