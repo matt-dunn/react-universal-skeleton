@@ -51,11 +51,11 @@ const Item = ({item, onChange}: ItemProps) => {
     });
 
     const handleChange = useCallback(
-        (v) => {
-            if (v !== value) {
-                setValue(v);
+        newValue => {
+            if (newValue !== value) {
+                setValue(newValue);
 
-                save && save({...item, name: v})
+                save && save({...item, name: newValue})
                     .then(a => console.log("SAVE COMPLETE", a.name));
             }
         },

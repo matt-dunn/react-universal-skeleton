@@ -15,7 +15,7 @@ function useAutosave<T = any>(action?: Action<T>, options?: Options): Action<T> 
     const isActive = useRef<boolean>(false);
     const pending = useRef<any>();
 
-    const {delay = 1000, onSaving, onComplete} = options || {};
+    const {delay = 500, onSaving, onComplete} = options || {};
 
     return useCallback(
         (...args): any => {
