@@ -137,13 +137,16 @@ const Styled = myStyled(Fancy)`
     padding: ${({index}) => `${100 + ((index || 1) * 5)}px`};
     color: ${({color}) => color};
     border: 10px solid orange;
-    ${({color}) => color === "blue" && `background-color: orange`};
+    ${({color}) => color === "blue" && `
+        background-color: orange;
+        font-weight: bold;
+    `};
 `;
 
 const Styled2 = myStyled("div")`
     border: 1px solid red;
     padding: 10px;
-    color: red;
+    color: yellow;
 `;
 
 const App = () => {
@@ -154,9 +157,10 @@ const App = () => {
         setColor("blue")
     }, 2000)
 
-    setTimeout(() => {
-        setIndex(index + 1)
-    }, 3000)
+    // setTimeout(() => {
+    //     setColor("yellow")
+    //     // setIndex(index + 1)
+    // }, 3000)
 
     return (
         <Styled color={color} index={index}>
