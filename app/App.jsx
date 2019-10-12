@@ -1,8 +1,10 @@
 import { hot } from 'react-hot-loader';
-import React from 'react'
+import React, {useState} from 'react'
+import ReactDOM from 'react-dom';
 import {Helmet} from 'react-helmet-async';
 import {Switch, Route, generatePath} from 'react-router-dom'
 import importComponent from 'react-imported-component';
+import styled, {css} from "styled-components";
 
 import Header from './components/Header'
 
@@ -46,29 +48,125 @@ import AuthProvider from "./components/auth"
 // Parcel seems to need the node_modules path prefixed otherwise server bundle get Unexpected Token error... :(
 import '/node_modules/react-responsive-ui/style.css';
 
-const App = () => {
+const sheet = (function() {
+    if(document.getElementById("mystyled")) {
+        return document.getElementById("mystyled").sheet
+    }
+    const style = document.createElement("style");
+    style.setAttribute("id", "mystyled")
+
+    // WebKit hack :(
+    style.appendChild(document.createTextNode(""));
+
+    document.head.appendChild(style);
+
+    return style.sheet;
+})();
+
+function getStyleIndex(sheet, className) {
+    const classes = sheet.rules || sheet.cssRules;
+
+    for (let x = 0; x < classes.length; x++) {
+        if (classes[x].selectorText === className) {
+            return x;
+        }
+    }
+
+    return -1;
+}
+
+const createHash = s => s.split("").reduce((a, b) => {a = ((a << 5) - a) + b.charCodeAt(0);return a & a},0)
+
+import {isFunction} from "lodash";
+
+const parsedRule = (strings, args, props) => strings.reduce((rule, part, index) => {
+    rule.push(part);
+
+    const arg = args[index];
+    const value = isFunction(arg) ? arg(props) : arg;
+    value && rule.push(value);
+
+    return rule;
+}, []).join("");
+
+const myStyled = (Component) => {
+    return (strings, ...args) => {
+        let prevClassName;
+        let prevHash;
+
+        const updateRule = props => {
+            const rule = parsedRule(strings, args, props);
+            const hash = createHash(rule);
+
+            if (hash === prevHash) {
+                return prevClassName;
+            }
+
+            const oldIndex = getStyleIndex(sheet, `.${prevClassName}`);
+            oldIndex !== -1 && sheet.deleteRule(oldIndex);
+
+            const className = `${Component.displayName || Component.name || Component.type || Component}__${hash}`;
+
+            prevClassName = className;
+            prevHash = hash;
+
+            const index = getStyleIndex(sheet, `.${className}`);
+
+            index !== -1 && sheet.deleteRule(index);
+
+            sheet.insertRule(
+                `.${className} {${rule}}`,
+                index === -1 ? 0 : index
+            );
+
+            return className;
+        };
+
+        return ({children, ...props}) => React.createElement(Component, {...props, className: updateRule(props)}, children);
+    }
+}
+
+const Fancy = ({children, className}) => {
     return (
-        <AuthProvider>
-            <GlobalStyles/>
-            <ToastifyStyles/>
+        <div className={className}>
+            Fancy:
+            {children}
+        </div>
+    );
+}
 
-            <Helmet>
-                <title>My App</title>
-                <meta name="build.version" content={process.env.npm_package_version + ((process.env.NODE_ENV !== "production" && "-dev") || "")}/>
-            </Helmet>
+const Styled = myStyled(Fancy)`
+    padding: ${({index}) => `${100 + ((index || 1) * 5)}px`};
+    color: ${({color}) => color};
+    border: 10px solid orange;
+    ${({color}) => color === "blue" && `background-color: orange`};
+`;
 
-            <Header/>
+const Styled2 = myStyled("div")`
+    border: 1px solid red;
+    padding: 10px;
+    color: red;
+`;
 
-            <ErrorHandler handler={handler}>
-                <Switch>
-                    <Route exact path="/" component={Home} />
-                    <Route exact path="/about/:page?" render={() => <About />} />
-                    <Route path="/login/:from?" render={() => <Login />} />
-                    <Route component={Error404} />
-                    {/*<Redirect to="/" />*/}
-                </Switch>
-            </ErrorHandler>
-        </AuthProvider>
+const App = () => {
+    const [color, setColor] = useState("green")
+    const [index, setIndex] = useState(0)
+
+    setTimeout(() => {
+        setColor("blue")
+    }, 2000)
+
+    setTimeout(() => {
+        setIndex(index + 1)
+    }, 3000)
+
+    return (
+        <Styled color={color} index={index}>
+            {color}
+            <Styled2>
+                INNER: {color}
+            </Styled2>
+        </Styled>
     );
 }
 
