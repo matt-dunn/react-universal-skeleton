@@ -47,20 +47,18 @@ const sheet = createStylesheet();
 
 const myStyled = Component => (strings, ...args) => {
     let prevClassName;
-    let prevHash;
 
     const updateRule = props => {
         const rule = parsedRule(strings, args, props);
-        const hash = createHash(rule);
 
-        if (hash === prevHash) {
+        const className = `${Component.displayName || Component.name || Component.type || Component}__${createHash(rule)}`;
+
+        if (className === prevClassName) {
             return prevClassName;
         }
 
         let oldIndex = getStyleIndex(sheet, `.${prevClassName}`);
         oldIndex !== -1 && sheet.deleteRule(oldIndex);
-
-        const className = `${Component.displayName || Component.name || Component.type || Component}__${hash}`;
 
         sheet.insertRule(
             `.${className} {${rule}}`,
@@ -70,7 +68,6 @@ const myStyled = Component => (strings, ...args) => {
         console.log("UPDATE", className, rule);
 
         prevClassName = className;
-        prevHash = hash;
 
         return className;
     };
