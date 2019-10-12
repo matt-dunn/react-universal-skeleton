@@ -4,6 +4,7 @@ import React, {useCallback} from "react";
 import Loading from "components/Loading";
 import {usePerformAction} from "components/actions";
 import Status, {IStatus} from "components/state-mutate-with-status/status";
+import PlaceHolderItem from "app/components/Placeholder/item";
 
 import {IExampleItemState} from "../../reducers/__dummy__/example";
 import {IExampleGetItem} from "../api/__dummy__/example";
@@ -24,11 +25,14 @@ const ItemContainer = styled.div<{processing?: boolean}>`
 
     .item {
       ${({processing}) => processing && css`
-        background-color: rgba(255, 165, 0, 0.5);
-      `}
+        background-color: rgba(210,210,210,0.1);
+      `};
       padding: 10px;
     }
-`
+`;
+
+const PlaceHolderListItem = PlaceHolderItem(styled.div``);
+
 
 const Item = ({className, isShown = true, item, onExampleGetItem, ...props}: ItemProps) => {
     const {complete, isActive, processing, hasError, error} = (item && Status(item.$status)) || {} as IStatus;
@@ -50,7 +54,7 @@ const Item = ({className, isShown = true, item, onExampleGetItem, ...props}: Ite
             </div>
             <Loading loading={processing}>
                 {!complete ?
-                    <div className="item">xxx</div>
+                    <PlaceHolderListItem className="item"/>
                     :
                     <div className="item">{item && item.name}</div>
                 }

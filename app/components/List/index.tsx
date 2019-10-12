@@ -8,6 +8,7 @@ import {usePerformAction} from "components/actions";
 
 import {IExampleItemState} from "../../reducers/__dummy__/example";
 import {ExampleEditItem, IExampleGetList} from "../api/__dummy__/example";
+import PlaceHolderItem from "app/components/Placeholder/item";
 
 import Item from "./Item";
 
@@ -58,32 +59,7 @@ const Placeholder = styled(ListItems)`
     text-align: center;
 `;
 
-const PlaceHolderItem = styled(ListItem)`
-  position: relative;
-
-  &:before {
-    position: absolute;
-    left: 10px;
-    top: 10px;
-    background-color: rgba(222, 226, 230, 0.4);
-    border-radius: 0.25rem;
-    width: 55%;
-    height: 0.75em;
-    content: " ";
-  }
-
-  &:after {
-    position: absolute;
-    left: 10px;
-    top: 10px;
-    margin-top: 1.1em;
-    background-color: rgba(222, 226, 230, 0.4);
-    border-radius: 0.25rem;
-    width: 85%;
-    height: 1em;
-    content: " ";
-  }
-`;
+const PlaceHolderListItem = PlaceHolderItem(ListItem);
 
 const Pagination = styled.ol<{disabled?: boolean}>`
   display: flex;
@@ -146,9 +122,9 @@ const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditIt
             <Loading loading={processing}>
                 {(!items || items.length === 0) ?
                     <Placeholder>
-                        <PlaceHolderItem/>
-                        <PlaceHolderItem/>
-                        <PlaceHolderItem/>
+                        <PlaceHolderListItem/>
+                        <PlaceHolderListItem/>
+                        <PlaceHolderListItem/>
                     </Placeholder>
                     :
                     <ListItems>
