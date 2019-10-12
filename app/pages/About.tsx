@@ -41,7 +41,7 @@ const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIt
                 <meta name="keywords" content="about,..." />
             </Helmet>
             <Title>
-                About page
+                About page (Lazy Loaded)
             </Title>
 
             <AboveTheFold>
