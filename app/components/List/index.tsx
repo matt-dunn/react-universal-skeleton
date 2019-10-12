@@ -40,8 +40,16 @@ const ListItems = styled.ol<{children: ReactNode[]}>`
     display: flex;
     ${list}
     
-    li {
+    > li {
       width: ${({children}) => (children && `${100 / children.length}%`) || 0};
+    }
+
+    @media only screen and (max-width: 500px) {
+      flex-direction: column;
+      
+      > li {
+        width: initial;
+      }
     }
 `;
 
@@ -51,6 +59,15 @@ const ListItem = styled.li`
 
     &:last-child {
         border-right: none;
+    }
+
+    @media only screen and (max-width: 500px) {
+        border-right: none;
+        border-bottom: 1px solid #eee;
+
+        &:last-child {
+            border-bottom: none;
+        }
     }
 `;
 

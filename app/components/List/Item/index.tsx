@@ -22,6 +22,7 @@ const Container = styled.div`
 
 const Value = styled(TextInput)`
   margin: 10px 0;
+  width: 100%;
   
   textarea {
     background-color: transparent;
