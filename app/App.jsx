@@ -22,7 +22,7 @@ const Styled = myStyled(Fancy)`
     `}
 `;
 
-const Styled2 = myStyled("div")`
+const Styled2 = myStyled.address`
     border: 1px solid red;
     padding: 10px;
     color: #ccc;
