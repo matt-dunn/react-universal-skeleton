@@ -19,25 +19,25 @@ const createStylesheet = () => {
     return style.sheet;
 };
 
-function getStyleIndex(sheet, className) {
-    const classes = sheet.rules || sheet.cssRules;
+const getStyleIndex = (sheet, className) => {
+    const rules = sheet.rules || sheet.cssRules;
 
-    for (let x = 0; x < classes.length; x++) {
-        if (classes[x].selectorText === className) {
-            return x;
+    for (let i = 0; i < rules.length; i++) {
+        if (rules[i].selectorText === className) {
+            return i;
         }
     }
 
     return -1;
-}
+};
 
-const createHash = s => s.split("").reduce((a, b) => {a = ((a << 5) - a) + b.charCodeAt(0);return a & a},0)
+const createHash = s => s.split("").reduce((a, b) => {a = ((a << 5) - a) + b.charCodeAt(0);return a & a},0);
 
 const parsedRule = (strings, args, props) => strings.reduce((rule, part, index) => {
     rule.push(part);
 
     const arg = args[index];
-    const value = isFunction(arg) ? arg(props) : arg;
+    const value = arg && isFunction(arg) ? arg(props) : arg;
     value && rule.push(value);
 
     return rule;
