@@ -18,7 +18,7 @@ import {getDataFromTree} from "components/actions";
 import ErrorProvider from "components/actions/ErrorProvider";
 import {errorLike} from "components/error";
 
-import {ServerStylesheet as Stylesheet} from "../../app/myStyled";
+import {ServerStylesheet as Stylesheet} from "components/myStyled";
 
 const parseHelmetTemplate = helmet => (template, ...vars) => {
     const matcher = /{(\w*)}/g;

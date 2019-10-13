@@ -1,7 +1,7 @@
 import { hot } from 'react-hot-loader';
 import React, {useEffect, useState} from 'react'
 
-import myStyled from "./myStyled";
+import myStyled from "components/myStyled";
 
 const Fancy = ({children, className}) => {
     return (

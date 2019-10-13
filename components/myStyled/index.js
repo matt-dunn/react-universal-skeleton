@@ -1,6 +1,8 @@
 import React, {useContext} from 'react'
 import {isFunction} from "lodash";
 
+import {createHash} from "./hash";
+
 export const StyleContext = React.createContext(undefined);
 
 const createStylesheet = () => {
@@ -34,8 +36,6 @@ const getStyleIndex = (sheet, className) => {
 
     return -1;
 };
-
-const createHash = s => s.split("").reduce((a, b) => {a = ((a << 5) - a) + b.charCodeAt(0);return a & a},0);
 
 const parsedRule = (strings, args, props) => strings.reduce((rule, part, index) => {
     rule.push(part);
