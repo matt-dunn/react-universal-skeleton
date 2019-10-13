@@ -115,54 +115,6 @@ domElements.forEach(element => {
 
 export default myStyled;
 
-const Rule = cssText => {
-    const match = cssText.match(/(?<selectorText>.*?)\{/);
+import ServerStylesheet from "./stylesheet";
 
-    const selectorText = match && match.groups.selectorText.trim();
-
-    return {
-        cssText,
-        selectorText
-    };
-};
-
-const Stylesheet = () => {
-    const rules = [];
-
-    const deleteRule = index => {
-        rules.splice(index, 1);
-    };
-
-    const insertRule = (cssText, index) => {
-        rules.splice(index || rules.length - 1, 0, Rule(cssText));
-        return index || rules.length - 1;
-    };
-
-    return {
-        rules,
-        deleteRule,
-        insertRule
-    };
-};
-
-export const ServerStylesheet = () => {
-    const stylesheet = Stylesheet();
-
-    const collectStyles = app => {
-        return React.createElement(
-            StyleContext.Provider,
-            {value: stylesheet},
-            app
-        );
-    };
-
-    const getStyles = () => {
-        return (stylesheet.rules.length > 0 && `<style id="myStyled">${stylesheet.rules.map(rule => rule.cssText).join("")}</style>`) || "";
-    };
-
-    return {
-        collectStyles,
-        rules: stylesheet.rules,
-        getStyles
-    };
-}
+export {ServerStylesheet};
