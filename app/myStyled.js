@@ -53,12 +53,19 @@ const myStyled = Component => (strings, ...args) => {
     let prevClassName;
 
     const updateRule = (props, serverSheet) => {
+        if (prevClassName && args.length === 0) {
+            return prevClassName;
+        }
+
         const rule = parsedRule(strings, args, props);
 
         // const className = `${Component.displayName || Component.name || Component.type || Component}__${createHash(rule)}`;
         const className = `ms__${createHash(rule)}`;
 
         if (serverSheet) {
+            const index = getStyleIndex(serverSheet, `.${className}`);
+            index !== -1 && serverSheet.deleteRule(index);
+
             serverSheet.insertRule(
                 `.${className} {${rule}}`
             );
@@ -71,9 +78,9 @@ const myStyled = Component => (strings, ...args) => {
                 return prevClassName;
             }
 
-            let oldIndex = getStyleIndex(sheet, `.${prevClassName || className}`);
+            const oldIndex = getStyleIndex(sheet, `.${prevClassName || className}`);
             if (oldIndex !== -1 && !prevClassName) {
-                return className
+                return prevClassName = className
             }
             oldIndex !== -1 && sheet.deleteRule(oldIndex);
 
@@ -108,7 +115,7 @@ domElements.forEach(element => {
 
 export default myStyled;
 
-const rule = cssText => {
+const Rule = cssText => {
     const match = cssText.match(/(?<selectorText>.*?)\{/);
 
     const selectorText = match && match.groups.selectorText.trim();
@@ -127,7 +134,7 @@ const Stylesheet = () => {
     };
 
     const insertRule = (cssText, index) => {
-        rules.splice(index || rules.length - 1, 0, rule(cssText));
+        rules.splice(index || rules.length - 1, 0, Rule(cssText));
         return index || rules.length - 1;
     };
 
