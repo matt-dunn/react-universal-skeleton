@@ -63,7 +63,7 @@ export default async (req, res) => {
 
         const stylesheet = Stylesheet()
 
-        await getDataFromTree(sheet.collectStyles(app));
+        await getDataFromTree(stylesheet.collectStyles(sheet.collectStyles(app)));
 
         const stream = sheet.interleaveWithNodeStream(
             renderToNodeStream(stylesheet.collectStyles(sheet.collectStyles(app)))
@@ -94,6 +94,7 @@ export default async (req, res) => {
                 {title}{meta}
                 <link rel="canonical" href="${req.protocol}://${req.hostname}${req.originalUrl}" />
                 `}
+                ${stylesheet.getStyles()}
                 ${closeHead}
             `.trim())
             stream
@@ -114,7 +115,6 @@ export default async (req, res) => {
                                 </script>`
                             )
                             this.queue(endingHTMLFragment)
-                            this.queue(stylesheet.getStyles());
                             this.queue(null)
                             console.log("----DONE", Date.now() - t1)
                         }

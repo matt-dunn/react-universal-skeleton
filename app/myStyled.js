@@ -45,7 +45,7 @@ const parsedRule = (strings, args, props) => strings.reduce((rule, part, index) 
     value && rule.push(value);
 
     return rule;
-}, []).join("");
+}, []).join("").replace(/\n/g, "");
 
 const sheet = createStylesheet();
 
@@ -62,6 +62,8 @@ const myStyled = Component => (strings, ...args) => {
             serverSheet.insertRule(
                 `.${className} {${rule}}`
             );
+
+            console.log("INSERT", className, rule, serverSheet.rules.length);
 
             return className;
         } else if (sheet) {
@@ -80,7 +82,7 @@ const myStyled = Component => (strings, ...args) => {
                 oldIndex === -1 ? 0 : oldIndex
             );
 
-            console.log("UPDATE", oldIndex, className, rule);
+            console.log("UPDATE", oldIndex, className, rule, sheet.rules.length);
 
             prevClassName = className;
 
@@ -107,7 +109,6 @@ domElements.forEach(element => {
 export default myStyled;
 
 const rule = cssText => {
-    // const cssText = text.replace(/\n/g, "");
     const match = cssText.match(/(?<selectorText>.*?)\{/);
 
     const selectorText = match && match.groups.selectorText.trim();

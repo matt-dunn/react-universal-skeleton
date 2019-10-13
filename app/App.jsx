@@ -39,7 +39,7 @@ const App = () => {
 
         setTimeout(() => {
             setColor("violet")
-            setIndex(index + 1)
+            setIndex(index => index + 1)
         }, 4000)
     }, []);
 
