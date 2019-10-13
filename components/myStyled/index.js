@@ -45,7 +45,7 @@ const parsedRule = (strings, args, props) => strings.reduce((rule, part, index) 
     value && rule.push(value);
 
     return rule;
-}, []).join("").replace(/\n/g, "");
+}, []).join("").split(/\n/g).map(i => i.trim()).join("").replace(/\n/g, "");
 
 const sheet = createStylesheet();
 
