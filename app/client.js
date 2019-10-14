@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react'
 import ReactDOM from 'react-dom'
+// import App from './App'
 import App from './TestMyStyled'
 import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter, withRouter } from 'react-router-dom'

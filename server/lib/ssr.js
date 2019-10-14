@@ -6,7 +6,8 @@ import { ServerStyleSheet } from 'styled-components'
 import { printDrainHydrateMarks } from 'react-imported-component';
 import log from 'llog'
 import through from 'through'
-import App from '../../app/App'
+// import App from '../../app/App'
+import App from '../../app/TestMyStyled'
 import { getHTMLFragments } from './client'
 import {serialize} from "components/state-mutate-with-status/utils";
 
