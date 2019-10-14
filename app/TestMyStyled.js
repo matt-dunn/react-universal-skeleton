@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 
 import myStyled from "components/myStyled";
+import PropTypes from "prop-types";
 // import myStyled from "styled-components";
 
 const Fancy = ({children, className}) => {
@@ -11,6 +12,14 @@ const Fancy = ({children, className}) => {
         </div>
     );
 }
+
+Fancy.propTypes = {
+    children: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.node),
+        PropTypes.node
+    ]),
+    className: PropTypes.string
+};
 
 const Styled = myStyled(Fancy)`
     padding: ${({index}) => `${20 + ((index || 0) * 50)}px`};

@@ -1,4 +1,5 @@
 import React, {useContext} from 'react'
+import PropTypes from "prop-types";
 import {isFunction} from "lodash";
 import Stylis from "stylis";
 
@@ -123,6 +124,13 @@ const myStyled = Component => (strings, ...args) => {
 
     const MyStyled = ({children, ...props}) => React.createElement(Component, {...props, className: [props.className, updateRule(props, useContext(StyleContext))].join(" ")}, children);
     MyStyled.displayName = Component.displayName || Component.name || Component.type || Component;
+    MyStyled.propTypes = {
+        children: PropTypes.oneOfType([
+            PropTypes.arrayOf(PropTypes.node),
+            PropTypes.node
+        ]),
+        className: PropTypes.string
+    };
     return MyStyled;
 };
 
