@@ -1,4 +1,3 @@
-import { hot } from 'react-hot-loader';
 import React, {useEffect, useState} from 'react'
 
 import myStyled from "components/myStyled";
@@ -49,7 +48,7 @@ const Styled4 = myStyled(Styled3)`
     font-weight: ${v};
 `;
 
-const App = () => {
+const TestMyStyled = () => {
     const [color, setColor] = useState("green");
     const [index, setIndex] = useState(0);
 
@@ -74,4 +73,4 @@ const App = () => {
     );
 };
 
-export default hot(module)(App);
+export default TestMyStyled;

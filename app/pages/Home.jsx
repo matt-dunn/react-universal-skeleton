@@ -3,6 +3,7 @@ import {Helmet} from 'react-helmet-async'
 import styled from "styled-components";
 
 import Page from '../styles/Page'
+import TestMyStyled from "../TestMyStyled";
 
 const Title = styled.h2`
     color: #ccc;
@@ -22,6 +23,8 @@ const Home = () => {
             <Title>
                 Home page
             </Title>
+
+            <TestMyStyled/>
         </Page>
     )
 }

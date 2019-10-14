@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react'
 import ReactDOM from 'react-dom'
-// import App from './App'
-import App from './TestMyStyled'
+import App from './App'
 import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter, withRouter } from 'react-router-dom'
 import { rehydrateMarks } from 'react-imported-component';
@@ -53,13 +52,9 @@ const element = document.getElementById('app');
 if (process.env.NODE_ENV === 'production') {
     // rehydrate the bundle marks
     rehydrateMarks().then(() => {
-        setTimeout(() => {
-            console.log("GO....")
-            ReactDOM.hydrate(app, element, () => {
-                console.log("DONE!")
-                window.__PRERENDERED_SSR__ = false;
-            });
-        }, 3000)
+        ReactDOM.hydrate(app, element, () => {
+            window.__PRERENDERED_SSR__ = false;
+        });
     });
 } else {
     ReactDOM.render(app, element, () => {
