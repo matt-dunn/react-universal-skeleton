@@ -40,8 +40,8 @@ const Styled = myStyled(Fancy)`
     }
 
     @media only screen and (max-width: 500px) {
-        & {
-            border: 10px solid ${({color}) => color} !important;
+        && {
+            border: 10px solid ${({color}) => color};
         }
     }
 `;

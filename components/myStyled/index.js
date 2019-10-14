@@ -93,8 +93,11 @@ const updateSheetRule = (oldIndex, sheet, className, prevClassName, rule) => {
     const DEBUG = [];
 
     stylis.use((context, content, selectors, parent) => {
+        // Remove and additional specificity...
+        const normalizedSelector = `.${className}${selectors[0].toString().replace(new RegExp(`\.${className}`, "g"), "")}`;
+
         // Do not include any global styles... Should be handled... globally!
-        if ((context === 2 || context === 3) && selectors[0] !== parent[0] && selectors[0].toLocaleLowerCase().indexOf(":global") === -1) {
+        if ((context === 2 || context === 3) && normalizedSelector !== parent[0] && selectors[0].toLocaleLowerCase().indexOf(":global") === -1) {
             sheet.insertRule(
                 `${selectors} {${content}}`,
                 index++
