@@ -53,16 +53,16 @@ const App = () => {
     const [color, setColor] = useState("green");
     const [index, setIndex] = useState(0);
 
-    // useEffect(() => {
-    //     setTimeout(() => {
-    //         setColor("blue")
-    //     }, 2000);
-    //
-    //     setTimeout(() => {
-    //         setColor("violet")
-    //         setIndex(index => index + 1)
-    //     }, 4000)
-    // }, []);
+    useEffect(() => {
+        setTimeout(() => {
+            setColor("blue")
+        }, 2000);
+
+        setTimeout(() => {
+            setColor("violet")
+            setIndex(index => index + 1)
+        }, 4000)
+    }, []);
 
     return (
         <Styled color={color} index={index}>
