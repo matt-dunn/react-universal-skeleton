@@ -68,6 +68,8 @@ const updateSheetRule = (oldIndex, sheet, className, prevClassName, rule) => {
     const stylis = new Stylis();
     let index = oldIndex === -1 ? 0 : oldIndex;
 
+    const DEBUG = [];
+
     stylis.use((context, content, selectors, parent) => {
         // TODO: add support @rules with context = 3
         // TODO: add support for :global
@@ -77,11 +79,13 @@ const updateSheetRule = (oldIndex, sheet, className, prevClassName, rule) => {
                 index++
             );
 
-            console.log(oldIndex === -1 ? "INSERT" : "UPDATE", selectors, content, sheet.rules.length);
+            DEBUG.push(`${selectors} {\n    ${content}\n  }`);
         }
     });
 
     stylis(className, rule);
+
+    console.log(`${oldIndex === -1 ? "INSERT" : "UPDATE"}(${sheet.rules.length} rules)\n `,DEBUG.join('\n  '))
 
     return className;
 };
