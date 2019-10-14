@@ -92,6 +92,7 @@ const updateSheetRule = (oldIndex, sheet, className, prevClassName, rule) => {
 
     const DEBUG = [];
 
+    // See https://github.com/thysultan/stylis.js#plugins for plugin details
     stylis.use((context, content, selectors, parent) => {
         // Remove and additional specificity...
         const normalizedSelector = `.${className}${selectors[0].toString().replace(new RegExp(`\.${className}`, "g"), "")}`;
