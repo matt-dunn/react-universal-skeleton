@@ -73,10 +73,9 @@ const updateSheetRule = (oldIndex, sheet, className, prevClassName, rule) => {
 
     stylis.use((context, content, selectors, parent) => {
         // TODO: add support @rules with context = 3
-        // TODO: add support for :global
         if (context === 2 && selectors[0] !== parent[0]/* || context === 3*/) {
             sheet.insertRule(
-                `.${selectors} {${content}}`,
+                `${selectors} {${content}}`,
                 index++
             );
 
@@ -84,7 +83,7 @@ const updateSheetRule = (oldIndex, sheet, className, prevClassName, rule) => {
         }
     });
 
-    stylis(className, rule);
+    stylis(`.${className}`, rule);
 
     console.log(`${oldIndex === -1 ? "INSERT" : "UPDATE"}(${sheet.rules.length} rules)\n `,DEBUG.join('\n  '))
 
