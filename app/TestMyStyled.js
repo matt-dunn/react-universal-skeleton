@@ -22,7 +22,7 @@ Fancy.propTypes = {
 };
 
 const Styled = myStyled(Fancy)`
-    :global(body) {background:#ececec}
+    // :global(body) {background:${({color}) => (color === "green" && "red") || "#ececec"}}
     padding: ${({index}) => `${20 + ((index || 0) * 50)}px`};
     color: ${({color}) => color};
     border: 3px solid orange;

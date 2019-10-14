@@ -58,6 +58,7 @@ const updateSheetRule = (oldIndex, sheet, className, prevClassName, rule) => {
         const prevSelectorName = `.${prevClassName}`;
         const prevSelectorNameLength = prevSelectorName.length;
 
+        // TODO: update global styles that are associated with this className only...
         for (let i = oldIndex; i < rules.length; i++) {
             if (rules[i].selectorText.substr(0, prevSelectorNameLength) === prevSelectorName) {
                 sheet.deleteRule(i);
