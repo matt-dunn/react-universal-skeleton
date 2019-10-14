@@ -58,7 +58,6 @@ const updateSheetRule = (oldIndex, sheet, className, prevClassName, rule) => {
         const prevSelectorName = `.${prevClassName}`;
         const prevSelectorNameLength = prevSelectorName.length;
 
-        // TODO: update global styles that are associated with this className only...
         for (let i = oldIndex; i < rules.length; i++) {
             if (rules[i].selectorText.substr(0, prevSelectorNameLength) === prevSelectorName) {
                 sheet.deleteRule(i);
@@ -67,14 +66,18 @@ const updateSheetRule = (oldIndex, sheet, className, prevClassName, rule) => {
         }
     }
 
-    const stylis = new Stylis();
+    const stylis = new Stylis({
+        global: false
+    });
+
     let index = oldIndex === -1 ? 0 : oldIndex;
 
     const DEBUG = [];
 
     stylis.use((context, content, selectors, parent) => {
         // TODO: add support @rules with context = 3
-        if (context === 2 && selectors[0] !== parent[0]/* || context === 3*/) {
+        // Do not include any global styles... Should be handled... globally!
+        if (context === 2 && selectors[0] !== parent[0]/* || context === 3*/ && selectors[0].toLocaleLowerCase().indexOf(":global") === -1) {
             sheet.insertRule(
                 `${selectors} {${content}}`,
                 index++
