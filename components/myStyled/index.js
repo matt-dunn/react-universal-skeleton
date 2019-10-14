@@ -121,7 +121,7 @@ const myStyled = Component => (strings, ...args) => {
         return "";
     };
 
-    const MyStyled = ({children, ...props}) => React.createElement(Component, {...props, className: updateRule(props, useContext(StyleContext))}, children);
+    const MyStyled = ({children, ...props}) => React.createElement(Component, {...props, className: [props.className, updateRule(props, useContext(StyleContext))].join(" ")}, children);
     MyStyled.displayName = Component.displayName || Component.name || Component.type || Component;
     return MyStyled;
 };
