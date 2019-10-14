@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
+import PropTypes from "prop-types";
 
 import myStyled from "components/myStyled";
-import PropTypes from "prop-types";
 // import myStyled from "styled-components";
 
 const Fancy = ({children, className}) => {
