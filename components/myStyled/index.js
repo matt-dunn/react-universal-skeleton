@@ -75,9 +75,8 @@ const updateSheetRule = (oldIndex, sheet, className, prevClassName, rule) => {
     const DEBUG = [];
 
     stylis.use((context, content, selectors, parent) => {
-        // TODO: add support @rules with context = 3
         // Do not include any global styles... Should be handled... globally!
-        if (context === 2 && selectors[0] !== parent[0]/* || context === 3*/ && selectors[0].toLocaleLowerCase().indexOf(":global") === -1) {
+        if ((context === 2 || context === 3) && selectors[0] !== parent[0] && selectors[0].toLocaleLowerCase().indexOf(":global") === -1) {
             sheet.insertRule(
                 `${selectors} {${content}}`,
                 index++
