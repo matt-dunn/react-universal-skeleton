@@ -32,8 +32,16 @@ const getFirstStyleIndex = (sheet, selectorText) => {
     const selectorTextLength = selectorText.length;
 
     for (let i = 0; i < rules.length; i++) {
-        if (rules[i].selectorText.substr(0, selectorTextLength) === selectorText) {
+        const rule = rules[i];
+        if (rule.selectorText && rule.selectorText.substr(0, selectorTextLength) === selectorText) {
             return i;
+        } else if (rule.rules || rule.cssRules) {
+            const subRules = rule.rules || rule.cssRules;
+            for(let ii = 0; ii < subRules.length; ii++) {
+                if (subRules[ii].selectorText.substr(0, selectorTextLength) === selectorText) {
+                    return i;
+                }
+            }
         }
     }
 
@@ -59,9 +67,19 @@ const updateSheetRule = (oldIndex, sheet, className, prevClassName, rule) => {
         const prevSelectorNameLength = prevSelectorName.length;
 
         for (let i = oldIndex; i < rules.length; i++) {
-            if (rules[i].selectorText.substr(0, prevSelectorNameLength) === prevSelectorName) {
+            const rule = rules[i];
+            if (rule.selectorText && rule.selectorText.substr(0, prevSelectorNameLength) === prevSelectorName) {
                 sheet.deleteRule(i);
                 i--;
+            } else if (rule.rules || rule.cssRules) {
+                const subRules = rule.rules || rule.cssRules;
+                for(let ii = 0; ii < subRules.length; ii++) {
+                    if (subRules[ii].selectorText.substr(0, prevSelectorNameLength) === prevSelectorName) {
+                        sheet.deleteRule(i);
+                        i--;
+                        break;
+                    }
+                }
             }
         }
     }

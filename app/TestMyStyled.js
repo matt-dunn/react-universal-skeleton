@@ -38,6 +38,12 @@ const Styled = myStyled(Fancy)`
     address {
         margin: ${({index}) => `${20 + ((index || 0) * 50)}px`};
     }
+
+    @media only screen and (max-width: 500px) {
+        & {
+            border: 10px solid ${({color}) => color} !important;
+        }
+    }
 `;
 
 const Styled2 = myStyled.address`

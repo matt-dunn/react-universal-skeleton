@@ -2,14 +2,23 @@ import React from 'react'
 import {StyleContext} from "./index";
 
 const Rule = cssText => {
-    const match = cssText.match(/(?<selectorText>.*?)\{/);
+    if (cssText.substr(0, 1) === "@") {
+        const match = cssText.match(/.*?\{(?<selectorText>.*)/);
 
-    const selectorText = match && match.groups.selectorText.trim();
+        return {
+            cssText,
+            cssRules: match && match.groups.selectorText.slice(0, -1).split("}").map(rule => rule && Rule(rule + "}")).filter(rule => rule)
+        }
+    } else {
+        const match = cssText.match(/(?<selectorText>.*?)\{/);
 
-    return {
-        cssText,
-        selectorText
-    };
+        const selectorText = match && match.groups.selectorText.trim();
+
+        return {
+            cssText,
+            selectorText
+        };
+    }
 };
 
 const Stylesheet = () => {
