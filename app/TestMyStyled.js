@@ -44,6 +44,8 @@ const Styled = myStyled(Fancy)`
             border: 10px solid ${({color}) => color};
         }
     }
+    
+    margin-top: 100px;
 `;
 
 const Styled2 = myStyled.address`
