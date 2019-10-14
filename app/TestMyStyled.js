@@ -53,6 +53,8 @@ const TestMyStyled = () => {
     const [index, setIndex] = useState(0);
 
     useEffect(() => {
+        console.log("READY");
+
         setTimeout(() => {
             setColor("blue")
         }, 2000);
