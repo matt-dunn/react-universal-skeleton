@@ -39,7 +39,7 @@ const Styled = myStyled(Fancy)`
         margin: ${({index}) => `${20 + ((index || 0) * 50)}px`};
     }
 
-    @media only screen and (max-width: 500px) {
+    @media only screen and (max-width: 1000px) {
         && {
             border: 10px solid ${({color}) => color};
         }
