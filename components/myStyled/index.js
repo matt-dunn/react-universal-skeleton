@@ -1,5 +1,6 @@
 import React, {useContext} from 'react'
 import {isFunction} from "lodash";
+import Stylis from "stylis";
 
 import {createHash} from "./hash";
 
@@ -25,11 +26,12 @@ const createStylesheet = () => {
     }
 };
 
-const getStyleIndex = (sheet, className) => {
+const getFirstStyleIndex = (sheet, selectorText) => {
     const rules = sheet.rules || sheet.cssRules;
+    const selectorTextLength = selectorText.length;
 
     for (let i = 0; i < rules.length; i++) {
-        if (rules[i].selectorText === className) {
+        if (rules[i].selectorText.substr(0, selectorTextLength) === selectorText) {
             return i;
         }
     }
@@ -45,61 +47,79 @@ const parsedRule = (strings, args, props) => strings.reduce((rule, part, index) 
     value && rule.push(value);
 
     return rule;
-}, []).join("").split(/\n/g).map(i => i.trim()).join("").replace(/\n/g, "");
+}, []).join("");
 
 const sheet = createStylesheet();
+
+const updateSheetRule = (oldIndex, sheet, className, prevClassName, rule) => {
+    if (oldIndex !== -1) {
+        const rules = sheet.rules || sheet.cssRules;
+        const prevSelectorName = `.${prevClassName}`;
+        const prevSelectorNameLength = prevSelectorName.length;
+
+        for (let i = oldIndex; i < rules.length; i++) {
+            if (rules[i].selectorText.substr(0, prevSelectorNameLength) === prevSelectorName) {
+                sheet.deleteRule(i);
+                i--;
+            }
+        }
+    }
+
+    const stylis = new Stylis();
+    let index = oldIndex === -1 ? 0 : oldIndex;
+
+    stylis.use((context, content, selectors, parent) => {
+        // TODO: add support @rules with context = 3
+        // TODO: add support for :global
+        if (context === 2 && selectors[0] !== parent[0]/* || context === 3*/) {
+            sheet.insertRule(
+                `.${selectors} {${content}}`,
+                index++
+            );
+
+            console.log(oldIndex === -1 ? "INSERT" : "UPDATE", selectors, content, sheet.rules.length);
+        }
+    });
+
+    stylis(className, rule);
+
+    return className;
+};
 
 const myStyled = Component => (strings, ...args) => {
     let prevClassName;
 
     const updateRule = (props, serverSheet) => {
-        if (prevClassName && args.length === 0) {
+        if (prevClassName && args.length === 0) {   // Static template
             return prevClassName;
         }
 
         const rule = parsedRule(strings, args, props);
 
         // const className = `${Component.displayName || Component.name || Component.type || Component}__${createHash(rule)}`;
-        const className = `ms__${createHash(rule)}`;
+        const className = `ms__${createHash(rule)}`;    // Use a fixed class prefix to simplify client/server class names
 
         if (serverSheet) {
-            const index = getStyleIndex(serverSheet, `.${className}`);
-            index !== -1 && serverSheet.deleteRule(index);
-
-            serverSheet.insertRule(
-                `.${className} {${rule}}`
-            );
-
-            console.log("INSERT", className, rule, serverSheet.rules.length);
-
-            return className;
+            return updateSheetRule(getFirstStyleIndex(serverSheet, `.${className}`), serverSheet, className, className, rule);
         } else if (sheet) {
             if (className === prevClassName) {
                 return prevClassName;
             }
 
-            const oldIndex = getStyleIndex(sheet, `.${prevClassName || className}`);
+            const oldIndex = getFirstStyleIndex(sheet, `.${prevClassName || className}`);
             if (oldIndex !== -1 && !prevClassName) {
-                return prevClassName = className
+                return prevClassName = className;
             }
-            oldIndex !== -1 && sheet.deleteRule(oldIndex);
 
-            sheet.insertRule(
-                `.${className} {${rule}}`,
-                oldIndex === -1 ? 0 : oldIndex
-            );
-
-            console.log("UPDATE", oldIndex, className, rule, sheet.rules.length);
-
-            prevClassName = className;
-
-            return className;
+            return prevClassName = updateSheetRule(oldIndex, sheet, className, prevClassName, rule);
         }
 
         return "";
     };
 
-    return ({children, ...props}) => React.createElement(Component, {...props, className: updateRule(props, useContext(StyleContext))}, children);
+    const MyStyled = ({children, ...props}) => React.createElement(Component, {...props, className: updateRule(props, useContext(StyleContext))}, children);
+    MyStyled.displayName = Component.displayName || Component.name || Component.type || Component;
+    return MyStyled;
 };
 
 const domElements = [

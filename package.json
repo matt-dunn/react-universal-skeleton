@@ -25,6 +25,7 @@
     "redux": "^4.0.4",
     "simple-deep-freeze": "^0.0.2",
     "styled-components": "^4.3.2",
+    "stylis": "^3.5.4",
     "typesafe-actions": "^4.4.2",
     "typescript": "^3.6.3",
     "uuid": "^3.3.3",

@@ -2,6 +2,7 @@ import { hot } from 'react-hot-loader';
 import React, {useEffect, useState} from 'react'
 
 import myStyled from "components/myStyled";
+// import myStyled from "styled-components";
 
 const Fancy = ({children, className}) => {
     return (
@@ -20,12 +21,32 @@ const Styled = myStyled(Fancy)`
         background-color: orange;
         font-weight: bold;
     `}
+
+    &:hover {
+        background-color: ${({color}) => (color === "blue" && "green") || "yellow"}
+    }
+    
+    address {
+        margin: ${({index}) => `${20 + ((index || 0) * 50)}px`};
+    }
 `;
 
 const Styled2 = myStyled.address`
     border: 1px solid red;
     padding: 10px;
-    color: #ccc;
+
+    &:hover {
+        background-color: red;
+    }
+`;
+
+const Styled3 = myStyled(Styled2)`
+    font-size: 20px;
+`;
+
+const v = "bold"
+const Styled4 = myStyled(Styled3)`
+    font-weight: ${v};
 `;
 
 const App = () => {
@@ -46,9 +67,9 @@ const App = () => {
     return (
         <Styled color={color} index={index}>
             {color}
-            <Styled2>
+            <Styled4 className="my-lovely-horse">
                 INNER: {color}
-            </Styled2>
+            </Styled4>
         </Styled>
     );
 };
