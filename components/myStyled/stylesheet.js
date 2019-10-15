@@ -23,6 +23,7 @@ const Rule = cssText => {
 
 const Stylesheet = () => {
     const rules = [];
+    const hashes = [];
 
     const deleteRule = index => {
         rules.splice(index, 1);
@@ -33,10 +34,14 @@ const Stylesheet = () => {
         return index || rules.length - 1;
     };
 
+    const collectHash = hash => hashes.push(hash);
+
     return {
         rules,
+        hashes,
         deleteRule,
-        insertRule
+        insertRule,
+        collectHash
     };
 };
 
@@ -52,7 +57,7 @@ export default () => {
     };
 
     const getStyles = () => {
-        return (stylesheet.rules.length > 0 && `<style id="myStyled">${stylesheet.rules.map(rule => rule.cssText).join("")}</style>`) || "";
+        return (stylesheet.rules.length > 0 && `<style data-my-styled="${stylesheet.hashes.join(" ")}" data-ssr="true">${stylesheet.rules.map(rule => rule.cssText).join("")}</style>`) || "";
     };
 
     return {

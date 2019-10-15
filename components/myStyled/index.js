@@ -3,43 +3,18 @@ import PropTypes from "prop-types";
 import Stylis from "stylis";
 
 import {createHash} from "./hash";
-import {createStylesheet, parsedRule, getFirstStyleIndex} from "./utils";
+import {createStylesheet, parsedRule} from "./utils";
 
 export const StyleContext = React.createContext(undefined);
 
-const sheet = createStylesheet();
+const {sheet, hashes} = createStylesheet() || {};
 
-const updateSheetRule = (oldIndex, sheet, className, prevClassName, rule) => {
-    if (oldIndex !== -1) {
-        const rules = sheet.rules || sheet.cssRules;
-        const prevSelectorName = `.${prevClassName}`;
-        const prevSelectorNameLength = prevSelectorName.length;
-
-        for (let i = oldIndex; i < rules.length; i++) {
-            const rule = rules[i];
-            if (rule.selectorText && rule.selectorText.substr(0, prevSelectorNameLength) === prevSelectorName) {
-                sheet.deleteRule(i);
-                i--;
-            } else if (rule.rules || rule.cssRules) {
-                const subRules = rule.rules || rule.cssRules;
-                for(let ii = 0; ii < subRules.length; ii++) {
-                    if (subRules[ii].selectorText.substr(0, prevSelectorNameLength) === prevSelectorName) {
-                        sheet.deleteRule(i);
-                        i--;
-                        break;
-                    }
-                }
-            }
-        }
-    }
+const updateSheetRule = (sheet, className, prevClassName, rule) => {
+    const DEBUG = [];
 
     const stylis = new Stylis({
         global: false
     });
-
-    let index = oldIndex === -1 ? 0 : oldIndex;
-
-    const DEBUG = [];
 
     // See https://github.com/thysultan/stylis.js#plugins for plugin details
     stylis.use((context, content, selectors, parent) => {
@@ -50,7 +25,6 @@ const updateSheetRule = (oldIndex, sheet, className, prevClassName, rule) => {
         if ((context === 2 || context === 3) && normalizedSelector !== parent[0] && selectors[0].toLocaleLowerCase().indexOf(":global") === -1) {
             sheet.insertRule(
                 `${selectors} {${content}}`,
-                index++
             );
 
             DEBUG.push(`${selectors} {\n    ${content}\n  }`);
@@ -59,10 +33,14 @@ const updateSheetRule = (oldIndex, sheet, className, prevClassName, rule) => {
 
     stylis(`.${className}`, rule);
 
-    console.log(`${oldIndex === -1 ? "INSERT" : "UPDATE"}(${sheet.rules.length} rules)\n `,DEBUG.join('\n  '))
+    console.log(`UPDATE(${sheet.rules.length} rules)\n `,DEBUG.join('\n  '))
 
     return className;
 };
+
+// Use a fixed class prefix to simplify client/server class names
+// const generateClassName = (Component, hash) => `${Component.displayName || Component.name || Component.type || Component}__${hash}`;
+const generateClassName = (Component, hash) => `ms__${hash}`;
 
 const myStyled = Component => (strings, ...args) => {
     let prevClassName;
@@ -73,23 +51,18 @@ const myStyled = Component => (strings, ...args) => {
         }
 
         const rule = parsedRule(strings, args, props);
-
-        // const className = `${Component.displayName || Component.name || Component.type || Component}__${createHash(rule)}`;
-        const className = `ms__${createHash(rule)}`;    // Use a fixed class prefix to simplify client/server class names
+        const hash = createHash(rule);
+        const className = generateClassName(Component, hash);
 
         if (serverSheet) {
-            return updateSheetRule(getFirstStyleIndex(serverSheet, `.${className}`), serverSheet, className, className, rule);
+            serverSheet.collectHash(hash);
+            return updateSheetRule(serverSheet, className, className, rule);
         } else if (sheet) {
-            if (className === prevClassName) {
-                return prevClassName;
+            if (className === prevClassName || (hashes && hashes.indexOf(hash) !== -1)) {
+                return className;
             }
 
-            const oldIndex = getFirstStyleIndex(sheet, `.${prevClassName || className}`);
-            if (oldIndex !== -1 && !prevClassName) {
-                return prevClassName = className;
-            }
-
-            return prevClassName = updateSheetRule(oldIndex, sheet, className, prevClassName, rule);
+            return prevClassName = updateSheetRule(sheet, className, prevClassName, rule);
         }
 
         return "";
