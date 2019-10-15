@@ -51,7 +51,8 @@ export const updateSheetRule = (sheet, className, prevClassName, rule) => {
 
     // See https://github.com/thysultan/stylis.js#plugins for plugin details
     stylis.use((context, content, selectors, parent) => {
-        // Remove and additional specificity...
+        // Remove anY additional specificity...
+        // TODO: a bit hacky... can likely be improved/made more robust. this is intended to ensure child blocks are not inserted without the parent wrapper (e.g. @media rules)
         const normalizedSelector = `.${className}${selectors[0].toString().replace(new RegExp(selectorName, "g"), "")}`;
 
         // Do not include any global styles... Should be handled... globally! 2 = selector block, 3 = @at-rule block
