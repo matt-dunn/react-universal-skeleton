@@ -36,7 +36,7 @@ const Styled = myStyled(Fancy)`
     }
     
     address {
-        margin: ${({index}) => `${20 + ((index || 0) * 50)}px`};
+        padding: ${({index}) => `${20 + ((index || 0) * 50)}px`};
     }
 
     @media only screen and (max-width: 1000px) {
@@ -62,8 +62,35 @@ const Styled3 = myStyled(Styled2)`
 `;
 
 const v = "bold"
-const Styled4 = myStyled(Styled3)`
+const Styled4 = myStyled("address")`
     font-weight: ${v};
+    animation-duration: 3s;
+    animation-name: slidein;
+    
+    &:hover {
+        background-color: blue;
+    }
+    
+    p {
+        background-color: #eee;
+    }
+
+    @keyframes slidein {
+      from {
+        margin-left: 100%;
+        width: 300%; 
+      }
+    
+      to {
+        margin-left: 0%;
+        width: 100%;
+      }
+    }
+    @media only screen and (max-width: 1000px) {
+        && {
+            border: 10px solid yellow;
+        }
+    }
 `;
 
 const TestMyStyled = () => {
@@ -88,6 +115,9 @@ const TestMyStyled = () => {
             {color}
             <Styled4 className="my-lovely-horse">
                 INNER: {color}
+                <p>
+                    Para
+                </p>
             </Styled4>
         </Styled>
     );

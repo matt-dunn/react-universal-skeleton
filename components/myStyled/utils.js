@@ -47,22 +47,26 @@ export const updateSheetRule = (sheet, className, prevClassName, rule) => {
         global: false
     });
 
+    const selectorName = `.${className}`;
+
     // See https://github.com/thysultan/stylis.js#plugins for plugin details
     stylis.use((context, content, selectors, parent) => {
         // Remove and additional specificity...
         const normalizedSelector = `.${className}${selectors[0].toString().replace(new RegExp(`\.${className}`, "g"), "")}`;
 
         // Do not include any global styles... Should be handled... globally!
-        if ((context === 2 || context === 3) && normalizedSelector !== parent[0] && selectors[0].toLocaleLowerCase().indexOf(":global") === -1) {
+        if (((context === 2 && selectors[0].substr(0, selectorName.length) === selectorName) || context === 3) && normalizedSelector !== parent[0] && selectors[0].toLocaleLowerCase().indexOf(":global") === -1) {
+            const selector = `${selectors}${(selectors[0].substr(0, 11) === "@keyframes " && `-${className}`) || ""}`;
+
             sheet.insertRule(
-                `${selectors} {${content}}`,
+                `${selector} {${content}}`,
             );
 
-            DEBUG.push(`${selectors} {\n    ${content}\n  }`);
+            DEBUG.push(`${selector} {\n    ${content}\n  }`);
         }
     });
 
-    stylis(`.${className}`, rule);
+    stylis(selectorName, rule);
 
     console.log(`UPDATE(${sheet.rules.length} rules)\n `,DEBUG.join('\n  '))
 
