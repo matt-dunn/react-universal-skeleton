@@ -1,46 +1,12 @@
 import React, {useContext} from 'react'
 import PropTypes from "prop-types";
-import Stylis from "stylis";
 
 import {createHash} from "./hash";
-import {createStylesheet, parsedRule} from "./utils";
+import {createStylesheet, parsedRule, generateClassName, updateSheetRule} from "./utils";
 
 export const StyleContext = React.createContext(undefined);
 
 const {sheet, hashes} = createStylesheet() || {};
-
-const updateSheetRule = (sheet, className, prevClassName, rule) => {
-    const DEBUG = [];
-
-    const stylis = new Stylis({
-        global: false
-    });
-
-    // See https://github.com/thysultan/stylis.js#plugins for plugin details
-    stylis.use((context, content, selectors, parent) => {
-        // Remove and additional specificity...
-        const normalizedSelector = `.${className}${selectors[0].toString().replace(new RegExp(`\.${className}`, "g"), "")}`;
-
-        // Do not include any global styles... Should be handled... globally!
-        if ((context === 2 || context === 3) && normalizedSelector !== parent[0] && selectors[0].toLocaleLowerCase().indexOf(":global") === -1) {
-            sheet.insertRule(
-                `${selectors} {${content}}`,
-            );
-
-            DEBUG.push(`${selectors} {\n    ${content}\n  }`);
-        }
-    });
-
-    stylis(`.${className}`, rule);
-
-    console.log(`UPDATE(${sheet.rules.length} rules)\n `,DEBUG.join('\n  '))
-
-    return className;
-};
-
-// Use a fixed class prefix to simplify client/server class names
-// const generateClassName = (Component, hash) => `${Component.displayName || Component.name || Component.type || Component}__${hash}`;
-const generateClassName = (Component, hash) => `ms__${hash}`;
 
 const myStyled = Component => (strings, ...args) => {
     let prevClassName;
