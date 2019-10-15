@@ -61,9 +61,8 @@ const Styled3 = myStyled(Styled2)`
     font-size: 20px;
 `;
 
-const v = "bold"
-const Styled4 = myStyled("address")`
-    font-weight: ${v};
+const Styled4 = myStyled.address`
+    font-weight: bold;
     animation-duration: 3s;
     animation-name: slidein;
     
@@ -86,11 +85,14 @@ const Styled4 = myStyled("address")`
         width: 100%;
       }
     }
+
     @media only screen and (max-width: 1000px) {
         && {
             border: 10px solid yellow;
         }
     }
+    
+    background-color: #fff;
 `;
 
 const TestMyStyled = () => {
