@@ -59,6 +59,4 @@ domElements.forEach(element => {
 
 export default myStyled;
 
-import ServerStylesheet from "./stylesheet";
-
-export {ServerStylesheet};
+export { default as ServerStylesheet } from "./stylesheet";
