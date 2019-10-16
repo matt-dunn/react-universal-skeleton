@@ -16,29 +16,30 @@ export const StyleContext = React.createContext(undefined);
 
 const {sheet, hashes} = createStylesheet() || {};
 
-// export interface MyStyledComponent<P> extends ComponentClass<P>, FunctionComponent<P> {
-export interface MyStyledComponent<P> extends FunctionComponent<P> {
-    (props: PropsWithChildren<P>, context?: any): ReactElement | null;
-    className?: string;
-    children?: any;
-}
-
 export interface MyStyledComponentProps {
-    // (props: PropsWithChildren<any>, context?: any): ReactElement | null;
     className?: string;
-    children?: any;
+    children?: ReactNode;
 }
 
-type XXX<P> = FunctionComponent<P> | ComponentClass<P> | string;
+export type MyStyledComponent<P extends MyStyledComponentProps> = ComponentType<P> | string;
 
-interface ZZZ<P> {
+export interface MyStyled<P> {
     (string: TemplateStringsArray, ...args: any[]): ComponentType<P & MyStyledComponentProps>
+        // & {
+        // [index:string] : ComponentType<P & MyStyledComponentProps>;
+        // activate(): void;
+    // };
+
 }
 
-const myStyled = <P>(Component: XXX<P>): ZZZ<P> => (strings, ...args) => {
-    let prevClassName;
+function isComponent(arg: any): arg is ComponentType {
+    return React.isValidElement(arg);
+}
 
-    const updateRule = (props, serverSheet) => {
+const myStyled = <P>(Component: MyStyledComponent<P & MyStyledComponentProps>): MyStyled<P> => (strings, ...args) => {
+    let prevClassName: string;
+
+    const updateRule = (props: any, serverSheet: any) => {
         if (prevClassName && args.length === 0) {   // Static template
             return prevClassName;
         }
@@ -62,37 +63,12 @@ const myStyled = <P>(Component: XXX<P>): ZZZ<P> => (strings, ...args) => {
     };
 
     const MyStyled = ({children, ...props}: MyStyledComponentProps) => React.createElement<any>(Component, {...props, className: [props.className, updateRule(props, useContext(StyleContext))].join(" ")}, children);
-    // MyStyled.displayName = Component.displayName || Component.name || Component.type || Component;
-    // MyStyled.propTypes = {
-    //     children: PropTypes.oneOfType([
-    //         PropTypes.arrayOf(PropTypes.node),
-    //         PropTypes.node
-    //     ]),
-    //     className: PropTypes.string
-    // };
+    if (isComponent(Component)) {
+        MyStyled.displayName = Component.displayName || Component.name;
+    }
     return MyStyled;
 };
 
-const Fancy = ({children, moose}: {children: any, moose: string}) => {
-    return null;
-}
-
-const Styled2 = myStyled(Fancy)`
-    border: 1px solid red;
-    padding: 10px;
-
-    &:hover {
-        background-color: red;
-    }
-`;
-
-const x = Styled2.displayName;
-
-const X = () => {
-    return (
-        <Styled2/>
-    )
-}
 
 
 const domElements = [
