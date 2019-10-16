@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import PropTypes from "prop-types";
 
 import myStyled from "components/myStyled";
@@ -88,7 +88,7 @@ const Styled4 = myStyled.address`
 
     @media only screen and (max-width: 1000px) {
         && {
-            border: 10px solid yellow;
+            border: 10px solid purple;
         }
     }
     
@@ -98,18 +98,25 @@ const Styled4 = myStyled.address`
 const TestMyStyled = () => {
     const [color, setColor] = useState("green");
     const [index, setIndex] = useState(0);
+    const t1 = useRef()
+    const t2 = useRef()
 
     useEffect(() => {
         console.log("READY");
 
-        setTimeout(() => {
+        t1.current = setTimeout(() => {
             setColor("blue")
         }, 2000);
 
-        setTimeout(() => {
+        t2.current = setTimeout(() => {
             setColor("violet")
             setIndex(index => index + 1)
         }, 4000)
+
+        return () => {
+            clearTimeout(t1.current)
+            clearTimeout(t2.current)
+        }
     }, []);
 
     return (

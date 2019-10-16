@@ -22,13 +22,13 @@ const myStyled = Component => (strings, ...args) => {
 
         if (serverSheet) {
             serverSheet.collectHash(hash);
-            return updateSheetRule(serverSheet, className, className, rule);
+            return updateSheetRule(serverSheet, className, rule);
         } else if (sheet) {
             if (className === prevClassName || (hashes && hashes.indexOf(hash) !== -1)) {
                 return className;
             }
 
-            return prevClassName = updateSheetRule(sheet, className, prevClassName, rule);
+            return prevClassName = updateSheetRule(sheet, className, rule);
         }
 
         return "";
