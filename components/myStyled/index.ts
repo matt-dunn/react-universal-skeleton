@@ -11,8 +11,9 @@ import PropTypes from "prop-types";
 
 import {createHash} from "./hash";
 import {createStylesheet, parsedRule, generateClassName, updateSheetRule} from "./utils";
+import {Stylesheet} from "./stylesheet";
 
-export const StyleContext = React.createContext(undefined);
+export const StyleContext = React.createContext<Stylesheet | undefined>(undefined);
 
 const {sheet, hashes} = createStylesheet() || {};
 
@@ -39,7 +40,7 @@ function isComponent(arg: any): arg is ComponentType {
 const myStyled = <P>(Component: MyStyledComponent<P & MyStyledComponentProps>): MyStyled<P> => (strings, ...args) => {
     let prevClassName: string;
 
-    const updateRule = (props: any, serverSheet: any) => {
+    const updateRule = (props: any, serverSheet?: Stylesheet) => {
         if (prevClassName && args.length === 0) {   // Static template
             return prevClassName;
         }
