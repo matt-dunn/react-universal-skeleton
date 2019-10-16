@@ -62,6 +62,14 @@ const Styled3 = myStyled(Styled2)`
 `;
 
 const Styled4 = myStyled.address`
+    @font-face {
+      font-family: 'Modak';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: local('Modak'), url(https://fonts.gstatic.com/s/modak/v5/EJRYQgs1XtIEskMA-hR77LKV.woff2) format('woff2');
+    }
+
     font-weight: bold;
     animation-duration: 3s;
     animation-name: slidein;
@@ -93,6 +101,8 @@ const Styled4 = myStyled.address`
     }
     
     background-color: #fff;
+
+    font-family: 'Modak';
 `;
 
 const TestMyStyled = () => {

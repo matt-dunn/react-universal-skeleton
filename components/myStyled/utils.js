@@ -59,11 +59,12 @@ export const updateSheetRule = (sheet, className, rule) => {
 
             // Do not include any global styles... Should be handled... globally! 2 = selector block, 3 = @at-rule block
             if (((context === 2 && selector.startsWith(selectorName)) || context === 3) && normalizedSelector !== parent[0] && selector.toLowerCase().indexOf(":global") === -1) {
+                // Add class postfix to localise animation name if required
                 const currentSelector = `${selector}${(selector.toLowerCase().startsWith("@keyframes ") && `-${className}`) || ""}`;
+                // Set the correct content if font-face
+                const currentContent = (selector.toLowerCase().startsWith("@font-face") && content.substr(1, content.length - 2)) || content;
 
-                sheet.insertRule(
-                    `${currentSelector} {${content}}`,
-                );
+                sheet.insertRule(`${currentSelector} {${currentContent}}`);
 
                 DEBUG.push(`${currentSelector} {\n    ${content}\n  }`);
             }
