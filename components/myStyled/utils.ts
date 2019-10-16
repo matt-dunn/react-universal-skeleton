@@ -1,14 +1,27 @@
 import {isFunction} from "lodash";
 import Stylis from "stylis";
+import {ComponentType} from "react";
 
-export const createStylesheet = () => {
+import {Stylesheet} from "./stylesheet";
+import {MyStyledComponent} from "./index";
+
+interface CreateStylesheet {
+    (): {
+        sheet: any;
+        hashes?: string[];
+    } | undefined;
+}
+
+export const createStylesheet: CreateStylesheet = () => {
     if (typeof document !== 'undefined') {
-        const myStyle = document.querySelector("style[data-my-styled]");
+        const myStyle = document.querySelector<HTMLStyleElement>("style[data-my-styled]");
 
         if (myStyle) {
+            const hashes = myStyle.getAttribute("data-my-styled");
+
             return {
                 sheet: myStyle.sheet,
-                hashes: myStyle.getAttribute("data-my-styled").split(" ")
+                hashes: (hashes && hashes.split(" ")) || undefined
             };
         }
 
@@ -26,7 +39,7 @@ export const createStylesheet = () => {
     }
 };
 
-export const parsedRule = (strings, args, props) => strings.reduce((rule, part, index) => {
+export const parsedRule = (strings: TemplateStringsArray, args: any, props: any): string => strings.reduce((rule: string[], part: string, index: number) => {
     rule.push(part);
 
     const arg = args[index];
@@ -38,10 +51,10 @@ export const parsedRule = (strings, args, props) => strings.reduce((rule, part, 
 
 // Use a fixed class prefix to simplify client/server class names
 // const generateClassName = (Component, hash) => `${Component.displayName || Component.name || Component.type || Component}__${hash}`;
-export const generateClassName = (Component, hash) => `ms__${hash}`;
+export const generateClassName = (Component: MyStyledComponent<any>, hash: string): string => `ms__${hash}`;
 
-export const updateSheetRule = (sheet, className, rule) => {
-    const DEBUG = [];
+export const updateSheetRule = (sheet: CSSStyleSheet | Stylesheet, className: string, rule: string) => {
+    const DEBUG: string[] = [];
 
     const selectorText = `.${className}`;
 
