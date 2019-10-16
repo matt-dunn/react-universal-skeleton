@@ -1,21 +1,8 @@
-import React, {
-    ComponentClass,
-    ComponentType,
-    FunctionComponent,
-    PropsWithChildren,
-    ReactElement,
-    ReactNode,
-    useContext
-} from 'react'
-import PropTypes from "prop-types";
+import React, {ComponentType, ReactNode, useContext} from 'react'
 
 import {createHash} from "./hash";
 import {createStylesheet, parsedRule, generateClassName, updateSheetRule} from "./utils";
 import {Stylesheet} from "./stylesheet";
-
-export const StyleContext = React.createContext<Stylesheet | undefined>(undefined);
-
-const {sheet, hashes} = createStylesheet() || {};
 
 export interface MyStyledComponentProps {
     className?: string;
@@ -26,12 +13,11 @@ export type MyStyledComponent<P extends MyStyledComponentProps> = ComponentType<
 
 export interface MyStyled<P> {
     (string: TemplateStringsArray, ...args: any[]): ComponentType<P & MyStyledComponentProps>
-        // & {
-        // [index:string] : ComponentType<P & MyStyledComponentProps>;
-        // activate(): void;
-    // };
-
 }
+
+export const StyleContext = React.createContext<Stylesheet | undefined>(undefined);
+
+const {sheet, hashes} = createStylesheet() || {};
 
 function isComponent(arg: any): arg is ComponentType {
     return React.isValidElement(arg);
