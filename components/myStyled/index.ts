@@ -12,7 +12,7 @@ export interface MyStyledComponentProps {
 export type MyStyledComponent<P extends MyStyledComponentProps> = ComponentType<P> | string;
 
 export interface MyStyled<P> {
-    (string: TemplateStringsArray, ...args: any[]): ComponentType<P & MyStyledComponentProps>
+    (string: TemplateStringsArray, ...args: any[]): ComponentType<P & MyStyledComponentProps>;
 }
 
 export const StyleContext = React.createContext<Stylesheet | undefined>(undefined);
