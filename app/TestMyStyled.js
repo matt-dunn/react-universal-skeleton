@@ -130,15 +130,38 @@ const TestMyStyled = () => {
     }, []);
 
     return (
-        <Styled color={color} index={index}>
-            {color}
-            <Styled4 className="my-lovely-horse">
-                INNER: {color}
-                <p>
-                    Para
-                </p>
-            </Styled4>
-        </Styled>
+        <>
+            <Styled color={color} index={index}>
+                {color}
+                <Styled4 className="my-lovely-horse">
+                    INNER: {color}
+                    <p>
+                        Para
+                    </p>
+                </Styled4>
+                <Styled4 className="my-lovely-horse">
+                    INNER: {color}
+                    <p>
+                        Para
+                    </p>
+                </Styled4>
+            </Styled>
+            <Styled color="indigo" index={index}>
+                {color}
+                <Styled4 className="my-lovely-horse">
+                    INNER: {color}
+                    <p>
+                        Para
+                    </p>
+                </Styled4>
+                <Styled4 className="my-lovely-horse">
+                    INNER: {color}
+                    <p>
+                        Para
+                    </p>
+                </Styled4>
+            </Styled>
+        </>
     );
 };
 
