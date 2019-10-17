@@ -1,10 +1,9 @@
-import React, {useEffect, useRef, useState} from 'react'
-import PropTypes from "prop-types";
+import React, {ReactNode, useEffect, useRef, useState} from 'react'
 
 import myStyled from "components/myStyled";
 // import myStyled from "styled-components";
 
-const Fancy = ({children, className}) => {
+const Fancy = ({children, className}: {children?: ReactNode, className?: string, fancy?: boolean}) => {
     return (
         <div className={className}>
             Fancy:
@@ -13,23 +12,19 @@ const Fancy = ({children, className}) => {
     );
 }
 
-Fancy.propTypes = {
-    children: PropTypes.oneOfType([
-        PropTypes.arrayOf(PropTypes.node),
-        PropTypes.node
-    ]),
-    className: PropTypes.string
-};
-
-const Styled = myStyled(Fancy)`
+const Styled = myStyled<{color: string, index: number, xxz?: string}>(Fancy)`
     :global(body) {background:${({color}) => (color === "green" && "red") || "#ececec"}}
     padding: ${({index}) => `${20 + ((index || 0) * 50)}px`};
     color: ${({color}) => color};
+    ${props => props.index}
     border: 3px solid orange;
     ${({color, index}) => color === "blue" && index === 0 && `
         background-color: orange;
         font-weight: bold;
     `}
+    
+    ${3}
+    ${props => props.xxz}
 
     &:hover {
         background-color: ${({color}) => (color === "blue" && "green") || "yellow"}
@@ -108,8 +103,8 @@ const Styled4 = myStyled.address`
 const TestMyStyled = () => {
     const [color, setColor] = useState("green");
     const [index, setIndex] = useState(0);
-    const t1 = useRef()
-    const t2 = useRef()
+    const t1 = useRef<number>()
+    const t2 = useRef<number>()
 
     useEffect(() => {
         console.log("READY");
@@ -131,7 +126,7 @@ const TestMyStyled = () => {
 
     return (
         <>
-            <Styled color={color} index={index}>
+            <Styled className="bob" color={color} index={index}>
                 {color}
                 <Styled4 className="my-lovely-horse">
                     INNER: {color}
