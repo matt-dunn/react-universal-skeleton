@@ -6,7 +6,7 @@ import {Stylesheet} from "./stylesheet";
 
 export interface MyStyledComponentProps {
     className?: string;
-    children: ReactNode | null;
+    children?: ReactNode | null;
 }
 
 export type MyStyledComponent<P extends MyStyledComponentProps> = ComponentType<P> | string;
