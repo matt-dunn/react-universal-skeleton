@@ -9,7 +9,7 @@ export interface MyStyledComponentProps {
     children?: ReactNode | null;
 }
 
-export type MyStyledComponent<P extends MyStyledComponentProps> = ComponentType<P> | string;
+export type MyStyledComponent<P extends MyStyledComponentProps> = ComponentType<P> | keyof JSX.IntrinsicElements;
 
 export interface MyStyled<P, T> {
     (string: TemplateStringsArray, ...args: T[]): ComponentType<P & MyStyledComponentProps>;
