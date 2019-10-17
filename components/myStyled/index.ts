@@ -16,8 +16,8 @@ export interface MyStyled<P, T> {
 }
 
 type MyStyledTemplate<P> = {
-    (props: P): string | false | number;
-} | string | number;
+    (props: P): string | false | number | undefined;
+} | string | number | undefined;
 
 export const StyleContext = React.createContext<Stylesheet | undefined>(undefined);
 
