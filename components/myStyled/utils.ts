@@ -39,7 +39,7 @@ export const createStylesheet: CreateStylesheet = () => {
     }
 };
 
-export const parsedRule = (strings: TemplateStringsArray, args: any, props: any): string => strings.reduce((rule: string[], part: string, index: number) => {
+export const parsedRule = <T>(strings: TemplateStringsArray, args: T[], props: any): string => strings.reduce((rule: string[], part: string, index: number) => {
     rule.push(part);
 
     const arg = args[index];

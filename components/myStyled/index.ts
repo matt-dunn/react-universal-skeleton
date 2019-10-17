@@ -11,9 +11,13 @@ export interface MyStyledComponentProps {
 
 export type MyStyledComponent<P extends MyStyledComponentProps> = ComponentType<P> | string;
 
-export interface MyStyled<P> {
-    (string: TemplateStringsArray, ...args: any[]): ComponentType<P & MyStyledComponentProps>;
+export interface MyStyled<P, T> {
+    (string: TemplateStringsArray, ...args: T[]): ComponentType<P & MyStyledComponentProps>;
 }
+
+type MyStyledTemplate<P> = {
+    (props: P): string | false | number;
+} | string | number;
 
 export const StyleContext = React.createContext<Stylesheet | undefined>(undefined);
 
@@ -22,8 +26,7 @@ const {sheet, hashes} = createStylesheet() || {};
 function isComponent(arg: any): arg is ComponentType {
     return React.isValidElement(arg);
 }
-
-const myStyled = <P>(Component: MyStyledComponent<P & MyStyledComponentProps>): MyStyled<P> => (strings, ...args) => {
+const myStyled = <P>(Component: MyStyledComponent<P & MyStyledComponentProps>): MyStyled<P, MyStyledTemplate<P>> => (strings, ...args) => {
     let prevClassName: string;
 
     const updateRule = (props: any, serverSheet?: Stylesheet) => {
