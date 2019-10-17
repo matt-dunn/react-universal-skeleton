@@ -1,7 +1,7 @@
 import React, {ComponentType, ReactNode, useContext} from 'react'
 
 import {createHash} from "./hash";
-import {createStylesheet, parsedRule, generateClassName, updateSheetRule} from "./utils";
+import {createStylesheet, parseRule, generateClassName, updateSheetRule} from "./utils";
 import {Stylesheet} from "./stylesheet";
 
 export interface MyStyledComponentProps {
@@ -26,6 +26,7 @@ const {sheet, hashes} = createStylesheet() || {};
 function isComponent(arg: any): arg is ComponentType {
     return React.isValidElement(arg);
 }
+
 const myStyled = <P>(Component: MyStyledComponent<P & MyStyledComponentProps>): MyStyled<P, MyStyledTemplate<P>> => (strings, ...args) => {
     let prevClassName: string;
 
@@ -34,7 +35,7 @@ const myStyled = <P>(Component: MyStyledComponent<P & MyStyledComponentProps>): 
             return prevClassName;
         }
 
-        const rule = parsedRule(strings, args, props);
+        const rule = parseRule(strings, args, props);
         const hash = createHash(rule);
         const className = generateClassName(Component, hash);
 
