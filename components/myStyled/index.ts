@@ -1,8 +1,8 @@
-import React, {ComponentType, ReactNode, useContext} from 'react'
+import React, {ComponentType, ReactNode, useContext, useRef} from 'react'
 
 import {createHash} from "./hash";
-import {createStylesheet, parseRule, generateClassName, updateSheetRule} from "./utils";
-import {Stylesheet} from "./stylesheet";
+import {parseRule, generateClassName, updateSheetRule} from "./utils";
+import {ClientServerStylesheet, createStylesheet, StyleContext, Rules} from "./stylesheet";
 
 export interface MyStyledComponentProps {
     className?: string;
@@ -19,44 +19,47 @@ type MyStyledTemplate<P> = {
     (props: P): string | false | number | undefined;
 } | string | false | number | undefined;
 
-export const StyleContext = React.createContext<Stylesheet | undefined>(undefined);
-
-const {sheet, hashes} = createStylesheet() || {};
-
 function isComponent(arg: any): arg is ComponentType {
     return React.isValidElement(arg);
 }
 
-const myStyled = <P>(Component: MyStyledComponent<P & MyStyledComponentProps>): MyStyled<P, MyStyledTemplate<P>> => (strings, ...args) => {
-    let prevClassName: string;
+const stylesheet = createStylesheet();
 
-    const updateRule = (props: any, serverSheet?: Stylesheet) => {
+const myStyled = <P>(Component: MyStyledComponent<P & MyStyledComponentProps>): MyStyled<P, MyStyledTemplate<P>> => (strings, ...args) => {
+    const updateRule = (prevClassName: string | undefined, props: any, stylesheet?: ClientServerStylesheet<CSSRuleList | Rules>) => {
         if (prevClassName && args.length === 0) {   // Static template
             return prevClassName;
         }
 
-        const rule = parseRule(strings, args, props);
-        const hash = createHash(rule);
-        const className = generateClassName(Component, hash);
+        if (stylesheet) {
+            const rule = parseRule(strings, args, props);
+            const hash = createHash(rule);
+            const className = generateClassName(Component, hash);
 
-        if (serverSheet) {
-            serverSheet.collectHash(hash);
-            return updateSheetRule(serverSheet, className, rule);
-        } else if (sheet) {
-            if (className === prevClassName || (hashes && hashes.indexOf(hash) !== -1)) {
+            if (className === prevClassName || (stylesheet.hashes && stylesheet.hashes.indexOf(hash) !== -1)) {
                 return className;
             }
 
-            return prevClassName = updateSheetRule(sheet, className, rule);
+            stylesheet.collectHash(hash);
+
+            return updateSheetRule(stylesheet.sheet, className, rule);
         }
 
         return "";
     };
 
-    const MyStyled = ({children, ...props}: MyStyledComponentProps) => React.createElement<any>(Component, {...props, className: [props.className, updateRule(props, useContext(StyleContext))].join(" ")}, children);
+    const MyStyled = ({children, ...props}: MyStyledComponentProps) => {
+        const prevClassName = useRef<string | undefined>(undefined);
+        const className = updateRule(prevClassName.current, props, useContext(StyleContext) || stylesheet);
+        prevClassName.current = className;
+
+        return React.createElement<any>(Component, {...props, className: [props.className, className].join(" ")}, children);
+    };
+
     if (isComponent(Component)) {
         MyStyled.displayName = Component.displayName || Component.name;
     }
+
     return MyStyled;
 };
 

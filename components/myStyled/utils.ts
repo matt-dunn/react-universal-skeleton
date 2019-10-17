@@ -1,43 +1,8 @@
 import {isFunction} from "lodash";
 import Stylis from "stylis";
-import {ComponentType} from "react";
 
-import {Stylesheet} from "./stylesheet";
 import {MyStyledComponent} from "./index";
-
-interface CreateStylesheet {
-    (): {
-        sheet: any;
-        hashes?: string[];
-    } | undefined;
-}
-
-export const createStylesheet: CreateStylesheet = () => {
-    if (typeof document !== 'undefined') {
-        const myStyle = document.querySelector<HTMLStyleElement>("style[data-my-styled]");
-
-        if (myStyle) {
-            const hashes = myStyle.getAttribute("data-my-styled");
-
-            return {
-                sheet: myStyle.sheet,
-                hashes: (hashes && hashes.split(" ")) || undefined
-            };
-        }
-
-        const style = document.createElement("style");
-        style.setAttribute("data-my-styled", "");
-
-        // WebKit hack :(
-        style.appendChild(document.createTextNode(""));
-
-        document.head.appendChild(style);
-
-        return {
-            sheet: style.sheet
-        };
-    }
-};
+import {Rules, StylesheetPartial} from "./stylesheet";
 
 export const parseRule = <T>(strings: TemplateStringsArray, args: T[], props: any): string => strings.reduce((rule: string[], part: string, index: number) => {
     rule.push(part);
@@ -53,7 +18,7 @@ export const parseRule = <T>(strings: TemplateStringsArray, args: T[], props: an
 // const generateClassName = (Component, hash) => `${Component.displayName || Component.name || Component.type || Component}__${hash}`;
 export const generateClassName = (Component: MyStyledComponent<any>, hash: string): string => `ms__${hash}`;
 
-export const updateSheetRule = (sheet: CSSStyleSheet | Stylesheet, className: string, rule: string) => {
+export const updateSheetRule = (sheet: StylesheetPartial<CSSRuleList | Rules>, className: string, rule: string) => {
     const DEBUG: string[] = [];
 
     const selectorText = `.${className}`;

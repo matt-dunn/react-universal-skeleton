@@ -1,5 +1,4 @@
 import React, {ComponentType} from 'react'
-import {StyleContext} from "./index";
 
 export type CSSRule = {
     cssText: string;
@@ -10,6 +9,22 @@ export type ParentRule = {
     cssText: string;
     selectorText: string;
 }
+
+export type Rules = (CSSRule | ParentRule)[];
+
+export interface StylesheetPartial<T> {
+    rules: T;
+    deleteRule: (index: number) => void;
+    insertRule: (cssText: string, index?: number) => number;
+}
+
+export interface ClientServerStylesheet<T> {
+    hashes: string[];
+    collectHash: (hash: string) => number;
+    sheet: StylesheetPartial<T>;
+}
+
+export const StyleContext = React.createContext<ClientServerStylesheet<Rules> | undefined>(undefined);
 
 const Rule = (cssText: string): CSSRule | ParentRule => {
     if (cssText.substr(0, 1) === "@") {
@@ -31,17 +46,8 @@ const Rule = (cssText: string): CSSRule | ParentRule => {
     }
 };
 
-export interface Stylesheet {
-    rules: (CSSRule | ParentRule)[];
-    hashes: string[];
-    deleteRule: (index: number) => void;
-    insertRule: (cssText: string, index?: number) => number;
-    collectHash: (hash: string) => number;
-}
-
-const Stylesheet = (): Stylesheet => {
-    const rules: (CSSRule | ParentRule)[] = [];
-    const hashes: string[] = [];
+const StylesheetPartial = (): StylesheetPartial<Rules> => {
+    const rules: Rules = [];
 
     const deleteRule = (index: number) => {
         rules.splice(index, 1);
@@ -52,35 +58,80 @@ const Stylesheet = (): Stylesheet => {
         return index || rules.length - 1;
     };
 
+    return {
+        rules,
+        deleteRule,
+        insertRule,
+    };
+};
+
+const ServerStylesheet = (): ClientServerStylesheet<Rules> => {
+    const hashes: string[] = [];
     const collectHash = (hash: string) => hashes.push(hash);
 
     return {
-        rules,
+        sheet: StylesheetPartial(),
         hashes,
-        deleteRule,
-        insertRule,
         collectHash
     };
 };
 
-export default () => {
-    const stylesheet = Stylesheet();
+const ClientStylesheet = (sheet: StylesheetPartial<CSSRuleList>, hashes: string[] = []): ClientServerStylesheet<CSSRuleList> => {
+    const collectHash = (hash: string) => hashes.push(hash);
 
-    const collectStyles = (app: ComponentType) => {
-        return React.createElement(
-            StyleContext.Provider,
-            {value: stylesheet},
-            app
+    return {
+        sheet,
+        hashes,
+        collectHash
+    };
+};
+
+export const createStylesheet = (): ClientServerStylesheet<CSSRuleList> | undefined => {
+    if (typeof document !== 'undefined') {
+        const myStyle = document.querySelector<HTMLStyleElement>("style[data-my-styled]");
+
+        if (myStyle) {
+            const hashes = myStyle.getAttribute("data-my-styled");
+
+            if (myStyle.sheet) {
+                return ClientStylesheet(
+                    // TODO: fix unknown - cast...
+                    myStyle.sheet as unknown as CSSStyleSheet,
+                    (hashes && hashes.split(" ")) || undefined
+                );
+            }
+        }
+
+        const style = document.createElement("style");
+        style.setAttribute("data-my-styled", "");
+
+        // WebKit hack :(
+        style.appendChild(document.createTextNode(""));
+
+        document.head.appendChild(style);
+
+        return ClientStylesheet(
+            // TODO: fix unknown - cast...
+            style.sheet as unknown as CSSStyleSheet
         );
-    };
+    }
+};
 
-    const getStyles = () => {
-        return (stylesheet.rules.length > 0 && `<style data-my-styled="${stylesheet.hashes.join(" ")}" data-ssr="true">${stylesheet.rules.map(rule => rule.cssText).join("")}</style>`) || "";
-    };
+export default () => {
+    const stylesheet = ServerStylesheet();
+
+    const collectStyles = (app: ComponentType) => React.createElement(
+        StyleContext.Provider,
+        {value: stylesheet},
+        app
+    );
+
+    const getStyles = () =>
+        (stylesheet.sheet.rules.length > 0 && `<style data-my-styled="${stylesheet.hashes.join(" ")}" data-ssr="true">${stylesheet.sheet.rules.map(rule => rule.cssText).join("")}</style>`) || "";
 
     return {
         collectStyles,
-        rules: stylesheet.rules,
+        rules: stylesheet.sheet.rules,
         getStyles
     };
 }
