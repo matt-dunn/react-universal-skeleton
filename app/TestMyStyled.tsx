@@ -3,7 +3,7 @@ import React, {ReactNode, useEffect, useRef, useState} from 'react'
 import myStyled from "components/myStyled";
 // import myStyled from "styled-components";
 
-const Fancy = ({children, className}: {children?: ReactNode, className?: string, fancy?: boolean}) => {
+const Fancy = ({children, className}: {children?: ReactNode; className?: string; fancy?: boolean}) => {
     return (
         <div className={className}>
             Fancy:
@@ -12,7 +12,7 @@ const Fancy = ({children, className}: {children?: ReactNode, className?: string,
     );
 }
 
-const Styled = myStyled<{color: string, index: number, xxz?: string}>(Fancy)`
+const Styled = myStyled<{color: string; index: number; xxz?: string}>(Fancy)`
     :global(body) {background:${({color}) => (color === "green" && "red") || "#ececec"}}
     padding: ${({index}) => `${20 + ((index || 0) * 50)}px`};
     color: ${({color}) => color};
@@ -43,7 +43,7 @@ const Styled = myStyled<{color: string, index: number, xxz?: string}>(Fancy)`
     margin-top: 100px;
 `;
 
-const Styled2 = myStyled.address`
+const Styled2 = myStyled("address")`
     border: 1px solid red;
     padding: 10px;
 
@@ -56,7 +56,7 @@ const Styled3 = myStyled(Styled2)`
     font-size: 20px;
 `;
 
-const Styled4 = myStyled.address`
+const Styled4 = myStyled("address")`
     @font-face {
       font-family: 'Modak';
       font-style: normal;
