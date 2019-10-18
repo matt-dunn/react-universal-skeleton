@@ -5,3 +5,4 @@ dist
 .idea
 .imported.js
 reports
+.DS_Store
