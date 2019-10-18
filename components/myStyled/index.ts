@@ -27,12 +27,8 @@ const stylesheet = createStylesheet();
 
 const myStyled = <P>(Component: MyStyledComponent<P & MyStyledComponentProps>): MyStyled<P, MyStyledTemplate<P>> => (strings, ...args) => {
     const updateRule = (prevClassName: string | undefined, props: any, stylesheet?: ClientServerStylesheet<CSSRuleList | Rules>) => {
-        if (prevClassName && args.length === 0) {   // Static template
-            return prevClassName;
-        }
-
         if (stylesheet) {
-            const rule = parseRule(strings, args, props);
+            const rule = args.length === 0 && strings.join("") || parseRule(strings, args, props);
             const hash = createHash(rule);
             const className = generateClassName(Component, hash);
 
@@ -50,8 +46,7 @@ const myStyled = <P>(Component: MyStyledComponent<P & MyStyledComponentProps>): 
 
     const MyStyled = ({children, ...props}: MyStyledComponentProps) => {
         const prevClassName = useRef<string | undefined>(undefined);
-        const className = updateRule(prevClassName.current, props, useContext(StyleContext) || stylesheet);
-        prevClassName.current = className;
+        const className = prevClassName.current = updateRule(prevClassName.current, props, useContext(StyleContext) || stylesheet);
 
         return React.createElement<any>(Component, {...props, className: [props.className, className].join(" ")}, children);
     };
