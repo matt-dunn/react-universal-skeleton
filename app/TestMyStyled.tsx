@@ -8,6 +8,7 @@ const Fancy = ({children, className}: {children?: ReactNode; className?: string;
         <div className={className}>
             Fancy:
             {children}
+            <p className="yes">Hello!!!</p>
         </div>
     );
 }
@@ -23,9 +24,9 @@ const Styled = myStyled<{color: string; index: number; xxz?: string}>(Fancy)`
         font-weight: bold;
     `}
     
-    ${3}
-    ${props => props.xxz}
-
+    ${props => props.color}
+    ${false}
+    
     &:hover {
         background-color: ${({color}) => (color === "blue" && "green") || "yellow"}
     }
@@ -41,6 +42,12 @@ const Styled = myStyled<{color: string; index: number; xxz?: string}>(Fancy)`
     }
     
     margin-top: 100px;
+
+    ${props => props.color} {a:3}
+    
+    .yes {
+        background-color: red;
+    }
 `;
 
 const Styled2 = myStyled("address")`
@@ -98,7 +105,23 @@ const Styled4 = myStyled("address")`
     background-color: #fff;
 
     font-family: 'Modak';
+    
+    & + & {
+        color: orange;
+    }
 `;
+
+const Button = myStyled("button")`
+    border: 2px solid red;
+    border-radius: 4px;
+    color: #333;
+    padding: 3px 6px;
+`
+
+const PrimaryButton = myStyled(Button)`
+    color: white;
+    background-color: red;
+`
 
 const TestMyStyled = () => {
     const [color, setColor] = useState("green");
@@ -132,12 +155,14 @@ const TestMyStyled = () => {
                     INNER: {color}
                     <p>
                         Para
+                        <Button value={"d"} onClick={() => console.log("Click Hello!")}>Hello</Button>
                     </p>
                 </Styled4>
                 <Styled4 className="my-lovely-horse">
                     INNER: {color}
                     <p>
                         Para
+                        <PrimaryButton onClick={() => console.log("Click There!")}>There</PrimaryButton>
                     </p>
                 </Styled4>
             </Styled>
@@ -161,3 +186,33 @@ const TestMyStyled = () => {
 };
 
 export default TestMyStyled;
+
+
+type Fancy2Props = {
+    moose: string;
+    hole: boolean;
+    bum: boolean;
+}
+const Fancy2 = ({}: Fancy2Props) => {
+    return null;
+}
+
+
+const Styled5 = myStyled<Fancy2Props>("div")`
+    border: 1px solid red;
+    padding: 10px;
+    ${props => props.moose && "2"}
+
+    &:hover {
+        background-color: red;
+    }
+`;
+
+const Styled6 = myStyled
+
+// const x = myStyled().
+const X = () => {
+    return (
+        <Styled5 value={3} className={""} moose="2" hole={true} bum={true}/>
+    )
+}
