@@ -2,7 +2,7 @@ import React, {ComponentType, ReactNode, useContext, useRef} from 'react'
 
 import {createHash} from "./hash";
 import {parseRule, generateClassName, updateSheetRule} from "./utils";
-import {ClientServerStylesheet, createStylesheet, StyleContext, Rules} from "./stylesheet";
+import {ClientServerStylesheet, createStylesheet, StyleContext, AnyRules} from "./stylesheet";
 
 export interface MyStyledComponentProps {
     className?: string;
@@ -26,7 +26,7 @@ function isComponent(arg: any): arg is ComponentType {
 const stylesheet = createStylesheet();
 
 const myStyled = <P>(Component: MyStyledComponent<P & MyStyledComponentProps>): MyStyled<P, MyStyledTemplate<P>> => (strings, ...args) => {
-    const updateRule = (prevClassName: string | undefined, props: any, stylesheet?: ClientServerStylesheet<CSSRuleList | Rules>) => {
+    const updateRule = (prevClassName: string | undefined, props: any, stylesheet?: ClientServerStylesheet<CSSRuleList | AnyRules>) => {
         if (stylesheet) {
             const rule = args.length === 0 && strings.join("") || parseRule(strings, args, props);
             const hash = createHash(rule);

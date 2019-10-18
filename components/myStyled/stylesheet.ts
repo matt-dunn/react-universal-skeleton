@@ -2,15 +2,16 @@ import React, {ComponentType} from 'react'
 
 export type CSSRule = {
     cssText: string;
-    cssRules: CSSRule[];
-}
-
-export type ParentRule = {
-    cssText: string;
     selectorText: string;
 }
 
-export type Rules = (CSSRule | ParentRule)[];
+export type OtherRule = {
+    cssText: string;
+    cssRules?: CSSRule[];
+}
+
+export type AnyRule = CSSRule | OtherRule;
+export type AnyRules = AnyRule[];
 
 export interface StylesheetPartial<T> {
     rules: T;
@@ -24,16 +25,16 @@ export interface ClientServerStylesheet<T> {
     sheet: StylesheetPartial<T>;
 }
 
-export const StyleContext = React.createContext<ClientServerStylesheet<Rules> | undefined>(undefined);
+export const StyleContext = React.createContext<ClientServerStylesheet<AnyRules> | undefined>(undefined);
 
-const Rule = (cssText: string): CSSRule | ParentRule => {
+const AnyRule = (cssText: string): AnyRule => {
     if (cssText.substr(0, 1) === "@") {
         const match = cssText.match(/.*?\{(?<selectorText>.*)/);
 
         return {
             cssText,
-            cssRules: match && match.groups && match.groups.selectorText.slice(0, -1).split("}").map(rule => rule && Rule(rule + "}")).filter(rule => rule)
-        } as CSSRule
+            cssRules: match && match.groups && match.groups.selectorText.slice(0, -1).split("}").map(rule => rule && AnyRule(rule + "}")).filter(rule => rule)
+        } as OtherRule
     } else {
         const match = cssText.match(/(?<selectorText>.*?)\{/);
 
@@ -42,19 +43,19 @@ const Rule = (cssText: string): CSSRule | ParentRule => {
         return {
             cssText,
             selectorText
-        } as ParentRule;
+        } as CSSRule;
     }
 };
 
-const StylesheetPartial = (): StylesheetPartial<Rules> => {
-    const rules: Rules = [];
+const StylesheetPartial = (): StylesheetPartial<AnyRules> => {
+    const rules: AnyRules = [];
 
     const deleteRule = (index: number) => {
         rules.splice(index, 1);
     };
 
     const insertRule = (cssText: string, index?: number) => {
-        rules.splice(index || rules.length - 1, 0, Rule(cssText));
+        rules.splice(index || rules.length - 1, 0, AnyRule(cssText));
         return index || rules.length - 1;
     };
 
@@ -65,7 +66,7 @@ const StylesheetPartial = (): StylesheetPartial<Rules> => {
     };
 };
 
-const ServerStylesheet = (): ClientServerStylesheet<Rules> => {
+const ServerStylesheet = (): ClientServerStylesheet<AnyRules> => {
     const hashes: string[] = [];
     const collectHash = (hash: string) => hashes.push(hash);
 

@@ -2,7 +2,7 @@ import {isFunction} from "lodash";
 import Stylis from "stylis";
 
 import {MyStyledComponent} from "./index";
-import {Rules, StylesheetPartial} from "./stylesheet";
+import {AnyRules, StylesheetPartial} from "./stylesheet";
 
 export const parseRule = <T>(strings: TemplateStringsArray, args: T[], props: any): string => strings.reduce((rule: string[], part: string, index: number) => {
     rule.push(part);
@@ -18,7 +18,7 @@ export const parseRule = <T>(strings: TemplateStringsArray, args: T[], props: an
 // const generateClassName = (Component, hash) => `${Component.displayName || Component.name || Component.type || Component}__${hash}`;
 export const generateClassName = (Component: MyStyledComponent<any>, hash: string): string => `ms__${hash}`;
 
-export const updateSheetRule = (sheet: StylesheetPartial<CSSRuleList | Rules>, className: string, rule: string) => {
+export const updateSheetRule = (sheet: StylesheetPartial<CSSRuleList | AnyRules>, className: string, rule: string) => {
     const DEBUG: string[] = [];
 
     const selectorText = `.${className}`;
