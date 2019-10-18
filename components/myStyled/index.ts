@@ -9,7 +9,7 @@ export interface MyStyledComponentProps {
     children?: ReactNode | null;
 }
 
-export type MyStyledComponent<P extends MyStyledComponentProps> = ComponentType<P> | keyof JSX.IntrinsicElements;
+export type MyStyledComponent<P extends keyof JSX.IntrinsicElements | React.ComponentType<P> | MyStyledComponentProps> = ComponentType<P> | keyof JSX.IntrinsicElements;
 
 export interface MyStyled<P, T> {
     (string: TemplateStringsArray, ...args: T[]): MyStyledComponent<P>;
@@ -25,7 +25,7 @@ function isComponent(arg: any): arg is ComponentType {
 
 const stylesheet = createStylesheet();
 
-const myStyled = <P>(Component: MyStyledComponent<P & MyStyledComponentProps>): MyStyled<P, MyStyledTemplate<P>> => (strings, ...args) => {
+const myStyled = <P>(Component: MyStyledComponent<P>): MyStyled<P, MyStyledTemplate<P>> => (strings, ...args) => {
     const updateRule = (prevClassName: string | undefined, props: any, stylesheet?: ClientServerStylesheet<CSSRuleList | AnyRules>) => {
         if (stylesheet) {
             const rule = args.length === 0 && strings.join("") || parseRule(strings, args, props);
