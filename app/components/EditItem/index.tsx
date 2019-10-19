@@ -27,8 +27,10 @@ const Value = styled(TextInput)`
   margin: 10px 0;
   width: 100%;
   
-  textarea {
-    background-color: transparent;
+  .rrui__input-field {
+    &, &:focus {
+      background-color: transparent;
+    }
   }
 `;
 

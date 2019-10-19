@@ -1,6 +1,6 @@
 import React, {useCallback} from 'react'
 import {Helmet} from 'react-helmet-async'
-import styled from "styled-components";
+import styled, {css} from "styled-components";
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import TrackVisibility from 'react-on-screen';
@@ -36,13 +36,19 @@ const AboutItem = styled(EditItem)`
   max-width: 300px;
 `
 
+const AboutListItem = styled(EditItem)<{isImportant?: boolean}>`
+  ${({isImportant}) => isImportant && css`background-color: #eee;`}
+`
+
+const importantIds = ["item-1", "item-2"]
+
 const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditItem, $status}: AboutProps) => {
     const { page } = useParams();
 
     const renderListItem = useCallback((item: IExampleItemState) => {
         // return <div>ITEM - {item.name}</div>
-        return <EditItem item={item} onChange={onExampleEditItem} type="primary"/>
-    }, [onExampleEditItem])
+        return <AboutListItem item={item} onChange={onExampleEditItem} type="primary" isImportant={importantIds.indexOf(item.id) !== -1}/>
+    }, [importantIds, onExampleEditItem])
 
     return (
         <Page>
