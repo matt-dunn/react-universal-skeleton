@@ -1,4 +1,4 @@
-import React, {ReactNode, useCallback} from "react";
+import React, {ComponentType, ReactNode, useCallback} from "react";
 import styled, {css} from "styled-components";
 import { Link } from 'react-router-dom';
 
@@ -10,7 +10,7 @@ import {IExampleItemState} from "../../reducers/__dummy__/example";
 import {ExampleEditItem, IExampleGetList} from "../api/__dummy__/example";
 import PlaceHolderItem from "app/components/Placeholder/Item";
 
-import Item from "./Item";
+import Item from "../EditItem";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
@@ -24,6 +24,7 @@ export type ListProps = {
     $status?: IStatus;
     isShown?: boolean;
     activePage?: number;
+    children?: (item: IExampleItemState) => JSX.Element
 };
 
 const ListContainer = styled.div`
@@ -109,7 +110,7 @@ const PageLink = styled(Link)`
   }
 `;
 
-const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditItem, activePage, ...props}: ListProps) => {
+const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditItem, activePage, children, ...props}: ListProps) => {
     const {complete, isActive, processing, hasError, error, outstandingTransactionCount} = Status(items.$status);
 
     usePerformAction(
@@ -127,7 +128,7 @@ const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditIt
         useCallback(() => isShown, [isShown])
     );
 
-    useWhatChanged(List, { activePage, isShown, items, $status, onExampleGetList, onExampleEditItem, usePerformAction, ...props });
+    useWhatChanged(List, { activePage, isShown, items, $status, onExampleGetList, onExampleEditItem, children, usePerformAction, ...props });
 
     return (
         <ListContainer>
@@ -147,10 +148,12 @@ const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditIt
                     <ListItems>
                         {items.map(item => (
                             <ListItem key={item.id}>
+                                {(children && children(item)) ||
                                 <Item
                                     item={item}
                                     onChange={onExampleEditItem}
                                 />
+                                }
                             </ListItem>
                         ))}
                     </ListItems>

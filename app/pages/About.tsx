@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useCallback} from 'react'
 import {Helmet} from 'react-helmet-async'
 import styled from "styled-components";
 import { connect } from 'react-redux';
@@ -10,6 +10,7 @@ import { IStatus } from 'components/state-mutate-with-status/status';
 import {AboveTheFold, ClientOnly} from "components/actions";
 import List from "app/components/List";
 import Item from "app/components/Item";
+import EditItem from "app/components/EditItem";
 
 import Page from '../styles/Page'
 import * as actions from '../actions';
@@ -30,8 +31,18 @@ const Title = styled.h2`
     color: #ccc;
 `;
 
+const AboutItem = styled(EditItem)`
+  margin: 50px auto;
+  max-width: 300px;
+`
+
 const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditItem, $status}: AboutProps) => {
     const { page } = useParams();
+
+    const renderListItem = useCallback((item: IExampleItemState) => {
+        // return <div>ITEM - {item.name}</div>
+        return <EditItem item={item} onChange={onExampleEditItem} type="primary"/>
+    }, [])
 
     return (
         <Page>
@@ -45,14 +56,36 @@ const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIt
             </Title>
 
             <AboveTheFold>
-                <List items={items} onExampleGetList={onExampleGetList} onExampleEditItem={onExampleEditItem} activePage={parseInt(page || "0", 10)}/>
+                {/*<List items={items} onExampleGetList={onExampleGetList} onExampleEditItem={onExampleEditItem} activePage={parseInt(page || "0", 10)}>*/}
+                {/*    /!*{(item: IExampleItemState) => {*!/*/}
+                {/*    /!*    return <div>ITEM - {item.name}</div>*!/*/}
+                {/*    /!*}}*!/*/}
+                {/*</List>*/}
                 {/*<TrackVisibility once={true} partialVisibility={true}>*/}
                 {/*    {({ isVisible }) => <List isShown={isVisible} items={items} onExampleGetList={onExampleGetList} onExampleEditItem={onExampleEditItem}/>}*/}
                 {/*</TrackVisibility>*/}
 
+                <List items={items} onExampleGetList={onExampleGetList} onExampleEditItem={onExampleEditItem} activePage={parseInt(page || "0", 10)}>
+                    {renderListItem}
+                </List>
+
                 <ClientOnly>
                 </ClientOnly>
             </AboveTheFold>
+
+            {/*<TrackVisibility once={true} partialVisibility={true}>*/}
+            {/*    {({ isVisible }) =>*/}
+            {/*        <List isShown={isVisible} items={items} onExampleGetList={onExampleGetList} onExampleEditItem={onExampleEditItem} activePage={parseInt(page || "0", 10)}>*/}
+            {/*            {renderListItem}*/}
+            {/*        </List>*/}
+            {/*    }*/}
+            {/*</TrackVisibility>*/}
+
+            {/*<TrackVisibility once={true} partialVisibility={true}>*/}
+            {/*    {({ isVisible }) => items && items[0] && items[0].id && <EditItem item={items[0]} onChange={onExampleEditItem}/>}*/}
+            {/*</TrackVisibility>*/}
+
+            {items && items[0] && items[0].id && <AboutItem item={items[0]} onChange={onExampleEditItem}/>}
 
             <div style={{height: "110vh"}}/>
 
