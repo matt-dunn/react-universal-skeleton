@@ -82,7 +82,15 @@ export const deepDiff = (o1: BaseDiffObject, o2: BaseDiffObject, p: string, path
   let changes = {};
 
   if (o1 !== o2) {
-    if (isObject(o1) && isObject(o2)) {
+    if (isFunction(o1) || isFunction(o2)) {
+      set(changes, `${path}.${p.toString()}`, {
+        warning: 'AVOIDABLE',
+        avoidable: true,
+        __VALUE__: true,
+        before: getObject(o1),
+        after: getObject(o2),
+      });
+    } else if (isObject(o1) && isObject(o2)) {
       const unionKeys: string[] = union(
           o1.get && o1.keySeq ? o1.keySeq().toArray() : keys(o1),
           o2.get && o2.keySeq ? o2.keySeq().toArray() : keys(o2),
@@ -164,7 +172,7 @@ export const outputPathParts = (id: string, o: any, parent?: any) => {
 
       if (counts) {
         if (counts.valueCount === counts.avoidableCount) {
-          groupStyle = 'background-color:orange;color:white;border-radius:1em;padding:2px 5px;';
+          groupStyle = 'background-color:red;color:white;border-radius:1em;padding:2px 5px;';
           groupTitleSubText = ' (ALL POTENTIALLY AVOIDABLE)';
         } else if (counts.avoidableCount > 0) {
           groupStyle = 'background-color:yellow;color:black;border-radius:1em;padding:2px 5px;';

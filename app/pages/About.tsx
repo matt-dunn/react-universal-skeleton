@@ -18,6 +18,8 @@ import {IAppState} from '../reducers';
 import {IExampleItemState} from '../reducers/__dummy__/example';
 import {IExampleGetList, IExampleGetItem, ExampleEditItem} from "../components/api/__dummy__/example";
 
+import useWhatChanged from "components/whatChanged/useWhatChanged";
+
 export type AboutProps = {
     items: IExampleItemState[];
     item?: IExampleItemState;
@@ -49,6 +51,8 @@ const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIt
         // return <div>ITEM - {item.name}</div>
         return <AboutListItem item={item} onChange={onExampleEditItem} type="primary" isImportant={importantIds.indexOf(item.id) !== -1}/>
     }, [importantIds, onExampleEditItem])
+
+    useWhatChanged(About, { items, item, onExampleGetList, onExampleGetItem, onExampleEditItem, $status, renderListItem, page});
 
     return (
         <Page>
