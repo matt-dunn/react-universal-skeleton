@@ -6,18 +6,21 @@ import TextInput from 'react-responsive-ui/modules/TextInput'
 import Status from "components/state-mutate-with-status/status";
 import useAutosave from "components/hooks/useAutosave";
 
-import {IExampleItemState} from "../../../reducers/__dummy__/example";
-import {IExampleResponse} from "../../api/__dummy__/example";
+import {IExampleItemState} from "../../reducers/__dummy__/example";
+import {IExampleResponse} from "../api/__dummy__/example";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
 export type ItemProps = {
     item: IExampleItemState;
     onChange?: (item: IExampleItemState) => Promise<IExampleResponse>;
+    type?: "primary" | "secondary";
+    className?: string;
 };
 
-const Container = styled.div`
+const Container = styled.div<{type?: string}>`
   display: flex;
+  ${({type}) => type === "primary" && css`border: 1px dashed #ccc; padding: 5px;`}
 `;
 
 const Value = styled(TextInput)`
@@ -33,7 +36,7 @@ const Saving = styled.div`
   font-size: 10px;
 `;
 
-const Item = ({item, onChange}: ItemProps) => {
+const Item = ({item, onChange, type, className}: ItemProps) => {
     const {id, name, $status} = item;
     const {complete, isActive, processing, hasError, error, lastUpdated} = Status($status);
 
@@ -66,8 +69,8 @@ const Item = ({item, onChange}: ItemProps) => {
     useWhatChanged(Item, {saving, inputEl, item, onChange, value, handleChange, save}, {idProp: "item.id"});
 
     return (
-        <>
-            <Container>
+        <div className={className}>
+            <Container type={type}>
                 <Value
                     multiline
                     label="Item"
@@ -80,7 +83,7 @@ const Item = ({item, onChange}: ItemProps) => {
                     Saving...
                 </Saving>
             }
-        </>
+        </div>
     )
 }
 
