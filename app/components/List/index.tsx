@@ -24,7 +24,7 @@ export type ListProps = {
     $status?: IStatus;
     isShown?: boolean;
     activePage?: number;
-    children?: (item: IExampleItemState) => JSX.Element
+    children?: (item: IExampleItemState) => JSX.Element;
 };
 
 const ListContainer = styled.div`

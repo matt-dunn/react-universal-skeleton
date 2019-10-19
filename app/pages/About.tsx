@@ -42,7 +42,7 @@ const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIt
     const renderListItem = useCallback((item: IExampleItemState) => {
         // return <div>ITEM - {item.name}</div>
         return <EditItem item={item} onChange={onExampleEditItem} type="primary"/>
-    }, [])
+    }, [onExampleEditItem])
 
     return (
         <Page>
