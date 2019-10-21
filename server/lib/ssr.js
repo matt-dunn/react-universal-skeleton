@@ -18,7 +18,7 @@ import {getDataFromTree} from "components/actions";
 import ErrorProvider from "components/actions/ErrorProvider";
 import {errorLike} from "components/error";
 
-import {ServerStylesheet as Stylesheet} from "components/myStyled";
+import StylesheetServer from "components/myStyled/server";
 
 const parseHelmetTemplate = helmet => (template, ...vars) => {
     const matcher = /{(\w*)}/g;
@@ -61,13 +61,13 @@ export default async (req, res) => {
     try {
         const sheet = new ServerStyleSheet()
 
-        const stylesheet = Stylesheet()
+        const stylesheetServer = StylesheetServer()
 
-        await getDataFromTree(stylesheet.collectStyles(sheet.collectStyles(app)));
+        await getDataFromTree(stylesheetServer.collectStyles(sheet.collectStyles(app)));
 
-        const stream = sheet.interleaveWithNodeStream(
-            renderToNodeStream(stylesheet.collectStyles(sheet.collectStyles(app)))
-        )
+        const stream = stylesheetServer.interleaveWithNodeStream(sheet.interleaveWithNodeStream(
+            renderToNodeStream(stylesheetServer.collectStyles(sheet.collectStyles(app)))
+        ));
 
         if (context.url) {
             console.log("REDIRECT:", context.url)
@@ -94,7 +94,6 @@ export default async (req, res) => {
                 {title}{meta}
                 <link rel="canonical" href="${req.protocol}://${req.hostname}${req.originalUrl}" />
                 `}
-                ${stylesheet.getStyles()}
                 ${closeHead}
             `.trim())
             stream

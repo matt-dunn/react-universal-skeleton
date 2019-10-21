@@ -1,4 +1,4 @@
-import React, {ReactElement} from 'react'
+import React from 'react'
 
 export type CSSRule = {
     cssText: string;
@@ -66,8 +66,9 @@ const StylesheetPartial = (): StylesheetPartial<AnyRules> => {
     };
 };
 
-const ServerStylesheet = (): ClientServerStylesheet<AnyRules> => {
+export const ServerStylesheet = (): ClientServerStylesheet<AnyRules> => {
     const hashes: string[] = [];
+
     const collectHash = (hash: string) => hashes.push(hash);
 
     return {
@@ -92,6 +93,9 @@ export const createStylesheet = (): ClientServerStylesheet<CSSRuleList> | undefi
         const myStyle = document.querySelector<HTMLStyleElement>("style[data-my-styled]");
 
         if (myStyle) {
+            if (!myStyle.parentElement || myStyle.parentElement.tagName.toUpperCase() !== "HEAD") {
+                document.getElementsByTagName("head")[0].appendChild(myStyle)
+            }
             const hashes = myStyle.getAttribute("data-my-styled");
 
             if (myStyle.sheet) {
@@ -117,22 +121,3 @@ export const createStylesheet = (): ClientServerStylesheet<CSSRuleList> | undefi
         );
     }
 };
-
-export default () => {
-    const stylesheet = ServerStylesheet();
-
-    const collectStyles = (tree: ReactElement): ReactElement => React.createElement(
-        StyleContext.Provider,
-        {value: stylesheet},
-        tree
-    );
-
-    const getStyles = () =>
-        (stylesheet.sheet.rules.length > 0 && `<style data-my-styled="${stylesheet.hashes.join(" ")}" data-ssr="true">${stylesheet.sheet.rules.map(rule => rule.cssText).join("")}</style>`) || "";
-
-    return {
-        collectStyles,
-        rules: stylesheet.sheet.rules,
-        getStyles
-    };
-}

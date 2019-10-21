@@ -17,15 +17,11 @@ const Styled = myStyled<{color: string; index: number; xxz?: string}>(Fancy)`
     :global(body) {background:${({color}) => (color === "green" && "red") || "#ececec"}}
     padding: ${({index}) => `${20 + ((index || 0) * 50)}px`};
     color: ${({color}) => color};
-    ${props => props.index}
     border: 3px solid orange;
     ${({color, index}) => color === "blue" && index === 0 && `
         background-color: orange;
         font-weight: bold;
     `}
-    
-    ${props => props.color}
-    ${false}
     
     &:hover {
         background-color: ${({color}) => (color === "blue" && "green") || "yellow"}
@@ -51,7 +47,7 @@ const Styled = myStyled<{color: string; index: number; xxz?: string}>(Fancy)`
 `;
 
 const Styled2 = myStyled("address")`
-    border: 1px solid red;
+    border: 1px solid violet;
     padding: 10px;
 
     &:hover {
@@ -181,6 +177,12 @@ const TestMyStyled = () => {
                     </p>
                 </Styled4>
             </Styled>
+
+            {/*{Array.from(Array(1000).keys()).map(index => {*/}
+            {/*    return <Styled2 key={index}>{index}</Styled2>*/}
+            {/*})}*/}
+
+            {/*<Styled4>END!</Styled4>*/}
         </>
     );
 };
