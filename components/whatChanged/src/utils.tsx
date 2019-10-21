@@ -29,7 +29,7 @@ const getObjectProp = (o: any, name: string) => {
 
 const getObject = (o: any) => {
   if (isFunction(o)) {
-    return 'Function';
+    return 'Function ' + (o.name || "");
   } else if (isObject(o)) {
     const seenObjects: any[] = [];
 
@@ -51,8 +51,12 @@ const getObject = (o: any) => {
   return o;
 };
 
-const getType = (o: any) => {
-  const parts = [];
+const getType = (o: any): string => {
+  const parts: string[] = [];
+
+  if(o.type && o.type.type) {
+      parts.push(getType(o.type))
+  }
 
   if (o.type && (o.type.displayName || o.type.name)) {
     parts.push(o.type.displayName || o.type.name);
@@ -62,7 +66,7 @@ const getType = (o: any) => {
     parts.push(o.type);
   }
 
-  if (o.$$typeof && o.$$typeof.toString) {
+  if (parts.length === 0 && o.$$typeof && o.$$typeof.toString) {
     parts.push(o.$$typeof.toString());
   }
 
@@ -84,8 +88,6 @@ export const deepDiff = (o1: BaseDiffObject, o2: BaseDiffObject, p: string, path
   if (o1 !== o2) {
     if (isFunction(o1) || isFunction(o2)) {
       set(changes, `${path}.${p.toString()}`, {
-        warning: 'AVOIDABLE',
-        avoidable: true,
         __VALUE__: true,
         before: getObject(o1),
         after: getObject(o2),
@@ -98,8 +100,8 @@ export const deepDiff = (o1: BaseDiffObject, o2: BaseDiffObject, p: string, path
 
       if (o1.$$typeof || o2.$$typeof) {
         changes = deepDiff(
-            { props: o1.props, state: o1.state },
-            { props: o2.props, state: o2.state },
+            (o1.state && { props: o1.props, state: o1.state }) || o1.props,
+            (o1.state && { props: o2.props, state: o2.state }) || o2.props,
             getType(o1).replace(/\./g, '__@@__'),
             (path ? `${path}.` : '') + p.toString(),
         );

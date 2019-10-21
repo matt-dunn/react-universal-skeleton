@@ -52,6 +52,8 @@ const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIt
         return <AboutListItem item={item} onChange={onExampleEditItem} type="primary" isImportant={importantIds.indexOf(item.id) !== -1}/>
     }, [importantIds, onExampleEditItem])
 
+    const renderItem = useCallback(({ isVisible }) => <Item isShown={isVisible} item={item} onExampleGetItem={onExampleGetItem}/>, [item])
+
     useWhatChanged(About, { items, item, onExampleGetList, onExampleGetItem, onExampleEditItem, $status, renderListItem, page});
 
     return (
@@ -100,7 +102,7 @@ const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIt
             <div style={{height: "110vh"}}/>
 
             <TrackVisibility once={true} partialVisibility={true}>
-                {({ isVisible }) => <Item isShown={isVisible} item={item} onExampleGetItem={onExampleGetItem}/>}
+                {renderItem}
             </TrackVisibility>
 
             <p>END.</p>
