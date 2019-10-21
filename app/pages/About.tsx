@@ -50,9 +50,9 @@ const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIt
     const renderListItem = useCallback((item: IExampleItemState) => {
         // return <div>ITEM - {item.name}</div>
         return <AboutListItem item={item} onChange={onExampleEditItem} type="primary" isImportant={importantIds.indexOf(item.id) !== -1}/>
-    }, [importantIds, onExampleEditItem])
+    }, [onExampleEditItem])
 
-    const renderItem = useCallback(({ isVisible }) => <Item isShown={isVisible} item={item} onExampleGetItem={onExampleGetItem}/>, [item])
+    const renderItem = useCallback(({ isVisible }) => <Item isShown={isVisible} item={item} onExampleGetItem={onExampleGetItem}/>, [item, onExampleGetItem])
 
     useWhatChanged(About, { items, item, onExampleGetList, onExampleGetItem, onExampleEditItem, $status, renderListItem, page});
 
