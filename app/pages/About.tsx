@@ -39,7 +39,7 @@ const AboutItem = styled(EditItem)`
 `
 
 const AboutListItem = styled(EditItem)<{isImportant?: boolean}>`
-  ${({isImportant}) => isImportant && css`background-color: #eee;`}
+  ${({isImportant}) => isImportant && css`background-color: rgba(230, 230, 230, 0.5);`}
 `
 
 const importantIds = ["item-1", "item-2"]
