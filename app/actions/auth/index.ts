@@ -1,6 +1,6 @@
 import { createStandardAction } from 'typesafe-actions';
 
-import { IPayload } from 'components/redux/middleware/stateDecorator';
+import {AuthApi} from "../../components/api/auth";
 
 export interface Login {
     username: string;
@@ -9,7 +9,7 @@ export interface Login {
 
 const login = createStandardAction('@auth/LOGIN')
     .map(({username, password}: Login) => ({
-        payload: ({ services }: IPayload) => services.login(username, password)
+        payload: ({ services }: {services: AuthApi}) => services.login(username, password)
     }));
 
 export { login };

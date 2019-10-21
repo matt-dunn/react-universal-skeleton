@@ -110,12 +110,14 @@ const PageLink = styled(Link)`
   }
 `;
 
+const MAX_ITEMS = 4;
+
 const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditItem, activePage, children, ...props}: ListProps) => {
     const {complete, isActive, processing, hasError, error, outstandingTransactionCount} = Status(items.$status);
 
     usePerformAction(
         useCallback(() => {
-            return onExampleGetList(activePage)
+            return onExampleGetList(activePage, MAX_ITEMS)
                 .then(e => {
                     console.log("DONE", e)
                     return e;
@@ -140,9 +142,7 @@ const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditIt
             <Loading loading={processing}>
                 {(!items || items.length === 0) ?
                     <Placeholder>
-                        <PlaceHolderListItem/>
-                        <PlaceHolderListItem/>
-                        <PlaceHolderListItem/>
+                        {Array.from(Array(MAX_ITEMS).keys()).map(i => <PlaceHolderListItem key={i}/>)}
                     </Placeholder>
                     :
                     <ListItems>

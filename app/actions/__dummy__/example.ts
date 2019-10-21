@@ -1,11 +1,11 @@
 import { createStandardAction } from 'typesafe-actions';
 
-import { IPayload } from 'components/redux/middleware/stateDecorator';
 import {IExampleItemState} from "../../reducers/__dummy__/example";
+import {IExampleApi} from "../../components/api/__dummy__/example";
 
 const exampleGetList = createStandardAction('@__dummy__/EXAMPLE_GET_LIST')
-    .map((page?: number) => ({
-        payload: ({ services }: IPayload) => services.exampleGetList(page),
+    .map(({page, count}: {page?: number; count?: number}) => ({
+        payload: ({ services }: {services: IExampleApi}) => services.exampleGetList(page, count),
         meta: {
             hasRetry: true
         }
@@ -13,7 +13,7 @@ const exampleGetList = createStandardAction('@__dummy__/EXAMPLE_GET_LIST')
 
 const exampleGetItem = createStandardAction('@__dummy__/EXAMPLE_GET_ITEM')
     .map(() => ({
-        payload: ({ services }: IPayload) => services.exampleGetItem(),
+        payload: ({ services }: {services: IExampleApi}) => services.exampleGetItem(),
         meta: {
             hasRetry: true
         }
@@ -21,7 +21,7 @@ const exampleGetItem = createStandardAction('@__dummy__/EXAMPLE_GET_ITEM')
 
 const exampleEditItem = createStandardAction('@__dummy__/EXAMPLE_EDIT_ITEM')
     .map((item: IExampleItemState) => ({
-        payload: ({ services }: IPayload) => services.exampleEditItem(item),
+        payload: ({ services }: {services: IExampleApi}) => services.exampleEditItem(item),
         meta: {
             hasRetry: true,
             id: item.id,

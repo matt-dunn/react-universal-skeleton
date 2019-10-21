@@ -12,12 +12,9 @@ export type IDependencies = {
 }
 
 export type IOptions = {
+  retryCount?: number;
   dependencies?: IDependencies;
 }
-
-export type IPayload = {
-  retryCount?: number;
-} & IDependencies
 
 export type Meta = {
   hasRetry?: boolean;
