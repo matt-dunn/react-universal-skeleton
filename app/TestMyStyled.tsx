@@ -99,7 +99,7 @@ const Styled4 = myStyled("address")`
     }
     
     background-color: #fff;
-
+    border: 1px solid #ddd;
     font-family: 'Modak';
     
     & + & {
