@@ -1,4 +1,4 @@
-import React, {ComponentType} from 'react'
+import React, {ReactElement} from 'react'
 
 export type CSSRule = {
     cssText: string;
@@ -121,10 +121,10 @@ export const createStylesheet = (): ClientServerStylesheet<CSSRuleList> | undefi
 export default () => {
     const stylesheet = ServerStylesheet();
 
-    const collectStyles = (app: ComponentType) => React.createElement(
+    const collectStyles = (tree: ReactElement): ReactElement => React.createElement(
         StyleContext.Provider,
         {value: stylesheet},
-        app
+        tree
     );
 
     const getStyles = () =>
