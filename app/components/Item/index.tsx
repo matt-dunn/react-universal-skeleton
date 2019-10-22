@@ -31,7 +31,7 @@ const ItemContainer = styled.div<{processing?: boolean}>`
     }
 `;
 
-const PlaceHolderListItem = PlaceHolderItem(styled.div``);
+const PlaceHolderListItem = PlaceHolderItem(styled.div`color:#ddd`);
 
 
 const Item = ({className, isShown = true, item, onExampleGetItem, ...props}: ItemProps) => {
