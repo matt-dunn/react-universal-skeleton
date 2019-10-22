@@ -28,7 +28,7 @@ export type ListProps = {
 };
 
 const ListContainer = styled.div`
-    //max-width: 700px;
+    /*max-width: 700px;*/
     border: 1px solid #ccc;
     margin: 10px auto;
 `;
@@ -48,7 +48,7 @@ const calculateMaxChildren = (children: ReactNode[], dimensions?: ViewportDimens
     return children.length;
 }
 
-const ListItems = styled.ol<{children: ReactNode[], dimensions?: ViewportDimensions, minWidth?: number}>`
+const ListItems = styled.ol<{children: ReactNode[]; dimensions?: ViewportDimensions; minWidth?: number}>`
     display: flex;
     ${list};
     
@@ -66,13 +66,13 @@ const ListItems = styled.ol<{children: ReactNode[], dimensions?: ViewportDimensi
       }}
     }
 
-    //@media only screen and (max-width: 500px) {
-    //  flex-direction: column;
-    //  
-    //  > li {
-    //    width: initial;
-    //  }
-    //}
+    /*@media only screen and (max-width: 500px) {
+      flex-direction: column;
+      
+      > li {
+        width: initial;
+      }
+    }*/
 `;
 
 const ListItem = styled.li`
@@ -81,18 +81,20 @@ const ListItem = styled.li`
     border-bottom: 1px solid #eee;
     margin: 0 -1px -1px 0;
 
-    //&:last-child {
-    //    border-right: none;
-    //}
+    /*
+    &:last-child {
+        border-right: none;
+    }
 
-    //@media only screen and (max-width: 500px) {
-    //    border-right: none;
-    //    border-bottom: 1px solid #eee;
-    //
-    //    &:last-child {
-    //        border-bottom: none;
-    //    }
-    //}
+    @media only screen and (max-width: 500px) {
+        border-right: none;
+        border-bottom: 1px solid #eee;
+
+        &:last-child {
+            border-bottom: none;
+        }
+    }
+     */
 `;
 
 const Placeholder = styled(ListItems)`

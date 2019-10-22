@@ -1,7 +1,7 @@
 import ResizeSensor from "css-element-queries/src/ResizeSensor";
 import {MutableRefObject, useLayoutEffect, useRef, useState} from "react";
 
-export type ViewportDimensions = {width: number, height: number};
+export type ViewportDimensions = {width: number; height: number};
 
 const useViewportWidth = (ref: MutableRefObject<Element | undefined>): ViewportDimensions | undefined => {
     const [dimensions, setDimensions] = useState<ViewportDimensions>();
@@ -21,7 +21,7 @@ const useViewportWidth = (ref: MutableRefObject<Element | undefined>): ViewportD
         return () => {
             resizeSensor.current && resizeSensor.current.detach();
         }
-    }, [ref.current])
+    }, [dimensions, ref])
 
     return dimensions;
 };
