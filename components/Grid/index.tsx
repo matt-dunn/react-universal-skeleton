@@ -32,19 +32,18 @@ const Container = styled.ol<{children: ReactNode[]; totalPaddingWidth?: number, 
 `;
 
 type ResponsiveGrid = {
-    type?: keyof JSX.IntrinsicElements | React.ComponentType<any>;
     children: ReactNode[],
     className?: string;
     minWidth?: number,
     totalPaddingWidth?: number;
 }
 
-export const ResponsiveGrid = ({type, children, className, minWidth, totalPaddingWidth}: ResponsiveGrid) => {
+export const ResponsiveGrid = (as: keyof JSX.IntrinsicElements | React.ComponentType<any>) => ({children, className, minWidth, totalPaddingWidth}: ResponsiveGrid) => {
     const container = useRef();
     const dimensions = useViewportWidth(container);
 
     return (
-        <Container as={type} ref={container as any} className={className} dimensions={dimensions} minWidth={minWidth} totalPaddingWidth={totalPaddingWidth}>
+        <Container as={as} ref={container as any} className={className} dimensions={dimensions} minWidth={minWidth} totalPaddingWidth={totalPaddingWidth}>
             {children}
         </Container>
     )

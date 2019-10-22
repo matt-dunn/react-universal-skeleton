@@ -34,7 +34,7 @@ const ListContainer = styled.div`
     margin: 10px auto;
 `;
 
-const ListItems = styled(ResponsiveGrid)`
+const ListItems = styled(ResponsiveGrid("ol"))`
     min-height: 150px;
 `;
 
