@@ -1,4 +1,4 @@
-import React, {ComponentType, ReactNode, useCallback} from "react";
+import React, {ReactNode, useCallback, useRef} from "react";
 import styled, {css} from "styled-components";
 import { Link } from 'react-router-dom';
 
@@ -28,7 +28,7 @@ export type ListProps = {
 };
 
 const ListContainer = styled.div`
-    max-width: 700px;
+    //max-width: 700px;
     border: 1px solid #ccc;
     margin: 10px auto;
 `;
@@ -37,39 +37,62 @@ const list = css`
     min-height: 100px;
 `;
 
-const ListItems = styled.ol<{children: ReactNode[]}>`
-    display: flex;
-    ${list}
-    
-    > li {
-      width: ${({children}) => (children && `${100 / children.length}%`) || 0};
+
+const calculateMaxChildren = (children: ReactNode[], dimensions?: ViewportDimensions, minWidth?: number) => {
+    const {width} = dimensions || {};
+
+    if (width && minWidth && width / children.length < minWidth) {
+        return Math.floor(width / minWidth);
     }
 
-    @media only screen and (max-width: 500px) {
-      flex-direction: column;
-      
-      > li {
-        width: initial;
-      }
+    return children.length;
+}
+
+const ListItems = styled.ol<{children: ReactNode[], dimensions?: ViewportDimensions, minWidth?: number}>`
+    display: flex;
+    ${list};
+    
+    flex-wrap: wrap;
+    
+    > li {
+      ${({children, dimensions, minWidth}) => {
+        const length = calculateMaxChildren(children, dimensions, minWidth);
+        return css`
+          width: calc(${`${100 / length}%`} - 20px);
+          &:nth-child(${length}n) {
+            border-right: none;
+          }
+        `;
+      }}
     }
+
+    //@media only screen and (max-width: 500px) {
+    //  flex-direction: column;
+    //  
+    //  > li {
+    //    width: initial;
+    //  }
+    //}
 `;
 
 const ListItem = styled.li`
     padding: 10px;
     border-right: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    margin: 0 -1px -1px 0;
 
-    &:last-child {
-        border-right: none;
-    }
+    //&:last-child {
+    //    border-right: none;
+    //}
 
-    @media only screen and (max-width: 500px) {
-        border-right: none;
-        border-bottom: 1px solid #eee;
-
-        &:last-child {
-            border-bottom: none;
-        }
-    }
+    //@media only screen and (max-width: 500px) {
+    //    border-right: none;
+    //    border-bottom: 1px solid #eee;
+    //
+    //    &:last-child {
+    //        border-bottom: none;
+    //    }
+    //}
 `;
 
 const Placeholder = styled(ListItems)`
@@ -110,10 +133,16 @@ const PageLink = styled(Link)`
   }
 `;
 
-const MAX_ITEMS = 4;
+const MAX_ITEMS = 5;
+
+import useViewportWidth, {ViewportDimensions} from "components/hooks/useViewportWidth";
 
 const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditItem, activePage, children, ...props}: ListProps) => {
     const {complete, isActive, processing, hasError, error, outstandingTransactionCount} = Status(items.$status);
+
+    const container = useRef();
+
+    const dimensions = useViewportWidth(container);
 
     usePerformAction(
         useCallback(() => {
@@ -130,10 +159,10 @@ const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditIt
         useCallback(() => isShown, [isShown])
     );
 
-    useWhatChanged(List, { activePage, isShown, items, $status, onExampleGetList, onExampleEditItem, children, usePerformAction, ...props });
+    useWhatChanged(List, { container, dimensions, activePage, isShown, items, $status, onExampleGetList, onExampleEditItem, children, usePerformAction, ...props });
 
     return (
-        <ListContainer>
+        <ListContainer ref={container as any}>
             <div style={{color: "#aaa", fontSize: "9px", padding: "4px", borderBottom: "1px solid #eee"}}>
                 [{!processing && outstandingTransactionCount > 0 ? "CHILDREN UPDATING": "CHILDREN DONE"}]
                 [{processing ? "UPDATING": "DONE"}]
@@ -141,11 +170,11 @@ const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditIt
             </div>
             <Loading loading={processing}>
                 {(!items || items.length === 0) ?
-                    <Placeholder>
+                    <Placeholder dimensions={dimensions} minWidth={200}>
                         {Array.from(Array(MAX_ITEMS).keys()).map(i => <PlaceHolderListItem key={i}/>)}
                     </Placeholder>
                     :
-                    <ListItems>
+                    <ListItems dimensions={dimensions} minWidth={200}>
                         {items.map(item => (
                             <ListItem key={item.id}>
                                 {(children && children(item)) ||
@@ -179,4 +208,4 @@ const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditIt
     )
 }
 
-export default React.memo<ListProps>(List);
+export default React.memo<ListProps>((List));

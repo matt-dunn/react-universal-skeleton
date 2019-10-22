@@ -10,7 +10,7 @@ const PlaceHolderItem = (Component: AnyStyledComponent) => styled(Component)`
     top: 10px;
     background-color: rgba(222, 226, 230, 0.4);
     border-radius: 0.25rem;
-    width: 55%;
+    width: calc(55% - 20px);
     height: 0.75em;
     content: " ";
   }
@@ -22,7 +22,7 @@ const PlaceHolderItem = (Component: AnyStyledComponent) => styled(Component)`
     margin-top: 1.1em;
     background-color: rgba(222, 226, 230, 0.4);
     border-radius: 0.25rem;
-    width: 85%;
+    width: calc(100% - 20px);
     height: 1em;
     content: " ";
   }
