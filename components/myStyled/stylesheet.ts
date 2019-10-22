@@ -90,19 +90,26 @@ const ClientStylesheet = (sheet: StylesheetPartial<CSSRuleList>, hashes: string[
 
 export const createStylesheet = (): ClientServerStylesheet<CSSRuleList> | undefined => {
     if (typeof document !== 'undefined') {
-        const myStyle = document.querySelector<HTMLStyleElement>("style[data-my-styled]");
+        const myStyles = document.querySelectorAll<HTMLStyleElement>("style[data-my-styled]");
 
-        if (myStyle) {
-            if (!myStyle.parentElement || myStyle.parentElement.tagName.toUpperCase() !== "HEAD") {
-                document.getElementsByTagName("head")[0].appendChild(myStyle)
-            }
-            const hashes = myStyle.getAttribute("data-my-styled");
+        if (myStyles.length > 0) {
+            let hashes: string[] = [];
 
-            if (myStyle.sheet) {
+            myStyles.forEach(style => {
+                if (!style.parentElement || style.parentElement.tagName.toUpperCase() !== "HEAD") {
+                    document.getElementsByTagName("head")[0].appendChild(style)
+                }
+                const styleHashes = style.getAttribute("data-my-styled");
+                styleHashes && (hashes = hashes.concat(styleHashes.split(" ")));
+            });
+
+            const sheet = myStyles[myStyles.length - 1].sheet;
+
+            if (sheet) {
                 return ClientStylesheet(
                     // TODO: fix unknown - cast...
-                    myStyle.sheet as unknown as CSSStyleSheet,
-                    (hashes && hashes.split(" ")) || undefined
+                    sheet as unknown as CSSStyleSheet,
+                    hashes
                 );
             }
         }

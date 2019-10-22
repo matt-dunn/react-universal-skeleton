@@ -26,9 +26,9 @@ export default () => {
     });
 
     const interleaveWithNodeStream = (readableStream: NodeJS.ReadableStream): NodeJS.ReadableStream => {
-        readableStream.on('end', () => {
-            console.error("END!!!!")
-        });
+        // readableStream.on('end', () => {
+        //     console.error("END!!!!")
+        // });
 
         readableStream.on('error', err => {
             // forward the error to the transform stream
