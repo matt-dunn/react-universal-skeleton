@@ -18,9 +18,9 @@ function useAutosave<T = any>(action?: Action<T>, options?: Options): Action<T> 
     const {delay = 500, onSaving, onComplete} = options || {};
 
     return useCallback(
-        (...args): any => {
+        (...args): Promise<T> => {
             if (!action) {
-                return Promise.reject("No action defined");
+                return Promise.reject(new Error("No action defined"));
             }
 
             return new Promise<T>((resolve, reject) => {
@@ -46,6 +46,7 @@ function useAutosave<T = any>(action?: Action<T>, options?: Options): Action<T> 
                                 .catch(reason => {
                                     pending.current = undefined;
                                     isActive.current = false;
+                                    onComplete && onComplete(...args);
                                     reject(reason);
                                 });
                         };
