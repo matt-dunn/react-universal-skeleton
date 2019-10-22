@@ -13,7 +13,7 @@ const calculateMaxChildren = (children: ReactNode[], dimensions?: ViewportDimens
     return children.length;
 };
 
-const Container = styled.ol<{children: ReactNode[]; totalPaddingWidth?: number, dimensions?: ViewportDimensions; minWidth?: number}>`
+const Container = styled.ol<{children: ReactNode[]; totalPaddingWidth?: number; dimensions?: ViewportDimensions; minWidth?: number}>`
     display: flex;
     flex-wrap: wrap;
     
@@ -32,9 +32,9 @@ const Container = styled.ol<{children: ReactNode[]; totalPaddingWidth?: number, 
 `;
 
 type ResponsiveGrid = {
-    children: ReactNode[],
+    children: ReactNode[];
     className?: string;
-    minWidth?: number,
+    minWidth?: number;
     totalPaddingWidth?: number;
 }
 
