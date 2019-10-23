@@ -20,7 +20,7 @@ export type ItemProps = {
 
 const Container = styled.div<{type?: string}>`
   display: flex;
-  ${({type}) => type === "primary" && css`border: 1px dashed #ccc; padding: 5px;`}
+  ${({type}) => type === "primary" && css`border: 1px dashed #ccc; padding: 5px;margin-bottom: 5px;`}
 `;
 
 const Value = styled(TextInput)`

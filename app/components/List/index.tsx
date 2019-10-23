@@ -83,7 +83,7 @@ const PageLink = styled(Link)`
   }
 `;
 
-const MAX_ITEMS = 5;
+const MAX_ITEMS = 4;
 
 const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditItem, activePage, children, ...props}: ListProps) => {
     const {complete, isActive, processing, hasError, error, outstandingTransactionCount} = Status(items.$status);
@@ -114,11 +114,11 @@ const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditIt
             </div>
             <Loading loading={processing}>
                 {(!items || items.length === 0) ?
-                    <Placeholder minWidth={200} totalPaddingWidth={20}>
+                    <Placeholder minItemWidth={200} totalPaddingWidth={20}>
                         {Array.from(Array(MAX_ITEMS).keys()).map(i => <PlaceHolderListItem key={i}/>)}
                     </Placeholder>
                     :
-                    <ListItems minWidth={200} totalPaddingWidth={20}>
+                    <ListItems minItemWidth={200} totalPaddingWidth={20}>
                         {items.map(item => (
                             <ListItem key={item.id}>
                                 {(children && children(item)) ||
