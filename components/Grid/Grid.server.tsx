@@ -1,20 +1,24 @@
-import React, {ReactNode} from "react";
-import styled from "styled-components";
+import React from "react";
+import styled, {css} from "styled-components";
 
-const Container = styled.ol`
+import {ResponsiveGridProps} from "./Grid.client";
+
+const Container = styled.ol<{minItemWidth?: number}>`
     display: flex;
     flex-wrap: wrap;
     
     > * {
       flex-grow: 1;
-      min-width: 200px;
+      ${({minItemWidth}) => (minItemWidth && css`min-width: ${minItemWidth}px`) || ""};
     }
 `;
 
-export const ResponsiveGrid = (as: keyof JSX.IntrinsicElements | React.ComponentType<any>) => ({children}: {children: ReactNode[]}) => {
+export const ResponsiveGrid = (as: keyof JSX.IntrinsicElements | React.ComponentType<any>) => ({children, className, minItemWidth}: ResponsiveGridProps) => {
     return (
-        <Container as={as}>
-            {children}
-        </Container>
+        <div className="no-js">
+            <Container as={as} className={className} minItemWidth={minItemWidth}>
+                {children}
+            </Container>
+        </div>
     );
 };

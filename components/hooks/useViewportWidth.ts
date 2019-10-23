@@ -12,16 +12,15 @@ const useViewportWidth = (ref: MutableRefObject<Element | undefined>): ViewportD
             return
         }
 
-        resizeSensor.current = new ResizeSensor(ref.current, d => {
-            if (!dimensions || dimensions.width !== d.width || dimensions.height !== d.height) {
-                setDimensions(d)
-            }
-        });
+        const rect = ref.current.getBoundingClientRect()
+        setDimensions({width: rect.width, height: rect.height})
+
+        resizeSensor.current = new ResizeSensor(ref.current, d => setDimensions(d));
 
         return () => {
             resizeSensor.current && resizeSensor.current.detach();
         }
-    }, [dimensions, ref])
+    }, [ref])
 
     return dimensions;
 };

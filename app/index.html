@@ -10,14 +10,13 @@
             visibility: hidden;
         }
     </style>
+    <script type="application/javascript">
+        document.getElementsByTagName('html')[0].className = "has-js";
+    </script>
 </head>
 
 <body>
 <div id="app">
-    <script type="application/javascript">
-        const element = document.getElementById('app');
-        element.className = "has-js";
-    </script>
 </div>
 <script id="js-entrypoint" src="./client.js"></script>
 </body>
