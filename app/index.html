@@ -5,10 +5,20 @@
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
+    <style>
+        .has-js .no-js {
+            visibility: hidden;
+        }
+    </style>
 </head>
 
 <body>
-<div id="app"></div>
+<div id="app">
+    <script type="application/javascript">
+        const element = document.getElementById('app');
+        element.className = "has-js";
+    </script>
+</div>
 <script id="js-entrypoint" src="./client.js"></script>
 </body>
 </html>
