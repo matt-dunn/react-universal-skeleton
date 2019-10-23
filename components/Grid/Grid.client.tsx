@@ -3,27 +3,27 @@ import useViewportWidth, {ViewportDimensions} from "../hooks/useViewportWidth";
 import styled, {css} from "styled-components";
 import {Container} from "postcss";
 
-const calculateMaxChildren = (children: ReactNode[], dimensions?: ViewportDimensions, minItemWidth?: number) => {
+const calculateMaxChildren = (length: number, dimensions?: ViewportDimensions, minItemWidth?: number) => {
     const {width} = dimensions || {};
 
-    if (width && minItemWidth && width / children.length < minItemWidth) {
+    if (width && minItemWidth && width / length < minItemWidth) {
         return Math.floor(width / minItemWidth);
     }
 
-    return children.length;
+    return length;
 };
 
-const Container = styled.ol<{children: ReactNode[]; totalPaddingWidth?: number; dimensions?: ViewportDimensions; minItemWidth?: number}>`
+const Container = styled.ol<{length: number; totalPaddingWidth?: number; dimensions?: ViewportDimensions; minItemWidth?: number}>`
     display: flex;
     flex-wrap: wrap;
     
     > * {
-      ${({children, totalPaddingWidth, dimensions, minItemWidth}) => {
-        const length = calculateMaxChildren(children, dimensions, minItemWidth);
-        const width = `${100 / length}%`;
+      ${({length, totalPaddingWidth, dimensions, minItemWidth}) => {
+        const maxLength = calculateMaxChildren(length, dimensions, minItemWidth);
+        const width = `${100 / maxLength}%`;
         return css`
           width: ${(totalPaddingWidth && `calc(${width} - ${totalPaddingWidth}px)`) || width};
-          &:nth-child(${length}n) {
+          &:nth-child(${maxLength}n) {
             border-right: none;
           }
         `;
@@ -43,7 +43,7 @@ export const ResponsiveGrid = (as: keyof JSX.IntrinsicElements | React.Component
     const dimensions = useViewportWidth(container);
 
     return (
-        <Container as={as} ref={container as any} className={className} dimensions={dimensions} minItemWidth={minItemWidth} totalPaddingWidth={totalPaddingWidth}>
+        <Container as={as} ref={container as any} length={children.length} className={className} dimensions={dimensions} minItemWidth={minItemWidth} totalPaddingWidth={totalPaddingWidth}>
             {children}
         </Container>
     )
