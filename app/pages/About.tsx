@@ -1,4 +1,4 @@
-import React, {useCallback, useContext, useState, useEffect} from 'react'
+import React, {useCallback, useContext, useState, useEffect, ReactEventHandler, FormEvent} from 'react'
 import {Helmet} from 'react-helmet-async'
 import styled, {css} from "styled-components";
 import { connect } from 'react-redux';
@@ -44,7 +44,7 @@ const AboutListItem = styled(EditItem)<{isImportant?: boolean}>`
 
 const importantIds = ["item-1", "item-2"]
 
-import {FormDataContext, useFormData} from "components/Form";
+import {FormDataContext, useFormData, FormData} from "components/Form";
 import ReactSelect from "react-select";
 import useEffectAction from "components/actions/useEffectAction";
 import {APIError} from "../../components/api";
@@ -90,7 +90,7 @@ type Option = {
     label: string;
 }
 
-const FancySelect = ({options, name, value}: {options: Option[]; name: string; value?: string;}) => {
+const FancySelect = ({options, name, value, onChange}: {options: Option[]; name: string; value?: string; onChange: (value: Option) => void;}) => {
     const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
@@ -104,6 +104,7 @@ const FancySelect = ({options, name, value}: {options: Option[]; name: string; v
                 name={name}
                 defaultValue={defaultValue}
                 options={options}
+                onChange={onChange}
             />
         )
     } else {
@@ -131,7 +132,8 @@ type MyFormResponse = {
 
 
 const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditItem, $status}: AboutProps) => {
-    const formData = useFormData<MyForm, MyFormResponse>();
+    const data = useFormData<MyForm, MyFormResponse>();
+    const [formData, setFormData] = useState(data);
     const { page } = useParams();
 
     const renderListItem = useCallback((item: IExampleItemState) => {
@@ -145,36 +147,58 @@ const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIt
 
     const isValid = Boolean(formData.isSubmitted && flavour);
 
-    // if (isValid && !formData.isProcessed) {
-        // formData.isProcessed = true;
-    // } else {
-        console.log("@@@@@", formData, formData.payload)
-    // }
+    console.log("@@@@@", formData, formData.payload)
+
+    const submit = (formData: FormData) => {
+        console.log("@@@@@: CALL API", formData)
+        formData.isProcessed = true;
+        return new Promise<MyFormResponse>(resolve => {
+            if (flavour === "vanilla") {
+                // throw new APIError("Authentication Failed", "auth", 403)
+                throw new Error("Bumhole!")
+            }
+            setTimeout(() => {
+                resolve({chosenFlavour: `CHOSEN: ${flavour}`});
+            }, 2000);
+        })
+            .then(payload => {
+                formData.payload = payload
+                return payload
+            })
+            .catch(ex => {
+                formData.error = errorLike(ex);
+                throw ex;
+            })
+    }
+
+    const handleSubmit = (e: FormEvent) => {
+        console.log(">>>", formData)
+
+        setFormData(formData => ({...formData, isSubmitted: true, isProcessed: true, error: undefined}))
+
+        submit(formData)
+            .then((payload: any) => {
+                console.log("END", payload)
+                setFormData(formData => ({...formData, payload}))
+            })
+            .catch(error => {
+                setFormData(formData => ({...formData, isSubmitted: false, isProcessed: false, error}))
+            })
+
+        e.preventDefault();
+    }
+
+    const handleChange = ({value}: Option) => {
+        console.log(">>>!!", value)
+        setFormData(formData => ({...formData, isSubmitted: false, isProcessed: false, error: undefined, data: {...formData.data, flavour: value}}))
+    }
 
     useEffectAction(
-        useCallback(() => {
-            console.log("@@@@@: CALL API", formData)
-            formData.isProcessed = true;
-            return new Promise<MyFormResponse>(resolve => {
-                if (flavour === "vanilla") {
-                    // throw new APIError("Authentication Failed", "auth", 403)
-                    throw new Error("Bumhole!")
-                }
-                setTimeout(() => {
-                    resolve({chosenFlavour: `CHOSEN: ${flavour}`});
-                }, 2000);
-            })
-                .then(payload => {
-                    formData.payload = payload
-                })
-                .catch(ex => {
-                    formData.error = errorLike(ex);
-                })
-        }, []),
+        () => submit(formData),
         () => formData.isSubmitted && !formData.isProcessed && isValid
     );
 
-    useWhatChanged(About, { items, item, onExampleGetList, onExampleGetItem, onExampleEditItem, $status, renderListItem, page});
+    useWhatChanged(About, { formData, items, item, onExampleGetList, onExampleGetItem, onExampleEditItem, $status, renderListItem, page});
 
     return (
         <Page>
@@ -189,13 +213,19 @@ const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIt
 
             <AboveTheFold>
 
-                {(isValid && !formData.error) && <div>You submitted '{flavour}'</div>}
-                {formData.error && <div>There was a problem submitting</div>}
-                {(formData.isSubmitted && !isValid) && <div>Flavour is required</div>}
+                {(isValid && !formData.error) && <p>You submitted '{flavour}'</p>}
+                {formData.error && <p>There was a problem submitting</p>}
+                {(formData.isSubmitted && !isValid) && <p>Flavour is required</p>}
                 <Form method="post" action="">
-                    <FancySelect options={options} name="flavour" value={formData.data["flavour"]}/>
+                    <FancySelect
+                        options={options}
+                        name="flavour"
+                        value={formData.data["flavour"]}
+                        onChange={handleChange}
+                    />
                     <Button
                         type="submit"
+                        onClick={handleSubmit}
                     >
                         Go
                     </Button>

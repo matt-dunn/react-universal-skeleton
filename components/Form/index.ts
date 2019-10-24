@@ -11,7 +11,7 @@ export type FormData<T = {}, P = {}> = {
 };
 
 export const FormData = <T = {}>(formData: FormData<T>): FormData => {
-    const {isProcessed = false, data = {}, isSubmitted = !isEmpty(data), payload, error} = formData;
+    const {isProcessed = false, data = {}, isSubmitted = !isEmpty(data), payload, error} = formData || {} as FormData;
 
     return {
         isProcessed,
@@ -26,7 +26,7 @@ export const FormDataContext = React.createContext<FormData | undefined>(undefin
 
 export const FormDataProvider = FormDataContext.Provider;
 
-export const useFormData = <T, P = any>() => {
+export const useFormData = <T, P = any>(): FormData<T> => {
     const formData = useContext(FormDataContext);
 
     return formData as FormData<T, P>
