@@ -46,6 +46,9 @@ const importantIds = ["item-1", "item-2"]
 
 import {FormDataContext, useFormData} from "components/Form";
 import ReactSelect from "react-select";
+import useEffectAction from "components/actions/useEffectAction";
+import {APIError} from "../../components/api";
+import {errorLike} from "../../components/error";
 
 const Form = styled.form`
   display: flex;
@@ -122,8 +125,13 @@ type MyForm = {
     flavour: string;
 }
 
+type MyFormResponse = {
+    chosenFlavour: string;
+}
+
+
 const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditItem, $status}: AboutProps) => {
-    const formData = useFormData<MyForm>();
+    const formData = useFormData<MyForm, MyFormResponse>();
     const { page } = useParams();
 
     const renderListItem = useCallback((item: IExampleItemState) => {
@@ -135,14 +143,36 @@ const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIt
 
     const {flavour} = formData.data;
 
-    const isValid = formData.isSubmitted && flavour;
+    const isValid = Boolean(formData.isSubmitted && flavour);
 
-    if (isValid && !formData.isProcessed) {
-        formData.isProcessed = true;
-        console.log("@@@@@: CALL API", formData)
-    } else {
-        console.log("@@@@@", formData)
-    }
+    // if (isValid && !formData.isProcessed) {
+        // formData.isProcessed = true;
+    // } else {
+        console.log("@@@@@", formData, formData.payload)
+    // }
+
+    useEffectAction(
+        useCallback(() => {
+            console.log("@@@@@: CALL API", formData)
+            formData.isProcessed = true;
+            return new Promise<MyFormResponse>(resolve => {
+                if (flavour === "vanilla") {
+                    // throw new APIError("Authentication Failed", "auth", 403)
+                    throw new Error("Bumhole!")
+                }
+                setTimeout(() => {
+                    resolve({chosenFlavour: `CHOSEN: ${flavour}`});
+                }, 2000);
+            })
+                .then(payload => {
+                    formData.payload = payload
+                })
+                .catch(ex => {
+                    formData.error = errorLike(ex);
+                })
+        }, []),
+        () => formData.isSubmitted && !formData.isProcessed && isValid
+    );
 
     useWhatChanged(About, { items, item, onExampleGetList, onExampleGetItem, onExampleEditItem, $status, renderListItem, page});
 
@@ -157,14 +187,20 @@ const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIt
                 About page (Lazy Loaded)
             </Title>
 
-            {isValid && <div>You submitted '{flavour}'</div>}
-            {(formData.isSubmitted && !isValid) && <div>Flavour is required</div>}
-            <Form method="post" action="">
-                <FancySelect options={options} name="flavour" value={formData.data["flavour"]}/>
-                <Button type="submit">Go</Button>
-            </Form>
-
             <AboveTheFold>
+
+                {(isValid && !formData.error) && <div>You submitted '{flavour}'</div>}
+                {formData.error && <div>There was a problem submitting</div>}
+                {(formData.isSubmitted && !isValid) && <div>Flavour is required</div>}
+                <Form method="post" action="">
+                    <FancySelect options={options} name="flavour" value={formData.data["flavour"]}/>
+                    <Button
+                        type="submit"
+                    >
+                        Go
+                    </Button>
+                </Form>
+
                 {/*<List items={items} onExampleGetList={onExampleGetList} onExampleEditItem={onExampleEditItem} activePage={parseInt(page || "0", 10)}>*/}
                 {/*    /!*{(item: IExampleItemState) => {*!/*/}
                 {/*    /!*    return <div>ITEM - {item.name}</div>*!/*/}
