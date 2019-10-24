@@ -13,9 +13,11 @@ import {deserialize} from "components/state-mutate-with-status/utils";
 import './.imported';
 
 import getStore from "./store";
+import {FormData, FormDataProvider} from "../components/Form";
 
 const store = getStore(deserialize(JSON.stringify(window.__PRELOADED_STATE__)));
 const error = window.__ERROR_STATE__;
+const formData = FormData(window.__PRELOADED_FORM_STATE__);
 
 console.error(store.getState())
 
@@ -30,21 +32,23 @@ const ScrollToTop = withRouter(({ children, location: { pathname } }) => {
 window.STORE = store;
 
 const app = (
-    <ErrorProvider value={{error}}>
-        <HelmetProvider>
-            <Provider store={store}>
-                <ToastContainer
-                    hideProgressBar
-                    pauseOnHover
-                />
-                <BrowserRouter>
-                    <ScrollToTop>
-                        <App />
-                    </ScrollToTop>
-                </BrowserRouter>
-            </Provider>
-        </HelmetProvider>
-    </ErrorProvider>
+    <FormDataProvider value={formData}>
+        <ErrorProvider value={{error}}>
+            <HelmetProvider>
+                <Provider store={store}>
+                    <ToastContainer
+                        hideProgressBar
+                        pauseOnHover
+                    />
+                    <BrowserRouter>
+                        <ScrollToTop>
+                            <App />
+                        </ScrollToTop>
+                    </BrowserRouter>
+                </Provider>
+            </HelmetProvider>
+        </ErrorProvider>
+    </FormDataProvider>
 );
 
 const element = document.getElementById('app');

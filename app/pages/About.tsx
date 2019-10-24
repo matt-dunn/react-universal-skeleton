@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react'
+import React, {useCallback, useContext, useState, useEffect} from 'react'
 import {Helmet} from 'react-helmet-async'
 import styled, {css} from "styled-components";
 import { connect } from 'react-redux';
@@ -44,7 +44,86 @@ const AboutListItem = styled(EditItem)<{isImportant?: boolean}>`
 
 const importantIds = ["item-1", "item-2"]
 
+import {FormDataContext, useFormData} from "components/Form";
+import ReactSelect from "react-select";
+
+const Form = styled.form`
+  display: flex;
+  width: 100%;
+  font-size: 16px;
+`;
+
+const SelectStyle = css`
+  font-size: inherit;
+  height: 36px;
+  background-color: transparent;
+  flex-grow: 1;
+  border-color: rgb(204, 204, 204);
+`
+const BasicSelect = styled.select`
+  ${SelectStyle}
+`;
+const Select = styled(ReactSelect)`
+  ${SelectStyle}
+`
+const Button = styled.button`
+  font-size: inherit;
+  padding: 5px;
+  border: 1px solid #ccc;
+  background-color: #eee;
+  border-radius: 3px;
+  margin-left: 8px;
+`
+
+const options = [
+    { value: '', label: 'Select...' },
+    { value: 'chocolate', label: 'Chocolate' },
+    { value: 'strawberry', label: 'Strawberry' },
+    { value: 'vanilla', label: 'Vanilla' },
+];
+
+type Option = {
+    value: string;
+    label: string;
+}
+
+const FancySelect = ({options, name, value}: {options: Option[]; name: string; value?: string;}) => {
+    const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+        setIsClient(true)
+    }, [])
+
+    if (isClient) {
+        const defaultValue = (value && options.filter(option => option.value ===value)[0]) || options[0];
+        return (
+            <Select
+                name={name}
+                defaultValue={defaultValue}
+                options={options}
+            />
+        )
+    } else {
+        return (
+            <BasicSelect
+                className="no-js"
+                name={name}
+                value={value}
+            >
+                {options.map((option, index) => (
+                    <option key={index} value={option.value}>{option.label}</option>
+                ))}
+            </BasicSelect>
+        )
+    }
+}
+
+type MyForm = {
+    flavour: string;
+}
+
 const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditItem, $status}: AboutProps) => {
+    const formData = useFormData<MyForm>();
     const { page } = useParams();
 
     const renderListItem = useCallback((item: IExampleItemState) => {
@@ -53,6 +132,17 @@ const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIt
     }, [onExampleEditItem])
 
     const renderItem = useCallback(({ isVisible }) => <Item isShown={isVisible} item={item} onExampleGetItem={onExampleGetItem}/>, [item, onExampleGetItem])
+
+    const {flavour} = formData.data;
+
+    const isValid = formData.isSubmitted && flavour;
+
+    if (isValid && !formData.isProcessed) {
+        formData.isProcessed = true;
+        console.log("@@@@@: CALL API", formData)
+    } else {
+        console.log("@@@@@", formData)
+    }
 
     useWhatChanged(About, { items, item, onExampleGetList, onExampleGetItem, onExampleEditItem, $status, renderListItem, page});
 
@@ -66,6 +156,13 @@ const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIt
             <Title>
                 About page (Lazy Loaded)
             </Title>
+
+            {isValid && <div>You submitted '{flavour}'</div>}
+            {(formData.isSubmitted && !isValid) && <div>Flavour is required</div>}
+            <Form method="post" action="">
+                <FancySelect options={options} name="flavour" value={formData.data["flavour"]}/>
+                <Button type="submit">Go</Button>
+            </Form>
 
             <AboveTheFold>
                 {/*<List items={items} onExampleGetList={onExampleGetList} onExampleEditItem={onExampleEditItem} activePage={parseInt(page || "0", 10)}>*/}

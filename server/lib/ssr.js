@@ -35,6 +35,8 @@ const parseHelmetTemplate = helmet => (template, ...vars) => {
         .join("") || "";
 };
 
+import {FormDataProvider, FormData} from "components/Form";
+
 export default async (req, res) => {
     const t1 = Date.now();
     const store = getStore();
@@ -42,20 +44,23 @@ export default async (req, res) => {
     const context = {};
     const helmetContext = {};
     const errorContext = {};
+    const formData = FormData({data: req.body});
 
     const app = (
-        <ErrorProvider value={errorContext}>
-            <HelmetProvider context={helmetContext}>
-                <Provider store={store}>
-                    <StaticRouter
-                        location={req.originalUrl}
-                        context={context}
-                    >
-                        <App/>
-                    </StaticRouter>
-                </Provider>
-            </HelmetProvider>
-        </ErrorProvider>
+        <FormDataProvider value={formData}>
+            <ErrorProvider value={errorContext}>
+                <HelmetProvider context={helmetContext}>
+                    <Provider store={store}>
+                        <StaticRouter
+                            location={req.originalUrl}
+                            context={context}
+                        >
+                            <App/>
+                        </StaticRouter>
+                    </Provider>
+                </HelmetProvider>
+            </ErrorProvider>
+        </FormDataProvider>
     );
 
     try {
@@ -109,6 +114,9 @@ export default async (req, res) => {
                                     /</g,
                                     '\\u003c'
                                 )}
+                                    window.__PRELOADED_FORM_STATE__ = ${formData && JSON.stringify(formData).replace(
+                                    /</g,
+                                    '\\u003c')}
                                     window.__PRERENDERED_SSR__ = true;
                                     window.__ERROR_STATE__ = ${JSON.stringify(errorContext && errorContext.error && errorLike(errorContext.error))}
                                 </script>`
