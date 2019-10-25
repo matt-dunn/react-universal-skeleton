@@ -26,7 +26,7 @@ export const FormDataContext = React.createContext<FormData | undefined>(undefin
 
 export const FormDataProvider = FormDataContext.Provider;
 
-export const useFormData = <T, P = any>(): FormData<T> => {
+export const useFormData = <T = {}, P = {}>(): FormData<T, P> => {
     const formData = useContext(FormDataContext);
 
     return formData as FormData<T, P>
