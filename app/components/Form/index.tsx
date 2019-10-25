@@ -152,8 +152,6 @@ const MyForm = () => {
 
     // const x = React.createRef<Formik>()
 
-    const context = useContext<Promise<any>[] | undefined>(APIContext as any);
-
     const submit = (data: MyForm): Promise<MyFormResponse> => {
         console.log("@@@@@@CALL FORM API")
         return new Promise((resolve, reject) => {
@@ -168,6 +166,8 @@ const MyForm = () => {
 
         })
     }
+
+    const context = useContext<Promise<any>[] | undefined>(APIContext as any);
 
     if (context && formDataContext.isSubmitted && !formDataContext.isProcessed) {
         context.push(schema.validate(formDataContext.data, {abortEarly: false})
