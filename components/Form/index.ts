@@ -8,7 +8,7 @@ export type Errors<T> = {
 
 export type FormData<T = {}, P = any> = {
     isProcessed: boolean;
-    data: T;
+    data?: T;
     isSubmitted: boolean;
     payload?: P;
     error?: ErrorLike;
@@ -16,7 +16,7 @@ export type FormData<T = {}, P = any> = {
 };
 
 export const FormData = <T = {}, P = any>(formData: FormData<T, P>): FormData<T, P> => {
-    const {isProcessed = false, data = {} as T, payload, error, errors} = formData || {} as FormData<T, P>;
+    const {isProcessed = false, data, payload, error, errors} = formData || {} as FormData<T, P>;
 
     return {
         isProcessed,

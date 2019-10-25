@@ -44,7 +44,7 @@ export default async (req, res) => {
     const context = {};
     const helmetContext = {};
     const errorContext = {};
-    const formData = FormData({data: req.body});
+    const formData = FormData(req.method === "POST" && {data: req.body});
 
     const app = (
         <FormDataProvider value={formData}>

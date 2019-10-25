@@ -77,14 +77,14 @@ type Option = {
     label: string;
 }
 
-const FancySelect = ({id, options, name, value, onChange, onBlur}: {id: string; options: Option[]; name: string; value?: string; onChange: (name: string, value: string) => void; onBlur: (name: string, touched: boolean) => void;}) => {
+const FancySelect = ({id, disabled, options, name, value, onChange, onBlur}: {id: string; disabled?: boolean; options: Option[]; name: string; value?: string; onChange: (name: string, value: string) => void; onBlur: (name: string, touched: boolean) => void}) => {
     const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
         setIsClient(true)
     }, [])
 
-    const handleChange = ({value}: {value: string;}) => {
+    const handleChange = ({value}: {value: string}) => {
         // this is going to call setFieldValue and manually update values.topcis
         onChange(name, value);
     };
@@ -107,6 +107,7 @@ const FancySelect = ({id, options, name, value, onChange, onBlur}: {id: string; 
                 options={options}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                isDisabled={disabled}
             />
         )
     } else {
@@ -117,6 +118,7 @@ const FancySelect = ({id, options, name, value, onChange, onBlur}: {id: string; 
                 name={name}
                 value={value}
                 onChange={handleSelectChange}
+                disabled={disabled}
             >
                 {options.map((option, index) => (
                     <option key={index} value={option.value}>{option.label}</option>
@@ -149,8 +151,6 @@ const MyForm = () => {
     const [formData, setFormData] = useState(formDataContext);
 
     // console.log("@@@@@", formData, formData.payload)
-
-    // const x = React.createRef<Formik>()
 
     const submit = (data: MyForm): Promise<MyFormResponse> => {
         console.log("@@@@@@CALL FORM API")
@@ -197,17 +197,26 @@ const MyForm = () => {
         );
     }
 
+    // TODO: set the correct Formik internal state somehow so that when rendered from server resetting a value runs the validator (touch?)
+    // const form = React.createRef<Formik>()
+    //
+    // useEffect(() => {
+    //     if (!context && formData.isSubmitted && form.current && formData.data) {
+    //         console.log("@@@@@@@@@SUBMIT!!!!!!!")
+    //         form.current.runValidations()//.executeSubmit()//.validateForm(formData.data)
+    //     }
+    // }, [])
+
     // useWhatChanged(About, { formData, items, item, onExampleGetList, onExampleGetItem, onExampleEditItem, $status, renderListItem, page});
 
     return (
         <div>
             {formData.payload && <pre>{JSON.stringify(formData.payload)}</pre>}
 
-            {formData.error && <InputFeedback>There was a problem submitting: {formData.error.message}</InputFeedback>}
-
             <Formik
                 initialValues={formData.data || { email: '', flavour: '' }}
                 onSubmit={(values, { setSubmitting }) => {
+                    setFormData(formData => ({...formData, error: undefined}))
                     submit(values as any)
                         .then(payload => {
                             setFormData(formData => ({...formData, isProcessed: true, error: undefined, payload: payload, data: values as any}))
@@ -237,6 +246,8 @@ const MyForm = () => {
                     } = props;
                     return (
                         <Form onSubmit={handleSubmit} method="post">
+                            {formData.error && <InputFeedback>There was a problem submitting: {formData.error.message}</InputFeedback>}
+
                             <Section>
                                 <Label htmlFor="flavour" style={{ display: 'block' }}>
                                     Flavour
@@ -248,6 +259,7 @@ const MyForm = () => {
                                     value={values.flavour}
                                     onBlur={setFieldTouched}
                                     onChange={setFieldValue}
+                                    disabled={isSubmitting}
                                 />
                                 {((formData.errors && formData.errors.flavour && !touched.flavour) || (errors.flavour && touched.flavour)) && (
                                     <InputFeedback>{errors.flavour || formData.errors.flavour}</InputFeedback>
@@ -266,6 +278,7 @@ const MyForm = () => {
                                     value={values.email}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
+                                    disabled={isSubmitting}
                                     className={
                                         errors.email && touched.email ? 'text-input error' : 'text-input'
                                     }
