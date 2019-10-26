@@ -172,16 +172,12 @@ const dummyApiCall = (data: MyForm): Promise<MyFormResponse> => {
 }
 
 const MyForm = () => {
-
-    const mapFormToApi = (values: MyForm): Promise<MyFormResponse> => {
-        return dummyApiCall(values)
-    }
-
-    const [formData, submit] = useForm<MyForm, MyFormResponse>(schema, mapFormToApi);
-    // const [formData, submit] = useForm();
-
-    // formData.data && formData.data.flavour
-
+    const [formData, submit] = useForm<MyForm, MyFormResponse>(
+        schema,
+        (values: MyForm): Promise<MyFormResponse> => {
+            return dummyApiCall(values)
+        }
+    );
 
     // TODO: set the correct Formik internal state somehow so that when rendered from server resetting a value runs the validator (touch?)
     // const form = React.createRef<Formik>()

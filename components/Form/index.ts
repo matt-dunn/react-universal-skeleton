@@ -40,7 +40,7 @@ export const useFormData = <T = any, P = any>(): FormData<T, P> => {
     return formData as FormData<T, P>
 };
 
-export const useForm = <T, P = any>(schema: Schema<T>, mapFormToApi: {(data: T): Promise<P>}): [FormData<T, P>, (data: T) => Promise<P>] => {
+export const useForm = <T, P = any>(schema: Schema<T>, mapDataToAction: {(data: T): Promise<P>}): [FormData<T, P>, (data: T) => Promise<P>] => {
     const formDataContext = useFormData<T, P>();
     const [formData, setFormData] = useState<FormData<T, P>>(formDataContext);
 
@@ -49,7 +49,7 @@ export const useForm = <T, P = any>(schema: Schema<T>, mapFormToApi: {(data: T):
 
         console.log("@@@@@@CALL FORM API", data)
 
-        return mapFormToApi(data)
+        return mapDataToAction(data)
             .then(payload => {
                 formDataContext.payload = payload;
 
@@ -66,7 +66,7 @@ export const useForm = <T, P = any>(schema: Schema<T>, mapFormToApi: {(data: T):
             })
     }
 
-    const context = useContext<Promise<any>[] | undefined>(APIContext as any);
+    const context = useContext<Promise<P>[]>(APIContext as any);
 
     if (context && formDataContext.isSubmitted && !formDataContext.isProcessed) {
         formDataContext.isProcessed = true;
@@ -82,6 +82,8 @@ export const useForm = <T, P = any>(schema: Schema<T>, mapFormToApi: {(data: T):
                         return errors;
                     }, {})
                 }
+
+                return reason;
             })
         );
     }
