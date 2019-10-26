@@ -1,12 +1,12 @@
 import React from 'react'
 import styled from "styled-components";
 
-import { Formik } from 'formik';
+import { Formik, getIn, FormikContext, connect } from 'formik';
 import * as Yup from 'yup';
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
-import {useForm} from "components/actions/form";
+import {useForm, useFormData} from "components/actions/form";
 import FancySelect from "app/components/FancySelect";
 
 const Form = styled.form`
@@ -98,6 +98,23 @@ const dummyApiCall = (flavour: string, email: string): Promise<MyFormResponse> =
     })
 };
 
+type FormikProps = {
+    formik: FormikContext<{}>;
+}
+
+export interface ErrorMessageProps {
+    name: string;
+    children: (message: string) => JSX.Element;
+}
+
+export const ErrorMessage = connect(({name, formik, children}: ErrorMessageProps & FormikProps) => {
+    const formData = useFormData();
+    const error = getIn(formik.errors, name);
+    const touched = getIn(formik.touched, name);
+
+    return (((formData.errors && formData.errors[name] && !touched) || (error && touched)) && children(error || formData.errors[name])) || null;
+}) as React.FunctionComponent<ErrorMessageProps>;
+
 const MyForm = () => {
     const [formData, submit] = useForm<MyForm, MyFormResponse>(
         schema,
@@ -159,9 +176,9 @@ const MyForm = () => {
                                     onChange={setFieldValue}
                                     disabled={isSubmitting}
                                 />
-                                {((formData.errors && formData.errors.flavour && !touched.flavour) || (errors.flavour && touched.flavour)) && (
-                                    <InputFeedback>{errors.flavour || formData.errors.flavour}</InputFeedback>
-                                )}
+                                <ErrorMessage name="flavour">
+                                    {message => <InputFeedback>{message}</InputFeedback>}
+                                </ErrorMessage>
                             </Section>
 
                             <Section>
@@ -181,9 +198,9 @@ const MyForm = () => {
                                         errors.email && touched.email ? 'text-input error' : 'text-input'
                                     }
                                 />
-                                {((formData.errors && formData.errors.email && !touched.email) || (errors.email && touched.email)) && (
-                                    <InputFeedback>{errors.email || formData.errors.email}</InputFeedback>
-                                )}
+                                <ErrorMessage name="email">
+                                    {message => <InputFeedback>{message}</InputFeedback>}
+                                </ErrorMessage>
                             </Section>
 
                             <p>

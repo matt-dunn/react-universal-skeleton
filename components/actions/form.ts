@@ -30,7 +30,7 @@ export const FormData = <T = any, P = any>(formData: FormData<T, P>): FormData<T
     }
 };
 
-export const FormDataContext = React.createContext<FormData | undefined>(undefined);
+const FormDataContext = React.createContext<FormData | undefined>(undefined);
 
 export const FormDataProvider = FormDataContext.Provider;
 
@@ -46,10 +46,6 @@ export const useForm = <T, P = any>(schema: Schema<T>, mapDataToAction: {(data: 
 
     const submit = (data: T): Promise<P> => {
         setFormData(formData => ({...formData, error: undefined}));
-
-        if (process.env.NODE_ENV !== "production") {
-            console.log("useForm: CALL API", data)
-        }
 
         return mapDataToAction(data)
             .then(payload => {
@@ -76,10 +72,6 @@ export const useForm = <T, P = any>(schema: Schema<T>, mapDataToAction: {(data: 
         context.push(schema.validate(formDataContext.data, {abortEarly: false})
             .then(data => submit(data))
             .catch(reason => {
-                if (process.env.NODE_ENV !== "production") {
-                    console.log("useForm: ERROR", reason)
-                }
-
                 if (reason.inner) {
                     formDataContext.errors = reason.inner.reduce((errors: any, error: any) => {
                         errors[error.path] = error.message;
@@ -93,4 +85,4 @@ export const useForm = <T, P = any>(schema: Schema<T>, mapDataToAction: {(data: 
     }
 
     return [formData, submit];
-}
+};
