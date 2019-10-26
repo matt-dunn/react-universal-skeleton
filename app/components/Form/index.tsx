@@ -154,15 +154,15 @@ const schema = Yup.object().shape({
         .required('Flavour is required')
 });
 
-const dummyApiCall = (data: MyForm): Promise<MyFormResponse> => {
+const dummyApiCall = (flavour: string, email: string): Promise<MyFormResponse> => {
     return new Promise((resolve, reject) => {
-        if (data.flavour === "vanilla") {
+        if (flavour === "vanilla") {
             // throw new APIError("Authentication Failed", "auth", 403)
             throw new Error("Don't like VANILLA!!!")
         }
 
         setTimeout(() => {
-            resolve({chosenFlavour: `FLAVOUR: ${data.flavour}`, yourEmail: `EMAIL: ${data.email}`})
+            resolve({chosenFlavour: `FLAVOUR: ${flavour}`, yourEmail: `EMAIL: ${email}`})
         }, 2000);
     })
 }
@@ -170,9 +170,7 @@ const dummyApiCall = (data: MyForm): Promise<MyFormResponse> => {
 const MyForm = () => {
     const [formData, submit] = useForm<MyForm, MyFormResponse>(
         schema,
-        (values: MyForm): Promise<MyFormResponse> => {
-            return dummyApiCall(values)
-        }
+        values => dummyApiCall(values.flavour, values.email)
     );
 
     // TODO: set the correct Formik internal state somehow so that when rendered from server resetting a value runs the validator (touch?)

@@ -45,9 +45,11 @@ export const useForm = <T, P = any>(schema: Schema<T>, mapDataToAction: {(data: 
     const [formData, setFormData] = useState<FormData<T, P>>(formDataContext);
 
     const submit = (data: T): Promise<P> => {
-        setFormData(formData => ({...formData, error: undefined}))
+        setFormData(formData => ({...formData, error: undefined}));
 
-        console.log("@@@@@@CALL FORM API", data)
+        if (process.env.NODE_ENV !== "production") {
+            console.log("useForm: CALL API", data)
+        }
 
         return mapDataToAction(data)
             .then(payload => {
@@ -64,7 +66,7 @@ export const useForm = <T, P = any>(schema: Schema<T>, mapDataToAction: {(data: 
 
                 return reason;
             })
-    }
+    };
 
     const context = useContext<Promise<P>[]>(APIContext as any);
 
@@ -74,7 +76,9 @@ export const useForm = <T, P = any>(schema: Schema<T>, mapDataToAction: {(data: 
         context.push(schema.validate(formDataContext.data, {abortEarly: false})
             .then(data => submit(data))
             .catch(reason => {
-                console.log("ERROR@@@@", reason)
+                if (process.env.NODE_ENV !== "production") {
+                    console.log("useForm: ERROR", reason)
+                }
 
                 if (reason.inner) {
                     formDataContext.errors = reason.inner.reduce((errors: any, error: any) => {
