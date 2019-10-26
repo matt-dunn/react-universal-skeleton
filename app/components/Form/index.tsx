@@ -3,10 +3,11 @@ import styled, {css} from "styled-components";
 
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import {Schema} from 'yup';
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
-import {useFormData} from "components/Form";
+import {useFormData, FormData, useForm} from "components/Form";
 import ReactSelect from "react-select";
 import {errorLike} from "components/error";
 import {APIContext} from "components/actions/contexts";
@@ -157,7 +158,7 @@ const schema = Yup.object().shape({
         .required('Flavour is required')
 });
 
-const dummyApiCall = (data: any) => {
+const dummyApiCall = (data: MyForm): Promise<MyFormResponse> => {
     return new Promise((resolve, reject) => {
         if (data.flavour === "vanilla") {
             // throw new APIError("Authentication Failed", "auth", 403)
@@ -171,49 +172,16 @@ const dummyApiCall = (data: any) => {
 }
 
 const MyForm = () => {
-    const formDataContext = useFormData<MyForm, MyFormResponse>();
-    const [formData, setFormData] = useState(formDataContext);
 
-    // console.log("@@@@@", formData, formData.payload)
-
-    const submit = (action: Promise<any>, data: MyForm): Promise<MyFormResponse> => {
-        console.log("@@@@@@CALL FORM API")
-        setFormData(formData => ({...formData, error: undefined}))
-
-        return action
-            .then(payload => {
-                formDataContext.payload = payload;
-
-                setFormData(formData => ({...formData, isProcessed: true, error: undefined, payload: payload, data}));
-
-                return payload;
-            })
-            .catch(reason => {
-                formDataContext.error = errorLike(reason);
-
-                setFormData(formData => ({...formData, isProcessed: true, error: formDataContext.error, payload: undefined, data}))
-            })
+    const mapFormToApi = (values: MyForm): Promise<MyFormResponse> => {
+        return dummyApiCall(values)
     }
 
-    const context = useContext<Promise<any>[] | undefined>(APIContext as any);
+    const [formData, submit] = useForm<MyForm, MyFormResponse>(schema, mapFormToApi);
+    // const [formData, submit] = useForm();
 
-    if (context && formDataContext.isSubmitted && !formDataContext.isProcessed) {
-        formDataContext.isProcessed = true;
+    // formData.data && formData.data.flavour
 
-        context.push(schema.validate(formDataContext.data, {abortEarly: false})
-            .then(data => submit(dummyApiCall(data), data))
-            .catch(reason => {
-                console.log("ERROR@@@@", reason)
-
-                if (reason.inner) {
-                    formDataContext.errors = reason.inner.reduce((errors: any, error: any) => {
-                        errors[error.path] = error.message;
-                        return errors;
-                    }, {})
-                }
-            })
-        );
-    }
 
     // TODO: set the correct Formik internal state somehow so that when rendered from server resetting a value runs the validator (touch?)
     // const form = React.createRef<Formik>()
@@ -234,7 +202,7 @@ const MyForm = () => {
             <Formik
                 initialValues={formData.data || { email: '', flavour: '' }}
                 onSubmit={(values, { setSubmitting }) => {
-                    submit(dummyApiCall(values), values as any)
+                    submit(values)
                         .finally(() => setSubmitting(false))
                 }}
                 validationSchema={schema}
