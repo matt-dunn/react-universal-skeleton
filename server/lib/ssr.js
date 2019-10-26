@@ -35,7 +35,7 @@ const parseHelmetTemplate = helmet => (template, ...vars) => {
         .join("") || "";
 };
 
-import {FormDataProvider, FormData} from "components/Form";
+import {FormDataProvider, FormData} from "components/actions/form";
 
 export default async (req, res) => {
     const t1 = Date.now();

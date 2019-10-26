@@ -13,7 +13,7 @@ import {deserialize} from "components/state-mutate-with-status/utils";
 import './.imported';
 
 import getStore from "./store";
-import {FormData, FormDataProvider} from "../components/Form";
+import {FormData, FormDataProvider} from "components/actions/form";
 
 const store = getStore(deserialize(JSON.stringify(window.__PRELOADED_STATE__)));
 const error = window.__ERROR_STATE__;

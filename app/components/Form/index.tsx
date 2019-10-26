@@ -3,15 +3,11 @@ import styled, {css} from "styled-components";
 
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import {Schema} from 'yup';
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
-import {useFormData, FormData, useForm} from "components/Form";
+import {useForm} from "components/actions/form";
 import ReactSelect from "react-select";
-import {errorLike} from "components/error";
-import {APIContext} from "components/actions/contexts";
-
 
 const Form = styled.form`
   border: 1px solid #ccc;
