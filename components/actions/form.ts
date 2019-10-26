@@ -2,7 +2,7 @@ import React, {useContext, useState} from "react";
 import {isEmpty} from "lodash";
 import {errorLike, ErrorLike} from "components/error";
 import {Schema} from "yup";
-import {APIContext} from "../actions/contexts";
+import {APIContext} from "./contexts";
 
 export type Errors<T> = {
     [Key in keyof T]: string;
