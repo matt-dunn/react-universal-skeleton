@@ -70,7 +70,7 @@ export const useForm = <T, P = any>(schema: Schema<T>, mapDataToAction: {(data: 
         formDataContext.isProcessed = true;
 
         context.push(schema.validate(formDataContext.data, {abortEarly: false})
-            .then(data => submit(data))
+            .then(submit)
             .catch(reason => {
                 if (reason.inner) {
                     formDataContext.errors = reason.inner.reduce((errors: any, error: any) => {
