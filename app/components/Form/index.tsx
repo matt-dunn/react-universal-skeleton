@@ -1,5 +1,5 @@
-import React, {useContext, useState, useEffect} from 'react'
-import styled, {css} from "styled-components";
+import React from 'react'
+import styled from "styled-components";
 
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
 import {useForm} from "components/actions/form";
-import ReactSelect from "react-select";
+import FancySelect from "app/components/FancySelect";
 
 const Form = styled.form`
   border: 1px solid #ccc;
@@ -17,19 +17,6 @@ const Form = styled.form`
   margin: 20px 0;
 `;
 
-const SelectStyle = css`
-  font-size: inherit;
-  height: 36px;
-  background-color: transparent;
-  flex-grow: 1;
-  border-color: rgb(204, 204, 204);
-`
-const BasicSelect = styled.select`
-  ${SelectStyle}
-`;
-const Select = styled(ReactSelect)`
-  ${SelectStyle}
-`
 const Button = styled.button`
   font-size: inherit;
   padding: 5px;
@@ -68,62 +55,6 @@ const options = [
     { value: 'strawberry', label: 'Strawberry' },
     { value: 'vanilla', label: 'Vanilla' },
 ];
-
-type Option = {
-    value: string;
-    label: string;
-}
-
-const FancySelect = ({id, disabled, options, name, value, onChange, onBlur}: {id: string; disabled?: boolean; options: Option[]; name: string; value?: string; onChange: (name: string, value: string) => void; onBlur: (name: string, touched: boolean) => void}) => {
-    const [isClient, setIsClient] = useState(false);
-
-    useEffect(() => {
-        setIsClient(true)
-    }, [])
-
-    const handleChange = ({value}: {value: string}) => {
-        // this is going to call setFieldValue and manually update values.topcis
-        onChange(name, value);
-    };
-
-    const handleBlur = () => {
-        onBlur(name, true);
-    };
-
-    const handleSelectChange = () => {
-
-    }
-
-    if (isClient) {
-        const defaultValue = (value && options.filter(option => option.value ===value)[0]) || options[0];
-        return (
-            <Select
-                id={id}
-                name={name}
-                value={defaultValue}
-                options={options}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                isDisabled={disabled}
-            />
-        )
-    } else {
-        return (
-            <BasicSelect
-                id={id}
-                className="no-js"
-                name={name}
-                value={value}
-                onChange={handleSelectChange}
-                disabled={disabled}
-            >
-                {options.map((option, index) => (
-                    <option key={index} value={option.value}>{option.label}</option>
-                ))}
-            </BasicSelect>
-        )
-    }
-}
 
 type MyForm = {
     flavour: string;
@@ -165,7 +96,7 @@ const dummyApiCall = (flavour: string, email: string): Promise<MyFormResponse> =
             resolve({chosenFlavour: `FLAVOUR: ${flavour}`, yourEmail: `EMAIL: ${email}`})
         }, 2000);
     })
-}
+};
 
 const MyForm = () => {
     const [formData, submit] = useForm<MyForm, MyFormResponse>(
