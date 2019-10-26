@@ -140,11 +140,35 @@ type MyFormResponse = {
 
 const schema = Yup.object().shape({
     email: Yup.string()
+        .required('Email is required')
         .email()
-        .required('Email is required'),
+        .test("c", "Email ${value} is unavailable", (value: string) => {
+            if (!value || !Yup.string().email().isValidSync(value)) {
+                return true;
+            } else {
+                return new Promise(resolve => {
+                    setTimeout(() => {
+                        resolve(value !== "demo@ixxus.co.uk")
+                    }, 1500)
+                })
+            }
+        }),
     flavour: Yup.string()
         .required('Flavour is required')
 });
+
+const dummyApiCall = (data: any) => {
+    return new Promise((resolve, reject) => {
+        if (data.flavour === "vanilla") {
+            // throw new APIError("Authentication Failed", "auth", 403)
+            throw new Error("Don't like VANILLA!!!")
+        }
+
+        setTimeout(() => {
+            resolve({chosenFlavour: `FLAVOUR: ${data.flavour}`, yourEmail: `EMAIL: ${data.email}`})
+        }, 2000);
+    })
+}
 
 const MyForm = () => {
     const formDataContext = useFormData<MyForm, MyFormResponse>();
@@ -152,35 +176,32 @@ const MyForm = () => {
 
     // console.log("@@@@@", formData, formData.payload)
 
-    const submit = (data: MyForm): Promise<MyFormResponse> => {
+    const submit = (action: Promise<any>, data: MyForm): Promise<MyFormResponse> => {
         console.log("@@@@@@CALL FORM API")
-        return new Promise((resolve, reject) => {
-            if (data.flavour === "vanilla") {
-                // throw new APIError("Authentication Failed", "auth", 403)
-                throw new Error("Don't like VANILLA!!!")
-            }
+        setFormData(formData => ({...formData, error: undefined}))
 
-            setTimeout(() => {
-                resolve({chosenFlavour: `FLAVOUR: ${data.flavour}`, yourEmail: `EMAIL: ${data.email}`})
-            }, 2000);
+        return action
+            .then(payload => {
+                formDataContext.payload = payload;
 
-        })
+                setFormData(formData => ({...formData, isProcessed: true, error: undefined, payload: payload, data}));
+
+                return payload;
+            })
+            .catch(reason => {
+                formDataContext.error = errorLike(reason);
+
+                setFormData(formData => ({...formData, isProcessed: true, error: formDataContext.error, payload: undefined, data}))
+            })
     }
 
     const context = useContext<Promise<any>[] | undefined>(APIContext as any);
 
     if (context && formDataContext.isSubmitted && !formDataContext.isProcessed) {
+        formDataContext.isProcessed = true;
+
         context.push(schema.validate(formDataContext.data, {abortEarly: false})
-            .then(data => {
-                return submit(data)
-                    .then(payload => {
-                        formDataContext.payload = payload;
-                    })
-                    .catch(reason => {
-                        formDataContext.error = errorLike(reason);
-                        throw reason;
-                    })
-            })
+            .then(data => submit(dummyApiCall(data), data))
             .catch(reason => {
                 console.log("ERROR@@@@", reason)
 
@@ -190,9 +211,6 @@ const MyForm = () => {
                         return errors;
                     }, {})
                 }
-            })
-            .finally(() => {
-                formDataContext.isProcessed = true;
             })
         );
     }
@@ -216,17 +234,8 @@ const MyForm = () => {
             <Formik
                 initialValues={formData.data || { email: '', flavour: '' }}
                 onSubmit={(values, { setSubmitting }) => {
-                    setFormData(formData => ({...formData, error: undefined}))
-                    submit(values as any)
-                        .then(payload => {
-                            setFormData(formData => ({...formData, isProcessed: true, error: undefined, payload: payload, data: values as any}))
-                        })
-                        .catch(reason => {
-                            setFormData(formData => ({...formData, isProcessed: true, error: reason, payload: undefined, data: values as any}))
-                        })
-                        .finally(() => {
-                            setSubmitting(false);
-                        })
+                    submit(dummyApiCall(values), values as any)
+                        .finally(() => setSubmitting(false))
                 }}
                 validationSchema={schema}
             >
