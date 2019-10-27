@@ -88,6 +88,8 @@ export const useForm = <T, P = any | undefined>(schema: Schema<T>, mapDataToActi
                         o[name] = true;
                         return o;
                     }, {});
+                } else {
+                    formDataContext.error = reason;
                 }
 
                 return reason;

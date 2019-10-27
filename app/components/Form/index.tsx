@@ -3,11 +3,13 @@ import styled from "styled-components";
 
 import { Formik, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import {ValidationError} from "yup";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
-import {useForm, useFormData} from "components/actions/form";
+import {useForm} from "components/actions/form";
 import FancySelect from "app/components/FancySelect";
+import {APIError} from "components/api";
 
 const Form = styled.form`
   border: 1px solid #ccc;
@@ -66,19 +68,29 @@ type MyFormResponse = {
     yourEmail: string;
 }
 
+const validateEmailApi = (email: string): Promise<boolean | ValidationError> => {
+    return new Promise((resolve, reject) => {
+        if (email === "matt.j.dunn@gmail.com") {
+            throw new Error("Email validation failed")
+        }
+
+        setTimeout(() => {
+            // reject(new Error("Email validation failed"))
+            resolve(email !== "demo@ixxus.co.uk")
+        }, 1500)
+    })
+}
+
 const schema = Yup.object().shape({
     email: Yup.string()
         .required('Email is required')
         .email()
-        .test("c", "Email ${value} is unavailable", (value: string) => {
+        .test("c", "Email ${value} is unavailable", function(value: string) {
             if (!value || !Yup.string().email().isValidSync(value)) {
                 return true;
             } else {
-                return new Promise(resolve => {
-                    setTimeout(() => {
-                        resolve(value !== "demo@ixxus.co.uk")
-                    }, 1500)
-                })
+                return validateEmailApi(value)
+                    .catch(reason => new ValidationError(reason.message, value, this.path))
             }
         }),
     flavour: Yup.string()
@@ -104,17 +116,7 @@ const MyForm = () => {
         values => dummyApiCall(values.flavour, values.email)
     );
 
-    // TODO: set the correct Formik internal state somehow so that when rendered from server resetting a value runs the validator (touch?)
-    // const form = React.createRef<Formik>()
-    //
-    // useEffect(() => {
-    //     if (!context && formData.isSubmitted && form.current && formData.data) {
-    //         console.log("@@@@@@@@@SUBMIT!!!!!!!")
-    //         form.current.runValidations()//.executeSubmit()//.validateForm(formData.data)
-    //     }
-    // }, [])
-
-    // useWhatChanged(About, { formData, items, item, onExampleGetList, onExampleGetItem, onExampleEditItem, $status, renderListItem, page});
+    useWhatChanged(MyForm, { formData });
 
     return (
         <div>
@@ -122,13 +124,13 @@ const MyForm = () => {
 
             <Formik
                 initialValues={formData.data || { email: '', flavour: '' }}
+                initialErrors={formData.errors}
+                initialTouched={formData.errorsHash}
                 onSubmit={(values, { setSubmitting }) => {
                     submit(values)
                         .finally(() => setSubmitting(false))
                 }}
                 validationSchema={schema}
-                initialErrors={formData.errors}
-                initialTouched={formData.errorsHash}
             >
                 {props => {
                     const {
