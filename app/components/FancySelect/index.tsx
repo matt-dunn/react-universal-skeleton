@@ -30,8 +30,8 @@ type FancySelectProps = {
     options: Option[];
     name: string;
     value?: string;
-    onChange: (name: string, value: string) => void;
-    onBlur: (name: string, touched: boolean) => void;
+    onChange: (name: string | any, value: string, shouldValidate?: boolean) => void;
+    onBlur: (name: string | any, touched?: boolean, shouldValidate?: boolean) => void;
 }
 
 const FancySelect = ({id, disabled, options, name, value, onChange, onBlur}: FancySelectProps): JSX.Element => {

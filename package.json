@@ -10,7 +10,7 @@
     "components": "^0.1.0",
     "css-element-queries": "^1.2.1",
     "flux-standard-action": "^2.1.1",
-    "formik": "^1.5.8",
+    "formik": "^2.0.1",
     "immutable": "^4.0.0-rc.12",
     "is-promise": "^2.1.0",
     "lodash": "^4.17.15",

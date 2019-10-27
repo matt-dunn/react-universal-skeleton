@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from "styled-components";
 
-import { Formik, getIn, FormikContext, connect } from 'formik';
+import { Formik, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
@@ -98,23 +98,6 @@ const dummyApiCall = (flavour: string, email: string): Promise<MyFormResponse> =
     })
 };
 
-type FormikProps = {
-    formik: FormikContext<{}>;
-}
-
-export interface ErrorMessageProps {
-    name: string;
-    children: (message: string) => JSX.Element;
-}
-
-export const ErrorMessage = connect(({name, formik, children}: ErrorMessageProps & FormikProps) => {
-    const formData = useFormData();
-    const error = getIn(formik.errors, name);
-    const touched = getIn(formik.touched, name);
-
-    return (((formData.errors && formData.errors[name] && !touched) || (error && touched)) && children(error || formData.errors[name])) || null;
-}) as React.FunctionComponent<ErrorMessageProps>;
-
 const MyForm = () => {
     const [formData, submit] = useForm<MyForm, MyFormResponse>(
         schema,
@@ -144,6 +127,8 @@ const MyForm = () => {
                         .finally(() => setSubmitting(false))
                 }}
                 validationSchema={schema}
+                initialErrors={formData.errors}
+                initialTouched={formData.errorsHash}
             >
                 {props => {
                     const {
