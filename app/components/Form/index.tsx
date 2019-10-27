@@ -85,7 +85,7 @@ const schema = Yup.object().shape({
     email: Yup.string()
         .required('Email is required')
         .email()
-        .test("c", "Email ${value} is unavailable", function(value: string) {
+        .test("email", "Email ${value} is unavailable", function(value: string) {
             if (!value || !Yup.string().email().isValidSync(value)) {
                 return true;
             } else {

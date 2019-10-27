@@ -1,7 +1,9 @@
 import React, {useContext, useState} from "react";
 import {isEmpty} from "lodash";
-import {errorLike, ErrorLike} from "components/error";
 import {Schema} from "yup";
+import immutable from 'object-path-immutable';
+
+import {errorLike, ErrorLike} from "components/error";
 import {APIContext} from "./contexts";
 
 export type Errors<T> = {
@@ -19,7 +21,7 @@ export type FormData<T = any, P = any> = {
     payload: P;
     error?: ErrorLike;
     errors: Errors<T>;
-    errorsHash: ErrorsHash<T>
+    errorsHash: ErrorsHash<T>;
 };
 
 export const FormData = <T = any, P = any>(formData: FormData<T, P>): FormData<T, P> => {
@@ -50,24 +52,24 @@ export const useForm = <T, P = any | undefined>(schema: Schema<T>, mapDataToActi
     const formDataContext = useFormData<T, P | undefined>();
     const [formData, setFormData] = useState<FormData<T, P | undefined>>(formDataContext);
 
-    const submit = (data: T): Promise<P> => {
+    const submit = async (data: T): Promise<P> => {
         setFormData(formData => FormData({...formData, error: undefined}));
 
-        return mapDataToAction(data)
-            .then(payload => {
-                formDataContext.payload = payload;
+        try {
+            const payload= await mapDataToAction(data);
 
-                setFormData(formData => FormData({...formData, isProcessed: true, error: undefined, payload: payload, data}));
+            formDataContext.payload = payload;
 
-                return payload;
-            })
-            .catch(reason => {
-                formDataContext.error = errorLike(reason);
+            setFormData(formData => FormData({...formData, isProcessed: true, error: undefined, payload: payload, data}));
 
-                setFormData(formData => FormData({...formData, isProcessed: true, error: formDataContext.error, payload: undefined, data}))
+            return payload;
+        } catch(reason) {
+            formDataContext.error = errorLike(reason);
 
-                return reason;
-            })
+            setFormData(formData => FormData({...formData, isProcessed: true, error: formDataContext.error, payload: undefined, data}));
+
+            return reason;
+        }
     };
 
     const context = useContext<Promise<P>[]>(APIContext as any);
@@ -79,15 +81,13 @@ export const useForm = <T, P = any | undefined>(schema: Schema<T>, mapDataToActi
             .then(submit)
             .catch(reason => {
                 if (reason.inner) {
-                    formDataContext.errors = reason.inner.reduce((errors: any, error: any) => {
-                        errors[error.path] = error.message;
-                        return errors;
-                    }, {})
+                    const {errors, hash} = reason.inner.reduce(({errors, hash}: {errors: Errors<T>; hash: ErrorsHash<T>}, {path, message}: {path: string; message: string}) => ({
+                        errors: immutable.set(errors, path, message),
+                        hash: immutable.set(hash, path, true)
+                    }), {errors: {}, hash: {}});
 
-                    formDataContext.errorsHash = Object.keys(formDataContext.errors).reduce((o: any, name: string) => {
-                        o[name] = true;
-                        return o;
-                    }, {});
+                    formDataContext.errors = errors;
+                    formDataContext.errorsHash = hash;
                 } else {
                     formDataContext.error = reason;
                 }
