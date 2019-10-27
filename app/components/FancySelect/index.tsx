@@ -5,14 +5,14 @@ import ReactSelect from "react-select";
 
 const SelectStyle = css`
   font-size: inherit;
-  height: 36px;
   background-color: transparent;
   flex-grow: 1;
   border-color: rgb(204, 204, 204);
 `;
 
 const BasicSelect = styled.select`
-  ${SelectStyle}
+  ${SelectStyle};
+  height: 36px;
 `;
 
 const Select = styled(ReactSelect)`
