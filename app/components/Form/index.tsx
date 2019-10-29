@@ -116,7 +116,7 @@ const MyForm = () => {
         values => dummyApiCall(values.flavour, values.email)
     );
 
-    useWhatChanged(MyForm, { formData });
+    useWhatChanged(MyForm, { formData, submit });
 
     return (
         <div>
@@ -126,10 +126,7 @@ const MyForm = () => {
                 initialValues={formData.data || { email: '', flavour: '' }}
                 initialErrors={formData.errors}
                 initialTouched={formData.errorsHash}
-                onSubmit={(values, { setSubmitting }) => {
-                    submit(values)
-                        .finally(() => setSubmitting(false))
-                }}
+                onSubmit={values => submit(values)}
                 validationSchema={schema}
             >
                 {props => {
@@ -146,6 +143,7 @@ const MyForm = () => {
                         setFieldTouched,
                         setFieldValue
                     } = props;
+                    useWhatChanged(Formik, { formData, submit, props });
                     return (
                         <Form onSubmit={handleSubmit} method="post">
                             {formData.error && <InputFeedback>There was a problem submitting: {formData.error.message}</InputFeedback>}
@@ -211,4 +209,4 @@ const MyForm = () => {
     )
 }
 
-export default MyForm
+export default React.memo(MyForm)
