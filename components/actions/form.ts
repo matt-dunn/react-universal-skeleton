@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, {useCallback, useContext, useState} from "react";
 import {isEmpty} from "lodash";
 import {Schema} from "yup";
 import immutable from 'object-path-immutable';
@@ -29,12 +29,12 @@ export const FormData = <T = any, P = any>(formData: FormData<T, P>): FormData<T
 
     return {
         isProcessed,
-        data,
         isSubmitted: !isEmpty(data),
-        payload,
-        error: error && errorLike(error),
+        data,
         errors,
-        errorsHash
+        errorsHash,
+        payload,
+        error: error && errorLike(error)
     }
 };
 
@@ -52,7 +52,7 @@ export const useForm = <T, P = any | undefined>(schema: Schema<T>, mapDataToActi
     const formDataContext = useFormData<T, P | undefined>();
     const [formData, setFormData] = useState<FormData<T, P | undefined>>(formDataContext);
 
-    const submit = async (data: T): Promise<P> => {
+    const submit = useCallback(async(data: T): Promise<P> => {
         setFormData(formData => FormData({...formData, error: undefined}));
 
         try {
@@ -70,7 +70,7 @@ export const useForm = <T, P = any | undefined>(schema: Schema<T>, mapDataToActi
 
             return reason;
         }
-    };
+    }, []);
 
     const context = useContext<Promise<P>[]>(APIContext as any);
 
