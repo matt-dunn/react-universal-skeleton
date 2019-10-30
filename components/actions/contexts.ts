@@ -1,6 +1,6 @@
 import React from "react";
 
-export const APIContext = React.createContext(undefined);
+export const APIContext = React.createContext<Promise<any>[]>([]);
 
 export const FoldContext = React.createContext(undefined);
 
