@@ -1,9 +1,9 @@
 import React from 'react'
-import styled from "styled-components";
+import styled, {css} from "styled-components";
 
-import { Formik, ErrorMessage } from 'formik';
+import {Formik, ErrorMessage, Field, useField, FieldAttributes, FormikErrors} from 'formik';
 import * as Yup from 'yup';
-import {ValidationError} from "yup";
+import {ValidationError, Schema} from "yup";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
@@ -39,6 +39,7 @@ const Input = styled.input`
   border: 1px solid rgb(204, 204, 204);
   padding: 9px 8px;
   border-radius: 4px;
+  ${({isValid}) => !isValid && css`border-color: red`};
   }
 `
 
@@ -68,23 +69,30 @@ type MyFormResponse = {
     yourEmail: string;
 }
 
-const validateEmailApi = (email: string): Promise<boolean | ValidationError> => {
-    return new Promise((resolve, reject) => {
-        if (email === "matt.j.dunn@gmail.com") {
-            throw new Error("Email validation failed")
-        }
+const validateEmailApi = (function() {
+    let t: number;
 
-        setTimeout(() => {
-            // reject(new Error("Email validation failed"))
-            resolve(email !== "demo@ixxus.co.uk")
-        }, 1500)
-    })
-}
+    return (email: string): Promise<boolean | ValidationError> => {
+        console.log("#####VALIDATE EMAIL")
+        clearTimeout(t);
+        return new Promise((resolve, reject) => {
+            if (email === "matt.j.dunn@gmail.com") {
+                throw new Error("Email validation failed")
+            }
 
-const schema = Yup.object().shape({
+            t = setTimeout(() => {
+                // reject(new Error("Email validation failed"))
+                resolve(!email.startsWith("demo@"))
+            }, 1500)
+        })
+    }
+})()
+
+const schema = {
     email: Yup.string()
         .required('Email is required')
-        .email()
+        .email(),
+    emailAsync: Yup.string()
         .test("email", "Email ${value} is unavailable", function(value: string) {
             if (!value || !Yup.string().email().isValidSync(value)) {
                 return true;
@@ -95,9 +103,10 @@ const schema = Yup.object().shape({
         }),
     flavour: Yup.string()
         .required('Flavour is required')
-});
+};
 
 const dummyApiCall = (flavour: string, email: string): Promise<MyFormResponse> => {
+    console.log("#####CALL API")
     return new Promise((resolve, reject) => {
         if (flavour === "vanilla") {
             // throw new APIError("Authentication Failed", "auth", 403)
@@ -110,9 +119,53 @@ const dummyApiCall = (flavour: string, email: string): Promise<MyFormResponse> =
     })
 };
 
+const MyField = ({ setFieldError, setStatus, status, ...props }: FieldAttributes<any> & {setFieldError: (field: string, value: string | undefined) => void; setStatus: (status: any) => void; status: any}) => {
+    const [field, meta] = useField(props);
+    console.log(field, meta)
+
+    const fieldSchema:any = schema[field.name];
+    const fieldSchemaAsync:any = schema[`${field.name}Async`];
+
+    const validate = (value: string) => {
+        return fieldSchema.validate(value)
+            .then(() => {
+                if (fieldSchemaAsync) {
+                    if (status && status.email && status.email.value === value) {
+                        // return "";
+                        return meta.error;
+                    }
+
+                    setFieldError(field.name, "");
+
+                    return fieldSchemaAsync.validate(value, {context: {setFieldError, setStatus}})
+                        .then(() => {
+                            setFieldError(field.name, "");
+                            return "";
+                        })
+                        .catch(reason => {
+                            setFieldError(field.name, reason.message);
+                            return reason.message;
+                        })
+                }
+                return "";
+            })
+            .catch(reason => {
+                setFieldError(field.name, reason.message);
+                return reason.message;
+            })
+            .finally(() => {
+                setStatus({...status, email: {value: value}});
+            })
+    }
+
+    return (
+        <Field {...props} validate={validate}/>
+    );
+};
+
 const MyForm = () => {
     const [formData, submit] = useForm<MyForm, MyFormResponse>(
-        schema,
+        Yup.object().shape(schema),
         values => dummyApiCall(values.flavour, values.email)
     );
 
@@ -127,7 +180,7 @@ const MyForm = () => {
                 initialErrors={formData.errors}
                 initialTouched={formData.errorsHash}
                 onSubmit={values => submit(values)}
-                validationSchema={schema}
+                // validationSchema={schema}
             >
                 {props => {
                     const {
@@ -141,7 +194,10 @@ const MyForm = () => {
                         handleSubmit,
                         handleReset,
                         setFieldTouched,
-                        setFieldValue
+                        setFieldValue,
+                        setFieldError,
+                        setStatus,
+                        status
                     } = props;
                     useWhatChanged(Formik, { formData, submit, props });
                     return (
@@ -152,7 +208,8 @@ const MyForm = () => {
                                 <Label htmlFor="flavour" style={{ display: 'block' }}>
                                     Flavour
                                 </Label>
-                                <FancySelect
+                                <MyField
+                                    as={FancySelect}
                                     id="flavour"
                                     options={options}
                                     name="flavour"
@@ -160,6 +217,10 @@ const MyForm = () => {
                                     onBlur={setFieldTouched}
                                     onChange={setFieldValue}
                                     disabled={isSubmitting}
+                                    isValid={!(errors.flavour && touched.flavour)}
+                                    status={status}
+                                    setFieldError={setFieldError}
+                                    setStatus={setStatus}
                                 />
                                 <ErrorMessage name="flavour">
                                     {message => <InputFeedback>{message}</InputFeedback>}
@@ -170,7 +231,8 @@ const MyForm = () => {
                                 <Label htmlFor="email" style={{ display: 'block' }}>
                                     Email
                                 </Label>
-                                <Input
+                                <MyField
+                                    as={Input}
                                     id="email"
                                     name="email"
                                     placeholder="Enter your email"
@@ -179,9 +241,10 @@ const MyForm = () => {
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     disabled={isSubmitting}
-                                    className={
-                                        errors.email && touched.email ? 'text-input error' : 'text-input'
-                                    }
+                                    isValid={!(errors.email && touched.email)}
+                                    status={status}
+                                    setFieldError={setFieldError}
+                                    setStatus={setStatus}
                                 />
                                 <ErrorMessage name="email">
                                     {message => <InputFeedback>{message}</InputFeedback>}

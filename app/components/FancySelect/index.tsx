@@ -3,11 +3,15 @@ import styled, {css} from "styled-components";
 
 import ReactSelect from "react-select";
 
-const SelectStyle = css`
+const SelectStyle = css<{isValid?: boolean}>`
   font-size: inherit;
   background-color: transparent;
   flex-grow: 1;
-  border-color: rgb(204, 204, 204);
+  > div {
+    &, &:hover {
+      border-color: ${({isValid}) => (isValid && 'rgb(204, 204, 204)') || "red"};
+    }
+  }
 `;
 
 const BasicSelect = styled.select`
@@ -27,6 +31,7 @@ type Option = {
 type FancySelectProps = {
     id: string;
     disabled?: boolean;
+    isValid?: boolean;
     options: Option[];
     name: string;
     value?: string;
@@ -34,7 +39,7 @@ type FancySelectProps = {
     onBlur: (name: string | any, touched?: boolean, shouldValidate?: boolean) => void;
 }
 
-const FancySelect = ({id, disabled, options, name, value, onChange, onBlur}: FancySelectProps): JSX.Element => {
+const FancySelect = ({id, disabled, isValid, options, name, value, onChange, onBlur}: FancySelectProps): JSX.Element => {
     const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
@@ -65,6 +70,7 @@ const FancySelect = ({id, disabled, options, name, value, onChange, onBlur}: Fan
                 onChange={handleChange}
                 onBlur={handleBlur}
                 isDisabled={disabled}
+                isValid={isValid}
             />
         )
     } else {
