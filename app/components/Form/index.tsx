@@ -33,7 +33,7 @@ const Label = styled.label`
   margin: 2px 0;
 `
 
-const Input = styled.input`
+const Input = styled.input<{isValid?: boolean}>`
   && {
   font-size: inherit;
   border: 1px solid rgb(204, 204, 204);
@@ -88,11 +88,10 @@ const validateEmailApi = (function() {
     }
 })()
 
-const schema = {
+const schema = Yup.object().shape({
     email: Yup.string()
         .required('Email is required')
-        .email(),
-    emailAsync: Yup.string()
+        .email()
         .test("email", "Email ${value} is unavailable", function(value: string) {
             if (!value || !Yup.string().email().isValidSync(value)) {
                 return true;
@@ -103,7 +102,7 @@ const schema = {
         }),
     flavour: Yup.string()
         .required('Flavour is required')
-};
+});
 
 const dummyApiCall = (flavour: string, email: string): Promise<MyFormResponse> => {
     console.log("#####CALL API")
@@ -119,54 +118,58 @@ const dummyApiCall = (flavour: string, email: string): Promise<MyFormResponse> =
     })
 };
 
-const MyField = ({ setFieldError, setStatus, status, ...props }: FieldAttributes<any> & {setFieldError: (field: string, value: string | undefined) => void; setStatus: (status: any) => void; status: any}) => {
-    const {errors} = useFormikContext();
-
-    const fieldSchema:any = schema[props.name];
-    const fieldSchemaAsync:any = schema[`${props.name}Async`];
-
-    const validateField = (value: string) => {
-        return fieldSchema.validate(value)
-            .then(() => {
-                if (fieldSchemaAsync) {
-                    if (status && status.email && status.email.value === value) {
-                        // return "";
-                        return errors[props.name];
-                    }
-
-                    setFieldError(props.name, "");
-
-                    return fieldSchemaAsync.validate(value, {context: {setFieldError, setStatus}})
-                        .then(() => {
-                            setFieldError(props.name, "");
-                            return "";
-                        })
-                        .catch(reason => {
-                            setFieldError(props.name, reason.message);
-                            return reason.message;
-                        })
-                }
-                return "";
-            })
-            .catch(reason => {
-                setFieldError(props.name, reason.message);
-                return reason.message;
-            })
-            .finally(() => {
-                setStatus({...status, email: {value: value}});
-            })
-    }
-
-    const {validate, ...fieldProps} = props
-
-    return (
-        <Field {...fieldProps} validate={validateField}/>
-    );
-};
+// const MyField = ({ setFieldError, setStatus, status, ...props }: FieldAttributes<any> & {setFieldError: (field: string, value: string | undefined) => void; setStatus: (status: any) => void; status: any}) => {
+//     const {errors} = useFormikContext();
+//
+//     const fieldSchema:any = schema[props.name];
+//     const fieldSchemaAsync:any = schema[`${props.name}Async`];
+//
+//     console.log("#FIELD", props.name)
+//
+//     const validateField = (value: string) => {
+//         console.log("#VAL", value)
+//         return fieldSchema.validate(value)
+//             .then(() => {
+//                 console.log("#VAL=OK1", value)
+//                 if (fieldSchemaAsync) {
+//                     if (status && status.email && status.email.value === value) {
+//                         // return "";
+//                         return errors[props.name];
+//                     }
+//
+//                     setFieldError(props.name, "");
+//
+//                     return fieldSchemaAsync.validate(value, {context: {setFieldError, setStatus}})
+//                         .then(() => {
+//                             setFieldError(props.name, "");
+//                             return "";
+//                         })
+//                         .catch(reason => {
+//                             setFieldError(props.name, reason.message);
+//                             return reason.message;
+//                         })
+//                 }
+//                 return "";
+//             })
+//             .catch(reason => {
+//                 setFieldError(props.name, reason.message);
+//                 return reason.message;
+//             })
+//             .finally(() => {
+//                 setStatus({...status, email: {value: value}});
+//             })
+//     }
+//
+//     const {validate, ...fieldProps} = props
+//
+//     return (
+//         <Field {...fieldProps} />
+//     );
+// };
 
 const MyForm = () => {
     const [formData, submit] = useForm<MyForm, MyFormResponse>(
-        Yup.object().shape(schema),
+        schema,
         values => dummyApiCall(values.flavour, values.email)
     );
 
@@ -181,7 +184,7 @@ const MyForm = () => {
                 initialErrors={formData.errors}
                 initialTouched={formData.errorsHash}
                 onSubmit={values => submit(values)}
-                // validationSchema={schema}
+                validationSchema={schema}
             >
                 {props => {
                     const {
@@ -209,7 +212,7 @@ const MyForm = () => {
                                 <Label htmlFor="flavour" style={{ display: 'block' }}>
                                     Flavour
                                 </Label>
-                                <MyField
+                                <Field
                                     as={FancySelect}
                                     id="flavour"
                                     options={options}
@@ -219,9 +222,9 @@ const MyForm = () => {
                                     onChange={setFieldValue}
                                     disabled={isSubmitting}
                                     isValid={!(errors.flavour && touched.flavour)}
-                                    status={status}
-                                    setFieldError={setFieldError}
-                                    setStatus={setStatus}
+                                    // status={status}
+                                    // setFieldError={setFieldError}
+                                    // setStatus={setStatus}
                                 />
                                 <ErrorMessage name="flavour">
                                     {message => <InputFeedback>{message}</InputFeedback>}
@@ -232,7 +235,7 @@ const MyForm = () => {
                                 <Label htmlFor="email" style={{ display: 'block' }}>
                                     Email
                                 </Label>
-                                <MyField
+                                <Field
                                     as={Input}
                                     id="email"
                                     name="email"
@@ -243,9 +246,9 @@ const MyForm = () => {
                                     onBlur={handleBlur}
                                     disabled={isSubmitting}
                                     isValid={!(errors.email && touched.email)}
-                                    status={status}
-                                    setFieldError={setFieldError}
-                                    setStatus={setStatus}
+                                    // status={status}
+                                    // setFieldError={setFieldError}
+                                    // setStatus={setStatus}
                                 />
                                 <ErrorMessage name="email">
                                     {message => <InputFeedback>{message}</InputFeedback>}

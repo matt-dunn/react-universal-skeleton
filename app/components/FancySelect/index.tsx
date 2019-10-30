@@ -17,6 +17,7 @@ const SelectStyle = css<{isValid?: boolean}>`
 const BasicSelect = styled.select`
   ${SelectStyle};
   height: 36px;
+  border-color: ${({isValid}) => (isValid && 'rgb(204, 204, 204)') || "red"};
 `;
 
 const Select = styled(ReactSelect)`
@@ -82,6 +83,7 @@ const FancySelect = ({id, disabled, isValid, options, name, value, onChange, onB
                 value={value}
                 onChange={handleSelectChange}
                 disabled={disabled}
+                isValid={isValid}
             >
                 {options.map((option, index) => (
                     <option key={index} value={option.value}>{option.label}</option>
