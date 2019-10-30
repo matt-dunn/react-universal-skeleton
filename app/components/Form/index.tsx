@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, {css} from "styled-components";
 
-import {Formik, ErrorMessage, Field, useField, FieldAttributes, FormikErrors} from 'formik';
+import {Formik, ErrorMessage, Field, useField, FieldAttributes, useFormikContext} from 'formik';
 import * as Yup from 'yup';
 import {ValidationError, Schema} from "yup";
 
@@ -120,37 +120,36 @@ const dummyApiCall = (flavour: string, email: string): Promise<MyFormResponse> =
 };
 
 const MyField = ({ setFieldError, setStatus, status, ...props }: FieldAttributes<any> & {setFieldError: (field: string, value: string | undefined) => void; setStatus: (status: any) => void; status: any}) => {
-    const [field, meta] = useField(props);
-    console.log(field, meta)
+    const {errors} = useFormikContext();
 
-    const fieldSchema:any = schema[field.name];
-    const fieldSchemaAsync:any = schema[`${field.name}Async`];
+    const fieldSchema:any = schema[props.name];
+    const fieldSchemaAsync:any = schema[`${props.name}Async`];
 
-    const validate = (value: string) => {
+    const validateField = (value: string) => {
         return fieldSchema.validate(value)
             .then(() => {
                 if (fieldSchemaAsync) {
                     if (status && status.email && status.email.value === value) {
                         // return "";
-                        return meta.error;
+                        return errors[props.name];
                     }
 
-                    setFieldError(field.name, "");
+                    setFieldError(props.name, "");
 
                     return fieldSchemaAsync.validate(value, {context: {setFieldError, setStatus}})
                         .then(() => {
-                            setFieldError(field.name, "");
+                            setFieldError(props.name, "");
                             return "";
                         })
                         .catch(reason => {
-                            setFieldError(field.name, reason.message);
+                            setFieldError(props.name, reason.message);
                             return reason.message;
                         })
                 }
                 return "";
             })
             .catch(reason => {
-                setFieldError(field.name, reason.message);
+                setFieldError(props.name, reason.message);
                 return reason.message;
             })
             .finally(() => {
@@ -158,8 +157,10 @@ const MyField = ({ setFieldError, setStatus, status, ...props }: FieldAttributes
             })
     }
 
+    const {validate, ...fieldProps} = props
+
     return (
-        <Field {...props} validate={validate}/>
+        <Field {...fieldProps} validate={validateField}/>
     );
 };
 
