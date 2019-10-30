@@ -47,18 +47,11 @@ const FancySelect = ({id, disabled, isValid, options, name, value, onChange, onB
         setIsClient(true)
     }, [])
 
-    const handleChange = ({value}: {value: string}) => {
-        // this is going to call setFieldValue and manually update values.topcis
-        onChange(name, value);
-    };
+    const handleChange = ({value}: {value: string}) => onChange(name, value);
 
-    const handleBlur = () => {
-        onBlur(name, true);
-    };
+    const handleBlur = () => onBlur(name, true);
 
-    const handleSelectChange = () => {
-
-    }
+    const handleSelectChange = () => {}
 
     if (isClient) {
         const defaultValue = (value && options.filter(option => option.value ===value)[0]) || options[0];

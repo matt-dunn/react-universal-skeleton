@@ -70,9 +70,9 @@ export const useForm = <T, P = any | undefined>(schema: Schema<T>, mapDataToActi
 
             return reason;
         }
-    }, []);
+    }, [formDataContext.error, formDataContext.payload, mapDataToAction]);
 
-    const context = useContext<Promise<P>[]>(APIContext as any);
+    const context = useContext(APIContext);
 
     if (context && formDataContext.isSubmitted && !formDataContext.isProcessed) {
         formDataContext.isProcessed = true;
