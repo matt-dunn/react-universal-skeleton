@@ -65,7 +65,9 @@ const options = [
 ];
 
 type MyForm = {
-    flavour: string;
+    flavour: {
+        favourite: string
+    };
     email: string;
 }
 
@@ -105,8 +107,10 @@ const schema = Yup.object().shape({
                     .catch(reason => new ValidationError(reason.message, value, this.path))
             }
         }),
-    flavour: Yup.string()
-        .required('Flavour is required')
+    flavour: Yup.object().shape({
+        favourite: Yup.string()
+            .required('Flavour is required')
+    })
 });
 
 const dummyApiCall = (flavour: string, email: string): Promise<MyFormResponse> => {
@@ -180,7 +184,7 @@ type InitialFormData<T> = {
 const MyForm = () => {
     const [formData, submit] = useForm<MyForm, MyFormResponse, ValidationError[]>(
         values => schema.validate(values, {abortEarly: false}),
-        values => dummyApiCall(values.flavour, values.email)
+        values => dummyApiCall(values.flavour.favourite, values.email)
     );
 
     const {errors: initialErrors, touched: initialTouched} = useMemo<InitialFormData<MyForm>>(() => formData.innerFormErrors && formData.innerFormErrors.reduce(({errors, touched}, {path, message}) => ({
@@ -188,7 +192,7 @@ const MyForm = () => {
         touched: setIn(touched, path, true)
     }), {errors: {}, touched: {}}) || {}, [formData.innerFormErrors]);
 
-    const initialValues = formData.data || { email: '', flavour: '' };
+    const initialValues = formData.data || { email: '', flavour: {favourite: ''} };
 
     useWhatChanged(MyForm, { formData, submit, initialValues });
 
@@ -226,22 +230,22 @@ const MyForm = () => {
                             {formData.error && <InputFeedback>There was a problem submitting: {formData.error.message}</InputFeedback>}
 
                             <Section>
-                                <FormLabel label="Flavour" name="flavour" schema={schema}/>
+                                <FormLabel label="Flavour" name="flavour.favourite" schema={schema}/>
                                 <Field
                                     as={FancySelect}
                                     id="flavour"
                                     options={options}
-                                    name="flavour"
-                                    value={values.flavour}
+                                    name="flavour.favourite"
+                                    value={values.flavour.favourite}
                                     onBlur={setFieldTouched}
                                     onChange={setFieldValue}
                                     disabled={isSubmitting}
-                                    isValid={!(errors.flavour && touched.flavour)}
+                                    isValid={!(errors.flavour && errors.flavour.favourite && touched.flavour && touched.flavour.favourite)}
                                     // status={status}
                                     // setFieldError={setFieldError}
                                     // setStatus={setStatus}
                                 />
-                                <ErrorMessage name="flavour">
+                                <ErrorMessage name="flavour.favourite">
                                     {message => <InputFeedback>{message}</InputFeedback>}
                                 </ErrorMessage>
                             </Section>
