@@ -18,6 +18,7 @@ import {ValidationError} from "yup";
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
 import {useForm} from "components/actions/form";
+import FormLabel from "app/components/Form/Label";
 import FancySelect from "app/components/FancySelect";
 
 const Form = styled.form`
@@ -35,11 +36,6 @@ const Button = styled.button`
   background-color: #eee;
   border-radius: 3px;
   margin: 10px 8px 10px 0;
-`
-
-const Label = styled.label`
-  color: #666;
-  margin: 2px 0;
 `
 
 const Input = styled.input<{isValid?: boolean}>`
@@ -194,7 +190,7 @@ const MyForm = () => {
 
     const initialValues = formData.data || { email: '', flavour: '' };
 
-    useWhatChanged(MyForm, { formData, submit });
+    useWhatChanged(MyForm, { formData, submit, initialValues });
 
     return (
         <>
@@ -230,9 +226,7 @@ const MyForm = () => {
                             {formData.error && <InputFeedback>There was a problem submitting: {formData.error.message}</InputFeedback>}
 
                             <Section>
-                                <Label htmlFor="flavour" style={{ display: 'block' }}>
-                                    Flavour
-                                </Label>
+                                <FormLabel label="Flavour" name="flavour" schema={schema}/>
                                 <Field
                                     as={FancySelect}
                                     id="flavour"
@@ -253,9 +247,7 @@ const MyForm = () => {
                             </Section>
 
                             <Section>
-                                <Label htmlFor="email" style={{ display: 'block' }}>
-                                    Email
-                                </Label>
+                                <FormLabel label="Email" name="email" schema={schema}/>
                                 <Field
                                     as={Input}
                                     id="email"
