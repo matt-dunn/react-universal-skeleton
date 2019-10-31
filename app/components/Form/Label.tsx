@@ -6,7 +6,7 @@ import {get} from "lodash";
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
 type Field = {
-    tests: Array<{ name: string; params: object; OPTIONS: {name: string} }>
+    tests: Array<{ name: string; params: object; OPTIONS: {name: string} }>;
 }
 
 type Fields<T> = {
