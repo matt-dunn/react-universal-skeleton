@@ -13,7 +13,7 @@ import {
     FormikTouched
 } from 'formik';
 import * as Yup from 'yup';
-import {ValidationError} from "yup";
+import {ValidationError, Schema} from "yup";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
@@ -64,13 +64,6 @@ const options = [
     { value: 'vanilla', label: 'Vanilla' },
 ];
 
-type MyForm = {
-    flavour: {
-        favourite: string
-    };
-    email: string;
-}
-
 type MyFormResponse = {
     chosenFlavour: string;
     yourEmail: string;
@@ -97,6 +90,7 @@ const validateEmailApi = (function() {
 
 const schema = Yup.object().shape({
     email: Yup.string()
+        .label("Email")
         .required('Email is required')
         .email()
         .test("email", "Email ${value} is unavailable", function(value: string) {
@@ -109,6 +103,7 @@ const schema = Yup.object().shape({
         }),
     flavour: Yup.object().shape({
         favourite: Yup.string()
+            .label("Flavour")
             .required('Flavour is required')
     })
 });
@@ -182,17 +177,17 @@ type InitialFormData<T> = {
 }
 
 const MyForm = () => {
-    const [formData, submit] = useForm<MyForm, MyFormResponse, ValidationError[]>(
+    const [formData, submit] = useForm<Yup.InferType<typeof schema>, MyFormResponse, ValidationError[]>(
         values => schema.validate(values, {abortEarly: false}),
         values => dummyApiCall(values.flavour.favourite, values.email)
     );
 
-    const {errors: initialErrors, touched: initialTouched} = useMemo<InitialFormData<MyForm>>(() => formData.innerFormErrors && formData.innerFormErrors.reduce(({errors, touched}, {path, message}) => ({
+    const {errors: initialErrors, touched: initialTouched} = useMemo<InitialFormData<Yup.InferType<typeof schema>>>(() => formData.innerFormErrors && formData.innerFormErrors.reduce(({errors, touched}, {path, message}) => ({
         errors: setIn(errors, path, message),
         touched: setIn(touched, path, true)
     }), {errors: {}, touched: {}}) || {}, [formData.innerFormErrors]);
 
-    const initialValues = formData.data || { email: '', flavour: {favourite: ''} };
+    const initialValues: Yup.InferType<typeof schema> = formData.data || (schema as any).getDefault();
 
     useWhatChanged(MyForm, { formData, submit, initialValues });
 
