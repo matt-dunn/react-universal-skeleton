@@ -192,14 +192,16 @@ const MyForm = () => {
         touched: setIn(touched, path, true)
     }), {errors: {}, touched: {}}) || {}, [formData.innerFormErrors]);
 
+    const initialValues = formData.data || { email: '', flavour: '' };
+
     useWhatChanged(MyForm, { formData, submit });
 
     return (
-        <div>
+        <>
             {formData.payload && <pre>{JSON.stringify(formData.payload)}</pre>}
 
             <Formik
-                initialValues={formData.data || { email: '', flavour: '' }}
+                initialValues={initialValues}
                 initialErrors={initialErrors}
                 initialTouched={initialTouched}
                 onSubmit={values => submit(values)}
@@ -291,7 +293,7 @@ const MyForm = () => {
                     );
                 }}
             </Formik>
-        </div>
+        </>
     )
 }
 

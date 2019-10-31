@@ -57,7 +57,7 @@ const FancySelect = ({id, disabled, isValid, options, name, value, onChange, onB
         const defaultValue = (value && options.filter(option => option.value ===value)[0]) || options[0];
         return (
             <Select
-                id={id}
+                inputId={id}
                 name={name}
                 value={defaultValue}
                 options={options}
