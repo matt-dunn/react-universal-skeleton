@@ -9,6 +9,7 @@ import {
     FieldAttributes,
     useFormikContext,
     setIn,
+    getIn,
     FormikErrors,
     FormikTouched
 } from 'formik';
@@ -91,6 +92,14 @@ const validateEmailApi = (function() {
 const schema = Yup.object().shape({
     email: Yup.string()
         .label("Email")
+        .meta({
+            order: 0,
+            Type: Input,
+            props: {
+                placeholder: "Enter your email",
+                type: "text"
+            }
+        })
         .required('Email is required')
         .email()
         .test("email", "Email ${value} is unavailable", function(value: string) {
@@ -101,9 +110,25 @@ const schema = Yup.object().shape({
                     .catch(reason => new ValidationError(reason.message, value, this.path))
             }
         }),
-    flavour: Yup.object().shape({
+    flavour: Yup.object()
+        .meta({
+            order: 1
+        })
+        .shape({
         favourite: Yup.string()
             .label("Flavour")
+            .meta({
+                order: 1,
+                Type: FancySelect,
+                props: {
+                    options: [
+                        { value: '', label: 'Select...' },
+                        { value: 'chocolate', label: 'Chocolate' },
+                        { value: 'strawberry', label: 'Strawberry' },
+                        { value: 'vanilla', label: 'Vanilla' },
+                    ]
+                }
+            })
             .required('Flavour is required')
     })
 });
@@ -176,6 +201,70 @@ type InitialFormData<T> = {
     touched: FormikTouched<T>;
 }
 
+const Fields = ({fields, values, errors, touched, isSubmitting, path = "", setFieldValue, setFieldTouched}) => {
+
+    const handleChange = (e, value) => {
+        if (e.target) {
+            setFieldValue(e.target.name, e.target.value)
+        } else {
+            setFieldValue(e, value)
+        }
+    }
+
+    const handleBlur = (e) => {
+        setFieldTouched((e.target && e.target.name) || e, true)
+    }
+
+    return (
+        <>
+            {Object.keys(fields).sort((a, b) => ((fields[b]._meta || {}).order || 0) - ((fields[a]._meta || {}).order || 0)).map(key => {
+                const field = fields[key];
+                const fullPath = [path, key].filter(part => part).join(".");
+                const {Type, props} = field._meta || {};
+                const value = getIn(values, fullPath)
+                const error = getIn(errors, fullPath)
+                const touch = getIn(touched, fullPath)
+                // console.log(">>>", field, fullPath)
+                return (
+                    field.fields ?
+                        <Fields
+                            key={key}
+                            fields={field.fields}
+                            values={values}
+                            errors={errors}
+                            touched={touched}
+                            setFieldValue={setFieldValue}
+                            setFieldTouched={setFieldTouched}
+                            isSubmitting={isSubmitting}
+                            path={key}
+                        />
+                        :
+                        <Section
+                            key={key}
+                        >
+                            <FormLabel
+                                label={field._label} name={fullPath} schema={schema}/>
+                            <Field
+                                {...props}
+                                as={Type}
+                                id={fullPath}
+                                name={fullPath}
+                                value={value}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                disabled={isSubmitting}
+                                isValid={!(error && touch)}
+                            />
+                            <ErrorMessage name={fullPath}>
+                                {message => <InputFeedback>{message}</InputFeedback>}
+                            </ErrorMessage>
+                        </Section>
+                )
+            })}
+        </>
+    );
+}
+
 const MyForm = () => {
     const [formData, submit] = useForm<Yup.InferType<typeof schema>, MyFormResponse, ValidationError[]>(
         values => schema.validate(values, {abortEarly: false}),
@@ -187,7 +276,7 @@ const MyForm = () => {
         touched: setIn(touched, path, true)
     }), {errors: {}, touched: {}}) || {}, [formData.innerFormErrors]);
 
-    const initialValues: Yup.InferType<typeof schema> = formData.data || (schema as any).getDefault();
+    const initialValues: Yup.InferType<typeof schema> = {email: "", flavour: {favourite: ""}}//formData.data || (schema as any).getDefault();
 
     useWhatChanged(MyForm, { formData, submit, initialValues });
 
@@ -224,48 +313,58 @@ const MyForm = () => {
                         <Form onSubmit={handleSubmit} method="post">
                             {formData.error && <InputFeedback>There was a problem submitting: {formData.error.message}</InputFeedback>}
 
-                            <Section>
-                                <FormLabel label="Flavour" name="flavour.favourite" schema={schema}/>
-                                <Field
-                                    as={FancySelect}
-                                    id="flavour"
-                                    options={options}
-                                    name="flavour.favourite"
-                                    value={values.flavour.favourite}
-                                    onBlur={setFieldTouched}
-                                    onChange={setFieldValue}
-                                    disabled={isSubmitting}
-                                    isValid={!(errors.flavour && errors.flavour.favourite && touched.flavour && touched.flavour.favourite)}
-                                    // status={status}
-                                    // setFieldError={setFieldError}
-                                    // setStatus={setStatus}
-                                />
-                                <ErrorMessage name="flavour.favourite">
-                                    {message => <InputFeedback>{message}</InputFeedback>}
-                                </ErrorMessage>
-                            </Section>
+                            <Fields
+                                fields={schema.fields}
+                                values={values}
+                                errors={errors}
+                                touched={touched}
+                                isSubmitting={isSubmitting}
+                                setFieldValue={setFieldValue}
+                                setFieldTouched={setFieldTouched}
+                            />
 
-                            <Section>
-                                <FormLabel label="Email" name="email" schema={schema}/>
-                                <Field
-                                    as={Input}
-                                    id="email"
-                                    name="email"
-                                    placeholder="Enter your email"
-                                    type="text"
-                                    value={values.email}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    disabled={isSubmitting}
-                                    isValid={!(errors.email && touched.email)}
-                                    // status={status}
-                                    // setFieldError={setFieldError}
-                                    // setStatus={setStatus}
-                                />
-                                <ErrorMessage name="email">
-                                    {message => <InputFeedback>{message}</InputFeedback>}
-                                </ErrorMessage>
-                            </Section>
+                            {/*<Section>*/}
+                            {/*    <FormLabel label="Flavour" name="flavour.favourite" schema={schema}/>*/}
+                            {/*    <Field*/}
+                            {/*        as={FancySelect}*/}
+                            {/*        id="flavour"*/}
+                            {/*        options={options}*/}
+                            {/*        name="flavour.favourite"*/}
+                            {/*        value={values.flavour.favourite}*/}
+                            {/*        onBlur={setFieldTouched}*/}
+                            {/*        onChange={setFieldValue}*/}
+                            {/*        disabled={isSubmitting}*/}
+                            {/*        isValid={!(errors.flavour && errors.flavour.favourite && touched.flavour && touched.flavour.favourite)}*/}
+                            {/*        // status={status}*/}
+                            {/*        // setFieldError={setFieldError}*/}
+                            {/*        // setStatus={setStatus}*/}
+                            {/*    />*/}
+                            {/*    <ErrorMessage name="flavour.favourite">*/}
+                            {/*        {message => <InputFeedback>{message}</InputFeedback>}*/}
+                            {/*    </ErrorMessage>*/}
+                            {/*</Section>*/}
+
+                            {/*<Section>*/}
+                            {/*    <FormLabel label="Email" name="email" schema={schema}/>*/}
+                            {/*    <Field*/}
+                            {/*        as={Input}*/}
+                            {/*        id="email"*/}
+                            {/*        name="email"*/}
+                            {/*        placeholder="Enter your email"*/}
+                            {/*        type="text"*/}
+                            {/*        value={values.email}*/}
+                            {/*        onChange={handleChange}*/}
+                            {/*        onBlur={handleBlur}*/}
+                            {/*        disabled={isSubmitting}*/}
+                            {/*        isValid={!(errors.email && touched.email)}*/}
+                            {/*        // status={status}*/}
+                            {/*        // setFieldError={setFieldError}*/}
+                            {/*        // setStatus={setStatus}*/}
+                            {/*    />*/}
+                            {/*    <ErrorMessage name="email">*/}
+                            {/*        {message => <InputFeedback>{message}</InputFeedback>}*/}
+                            {/*    </ErrorMessage>*/}
+                            {/*</Section>*/}
 
                             <p>
                                 <Button
