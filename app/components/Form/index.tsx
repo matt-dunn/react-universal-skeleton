@@ -1,15 +1,24 @@
-import React from 'react'
+import React, {useMemo} from 'react'
 import styled, {css} from "styled-components";
 
-import {Formik, ErrorMessage, Field, useField, FieldAttributes, useFormikContext} from 'formik';
+import {
+    Formik,
+    ErrorMessage,
+    Field,
+    useField,
+    FieldAttributes,
+    useFormikContext,
+    setIn,
+    FormikErrors,
+    FormikTouched
+} from 'formik';
 import * as Yup from 'yup';
-import {ValidationError, Schema} from "yup";
+import {ValidationError} from "yup";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
 import {useForm} from "components/actions/form";
 import FancySelect from "app/components/FancySelect";
-import {APIError} from "components/api";
 
 const Form = styled.form`
   border: 1px solid #ccc;
@@ -167,11 +176,21 @@ const dummyApiCall = (flavour: string, email: string): Promise<MyFormResponse> =
 //     );
 // };
 
+type InitialFormData<T> = {
+    errors: FormikErrors<T>;
+    touched: FormikTouched<T>;
+}
+
 const MyForm = () => {
-    const [formData, submit] = useForm<MyForm, MyFormResponse>(
-        schema,
+    const [formData, submit] = useForm<MyForm, MyFormResponse, ValidationError[]>(
+        values => schema.validate(values, {abortEarly: false}),
         values => dummyApiCall(values.flavour, values.email)
     );
+
+    const {errors: initialErrors, touched: initialTouched} = useMemo<InitialFormData<MyForm>>(() => formData.innerFormErrors && formData.innerFormErrors.reduce(({errors, touched}, {path, message}) => ({
+        errors: setIn(errors, path, message),
+        touched: setIn(touched, path, true)
+    }), {errors: {}, touched: {}}) || {}, [formData.innerFormErrors]);
 
     useWhatChanged(MyForm, { formData, submit });
 
@@ -181,8 +200,8 @@ const MyForm = () => {
 
             <Formik
                 initialValues={formData.data || { email: '', flavour: '' }}
-                initialErrors={formData.errors}
-                initialTouched={formData.errorsHash}
+                initialErrors={initialErrors}
+                initialTouched={initialTouched}
                 onSubmit={values => submit(values)}
                 validationSchema={schema}
             >

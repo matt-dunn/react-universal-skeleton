@@ -1,38 +1,25 @@
 import React, {useCallback, useContext, useState} from "react";
-import {isEmpty} from "lodash";
-import {Schema} from "yup";
-import immutable from 'object-path-immutable';
 
 import {errorLike, ErrorLike} from "components/error";
 import {APIContext} from "./contexts";
 
-export type Errors<T> = {
-    [Key in keyof T]: string;
-}
-
-export type ErrorsHash<T> = {
-    [Key in keyof T]: boolean;
-}
-
-export type FormData<T = any, P = any> = {
+export type FormData<T = any, P = any, E = any> = {
     isProcessed: boolean;
     data?: T;
     isSubmitted: boolean;
     payload: P;
     error?: ErrorLike;
-    errors: Errors<T>;
-    errorsHash: ErrorsHash<T>;
+    innerFormErrors: E;
 };
 
-export const FormData = <T = any, P = any>(formData: FormData<T, P>): FormData<T, P> => {
-    const {isProcessed = false, data, payload, error, errors, errorsHash} = formData || {} as FormData<T, P>;
+export const FormData = <T = any, P = any, E = any>(formData: FormData<T, P, E>): FormData<T, P, E> => {
+    const {isProcessed = false, data, payload, error, innerFormErrors} = formData || {} as FormData<T, P, E>;
 
     return {
         isProcessed,
-        isSubmitted: !isEmpty(data),
+        isSubmitted: (data && Object.keys(data).length > 0) || false,
         data,
-        errors,
-        errorsHash,
+        innerFormErrors,
         payload,
         error: error && errorLike(error)
     }
@@ -42,15 +29,15 @@ const FormDataContext = React.createContext<FormData | undefined>(undefined);
 
 export const FormDataProvider = FormDataContext.Provider;
 
-export const useFormData = <T = any, P = any>(): FormData<T, P> => {
+export const useFormData = <T = any, P = any, E = any>(): FormData<T, P, E> => {
     const formData = useContext(FormDataContext);
 
-    return formData as FormData<T, P>;
+    return formData as FormData<T, P, E>;
 };
 
-export const useForm = <T, P = any | undefined>(schema: Schema<T>, mapDataToAction: {(data: T): Promise<P>}): [FormData<T, P | undefined>, (data: T) => Promise<P>] => {
-    const formDataContext = useFormData<T, P | undefined>();
-    const [formData, setFormData] = useState<FormData<T, P | undefined>>(formDataContext);
+export const useForm = <T, P = any | undefined, E = any | undefined>(formValidator: (values: T) => Promise<any>, mapDataToAction: {(data: T): Promise<P>}): [FormData<T, P | undefined, E>, (data: T) => Promise<P>] => {
+    const formDataContext = useFormData<T, P, E>();
+    const [formData, setFormData] = useState<FormData<T, P | undefined, E>>(formDataContext);
 
     const submit = useCallback(async(data: T): Promise<P> => {
         setFormData(formData => FormData({...formData, error: undefined}));
@@ -77,17 +64,11 @@ export const useForm = <T, P = any | undefined>(schema: Schema<T>, mapDataToActi
     if (context && formDataContext.isSubmitted && !formDataContext.isProcessed) {
         formDataContext.isProcessed = true;
 
-        context.push(schema.validate(formDataContext.data, {abortEarly: false})
+        formDataContext.data && context.push(formValidator(formDataContext.data)
             .then(submit)
             .catch(reason => {
                 if (reason.inner) {
-                    const {errors, hash} = reason.inner.reduce(({errors, hash}: {errors: Errors<T>; hash: ErrorsHash<T>}, {path, message}: {path: string; message: string}) => ({
-                        errors: immutable.set(errors, path, message),
-                        hash: immutable.set(hash, path, true)
-                    }), {errors: {}, hash: {}});
-
-                    formDataContext.errors = errors;
-                    formDataContext.errorsHash = hash;
+                    formDataContext.innerFormErrors = reason.inner;
                 } else {
                     formDataContext.error = reason;
                 }
