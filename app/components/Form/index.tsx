@@ -48,6 +48,17 @@ const Input = styled.input<{isValid?: boolean}>`
   ${({isValid}) => !isValid && css`border-color: red`};
   }
 `
+const Textarea = styled.textarea<{isValid?: boolean}>`
+  && {
+  font-size: inherit;
+  border: 1px solid rgb(204, 204, 204);
+  padding: 9px 8px;
+  border-radius: 4px;
+  min-width: 100%;
+  min-height: 10em;
+  ${({isValid}) => !isValid && css`border-color: red`};
+  }
+`
 
 const InputFeedback = styled.div`
   color: red;
@@ -92,8 +103,9 @@ const validateEmailApi = (function() {
 const schema = Yup.object().shape({
     email: Yup.string()
         .label("Email")
+        .ensure()
         .meta({
-            order: 0,
+            order: 1,
             Type: Input,
             props: {
                 placeholder: "Enter your email",
@@ -101,6 +113,7 @@ const schema = Yup.object().shape({
             }
         })
         .required('Email is required')
+        .ensure()
         .email()
         .test("email", "Email ${value} is unavailable", function(value: string) {
             if (!value || !Yup.string().email().isValidSync(value)) {
@@ -112,11 +125,12 @@ const schema = Yup.object().shape({
         }),
     flavour: Yup.object()
         .meta({
-            order: 1
+            order: 0
         })
         .shape({
         favourite: Yup.string()
             .label("Flavour")
+            .ensure()
             .meta({
                 order: 1,
                 Type: FancySelect,
@@ -130,7 +144,19 @@ const schema = Yup.object().shape({
                 }
             })
             .required('Flavour is required')
-    })
+    }),
+    notes: Yup.string()
+        .required('Notes is required')
+        .label("Notes")
+        .ensure()
+        .meta({
+            order: 2,
+            Type: Textarea,
+            props: {
+                placeholder: "Enter your notes",
+                type: "text"
+            }
+        })
 });
 
 const dummyApiCall = (flavour: string, email: string): Promise<MyFormResponse> => {
@@ -217,7 +243,7 @@ const Fields = ({fields, values, errors, touched, isSubmitting, path = "", setFi
 
     return (
         <>
-            {Object.keys(fields).sort((a, b) => ((fields[b]._meta || {}).order || 0) - ((fields[a]._meta || {}).order || 0)).map(key => {
+            {Object.keys(fields).sort((a, b) => ((fields[a]._meta || {}).order || 0) - ((fields[b]._meta || {}).order || 0)).map(key => {
                 const field = fields[key];
                 const fullPath = [path, key].filter(part => part).join(".");
                 const {Type, props} = field._meta || {};
@@ -276,7 +302,7 @@ const MyForm = () => {
         touched: setIn(touched, path, true)
     }), {errors: {}, touched: {}}) || {}, [formData.innerFormErrors]);
 
-    const initialValues: Yup.InferType<typeof schema> = {email: "", flavour: {favourite: ""}}//formData.data || (schema as any).getDefault();
+    const initialValues: Yup.InferType<typeof schema> = formData.data || (schema as any).getDefault();
 
     useWhatChanged(MyForm, { formData, submit, initialValues });
 
