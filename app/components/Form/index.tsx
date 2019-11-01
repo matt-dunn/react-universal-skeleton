@@ -498,7 +498,7 @@ const MyForm = () => {
                                 >
                                     Reset
                                 </Button>
-                                <Button type="submit" disabled={isSubmitting} name={"GO"} value={"123"}>
+                                <Button type="submit" disabled={isSubmitting} name="SUBMIT">
                                     Submit
                                 </Button>
                             </p>

@@ -12,12 +12,12 @@ export type FormData<T = any, P = any, E = any> = {
     innerFormErrors: E;
 };
 
-export const FormData = <T = any, P = any, E = any>(formData: FormData<T, P, E>): FormData<T, P, E> => {
+export const FormData = <T extends Object = any, P = any, E = any>(formData: FormData<T, P, E>): FormData<T, P, E> => {
     const {isProcessed = false, data, payload, error, innerFormErrors} = formData || {} as FormData<T, P, E>;
 
     return {
         isProcessed,
-        isSubmitted: (data && Object.keys(data).length > 0) || false,
+        isSubmitted: (data && data.hasOwnProperty("SUBMIT")) || false,
         data,
         innerFormErrors,
         payload,
