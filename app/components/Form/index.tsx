@@ -265,6 +265,12 @@ type InitialFormData<T> = {
     touched: FormikTouched<T>;
 }
 
+const getDefault = (schema: Schema<any>, path: string = "") => {
+    const pathSchema = Yup.reach(schema, path);
+
+    return ((pathSchema as any)._type === "array" && (Yup.reach(schema, path) as any)._subType.getDefault()) || (pathSchema as any).getDefault()
+};
+
 const Fields = ({fields, values, errors, touched, isSubmitting, path = "", setFieldValue, setFieldTouched}) => {
 
     const handleChange = (e, value) => {
@@ -319,7 +325,7 @@ const Fields = ({fields, values, errors, touched, isSubmitting, path = "", setFi
                                         value={fullPath}
                                         onClick={(e) => {
                                             e.preventDefault();
-                                            arrayHelpers.push(Yup.reach(schema, fullPath + ".0").getDefault())
+                                            arrayHelpers.push(getDefault(schema, fullPath))
                                         }}
                                     >
                                         Add Item
@@ -356,7 +362,7 @@ const Fields = ({fields, values, errors, touched, isSubmitting, path = "", setFi
                                                     value={itemFullPath}
                                                     onClick={(e) => {
                                                         e.preventDefault();
-                                                        arrayHelpers.insert(index, Yup.reach(schema, fullPath + ".0").getDefault())
+                                                        arrayHelpers.insert(index, getDefault(schema, fullPath))
                                                     }}
                                                 >
                                                     Insert Item
@@ -437,7 +443,7 @@ const MyForm = () => {
         (action, data, value) => {
             switch (action) {
                 case "add": {
-                    return (value && immutable.push(data, value, Yup.reach(schema, value + ".0").getDefault())) || data;
+                    return (value && immutable.push(data, value, getDefault(schema, value))) || data;
                 }
                 case "remove": {
                     return immutable.del(data, value)
@@ -447,7 +453,7 @@ const MyForm = () => {
                         const parts = value.split(".");
                         const index = parseInt(parts.slice(-1).join("."), 10);
                         const path = parts.slice(0, -1).join(".");
-                        return immutable.insert(data, path, Yup.reach(schema, value).getDefault(), index)
+                        return immutable.insert(data, path, getDefault(schema, value), index)
                     }
                     break;
                 }
@@ -460,8 +466,7 @@ const MyForm = () => {
         touched: setIn(touched, path, true)
     }), {errors: {}, touched: {}}) || {}, [formData.innerFormErrors]);
 
-    const initialValues: Yup.InferType<typeof schema> = formData.data || (schema as any).getDefault();
-    // console.log("@@@INITIAL", formData)
+    const initialValues: Yup.InferType<typeof schema> = formData.data || getDefault(schema);
 
     useWhatChanged(MyForm, { formData, submit, initialValues });
 
