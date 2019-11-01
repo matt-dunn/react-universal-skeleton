@@ -11,7 +11,8 @@ import {
     setIn,
     getIn,
     FormikErrors,
-    FormikTouched
+    FormikTouched,
+    FieldArray
 } from 'formik';
 import * as Yup from 'yup';
 import {ValidationError, Schema} from "yup";
@@ -301,47 +302,84 @@ const Fields = ({fields, values, errors, touched, isSubmitting, path = "", setFi
                         return o;
                     }, {min: undefined, max: undefined})
 
-                    console.log(">>!", field.describe(), value, fullPath, min, max)
+                    console.log(">>!", field.describe(), value, fullPath, min, max, field.default())
 
                     const itemsCount = value.length;
 
-                    const AddOption = (itemsCount < max && (
-                        <Button disabled={isSubmitting} name="ADD_ITEM" value={fullPath}>
-                            Add Item
-                        </Button>
-                    )) || null;
-
                     return (
-                        <SubSection
+                        <FieldArray
                             key={fullPath}
-                        >
-                            {value.map((value, index) => {
-                                const itemFullPath = `${fullPath}.${index}`;
-                                const RemoveOption = (itemsCount > min && (
-                                    <Button disabled={isSubmitting} name="REMOVE_ITEM" value={itemFullPath}>
-                                        Remove Item
+                            name={fullPath}
+                            render={arrayHelpers => {
+                                const AddOption = (itemsCount < max && (
+                                    <Button
+                                        disabled={isSubmitting}
+                                        name="ADD_ITEM"
+                                        value={fullPath}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            arrayHelpers.push(field.default()[0])
+                                        }}
+                                    >
+                                        Add Item
                                     </Button>
                                 )) || null;
+
                                 return (
-                                    <SubSection
-                                        key={itemFullPath}
-                                    >
-                                        <Fields
-                                            fields={field._subType.fields}
-                                            values={values}
-                                            errors={errors}
-                                            touched={touched}
-                                            setFieldValue={setFieldValue}
-                                            setFieldTouched={setFieldTouched}
-                                            isSubmitting={isSubmitting}
-                                            path={itemFullPath}
-                                        />
-                                        {RemoveOption}
+                                    <SubSection>
+                                        {value.map((value, index) => {
+                                            const itemFullPath = `${fullPath}.${index}`;
+                                            const RemoveOption = (itemsCount > min && (
+                                                <Button
+                                                    disabled={isSubmitting}
+                                                    name="REMOVE_ITEM"
+                                                    value={itemFullPath}
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        arrayHelpers.remove(index)
+                                                    }}
+                                                >
+                                                    Remove Item
+                                                </Button>
+                                            )) || null;
+
+                                            const InsertOption = (itemsCount < max && (
+                                                <Button
+                                                    disabled={isSubmitting}
+                                                    name="INSERT_ITEM"
+                                                    value={itemFullPath}
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        arrayHelpers.insert(index + 1, field.default()[0])
+                                                    }}
+                                                >
+                                                    Insert Item
+                                                </Button>
+                                            )) || null;
+
+                                            return (
+                                                <SubSection
+                                                    key={itemFullPath}
+                                                >
+                                                    <Fields
+                                                        fields={field._subType.fields}
+                                                        values={values}
+                                                        errors={errors}
+                                                        touched={touched}
+                                                        setFieldValue={setFieldValue}
+                                                        setFieldTouched={setFieldTouched}
+                                                        isSubmitting={isSubmitting}
+                                                        path={itemFullPath}
+                                                    />
+                                                    {InsertOption}
+                                                    {RemoveOption}
+                                                </SubSection>
+                                            );
+                                        })}
+                                        {AddOption}
                                     </SubSection>
-                                );
-                            })}
-                            {AddOption}
-                        </SubSection>
+                                )}}
+                        />
                     )
                 } else if (field._type === "object") {
                     return (
