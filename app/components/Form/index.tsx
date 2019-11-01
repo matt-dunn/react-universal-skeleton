@@ -22,6 +22,7 @@ import useWhatChanged from "components/whatChanged/useWhatChanged";
 import {useForm} from "components/actions/form";
 import FormLabel from "app/components/Form/Label";
 import FancySelect from "app/components/FancySelect";
+import immutable from "object-path-immutable";
 
 const Form = styled.form`
   border: 1px solid #ccc;
@@ -190,8 +191,8 @@ const schema = Yup.object().shape({
                 })
                 .ensure()
         }))
-        // .ensure()
-        .default([{name: "", address: ""}, {name: "", address: ""}])
+        .ensure()
+        // .default([{name: "", address: ""}])
         .min(1)
         .max(4)
 });
@@ -300,11 +301,11 @@ const Fields = ({fields, values, errors, touched, isSubmitting, path = "", setFi
                             o.max = test.params.max;
                         }
                         return o;
-                    }, {min: undefined, max: undefined})
+                    }, {min: 0, max: undefined})
 
-                    console.log(">>!", field.describe(), value, fullPath, min, max, field.default())
+                    // console.log(">>!", field.describe(), value, fullPath, min, max, field.default())
 
-                    const itemsCount = value.length;
+                    const itemsCount = (value && value.length) || 0;
 
                     return (
                         <FieldArray
@@ -314,11 +315,11 @@ const Fields = ({fields, values, errors, touched, isSubmitting, path = "", setFi
                                 const AddOption = (itemsCount < max && (
                                     <Button
                                         disabled={isSubmitting}
-                                        name="ADD_ITEM"
+                                        name="@@ADD_ITEM"
                                         value={fullPath}
                                         onClick={(e) => {
                                             e.preventDefault();
-                                            arrayHelpers.push(field.default()[0])
+                                            arrayHelpers.push(Yup.reach(schema, fullPath + ".0").getDefault())
                                         }}
                                     >
                                         Add Item
@@ -327,12 +328,17 @@ const Fields = ({fields, values, errors, touched, isSubmitting, path = "", setFi
 
                                 return (
                                     <SubSection>
-                                        {value.map((value, index) => {
+                                        {typeof error === "string" && <ErrorMessage name={fullPath}>
+                                            {message => <InputFeedback>{message}</InputFeedback>}
+                                            </ErrorMessage>
+                                        }
+
+                                        {value && value.map((value, index) => {
                                             const itemFullPath = `${fullPath}.${index}`;
                                             const RemoveOption = (itemsCount > min && (
                                                 <Button
                                                     disabled={isSubmitting}
-                                                    name="REMOVE_ITEM"
+                                                    name="@@REMOVE_ITEM"
                                                     value={itemFullPath}
                                                     onClick={(e) => {
                                                         e.preventDefault();
@@ -346,11 +352,11 @@ const Fields = ({fields, values, errors, touched, isSubmitting, path = "", setFi
                                             const InsertOption = (itemsCount < max && (
                                                 <Button
                                                     disabled={isSubmitting}
-                                                    name="INSERT_ITEM"
+                                                    name="@@INSERT_ITEM"
                                                     value={itemFullPath}
                                                     onClick={(e) => {
                                                         e.preventDefault();
-                                                        arrayHelpers.insert(index + 1, field.default()[0])
+                                                        arrayHelpers.insert(index, Yup.reach(schema, fullPath + ".0").getDefault())
                                                     }}
                                                 >
                                                     Insert Item
@@ -427,7 +433,26 @@ const Fields = ({fields, values, errors, touched, isSubmitting, path = "", setFi
 const MyForm = () => {
     const [formData, submit] = useForm<Yup.InferType<typeof schema>, MyFormResponse, ValidationError[]>(
         values => schema.validate(values, {abortEarly: false}),
-        values => dummyApiCall(values.flavour.favourite, values.email)
+        values => dummyApiCall(values.flavour.favourite, values.email),
+        (action, data, value) => {
+            switch (action) {
+                case "add": {
+                    return (value && immutable.push(data, value, Yup.reach(schema, value + ".0").getDefault())) || data;
+                }
+                case "remove": {
+                    return immutable.del(data, value)
+                }
+                case "insert": {
+                    if (value) {
+                        const parts = value.split(".");
+                        const index = parseInt(parts.slice(-1).join("."), 10);
+                        const path = parts.slice(0, -1).join(".");
+                        return immutable.insert(data, path, Yup.reach(schema, value).getDefault(), index)
+                    }
+                    break;
+                }
+            }
+        }
     );
 
     const {errors: initialErrors, touched: initialTouched} = useMemo<InitialFormData<Yup.InferType<typeof schema>>>(() => formData.innerFormErrors && formData.innerFormErrors.reduce(({errors, touched}, {path, message}) => ({
@@ -436,7 +461,7 @@ const MyForm = () => {
     }), {errors: {}, touched: {}}) || {}, [formData.innerFormErrors]);
 
     const initialValues: Yup.InferType<typeof schema> = formData.data || (schema as any).getDefault();
-    console.log("@@@INITIAL", initialValues)
+    // console.log("@@@INITIAL", formData)
 
     useWhatChanged(MyForm, { formData, submit, initialValues });
 
@@ -468,7 +493,7 @@ const MyForm = () => {
                         setStatus,
                         status
                     } = props;
-                    console.log("####ERRORS", errors)
+                    // console.log("####ERRORS", errors)
                     useWhatChanged(Formik, { formData, submit, props });
                     return (
                         <Form onSubmit={handleSubmit} method="post">
@@ -536,7 +561,7 @@ const MyForm = () => {
                                 >
                                     Reset
                                 </Button>
-                                <Button type="submit" disabled={isSubmitting} name="SUBMIT">
+                                <Button type="submit" disabled={isSubmitting} name="@@SUBMIT">
                                     Submit
                                 </Button>
                             </p>
