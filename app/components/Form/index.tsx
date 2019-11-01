@@ -69,6 +69,12 @@ const Section = styled.div`
   margin: 0 0 10px 0;
 `
 
+const SubSection = styled.div`
+  margin: 0 0 10px 0;
+  padding: 10px;
+  border: 1px solid #eee;
+`
+
 const options = [
     { value: '', label: 'Select...' },
     { value: 'chocolate', label: 'Chocolate' },
@@ -156,7 +162,37 @@ const schema = Yup.object().shape({
                 placeholder: "Enter your notes",
                 type: "text"
             }
-        })
+        }),
+    items: Yup.array(Yup.object()
+        .shape({
+            name: Yup.string()
+                .label("Name")
+                .meta({
+                    order: 0,
+                    Type: Input,
+                    props: {
+                        placeholder: "Enter your name",
+                        type: "text"
+                    }
+                })
+                .ensure()
+                .required(),
+            address: Yup.string()
+                .label("Address")
+                .meta({
+                    order: 1,
+                    Type: Input,
+                    props: {
+                        placeholder: "Enter your address",
+                        type: "text"
+                    }
+                })
+                .ensure()
+        }))
+        // .ensure()
+        .default([{name: "", address: ""}, {name: "", address: ""}])
+        .min(1)
+        .max(4)
 });
 
 const dummyApiCall = (flavour: string, email: string): Promise<MyFormResponse> => {
@@ -246,15 +282,71 @@ const Fields = ({fields, values, errors, touched, isSubmitting, path = "", setFi
             {Object.keys(fields).sort((a, b) => ((fields[a]._meta || {}).order || 0) - ((fields[b]._meta || {}).order || 0)).map(key => {
                 const field = fields[key];
                 const fullPath = [path, key].filter(part => part).join(".");
+                // console.log(">>>", fullPath)
+
+                const {type, label, meta, tests} = field.describe();
                 const {Type, props} = field._meta || {};
                 const value = getIn(values, fullPath)
                 const error = getIn(errors, fullPath)
                 const touch = getIn(touched, fullPath)
-                // console.log(">>>", field, fullPath)
-                return (
-                    field.fields ?
+
+                if (field._type === "array") {
+
+                    const {min, max} = tests.reduce((o, test) => {
+                        if (test.name === "min") {
+                            o.min = test.params.min;
+                        } else if (test.name === "max") {
+                            o.max = test.params.max;
+                        }
+                        return o;
+                    }, {min: undefined, max: undefined})
+
+                    console.log(">>!", field.describe(), value, fullPath, min, max)
+
+                    const itemsCount = value.length;
+
+                    const AddOption = (itemsCount < max && (
+                        <Button disabled={isSubmitting} name="ADD_ITEM" value={fullPath}>
+                            Add Item
+                        </Button>
+                    )) || null;
+
+                    return (
+                        <SubSection
+                            key={fullPath}
+                        >
+                            {value.map((value, index) => {
+                                const itemFullPath = `${fullPath}.${index}`;
+                                const RemoveOption = (itemsCount > min && (
+                                    <Button disabled={isSubmitting} name="REMOVE_ITEM" value={itemFullPath}>
+                                        Remove Item
+                                    </Button>
+                                )) || null;
+                                return (
+                                    <SubSection
+                                        key={itemFullPath}
+                                    >
+                                        <Fields
+                                            fields={field._subType.fields}
+                                            values={values}
+                                            errors={errors}
+                                            touched={touched}
+                                            setFieldValue={setFieldValue}
+                                            setFieldTouched={setFieldTouched}
+                                            isSubmitting={isSubmitting}
+                                            path={itemFullPath}
+                                        />
+                                        {RemoveOption}
+                                    </SubSection>
+                                );
+                            })}
+                            {AddOption}
+                        </SubSection>
+                    )
+                } else if (field._type === "object") {
+                    return (
                         <Fields
-                            key={key}
+                            key={fullPath}
                             fields={field.fields}
                             values={values}
                             errors={errors}
@@ -262,29 +354,32 @@ const Fields = ({fields, values, errors, touched, isSubmitting, path = "", setFi
                             setFieldValue={setFieldValue}
                             setFieldTouched={setFieldTouched}
                             isSubmitting={isSubmitting}
-                            path={key}
+                            path={fullPath}
                         />
-                        :
-                        <Section
-                            key={key}
-                        >
-                            <FormLabel
-                                label={field._label} name={fullPath} schema={schema}/>
-                            <Field
-                                {...props}
-                                as={Type}
-                                id={fullPath}
-                                name={fullPath}
-                                value={value}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                disabled={isSubmitting}
-                                isValid={!(error && touch)}
-                            />
-                            <ErrorMessage name={fullPath}>
-                                {message => <InputFeedback>{message}</InputFeedback>}
-                            </ErrorMessage>
-                        </Section>
+                    )
+                }
+
+                return (
+                    <Section
+                        key={fullPath}
+                    >
+                        <FormLabel
+                            label={label} name={fullPath} field={field}/>
+                        <Field
+                            {...props}
+                            as={Type}
+                            id={fullPath}
+                            name={fullPath}
+                            value={value}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            disabled={isSubmitting}
+                            isValid={!(error && touch)}
+                        />
+                        <ErrorMessage name={fullPath}>
+                            {message => <InputFeedback>{message}</InputFeedback>}
+                        </ErrorMessage>
+                    </Section>
                 )
             })}
         </>
@@ -303,6 +398,7 @@ const MyForm = () => {
     }), {errors: {}, touched: {}}) || {}, [formData.innerFormErrors]);
 
     const initialValues: Yup.InferType<typeof schema> = formData.data || (schema as any).getDefault();
+    console.log("@@@INITIAL", initialValues)
 
     useWhatChanged(MyForm, { formData, submit, initialValues });
 
@@ -334,6 +430,7 @@ const MyForm = () => {
                         setStatus,
                         status
                     } = props;
+                    console.log("####ERRORS", errors)
                     useWhatChanged(Formik, { formData, submit, props });
                     return (
                         <Form onSubmit={handleSubmit} method="post">
@@ -401,7 +498,7 @@ const MyForm = () => {
                                 >
                                     Reset
                                 </Button>
-                                <Button type="submit" disabled={isSubmitting}>
+                                <Button type="submit" disabled={isSubmitting} name={"GO"} value={"123"}>
                                     Submit
                                 </Button>
                             </p>

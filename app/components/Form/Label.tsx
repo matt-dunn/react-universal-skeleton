@@ -1,26 +1,18 @@
 import React from "react";
-import {Schema} from "yup";
+import {ObjectSchemaDefinition, Schema, SchemaDescription} from "yup";
 import styled from "styled-components";
 import {get} from "lodash";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
-type Field = {
+interface Field extends SchemaDescription {
     tests: Array<{ name: string; params: object; OPTIONS: {name: string} }>;
-}
-
-type Fields<T> = {
-    [Key in keyof T]: Field;
-}
-
-interface SchemaWithFields<T> extends Schema<T> {
-    fields?: Fields<T>;
 }
 
 type FormLabelProps<T> = {
     label: string;
     name: string;
-    schema: SchemaWithFields<T>;
+    field: Field;
 }
 
 const Label = styled.label`
@@ -45,10 +37,8 @@ const LabelIsRequired = styled.span`
 
 const typedMemo: <T>(c: T) => T = React.memo;
 
-const FormLabel = typedMemo(function<T>({label, name, schema}: FormLabelProps<T>) {
-    const field: Field = get(schema.fields, name.split(".").join(".fields."));
-
-    useWhatChanged(FormLabel, { FormLabel, label, schema });
+const FormLabel = typedMemo(function<T>({label, name, field}: FormLabelProps<T>) {
+    useWhatChanged(FormLabel, { FormLabel, label, field });
 
     return (
         <Label htmlFor={name as string}>
