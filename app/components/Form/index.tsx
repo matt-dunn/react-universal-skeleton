@@ -19,7 +19,7 @@ import {ValidationError, Schema, InferType, AnySchemaConstructor} from "yup";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
-import {useForm} from "components/actions/form";
+import {MapDataToAction, useForm} from "components/actions/form";
 import FormLabel from "app/components/Form/Label";
 import FancySelect from "app/components/FancySelect";
 import immutable from "object-path-immutable";
@@ -88,140 +88,140 @@ const Legend = styled.legend`
   border-radius: 1em;
 `
 
-const options = [
-    { value: '', label: 'Select...' },
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-];
+// const options = [
+//     { value: '', label: 'Select...' },
+//     { value: 'chocolate', label: 'Chocolate' },
+//     { value: 'strawberry', label: 'Strawberry' },
+//     { value: 'vanilla', label: 'Vanilla' },
+// ];
+//
+// type MyFormResponse = {
+//     chosenFlavour: string;
+//     yourEmail: string;
+// }
 
-type MyFormResponse = {
-    chosenFlavour: string;
-    yourEmail: string;
-}
+// const validateEmailApi = (function() {
+//     let t: number;
+//
+//     return (email: string): Promise<boolean | ValidationError> => {
+//         console.log("#####VALIDATE EMAIL")
+//         clearTimeout(t);
+//         return new Promise((resolve, reject) => {
+//             if (email === "matt.j.dunn@gmail.com") {
+//                 throw new Error("Email validation failed")
+//             }
+//
+//             t = setTimeout(() => {
+//                 // reject(new Error("Email validation failed"))
+//                 resolve(!email.startsWith("demo@"))
+//             }, 1500)
+//         })
+//     }
+// })()
 
-const validateEmailApi = (function() {
-    let t: number;
+// const schema = Yup.object().shape({
+//     email: Yup.string()
+//         .label("Email")
+//         .ensure()
+//         .meta({
+//             order: 1,
+//             Type: Input,
+//             props: {
+//                 placeholder: "Enter your email",
+//                 type: "text"
+//             }
+//         })
+//         .required('Email is required')
+//         .ensure()
+//         .email()
+//         .test("email", "Email ${value} is unavailable", function(value: string) {
+//             if (!value || !Yup.string().email().isValidSync(value)) {
+//                 return true;
+//             } else {
+//                 return validateEmailApi(value)
+//                     .catch(reason => new ValidationError(reason.message, value, this.path))
+//             }
+//         }),
+//     flavour: Yup.object()
+//         .meta({
+//             order: 0
+//         })
+//         .shape({
+//         favourite: Yup.string()
+//             .label("Flavour")
+//             .ensure()
+//             .meta({
+//                 order: 1,
+//                 Type: FancySelect,
+//                 props: {
+//                     options: [
+//                         { value: '', label: 'Select...' },
+//                         { value: 'chocolate', label: 'Chocolate' },
+//                         { value: 'strawberry', label: 'Strawberry' },
+//                         { value: 'vanilla', label: 'Vanilla' },
+//                     ]
+//                 }
+//             })
+//             .required('Flavour is required')
+//     }),
+//     notes: Yup.string()
+//         .required('Notes is required')
+//         .label("Notes")
+//         .ensure()
+//         .meta({
+//             order: 2,
+//             Type: Textarea,
+//             props: {
+//                 placeholder: "Enter your notes",
+//                 type: "text"
+//             }
+//         }),
+//     items: Yup.array(Yup.object()
+//         .shape({
+//             name: Yup.string()
+//                 .label("Name")
+//                 .meta({
+//                     order: 0,
+//                     Type: Input,
+//                     props: {
+//                         placeholder: "Enter your name",
+//                         type: "text"
+//                     }
+//                 })
+//                 .ensure()
+//                 .required(),
+//             address: Yup.string()
+//                 .label("Address")
+//                 .meta({
+//                     order: 1,
+//                     Type: Input,
+//                     props: {
+//                         placeholder: "Enter your address",
+//                         type: "text"
+//                     }
+//                 })
+//                 .ensure()
+//         }))
+//         .label("Peeps")
+//         .ensure()
+//         // .default([{name: "", address: ""}])
+//         .min(1)
+//         .max(5)
+// });
 
-    return (email: string): Promise<boolean | ValidationError> => {
-        console.log("#####VALIDATE EMAIL")
-        clearTimeout(t);
-        return new Promise((resolve, reject) => {
-            if (email === "matt.j.dunn@gmail.com") {
-                throw new Error("Email validation failed")
-            }
-
-            t = setTimeout(() => {
-                // reject(new Error("Email validation failed"))
-                resolve(!email.startsWith("demo@"))
-            }, 1500)
-        })
-    }
-})()
-
-const schema = Yup.object().shape({
-    email: Yup.string()
-        .label("Email")
-        .ensure()
-        .meta({
-            order: 1,
-            Type: Input,
-            props: {
-                placeholder: "Enter your email",
-                type: "text"
-            }
-        })
-        .required('Email is required')
-        .ensure()
-        .email()
-        .test("email", "Email ${value} is unavailable", function(value: string) {
-            if (!value || !Yup.string().email().isValidSync(value)) {
-                return true;
-            } else {
-                return validateEmailApi(value)
-                    .catch(reason => new ValidationError(reason.message, value, this.path))
-            }
-        }),
-    flavour: Yup.object()
-        .meta({
-            order: 0
-        })
-        .shape({
-        favourite: Yup.string()
-            .label("Flavour")
-            .ensure()
-            .meta({
-                order: 1,
-                Type: FancySelect,
-                props: {
-                    options: [
-                        { value: '', label: 'Select...' },
-                        { value: 'chocolate', label: 'Chocolate' },
-                        { value: 'strawberry', label: 'Strawberry' },
-                        { value: 'vanilla', label: 'Vanilla' },
-                    ]
-                }
-            })
-            .required('Flavour is required')
-    }),
-    notes: Yup.string()
-        .required('Notes is required')
-        .label("Notes")
-        .ensure()
-        .meta({
-            order: 2,
-            Type: Textarea,
-            props: {
-                placeholder: "Enter your notes",
-                type: "text"
-            }
-        }),
-    items: Yup.array(Yup.object()
-        .shape({
-            name: Yup.string()
-                .label("Name")
-                .meta({
-                    order: 0,
-                    Type: Input,
-                    props: {
-                        placeholder: "Enter your name",
-                        type: "text"
-                    }
-                })
-                .ensure()
-                .required(),
-            address: Yup.string()
-                .label("Address")
-                .meta({
-                    order: 1,
-                    Type: Input,
-                    props: {
-                        placeholder: "Enter your address",
-                        type: "text"
-                    }
-                })
-                .ensure()
-        }))
-        .label("Peeps")
-        .ensure()
-        // .default([{name: "", address: ""}])
-        .min(1)
-        .max(5)
-});
-
-const dummyApiCall = (flavour: string, email: string): Promise<MyFormResponse> => {
-    console.log("#####CALL API")
-    return new Promise((resolve, reject) => {
-        if (flavour === "vanilla") {
-            // throw new APIError("Authentication Failed", "auth", 403)
-            throw new Error("Don't like VANILLA!!!")
-        }
-
-        setTimeout(() => {
-            resolve({chosenFlavour: `FLAVOUR: ${flavour}`, yourEmail: `EMAIL: ${email}`})
-        }, 2000);
-    })
-};
+// const dummyApiCall = (flavour: string, email: string): Promise<MyFormResponse> => {
+//     console.log("#####CALL API")
+//     return new Promise((resolve, reject) => {
+//         if (flavour === "vanilla") {
+//             // throw new APIError("Authentication Failed", "auth", 403)
+//             throw new Error("Don't like VANILLA!!!")
+//         }
+//
+//         setTimeout(() => {
+//             resolve({chosenFlavour: `FLAVOUR: ${flavour}`, yourEmail: `EMAIL: ${email}`})
+//         }, 2000);
+//     })
+// };
 
 // const MyField = ({ setFieldError, setStatus, status, ...props }: FieldAttributes<any> & {setFieldError: (field: string, value: string | undefined) => void; setStatus: (status: any) => void; status: any}) => {
 //     const {errors} = useFormikContext();
@@ -277,7 +277,7 @@ type InitialFormData<T> = {
     touched: FormikTouched<T>;
 }
 
-const getDefault = (schema: Schema<any>, path: string = "") => {
+const getDefault = (schema: Schema<any>, path = "") => {
     const pathSchema = Yup.reach(schema, path);
 
     return ((pathSchema as any)._type === "array" && (Yup.reach(schema, path) as any)._subType.getDefault()) || (pathSchema as any).getDefault()
@@ -302,6 +302,7 @@ export type Fields<T> = {
 };
 
 type FieldProps<T extends object> = {
+    schema: SchemaWithFields<T>;
     fields: Fields<T>;
     values: T;
     errors: FormikErrors<T>;
@@ -313,10 +314,10 @@ type FieldProps<T extends object> = {
 }
 
 interface SchemaWithFields<T> extends Schema<T> {
-    fields: Fields<T>;
+    fields?: Fields<T>;
 }
 
-function Fields<T extends object>({fields, values, errors, touched, isSubmitting, path = "", setFieldValue, setFieldTouched}: FieldProps<T>) {
+function Fields<T extends object>({schema, fields, values, errors, touched, isSubmitting, path = "", setFieldValue, setFieldTouched}: FieldProps<T>) {
     const handleChange = (e: any, value?: string) => {
         if (e.target) {
             setFieldValue(e.target.name, e.target.value)
@@ -343,7 +344,7 @@ function Fields<T extends object>({fields, values, errors, touched, isSubmitting
                 const touch = getIn(touched, fullPath)
 
                 if (field._type === "array") {
-                    const {min, max} = tests.reduce((o: {min: number, max: number | undefined}, test: { name: string; params: any }) => {
+                    const {min, max} = tests.reduce((o: {min: number; max: number | undefined}, test: { name: string; params: any }) => {
                         if (test.name === "min") {
                             o.min = test.params.min;
                         } else if (test.name === "max") {
@@ -420,6 +421,7 @@ function Fields<T extends object>({fields, values, errors, touched, isSubmitting
                                                     key={itemFullPath}
                                                 >
                                                     <Fields
+                                                        schema={schema}
                                                         fields={field._subType.fields}
                                                         values={values}
                                                         errors={errors}
@@ -442,6 +444,7 @@ function Fields<T extends object>({fields, values, errors, touched, isSubmitting
                 } else if (field._type === "object") {
                     return (
                         <Fields
+                            schema={schema}
                             key={fullPath}
                             fields={field.fields}
                             values={values}
@@ -483,10 +486,15 @@ function Fields<T extends object>({fields, values, errors, touched, isSubmitting
     );
 }
 
-const MyForm = () => {
-    const [formData, submit] = useForm<Yup.InferType<typeof schema>, MyFormResponse, ValidationError[]>(
+type FormProps<T, P> = {
+    schema: SchemaWithFields<T>;
+    mapDataToAction: MapDataToAction<any, P>;
+}
+
+function MyForm<T, P>({schema, mapDataToAction}: FormProps<T, P>) {
+    const [formData, submit] = useForm<Yup.InferType<typeof schema>, P, ValidationError[]>(
         values => schema.validate(values, {abortEarly: false}),
-        values => dummyApiCall(values.flavour.favourite, values.email),
+        mapDataToAction,
         (action, data, value) => {
             switch (action) {
                 case "add": {
@@ -555,7 +563,8 @@ const MyForm = () => {
                         <Form onSubmit={handleSubmit} method="post">
                             {formData.error && <InputFeedback>There was a problem submitting: {formData.error.message}</InputFeedback>}
 
-                            <Fields
+                            {schema.fields && <Fields
+                                schema={schema}
                                 fields={schema.fields}
                                 values={values}
                                 errors={errors}
@@ -563,7 +572,7 @@ const MyForm = () => {
                                 isSubmitting={isSubmitting}
                                 setFieldValue={setFieldValue}
                                 setFieldTouched={setFieldTouched}
-                            />
+                            />}
 
                             {/*<Section>*/}
                             {/*    <FormLabel label="Flavour" name="flavour.favourite" schema={schema}/>*/}

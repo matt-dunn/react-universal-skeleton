@@ -62,7 +62,11 @@ export const useFormData = <T = any, P = any, E = any>(): FormData<T, P, E> => {
     return formData as FormData<T, P, E>;
 };
 
-export const useForm = <T, P = any | undefined, E = any | undefined>(formValidator: (values: T) => Promise<any>, mapDataToAction: {(data: T): Promise<P>}, performAction?: (action: ActionType, data: T, value?: string) => T | undefined | null): [FormData<T, P | undefined, E>, (data: T) => Promise<P>] => {
+export interface MapDataToAction<T, P> {
+    (data: T): Promise<P>;
+}
+
+export const useForm = <T, P = any | undefined, E = any | undefined>(formValidator: (values: T) => Promise<any>, mapDataToAction: MapDataToAction<T, P>, performAction?: (action: ActionType, data: T, value?: string) => T | undefined | null): [FormData<T, P | undefined, E>, (data: T) => Promise<P>] => {
     const formDataContext = useFormData<T, P, E>();
     const [formData, setFormData] = useState<FormData<T, P | undefined, E>>(formDataContext);
 

@@ -21,6 +21,11 @@ import {IExampleGetList, IExampleGetItem, ExampleEditItem} from "../components/a
 import MyForm from "app/components/Form";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
+import * as Yup from "yup";
+import {string} from "yup";
+import {ValidationError} from "yup";
+import FancySelect from "../components/FancySelect";
+import {MapDataToAction} from "../../components/actions/form";
 
 export type AboutProps = {
     items: IExampleItemState[];
@@ -46,6 +51,157 @@ const AboutListItem = styled(EditItem)<{isImportant?: boolean}>`
 
 const importantIds = ["item-1", "item-2"]
 
+const Input = styled.input<{isValid?: boolean}>`
+  && {
+  font-size: inherit;
+  border: 1px solid rgb(204, 204, 204);
+  padding: 9px 8px;
+  border-radius: 4px;
+  ${({isValid}) => !isValid && css`border-color: red`};
+  }
+`
+const Textarea = styled.textarea<{isValid?: boolean}>`
+  && {
+  font-size: inherit;
+  border: 1px solid rgb(204, 204, 204);
+  padding: 9px 8px;
+  border-radius: 4px;
+  min-width: 100%;
+  min-height: 10em;
+  ${({isValid}) => !isValid && css`border-color: red`};
+  }
+`
+
+const validateEmailApi = (function() {
+    let t: number;
+
+    return (email: string): Promise<boolean | ValidationError> => {
+        console.log("#####VALIDATE EMAIL")
+        clearTimeout(t);
+        return new Promise((resolve, reject) => {
+            if (email === "matt.j.dunn@gmail.com") {
+                throw new Error("Email validation failed")
+            }
+
+            t = setTimeout(() => {
+                // reject(new Error("Email validation failed"))
+                resolve(!email.startsWith("demo@"))
+            }, 1500)
+        })
+    }
+})()
+
+const schema = Yup.object().shape({
+    email: Yup.string()
+        .label("Email")
+        .ensure()
+        .meta({
+            order: 1,
+            Type: Input,
+            props: {
+                placeholder: "Enter your email",
+                type: "text"
+            }
+        })
+        .required('Email is required')
+        .ensure()
+        .email()
+        .test("email", "Email ${value} is unavailable", function(value: string) {
+            if (!value || !Yup.string().email().isValidSync(value)) {
+                return true;
+            } else {
+                return validateEmailApi(value)
+                    .catch(reason => new ValidationError(reason.message, value, this.path))
+            }
+        }),
+    flavour: Yup.object()
+        .meta({
+            order: 0
+        })
+        .shape({
+            favourite: Yup.string()
+                .label("Flavour")
+                .ensure()
+                .meta({
+                    order: 1,
+                    Type: FancySelect,
+                    props: {
+                        options: [
+                            { value: '', label: 'Select...' },
+                            { value: 'chocolate', label: 'Chocolate' },
+                            { value: 'strawberry', label: 'Strawberry' },
+                            { value: 'vanilla', label: 'Vanilla' },
+                        ]
+                    }
+                })
+                .required('Flavour is required')
+        }),
+    notes: Yup.string()
+        .required('Notes is required')
+        .label("Notes")
+        .ensure()
+        .meta({
+            order: 2,
+            Type: Textarea,
+            props: {
+                placeholder: "Enter your notes",
+                type: "text"
+            }
+        }),
+    items: Yup.array(Yup.object()
+        .shape({
+            name: Yup.string()
+                .label("Name")
+                .meta({
+                    order: 0,
+                    Type: Input,
+                    props: {
+                        placeholder: "Enter your name",
+                        type: "text"
+                    }
+                })
+                .ensure()
+                .required(),
+            address: Yup.string()
+                .label("Address")
+                .meta({
+                    order: 1,
+                    Type: Input,
+                    props: {
+                        placeholder: "Enter your address",
+                        type: "text"
+                    }
+                })
+                .ensure()
+        }))
+        .label("Peeps")
+        .ensure()
+        // .default([{name: "", address: ""}])
+        .min(1)
+        .max(5)
+});
+
+type MyFormResponse = {
+    chosenFlavour: string;
+    yourEmail: string;
+}
+
+const dummyApiCall = (flavour: string, email: string): Promise<MyFormResponse> => {
+    console.log("#####CALL API")
+    return new Promise((resolve, reject) => {
+        if (flavour === "vanilla") {
+            // throw new APIError("Authentication Failed", "auth", 403)
+            throw new Error("Don't like VANILLA!!!")
+        }
+
+        setTimeout(() => {
+            resolve({chosenFlavour: `FLAVOUR: ${flavour}`, yourEmail: `EMAIL: ${email}`})
+        }, 2000);
+    })
+};
+
+const mapDataToAction: MapDataToAction<Yup.InferType<typeof schema>, MyFormResponse> = values => dummyApiCall(values.flavour.favourite, values.email)
+
 const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditItem, $status}: AboutProps) => {
     const { page } = useParams();
 
@@ -69,7 +225,10 @@ const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIt
                 About page (Lazy Loaded)
             </Title>
 
-            <MyForm/>
+            <MyForm
+                schema={schema}
+                mapDataToAction={mapDataToAction}
+            />
 
             <AboveTheFold>
                 {/*<List items={items} onExampleGetList={onExampleGetList} onExampleEditItem={onExampleEditItem} activePage={parseInt(page || "0", 10)}>*/}
