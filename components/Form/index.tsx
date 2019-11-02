@@ -12,13 +12,23 @@ import {ValidationError} from "yup";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
-import {MapDataToAction, useForm} from "components/actions/form";
+import {ActionType, MapDataToAction, useForm} from "components/actions/form";
 import {getDefault} from "./utils";
 import Fields, {SchemaWithFields} from "./Fields";
 
 export type FormStyles = {
     control: FlattenInterpolation<any>;
     controlInvalid: FlattenInterpolation<any>;
+}
+
+type InitialFormData<T> = {
+    errors: FormikErrors<T>;
+    touched: FormikTouched<T>;
+}
+
+export type FormProps<T, P> = {
+    schema: SchemaWithFields<T>;
+    onSubmit: MapDataToAction<any, P>;
 }
 
 export const formStyles: FormStyles = {
@@ -71,41 +81,33 @@ const FormContainer = styled.form`
 const InputFeedback = styled.div`
   color: red;
   margin: 5px 0 10px 0;
-`
+`;
 
-type InitialFormData<T> = {
-    errors: FormikErrors<T>;
-    touched: FormikTouched<T>;
+function performAction<T>(schema: any, action: ActionType, data: T, value?: string): T | undefined | null {
+    switch (action) {
+        case "add": {
+            return (value && immutable.push(data, value, getDefault(schema, value))) || data;
+        }
+        case "remove": {
+            return immutable.del(data, value)
+        }
+        case "insert": {
+            if (value) {
+                const parts = value.split(".");
+                const index = parseInt(parts.slice(-1).join("."), 10);
+                const path = parts.slice(0, -1).join(".");
+                return immutable.insert(data, path, getDefault(schema, value), index)
+            }
+            break;
+        }
+    }
 }
-
-type FormProps<T, P> = {
-    schema: SchemaWithFields<T>;
-    onSubmit: MapDataToAction<any, P>;
-}
-
 function Form<T, P>({schema, onSubmit}: FormProps<T, P>) {
     const [formData, submit] = useForm<Yup.InferType<typeof schema>, P, ValidationError[]>(
+        schema,
         values => schema.validate(values, {abortEarly: false}),
         onSubmit,
-        (action, data, value) => {
-            switch (action) {
-                case "add": {
-                    return (value && immutable.push(data, value, getDefault(schema, value))) || data;
-                }
-                case "remove": {
-                    return immutable.del(data, value)
-                }
-                case "insert": {
-                    if (value) {
-                        const parts = value.split(".");
-                        const index = parseInt(parts.slice(-1).join("."), 10);
-                        const path = parts.slice(0, -1).join(".");
-                        return immutable.insert(data, path, getDefault(schema, value), index)
-                    }
-                    break;
-                }
-            }
-        }
+        performAction
     );
 
     const {errors: initialErrors, touched: initialTouched} = useMemo<InitialFormData<Yup.InferType<typeof schema>>>(() => formData.innerFormErrors && formData.innerFormErrors.reduce(({errors, touched}, {path, message}) => ({

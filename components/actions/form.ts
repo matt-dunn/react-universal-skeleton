@@ -66,7 +66,11 @@ export interface MapDataToAction<T, P> {
     (data: T): Promise<P>;
 }
 
-export const useForm = <T, P = any | undefined, E = any | undefined>(formValidator: (values: T) => Promise<any>, mapDataToAction: MapDataToAction<T, P>, performAction?: (action: ActionType, data: T, value?: string) => T | undefined | null): [FormData<T, P | undefined, E>, (data: T) => Promise<P>] => {
+export interface PerformAction<T, S> {
+    (schema: S, action: ActionType, data: T, value?: string): T | undefined | null;
+}
+
+export const useForm = <T, P = any | undefined, E = any | undefined, S = any>(schema: any, formValidator: (values: T) => Promise<any>, mapDataToAction: MapDataToAction<T, P>, performAction?: PerformAction<T, S>): [FormData<T, P | undefined, E>, (data: T) => Promise<P>] => {
     const formDataContext = useFormData<T, P, E>();
     const [formData, setFormData] = useState<FormData<T, P | undefined, E>>(formDataContext);
 
@@ -108,7 +112,7 @@ export const useForm = <T, P = any | undefined, E = any | undefined>(formValidat
     }
 
     if (formData.action && performAction && !formDataContext.isProcessed && formDataContext.data) {
-        const data = performAction(formData.action.type, formDataContext.data, formData.action.value);
+        const data = performAction(schema, formData.action.type, formDataContext.data, formData.action.value);
         if (data) {
             formDataContext.data = data;
         }
