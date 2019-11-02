@@ -1,5 +1,5 @@
 import React, {useMemo} from 'react'
-import styled, {css} from "styled-components";
+import styled, {css, FlattenInterpolation} from "styled-components";
 import immutable from "object-path-immutable";
 import {
     Formik,
@@ -15,6 +15,22 @@ import useWhatChanged from "components/whatChanged/useWhatChanged";
 import {MapDataToAction, useForm} from "components/actions/form";
 import {getDefault} from "./utils";
 import Fields, {SchemaWithFields} from "./Fields";
+
+export type FormStyles = {
+    control: FlattenInterpolation<any>;
+    controlInvalid: FlattenInterpolation<any>;
+}
+
+export const formStyles: FormStyles = {
+    control: css`
+        font-size: inherit;
+        border: 1px solid rgb(204, 204, 204);
+        border-radius: 4px;
+    `,
+    controlInvalid: css`
+        border-color: red;
+    `
+}
 
 const FormContainer = styled.form`
   border: 1px solid #ccc;
@@ -33,17 +49,13 @@ const FormContainer = styled.form`
   }
   
   input {
-    font-size: inherit;
-    border: 1px solid rgb(204, 204, 204);
     padding: 9px 8px;
-    border-radius: 4px;
+    ${formStyles.control};
   }
   
   textarea {
-    font-size: inherit;
-    border: 1px solid rgb(204, 204, 204);
     padding: 9px 8px;
-    border-radius: 4px;
+    ${formStyles.control};
     min-width: 100%;
     min-height: 10em;
   }

@@ -4,6 +4,7 @@ import FormLabel from "./Label";
 import React, {ComponentType} from "react";
 import styled from "styled-components";
 import {getDefault} from "./utils";
+import {formStyles} from "./index";
 
 interface Field<T> extends SchemaDescription {
     _meta: {
@@ -218,6 +219,7 @@ function Fields<T extends object>({schema, fields, values, errors, touched, isSu
                             disabled={isSubmitting}
                             isValid={isValid}
                             className={(!isValid && "invalid") || ""}
+                            formStyles={formStyles}
                         />
                         <ErrorMessage name={fullPath}>
                             {message => <InputFeedback>{message}</InputFeedback>}

@@ -2,22 +2,25 @@ import React, {useState, useEffect} from 'react'
 import styled, {css} from "styled-components";
 
 import ReactSelect from "react-select";
+import {FormStyles} from "components/Form";
 
-const SelectStyle = css<{isValid?: boolean}>`
+const SelectStyle = css<{isValid?: boolean; formElementStyles: FormStyles}>`
   font-size: inherit;
   background-color: transparent;
   flex-grow: 1;
   > div {
+    ${({formElementStyles}) => formElementStyles.control}
     &, &:hover {
-      border-color: ${({isValid}) => (isValid && 'rgb(204, 204, 204)') || "red"};
+      ${({isValid, formElementStyles}) => !isValid && formElementStyles.controlInvalid}
     }
   }
 `;
 
-const BasicSelect = styled.select`
+const BasicSelect = styled.select<{isValid?: boolean; formElementStyles: FormStyles}>`
   ${SelectStyle};
   height: 36px;
-  border-color: ${({isValid}) => (isValid && 'rgb(204, 204, 204)') || "red"};
+  ${({formElementStyles}) => formElementStyles.control}
+  ${({isValid, formElementStyles}) => !isValid && formElementStyles.controlInvalid}
 `;
 
 const Select = styled(ReactSelect)`
@@ -38,9 +41,10 @@ type FancySelectProps = {
     value?: string;
     onChange: (name: string | any, value: string, shouldValidate?: boolean) => void;
     onBlur: (name: string | any, touched?: boolean, shouldValidate?: boolean) => void;
+    formStyles: FormStyles;
 }
 
-const FancySelect = ({id, disabled, isValid, options, name, value, onChange, onBlur}: FancySelectProps): JSX.Element => {
+const FancySelect = ({id, disabled, isValid, options, name, value, onChange, onBlur, formStyles}: FancySelectProps): JSX.Element => {
     const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
@@ -65,6 +69,7 @@ const FancySelect = ({id, disabled, isValid, options, name, value, onChange, onB
                 onBlur={handleBlur}
                 isDisabled={disabled}
                 isValid={isValid}
+                formElementStyles={formStyles}
             />
         )
     } else {
@@ -77,6 +82,7 @@ const FancySelect = ({id, disabled, isValid, options, name, value, onChange, onB
                 onChange={handleSelectChange}
                 disabled={disabled}
                 isValid={isValid}
+                formElementStyles={formStyles}
             >
                 {options.map((option, index) => (
                     <option key={index} value={option.value}>{option.label}</option>
