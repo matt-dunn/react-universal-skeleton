@@ -7,7 +7,7 @@ import {getDefault} from "./utils";
 
 interface Field<T> extends SchemaDescription {
     _meta: {
-        Type?: ComponentType<any>;
+        Type?: ComponentType<any> | string;
         props?: any;
         order?: number;
     };
@@ -56,15 +56,6 @@ const Legend = styled.legend`
   border-radius: 1em;
 `
 
-const Button = styled.button`
-  font-size: inherit;
-  padding: 5px;
-  border: 1px solid #ccc;
-  background-color: #eee;
-  border-radius: 3px;
-  margin: 10px 8px 10px 0;
-`
-
 const InputFeedback = styled.div`
   color: red;
   margin: 5px 0 10px 0;
@@ -89,11 +80,12 @@ function Fields<T extends object>({schema, fields, values, errors, touched, isSu
                 const field = fields[key];
                 const fullPath = [path, key].filter(part => part).join(".");
 
-                const {type, label, meta, tests} = field.describe();
-                const {Type, props} = field._meta || {};
+                const {label, tests} = field.describe();
+                const {Type, props} = {Type: "input", ...field._meta};
                 const value: string[] = getIn(values, fullPath)
                 const error = getIn(errors, fullPath)
                 const touch = getIn(touched, fullPath)
+                const FormElement = (typeof Type === "string" && styled(Type as any)``) || Type;
 
                 if (field._type === "array") {
                     const {min, max} = tests.reduce((o: {min: number; max: number | undefined}, test: { name: string; params: any }) => {
@@ -113,7 +105,7 @@ function Fields<T extends object>({schema, fields, values, errors, touched, isSu
                             name={fullPath}
                             render={arrayHelpers => {
                                 const AddOption = ((!max || itemsCount < max) && (
-                                    <Button
+                                    <button
                                         disabled={isSubmitting}
                                         name="@@ADD_ITEM"
                                         value={fullPath}
@@ -123,7 +115,7 @@ function Fields<T extends object>({schema, fields, values, errors, touched, isSu
                                         }}
                                     >
                                         Add Item
-                                    </Button>
+                                    </button>
                                 )) || null;
 
                                 return (
@@ -137,7 +129,7 @@ function Fields<T extends object>({schema, fields, values, errors, touched, isSu
                                         {value && value.map((value, index) => {
                                             const itemFullPath = `${fullPath}.${index}`;
                                             const RemoveOption = (itemsCount > min && (
-                                                <Button
+                                                <button
                                                     disabled={isSubmitting}
                                                     name="@@REMOVE_ITEM"
                                                     value={itemFullPath}
@@ -147,11 +139,11 @@ function Fields<T extends object>({schema, fields, values, errors, touched, isSu
                                                     }}
                                                 >
                                                     Remove Item
-                                                </Button>
+                                                </button>
                                             )) || null;
 
                                             const InsertOption = ((!max || itemsCount < max) && (
-                                                <Button
+                                                <button
                                                     disabled={isSubmitting}
                                                     name="@@INSERT_ITEM"
                                                     value={itemFullPath}
@@ -161,7 +153,7 @@ function Fields<T extends object>({schema, fields, values, errors, touched, isSu
                                                     }}
                                                 >
                                                     Insert Item
-                                                </Button>
+                                                </button>
                                             )) || null;
 
                                             return (
@@ -206,6 +198,8 @@ function Fields<T extends object>({schema, fields, values, errors, touched, isSu
                     )
                 }
 
+                const isValid = !(error && touch);
+
                 return (
                     <Section
                         key={fullPath}
@@ -215,14 +209,15 @@ function Fields<T extends object>({schema, fields, values, errors, touched, isSu
                         />
                         <Field
                             {...props}
-                            as={Type}
+                            as={FormElement}
                             id={fullPath}
                             name={fullPath}
                             value={value}
                             onChange={handleChange}
                             onBlur={handleBlur}
                             disabled={isSubmitting}
-                            isValid={!(error && touch)}
+                            isValid={isValid}
+                            className={(!isValid && "invalid") || ""}
                         />
                         <ErrorMessage name={fullPath}>
                             {message => <InputFeedback>{message}</InputFeedback>}

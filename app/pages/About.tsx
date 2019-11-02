@@ -51,27 +51,6 @@ const AboutListItem = styled(EditItem)<{isImportant?: boolean}>`
 
 const importantIds = ["item-1", "item-2"]
 
-const Input = styled.input<{isValid?: boolean}>`
-  && {
-  font-size: inherit;
-  border: 1px solid rgb(204, 204, 204);
-  padding: 9px 8px;
-  border-radius: 4px;
-  ${({isValid}) => !isValid && css`border-color: red`};
-  }
-`
-const Textarea = styled.textarea<{isValid?: boolean}>`
-  && {
-  font-size: inherit;
-  border: 1px solid rgb(204, 204, 204);
-  padding: 9px 8px;
-  border-radius: 4px;
-  min-width: 100%;
-  min-height: 10em;
-  ${({isValid}) => !isValid && css`border-color: red`};
-  }
-`
-
 const validateEmailApi = (function() {
     let t: number;
 
@@ -97,7 +76,6 @@ const schema = Yup.object().shape({
         .ensure()
         .meta({
             order: 1,
-            Type: Input,
             props: {
                 placeholder: "Enter your email",
                 type: "text"
@@ -142,7 +120,7 @@ const schema = Yup.object().shape({
         .ensure()
         .meta({
             order: 2,
-            Type: Textarea,
+            Type: "textarea",
             props: {
                 placeholder: "Enter your notes",
                 type: "text"
@@ -154,7 +132,6 @@ const schema = Yup.object().shape({
                 .label("Name")
                 .meta({
                     order: 0,
-                    Type: Input,
                     props: {
                         placeholder: "Enter your name",
                         type: "text"
@@ -166,7 +143,6 @@ const schema = Yup.object().shape({
                 .label("Address")
                 .meta({
                     order: 1,
-                    Type: Input,
                     props: {
                         placeholder: "Enter your address",
                         type: "text"

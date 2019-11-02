@@ -22,37 +22,39 @@ const FormContainer = styled.form`
   border-radius: 4px;
   padding: 10px;
   margin: 20px 0;
+  
+  button {
+    font-size: inherit;
+    padding: 5px;
+    border: 1px solid #ccc;
+    background-color: #eee;
+    border-radius: 3px;
+    margin: 10px 8px 10px 0;
+  }
+  
+  input {
+    font-size: inherit;
+    border: 1px solid rgb(204, 204, 204);
+    padding: 9px 8px;
+    border-radius: 4px;
+  }
+  
+  textarea {
+    font-size: inherit;
+    border: 1px solid rgb(204, 204, 204);
+    padding: 9px 8px;
+    border-radius: 4px;
+    min-width: 100%;
+    min-height: 10em;
+  }
+  
+    input,
+    textarea {
+        &.invalid {
+          border-color: red;
+        }
+    }
 `;
-
-const Button = styled.button`
-  font-size: inherit;
-  padding: 5px;
-  border: 1px solid #ccc;
-  background-color: #eee;
-  border-radius: 3px;
-  margin: 10px 8px 10px 0;
-`
-
-const Input = styled.input<{isValid?: boolean}>`
-  && {
-  font-size: inherit;
-  border: 1px solid rgb(204, 204, 204);
-  padding: 9px 8px;
-  border-radius: 4px;
-  ${({isValid}) => !isValid && css`border-color: red`};
-  }
-`
-const Textarea = styled.textarea<{isValid?: boolean}>`
-  && {
-  font-size: inherit;
-  border: 1px solid rgb(204, 204, 204);
-  padding: 9px 8px;
-  border-radius: 4px;
-  min-width: 100%;
-  min-height: 10em;
-  ${({isValid}) => !isValid && css`border-color: red`};
-  }
-`
 
 const InputFeedback = styled.div`
   color: red;
@@ -101,7 +103,7 @@ function Form<T, P>({schema, mapDataToAction}: FormProps<T, P>) {
 
     const initialValues: Yup.InferType<typeof schema> = formData.data || getDefault(schema);
 
-    console.log("@@@", initialValues)
+    console.log("@@@INITIAL DATA", initialValues)
 
     useWhatChanged(Form, { formData, submit, initialValues });
 
@@ -133,7 +135,7 @@ function Form<T, P>({schema, mapDataToAction}: FormProps<T, P>) {
 
                     if (schema.fields) {
                         return (
-                            <FormContainer onSubmit={handleSubmit} method="post">
+                            <FormContainer onSubmit={handleSubmit} method="post" className={(!isValid && "invalid") || ""}>
                                 {formData.error &&
                                 <InputFeedback>There was a problem submitting: {formData.error.message}</InputFeedback>}
 
@@ -149,17 +151,17 @@ function Form<T, P>({schema, mapDataToAction}: FormProps<T, P>) {
                                 />}
 
                                 <p>
-                                    <Button
+                                    <button
                                         type="button"
                                         className="outline"
                                         onClick={handleReset}
                                         disabled={!dirty || isSubmitting}
                                     >
                                         Reset
-                                    </Button>
-                                    <Button type="submit" disabled={isSubmitting} name="@@SUBMIT">
+                                    </button>
+                                    <button type="submit" disabled={isSubmitting} name="@@SUBMIT">
                                         Submit {(isValid && isInitialValid) && "✔"}
-                                    </Button>
+                                    </button>
                                 </p>
                             </FormContainer>
                         );
