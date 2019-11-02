@@ -11,6 +11,7 @@ interface Field<T> extends SchemaDescription {
         Type?: ComponentType<any> | string;
         props?: any;
         order?: number;
+        itemLabel?: string;
     };
     _type: string;
     _subType: {
@@ -82,7 +83,7 @@ function Fields<T extends object>({schema, fields, values, errors, touched, isSu
                 const fullPath = [path, key].filter(part => part).join(".");
 
                 const {label, tests} = field.describe();
-                const {Type, props} = {Type: "input", ...field._meta};
+                const {Type, props, itemLabel} = {Type: "input", ...field._meta};
                 const value: string[] = getIn(values, fullPath)
                 const error = getIn(errors, fullPath)
                 const touch = getIn(touched, fullPath)
@@ -115,7 +116,7 @@ function Fields<T extends object>({schema, fields, values, errors, touched, isSu
                                             arrayHelpers.push(getDefault(schema, fullPath))
                                         }}
                                     >
-                                        Add Item
+                                        Add {itemLabel || label}
                                     </button>
                                 )) || null;
 
@@ -139,7 +140,7 @@ function Fields<T extends object>({schema, fields, values, errors, touched, isSu
                                                         arrayHelpers.remove(index)
                                                     }}
                                                 >
-                                                    Remove Item
+                                                    Remove {itemLabel || label}
                                                 </button>
                                             )) || null;
 
@@ -153,7 +154,7 @@ function Fields<T extends object>({schema, fields, values, errors, touched, isSu
                                                         arrayHelpers.insert(index, getDefault(schema, fullPath))
                                                     }}
                                                 >
-                                                    Insert Item
+                                                    Insert {itemLabel || label}
                                                 </button>
                                             )) || null;
 

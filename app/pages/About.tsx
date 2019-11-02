@@ -119,7 +119,7 @@ const schema = Yup.object().shape({
         .label("Notes")
         .ensure()
         .meta({
-            order: 2,
+            order: 3,
             Type: "textarea",
             props: {
                 placeholder: "Enter your notes",
@@ -148,9 +148,34 @@ const schema = Yup.object().shape({
                         type: "text"
                     }
                 })
-                .ensure()
+                .ensure(),
+            friends: Yup.array(Yup.object()
+                .shape({
+                    nickname: Yup.string()
+                        .label("Nickname")
+                        .meta({
+                            order: 0,
+                            props: {
+                                placeholder: "Enter nickname",
+                                type: "text"
+                            }
+                        })
+                        .ensure()
+                        .required(),
+                })
+            )
+                .label("Friends")
+                .meta({
+                    order: 2,
+                    itemLabel: "Friend"
+                })
+                .max(2)
         }))
         .label("Peeps")
+        .meta({
+            order: 2,
+            itemLabel: "Peep"
+        })
         .ensure()
         // .default([{name: "", address: ""}])
         .min(1)
