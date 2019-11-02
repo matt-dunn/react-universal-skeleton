@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react'
+import React, {ComponentElement, ComponentType, useMemo} from 'react'
 import styled, {css} from "styled-components";
 
 import {
@@ -12,10 +12,10 @@ import {
     getIn,
     FormikErrors,
     FormikTouched,
-    FieldArray
+    FieldArray, FormikHelpers
 } from 'formik';
 import * as Yup from 'yup';
-import {ValidationError, Schema} from "yup";
+import {ValidationError, Schema, InferType, AnySchemaConstructor} from "yup";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
@@ -23,6 +23,10 @@ import {useForm} from "components/actions/form";
 import FormLabel from "app/components/Form/Label";
 import FancySelect from "app/components/FancySelect";
 import immutable from "object-path-immutable";
+import {string} from "yup";
+import {ObjectSchemaDefinition} from "yup";
+import {Ref} from "yup";
+import {SchemaDescription} from "yup";
 
 const Form = styled.form`
   border: 1px solid #ccc;
@@ -71,10 +75,17 @@ const Section = styled.div`
   margin: 0 0 10px 0;
 `
 
-const SubSection = styled.div`
+const SubSection = styled.fieldset`
   margin: 0 0 10px 0;
   padding: 10px;
   border: 1px solid #eee;
+  border-radius: 5px;
+`
+
+const Legend = styled.legend`
+  padding: 2px 20px;
+  background-color: #eee;
+  border-radius: 1em;
 `
 
 const options = [
@@ -191,10 +202,11 @@ const schema = Yup.object().shape({
                 })
                 .ensure()
         }))
+        .label("Peeps")
         .ensure()
         // .default([{name: "", address: ""}])
         .min(1)
-        .max(4)
+        .max(5)
 });
 
 const dummyApiCall = (flavour: string, email: string): Promise<MyFormResponse> => {
@@ -271,9 +283,41 @@ const getDefault = (schema: Schema<any>, path: string = "") => {
     return ((pathSchema as any)._type === "array" && (Yup.reach(schema, path) as any)._subType.getDefault()) || (pathSchema as any).getDefault()
 };
 
-const Fields = ({fields, values, errors, touched, isSubmitting, path = "", setFieldValue, setFieldTouched}) => {
+interface Field<T> extends SchemaDescription {
+    _meta: {
+        Type?: ComponentType<any>;
+        props?: any;
+        order?: number;
+    };
+    _type: string;
+    _subType: {
+        fields: Fields<T>;
+    };
+    fields: Fields<T>;
+    tests: Array<{ name: string; params: object; OPTIONS: {name: string} }>;
+}
 
-    const handleChange = (e, value) => {
+export type Fields<T> = {
+    [field: string]: Schema<T> & Field<T>;
+};
+
+type FieldProps<T extends object> = {
+    fields: Fields<T>;
+    values: T;
+    errors: FormikErrors<T>;
+    touched: FormikTouched<T>;
+    isSubmitting: boolean;
+    path?: string;
+    setFieldValue: (field: keyof T & string, value: any, shouldValidate?: boolean) => void;
+    setFieldTouched: (field: keyof T & string, isTouched?: boolean, shouldValidate?: boolean) => void;
+}
+
+interface SchemaWithFields<T> extends Schema<T> {
+    fields: Fields<T>;
+}
+
+function Fields<T extends object>({fields, values, errors, touched, isSubmitting, path = "", setFieldValue, setFieldTouched}: FieldProps<T>) {
+    const handleChange = (e: any, value?: string) => {
         if (e.target) {
             setFieldValue(e.target.name, e.target.value)
         } else {
@@ -281,7 +325,7 @@ const Fields = ({fields, values, errors, touched, isSubmitting, path = "", setFi
         }
     }
 
-    const handleBlur = (e) => {
+    const handleBlur = (e: any) => {
         setFieldTouched((e.target && e.target.name) || e, true)
     }
 
@@ -294,13 +338,12 @@ const Fields = ({fields, values, errors, touched, isSubmitting, path = "", setFi
 
                 const {type, label, meta, tests} = field.describe();
                 const {Type, props} = field._meta || {};
-                const value = getIn(values, fullPath)
+                const value: string[] = getIn(values, fullPath)
                 const error = getIn(errors, fullPath)
                 const touch = getIn(touched, fullPath)
 
                 if (field._type === "array") {
-
-                    const {min, max} = tests.reduce((o, test) => {
+                    const {min, max} = tests.reduce((o: {min: number, max: number | undefined}, test: { name: string; params: any }) => {
                         if (test.name === "min") {
                             o.min = test.params.min;
                         } else if (test.name === "max") {
@@ -313,12 +356,14 @@ const Fields = ({fields, values, errors, touched, isSubmitting, path = "", setFi
 
                     const itemsCount = (value && value.length) || 0;
 
+                    console.log(field)
+
                     return (
                         <FieldArray
                             key={fullPath}
                             name={fullPath}
                             render={arrayHelpers => {
-                                const AddOption = (itemsCount < max && (
+                                const AddOption = ((!max || itemsCount < max) && (
                                     <Button
                                         disabled={isSubmitting}
                                         name="@@ADD_ITEM"
@@ -334,6 +379,7 @@ const Fields = ({fields, values, errors, touched, isSubmitting, path = "", setFi
 
                                 return (
                                     <SubSection>
+                                        {label && <Legend>{label}</Legend>}
                                         {typeof error === "string" && <ErrorMessage name={fullPath}>
                                             {message => <InputFeedback>{message}</InputFeedback>}
                                             </ErrorMessage>
@@ -355,7 +401,7 @@ const Fields = ({fields, values, errors, touched, isSubmitting, path = "", setFi
                                                 </Button>
                                             )) || null;
 
-                                            const InsertOption = (itemsCount < max && (
+                                            const InsertOption = ((!max || itemsCount < max) && (
                                                 <Button
                                                     disabled={isSubmitting}
                                                     name="@@INSERT_ITEM"
@@ -414,7 +460,8 @@ const Fields = ({fields, values, errors, touched, isSubmitting, path = "", setFi
                         key={fullPath}
                     >
                         <FormLabel
-                            label={label} name={fullPath} field={field}/>
+                            label={label} name={fullPath} field={field}
+                        />
                         <Field
                             {...props}
                             as={Type}
@@ -468,6 +515,8 @@ const MyForm = () => {
 
     const initialValues: Yup.InferType<typeof schema> = formData.data || getDefault(schema);
 
+    console.log("@@@", initialValues && initialValues)
+
     useWhatChanged(MyForm, { formData, submit, initialValues });
 
     return (
@@ -496,7 +545,9 @@ const MyForm = () => {
                         setFieldValue,
                         setFieldError,
                         setStatus,
-                        status
+                        status,
+                        isValid,
+                        isInitialValid
                     } = props;
                     // console.log("####ERRORS", errors)
                     useWhatChanged(Formik, { formData, submit, props });
@@ -567,7 +618,7 @@ const MyForm = () => {
                                     Reset
                                 </Button>
                                 <Button type="submit" disabled={isSubmitting} name="@@SUBMIT">
-                                    Submit
+                                    Submit {(isValid && isInitialValid) && "✔"}
                                 </Button>
                             </p>
                         </Form>
