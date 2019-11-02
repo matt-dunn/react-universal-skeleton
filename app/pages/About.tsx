@@ -18,14 +18,14 @@ import {IAppState} from '../reducers';
 import {IExampleItemState} from '../reducers/__dummy__/example';
 import {IExampleGetList, IExampleGetItem, ExampleEditItem} from "../components/api/__dummy__/example";
 
-import MyForm from "app/components/Form";
+import MyForm from "components/Form";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 import * as Yup from "yup";
 import {string} from "yup";
 import {ValidationError} from "yup";
-import FancySelect from "../components/FancySelect";
-import {MapDataToAction} from "../../components/actions/form";
+import FancySelect from "components/FancySelect";
+import {MapDataToAction} from "components/actions/form";
 
 export type AboutProps = {
     items: IExampleItemState[];
