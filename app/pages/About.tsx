@@ -176,7 +176,7 @@ const dummyApiCall = (flavour: string, email: string): Promise<MyFormResponse> =
     })
 };
 
-const mapDataToAction: MapDataToAction<Yup.InferType<typeof schema>, MyFormResponse> = values => dummyApiCall(values.flavour.favourite, values.email)
+const handleSubmit: MapDataToAction<Yup.InferType<typeof schema>, MyFormResponse> = values => dummyApiCall(values.flavour.favourite, values.email)
 
 const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditItem, $status}: AboutProps) => {
     const { page } = useParams();
@@ -203,7 +203,7 @@ const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIt
 
             <MyForm
                 schema={schema}
-                mapDataToAction={mapDataToAction}
+                onSubmit={handleSubmit}
             />
 
             <AboveTheFold>

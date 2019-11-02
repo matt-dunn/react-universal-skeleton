@@ -80,13 +80,13 @@ type InitialFormData<T> = {
 
 type FormProps<T, P> = {
     schema: SchemaWithFields<T>;
-    mapDataToAction: MapDataToAction<any, P>;
+    onSubmit: MapDataToAction<any, P>;
 }
 
-function Form<T, P>({schema, mapDataToAction}: FormProps<T, P>) {
+function Form<T, P>({schema, onSubmit}: FormProps<T, P>) {
     const [formData, submit] = useForm<Yup.InferType<typeof schema>, P, ValidationError[]>(
         values => schema.validate(values, {abortEarly: false}),
-        mapDataToAction,
+        onSubmit,
         (action, data, value) => {
             switch (action) {
                 case "add": {
