@@ -131,8 +131,6 @@ function Form<T, P>({schema, mapDataToAction}: FormProps<T, P>) {
                         isInitialValid
                     } = props;
 
-                    useWhatChanged(Formik, { formData, submit, props });
-
                     if (schema.fields) {
                         return (
                             <FormContainer onSubmit={handleSubmit} method="post">
