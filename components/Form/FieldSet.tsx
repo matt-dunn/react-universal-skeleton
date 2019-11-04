@@ -6,41 +6,10 @@ import styled from "styled-components";
 import {formStyles} from "./index";
 import Array from "./Array";
 import {FormContext} from "./utils";
+import {Fields} from "./types";
 
-export interface Field<T> extends SchemaDescription {
-    _meta: {
-        Component?: ComponentType<any> | string;
-        props?: any;
-        order?: number;
-        itemLabel?: string;
-    };
-    _type: string;
-    _subType: {
-        fields: Fields<T>;
-    };
+export type FieldSetProps<T> = {
     fields: Fields<T>;
-    tests: Array<{ name: string; params: object; OPTIONS: {name: string; params: any} }>;
-}
-
-export type Fields<T> = {
-    [field: string]: Schema<T> & Field<T>;
-};
-
-type FieldProps<T> = {
-    // schema: SchemaWithFields<T>;
-    fields: Fields<T>;
-    // values: T;
-    // errors: FormikErrors<T>;
-    // touched: FormikTouched<T>;
-    // isSubmitting: boolean;
-    path?: string;
-    children?: (map: any) => JSX.Element;
-    // setFieldValue: (field: keyof T & string, value: any, shouldValidate?: boolean) => void;
-    // setFieldTouched: (field: keyof T & string, isTouched?: boolean, shouldValidate?: boolean) => void;
-}
-
-export interface SchemaWithFields<T> extends Schema<T> {
-    fields?: Fields<T>;
 }
 
 const Section = styled.section`
@@ -57,56 +26,8 @@ export const InputFeedback = styled.label`
   }
 `;
 
-const flattenFields = (fields, path, fieldPath = "") => {
-    console.log("*******")
-    return Object.keys(fields).reduce((map, key) => {
-        const field = fields[key];
-
-        if (field._type === "object") {
-            const objectFields = flattenFields(field.fields, path, key)
-            Object.keys(objectFields).forEach(category => {
-                if (!map[category]) {
-                    map[category] = [];
-                }
-
-                map[category] = map[category].concat(objectFields[category])
-            })
-        } else {
-            const {category = "children"} = field._meta;
-
-            if (!map[category]) {
-                map[category] = [];
-            }
-
-            map[category].push({
-                schema: field,
-                fullPath: [path, fieldPath, key].filter(part => part).join(".")
-            });
-        }
-
-        return map;
-    }, {children: []})
-}
-
-function FieldSet<T>({fields, path = "", children}: FieldProps<T>) {
-    const fieldSet = useMemo(() => flattenFields(fields, path), [fields, path]);
-
-    return (children && children(fieldSet)) || (
-        <>
-            {Object.keys(fieldSet).map(key => {
-                return (
-                    <FieldsX
-                        key={key}
-                        fields={fieldSet[key]}
-                    />
-                )
-            })}
-        </>
-    );
-}
-
-export function FieldsX<T extends object>({fields}: FieldProps<T>) {
-    const {schema} = useContext(FormContext) || {}
+export function FieldSet<T extends object>({fields}: FieldSetProps<T>) {
+    const {schema} = useContext(FormContext) || {};
     const {values, errors, touched, isSubmitting, setFieldValue, setFieldTouched} = useFormikContext();
 
     const handleChange = (e: any, value?: string) => {
@@ -146,21 +67,6 @@ export function FieldsX<T extends object>({fields}: FieldProps<T>) {
                             fullPath={fullPath}
                             setFieldValue={setFieldValue}
                             setFieldTouched={setFieldTouched}/>
-                    )
-                } else if (field._type === "objectXXX") {
-                    return (
-                        <FieldSet
-                            key={fullPath}
-                            schema={schema}
-                            fields={field.fields}
-                            values={values}
-                            errors={errors}
-                            touched={touched}
-                            setFieldValue={setFieldValue}
-                            setFieldTouched={setFieldTouched}
-                            isSubmitting={isSubmitting}
-                            path={fullPath}
-                        />
                     )
                 }
 

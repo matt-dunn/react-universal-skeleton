@@ -1,11 +1,9 @@
 import React, {useMemo} from 'react'
-import styled, {css, FlattenInterpolation} from "styled-components";
+import styled, {css} from "styled-components";
 import immutable from "object-path-immutable";
 import {
     Formik,
-    setIn,
-    FormikErrors,
-    FormikTouched
+    setIn
 } from 'formik';
 import * as Yup from 'yup';
 import {ValidationError} from "yup";
@@ -14,17 +12,8 @@ import useWhatChanged from "components/whatChanged/useWhatChanged";
 
 import {ActionType, MapDataToAction, useForm} from "components/actions/form";
 import {getDefault, FormContext} from "./utils";
-import FieldSet, {SchemaWithFields} from "./FieldSet";
-
-export type FormStyles = {
-    control: FlattenInterpolation<any>;
-    controlInvalid: FlattenInterpolation<any>;
-}
-
-type InitialFormData<T> = {
-    errors: FormikErrors<T>;
-    touched: FormikTouched<T>;
-}
+import FieldSetWrapper from "./FieldWrapper";
+import {FormStyles, InitialFormData, SchemaWithFields} from "./types";
 
 export type FormProps<T, P> = {
     schema: SchemaWithFields<T>;
@@ -156,7 +145,7 @@ function Form<T, P>({schema, onSubmit, children}: FormProps<T, P>) {
                                 {formData.error &&
                                 <InputFeedback>There was a problem submitting: {formData.error.message}</InputFeedback>}
 
-                                <FieldSet
+                                <FieldSetWrapper
                                     fields={schema.fields}
                                     children={children}
                                 />

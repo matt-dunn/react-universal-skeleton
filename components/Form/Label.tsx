@@ -1,18 +1,13 @@
 import React from "react";
-import {ObjectSchemaDefinition, Schema, SchemaDescription} from "yup";
 import styled from "styled-components";
-import {get} from "lodash";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
-
-interface Field extends SchemaDescription {
-    tests: Array<{ name: string; params: object; OPTIONS: {name: string} }>;
-}
+import {Field} from "./types";
 
 type FormLabelProps<T> = {
     label: string;
     name: string;
-    field: Field;
+    field: Field<T>;
 }
 
 const Label = styled.label`

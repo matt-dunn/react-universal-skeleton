@@ -4,9 +4,11 @@ import {ErrorMessage, FieldArray, FormikErrors, FormikTouched, getIn} from "form
 import styled from "styled-components";
 
 import {getDefault} from "./utils";
-import FieldSet, {SchemaWithFields, Field, InputFeedback} from "./FieldSet";
+import FieldSetWrapper from "./FieldWrapper";
+import {Field, SchemaWithFields} from "./types";
+import {InputFeedback} from "./FieldSet";
 
-type ArrayProps<T extends object> = {
+export type ArrayProps<T extends object> = {
     schema: SchemaWithFields<T>;
     field: Schema<T> & Field<T>;
     values: T;
@@ -113,15 +115,8 @@ function Array<T extends object>({schema, field, values, errors, touched, isSubm
                                 <SubSection
                                     key={itemFullPath}
                                 >
-                                    <FieldSet
-                                        schema={schema}
+                                    <FieldSetWrapper
                                         fields={field._subType.fields}
-                                        values={values}
-                                        errors={errors}
-                                        touched={touched}
-                                        setFieldValue={setFieldValue}
-                                        setFieldTouched={setFieldTouched}
-                                        isSubmitting={isSubmitting}
                                         path={itemFullPath}
                                     />
                                     {InsertOption}

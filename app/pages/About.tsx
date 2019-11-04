@@ -19,7 +19,7 @@ import {IExampleItemState} from '../reducers/__dummy__/example';
 import {IExampleGetList, IExampleGetItem, ExampleEditItem} from "../components/api/__dummy__/example";
 
 import MyForm from "components/Form";
-import {FieldsX} from "components/Form/FieldSet";
+import FieldsSet from "components/Form/FieldSet";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 import * as Yup from "yup";
@@ -237,13 +237,13 @@ const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIt
                         return (
                             <div style={{display: "flex"}}>
                                 <section style={{flexGrow: 1, width: "50%", marginRight: "10px"}}>
-                                    <FieldsX
+                                    <FieldsSet
                                         fields={children}
                                     />
                                 </section>
                                 <section style={{flexGrow: 1, width: "50%", marginLeft: "10px"}}>
                                     <p>ifewhfo iewhfioewhfoi ehwife whfoi ewhf ewiofh eiohfioewhfoi ewhfoi ewh oiehf oiewhf oeihf oiehf oiehfeoihfo ehf oehf oiewhf oiehf iwhe fhoiwh odew.</p>
-                                    <FieldsX
+                                    <FieldsSet
                                         fields={extra}
                                     />
                                 </section>
