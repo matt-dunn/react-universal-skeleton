@@ -75,7 +75,7 @@ function Array<T extends object>({schema, field, values, errors, touched, isSubm
                     <SubSectionContainer>
                         {label && <Legend>{label}</Legend>}
                         {typeof error === "string" && <ErrorMessage name={fullPath}>
-                            {message => <InputFeedback>{message}</InputFeedback>}
+                            {message => <InputFeedback><em>{message}</em></InputFeedback>}
                         </ErrorMessage>
                         }
 

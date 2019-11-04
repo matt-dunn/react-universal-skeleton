@@ -19,6 +19,7 @@ const SelectStyle = css<{isValid?: boolean; formElementStyles: FormStyles}>`
 const BasicSelect = styled.select<{isValid?: boolean; formElementStyles: FormStyles}>`
   ${SelectStyle};
   height: 36px;
+  width: 100%;
   ${({formElementStyles}) => formElementStyles.control}
   ${({isValid, formElementStyles}) => !isValid && formElementStyles.controlInvalid}
 `;

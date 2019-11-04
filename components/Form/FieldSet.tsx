@@ -41,16 +41,21 @@ export interface SchemaWithFields<T> extends Schema<T> {
     fields?: Fields<T>;
 }
 
-const Section = styled.div`
+const Section = styled.section`
   margin: 0 0 10px 0;
 `;
 
-export const InputFeedback = styled.div`
+export const InputFeedback = styled.label`
   color: red;
+  display: block;
   margin: 5px 0 10px 0;
+  
+  em {
+    font-style: normal;
+  }
 `;
 
-function Fields<T extends object>({schema, fields, values, errors, touched, isSubmitting, path = "", setFieldValue, setFieldTouched}: FieldProps<T>) {
+function FieldSet<T extends object>({schema, fields, values, errors, touched, isSubmitting, path = "", setFieldValue, setFieldTouched}: FieldProps<T>) {
     const handleChange = (e: any, value?: string) => {
         if (e.target) {
             setFieldValue(e.target.name, e.target.value);
@@ -91,7 +96,7 @@ function Fields<T extends object>({schema, fields, values, errors, touched, isSu
                     )
                 } else if (field._type === "object") {
                     return (
-                        <Fields
+                        <FieldSet
                             key={fullPath}
                             schema={schema}
                             fields={field.fields}
@@ -130,14 +135,16 @@ function Fields<T extends object>({schema, fields, values, errors, touched, isSu
                         key={fullPath}
                     >
                         <FormLabel
-                            label={label} name={fullPath} field={field}
+                            label={label}
+                            name={fullPath}
+                            field={field}
                         />
                         <Field
                             {...componentProps}
                             {...additionalProps}
                         />
                         <ErrorMessage name={fullPath}>
-                            {message => <InputFeedback>{message}</InputFeedback>}
+                            {message => <InputFeedback htmlFor={fullPath}><em>{message}</em></InputFeedback>}
                         </ErrorMessage>
                     </Section>
                 )
@@ -146,4 +153,4 @@ function Fields<T extends object>({schema, fields, values, errors, touched, isSu
     );
 }
 
-export default Fields;
+export default FieldSet;

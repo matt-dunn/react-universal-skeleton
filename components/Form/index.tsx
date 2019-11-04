@@ -48,6 +48,7 @@ const FormContainer = styled.form`
   border-radius: 4px;
   padding: 10px;
   margin: 20px 0;
+  box-sizing: border-box;
   
   button {
     font-size: inherit;
@@ -61,6 +62,7 @@ const FormContainer = styled.form`
   input {
     padding: 9px 8px;
     ${formStyles.control};
+    width: 100%;
   }
   
   textarea {
