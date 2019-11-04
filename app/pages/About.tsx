@@ -100,6 +100,7 @@ const schema = Yup.object().shape({
                 .ensure()
                 .meta({
                     order: 0,
+                    category: "other",
                     Component: FancySelect,
                     props: {
                         options: [
@@ -121,7 +122,7 @@ const schema = Yup.object().shape({
             category: "extra",
             Component: "textarea",
             props: {
-                placeholder: "Enter your notes",
+                placeholder: "Enter notes",
                 type: "text"
             }
         }),
@@ -132,7 +133,7 @@ const schema = Yup.object().shape({
                 .meta({
                     order: 0,
                     props: {
-                        placeholder: "Enter your name",
+                        placeholder: "Enter name",
                         type: "text"
                     }
                 })
@@ -143,7 +144,7 @@ const schema = Yup.object().shape({
                 .meta({
                     order: 1,
                     props: {
-                        placeholder: "Enter your address",
+                        placeholder: "Enter address",
                         type: "text"
                     }
                 })
@@ -170,10 +171,10 @@ const schema = Yup.object().shape({
                 })
                 .max(2)
         }))
-        .label("Peeps")
+        .label("People")
         .meta({
             order: 2,
-            itemLabel: "Peep"
+            itemLabel: "Person"
         })
         .ensure()
         // .default([{name: "", address: ""}])
@@ -230,20 +231,28 @@ const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIt
                     schema={schema}
                     onSubmit={handleSubmit}
                 >
-                    {({children, extra}) => {
+                    {({children, extra, other}) => {
                         return (
-                            <div style={{display: "flex"}}>
-                                <section style={{flexGrow: 1, width: "50%", marginRight: "10px"}}>
+                            <div>
+                                <div style={{borderBottom: "1px solid #dfdfdf", margin: "0 0 20px 0", padding: "0 0 10px 0"}}>
                                     <FieldsSet
-                                        fields={children}
+                                        fields={other}
                                     />
-                                </section>
-                                <section style={{flexGrow: 1, width: "50%", marginLeft: "10px"}}>
-                                    <p style={{fontSize: "14px", backgroundColor: "#eee", padding: "10px", borderRadius: "10px", margin: "0 0 10px 0"}}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                                    <FieldsSet
-                                        fields={extra}
-                                    />
-                                </section>
+                                    <p style={{fontSize: "14px", backgroundColor: "#eee", padding: "10px", borderRadius: "10px", margin: "0 0 10px 0"}}>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                                </div>
+                                <div style={{display: "flex"}}>
+                                    <section style={{flexGrow: 1, width: "50%", marginRight: "10px"}}>
+                                        <FieldsSet
+                                            fields={children}
+                                        />
+                                    </section>
+                                    <section style={{flexGrow: 1, width: "50%", marginLeft: "10px"}}>
+                                        <p style={{fontSize: "14px", backgroundColor: "#eee", padding: "10px", borderRadius: "10px", margin: "0 0 10px 0"}}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                        <FieldsSet
+                                            fields={extra}
+                                        />
+                                    </section>
+                                </div>
                             </div>
                         )
                     }}

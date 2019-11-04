@@ -35,6 +35,7 @@ export const InputFeedback = styled.label`
 export const formStyles: FormStyles = {
     control: css`
         font-size: inherit;
+        font-family: inherit;
         border: 1px solid rgb(204, 204, 204);
         border-radius: 4px;
     `,
@@ -70,6 +71,7 @@ export const FormContainer = styled.form`
     padding: 9px 8px;
     ${formStyles.control};
     min-width: 100%;
+    max-width: 100%;
     min-height: 10em;
   }
   
