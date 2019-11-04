@@ -9,7 +9,7 @@ import {FormContext} from "./utils";
 import {FieldMap} from "./types";
 
 export type FieldSetProps<T> = {
-    fields: FieldMap<Partial<T>>[]
+    fields: FieldMap<Partial<T>>[];
 }
 
 const Section = styled.section`

@@ -148,8 +148,9 @@ function Form<T, P>({schema, onSubmit, children}: FormProps<T, P>) {
 
                                 <FieldSetWrapper
                                     fields={schema.fields}
-                                    children={children}
-                                />
+                                >
+                                    {children}
+                                </FieldSetWrapper>
 
                                 <p>
                                     <button

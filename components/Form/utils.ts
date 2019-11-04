@@ -10,7 +10,7 @@ export const getDefault = (schema: Schema<any>, path = "") => {
 };
 
 export type FormContext = {
-    schema: SchemaWithFields<any>
+    schema: SchemaWithFields<any>;
 }
 
 export const FormContext = React.createContext<FormContext | undefined>(undefined);
