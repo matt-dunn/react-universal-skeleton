@@ -38,13 +38,14 @@ export type ResponsiveGridProps = {
     totalPaddingWidth?: number;
 }
 
-export const ResponsiveGrid = (as: keyof JSX.IntrinsicElements | React.ComponentType<any>) => ({children, className, minItemWidth, totalPaddingWidth}: ResponsiveGridProps) => {
-    const container = useRef();
-    const dimensions = useViewportWidth(container);
+export const ResponsiveGrid = (as: keyof JSX.IntrinsicElements | React.ComponentType<any>) =>
+    ({children, className, minItemWidth, totalPaddingWidth}: ResponsiveGridProps) => {
+        const container = useRef(); // eslint-disable-line react-hooks/rules-of-hooks
+        const dimensions = useViewportWidth(container); // eslint-disable-line react-hooks/rules-of-hooks
 
-    return (
-        <Container as={as} ref={container as any} length={children.length} className={className} dimensions={dimensions} minItemWidth={minItemWidth} totalPaddingWidth={totalPaddingWidth}>
-            {children}
-        </Container>
-    )
-};
+        return (
+            <Container as={as} ref={container as any} length={children.length} className={className} dimensions={dimensions} minItemWidth={minItemWidth} totalPaddingWidth={totalPaddingWidth}>
+                {children}
+            </Container>
+        )
+    };
