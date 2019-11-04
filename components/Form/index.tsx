@@ -70,12 +70,12 @@ const FormContainer = styled.form`
     min-height: 10em;
   }
   
-    input,
-    textarea {
-        &.invalid {
-          border-color: red;
-        }
-    }
+  input,
+  textarea {
+      &.invalid {
+        border-color: red;
+      }
+  }
 `;
 
 const InputFeedback = styled.div`
@@ -153,7 +153,7 @@ function Form<T, P>({schema, onSubmit}: FormProps<T, P>) {
                                 {formData.error &&
                                 <InputFeedback>There was a problem submitting: {formData.error.message}</InputFeedback>}
 
-                                {<Fields
+                                <Fields
                                     schema={schema}
                                     fields={schema.fields}
                                     values={values}
@@ -162,7 +162,7 @@ function Form<T, P>({schema, onSubmit}: FormProps<T, P>) {
                                     isSubmitting={isSubmitting}
                                     setFieldValue={setFieldValue}
                                     setFieldTouched={setFieldTouched}
-                                />}
+                                />
 
                                 <p>
                                     <button

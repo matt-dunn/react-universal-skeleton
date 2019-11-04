@@ -65,7 +65,7 @@ const validateEmailApi = (function() {
             t = setTimeout(() => {
                 // reject(new Error("Email validation failed"))
                 resolve(!email.startsWith("demo@"))
-            }, 1500)
+            }, 0)
         })
     }
 })()
@@ -102,7 +102,7 @@ const schema = Yup.object().shape({
                 .ensure()
                 .meta({
                     order: 1,
-                    Type: FancySelect,
+                    Component: FancySelect,
                     props: {
                         options: [
                             { value: '', label: 'Select...' },
@@ -120,7 +120,7 @@ const schema = Yup.object().shape({
         .ensure()
         .meta({
             order: 3,
-            Type: "textarea",
+            Component: "textarea",
             props: {
                 placeholder: "Enter your notes",
                 type: "text"

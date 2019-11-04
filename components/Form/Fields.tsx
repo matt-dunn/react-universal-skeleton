@@ -8,7 +8,7 @@ import {formStyles} from "./index";
 
 interface Field<T> extends SchemaDescription {
     _meta: {
-        Type?: ComponentType<any> | string;
+        Component?: ComponentType<any> | string;
         props?: any;
         order?: number;
         itemLabel?: string;
@@ -43,38 +43,42 @@ export interface SchemaWithFields<T> extends Schema<T> {
 
 const Section = styled.div`
   margin: 0 0 10px 0;
-`
+`;
 
-const SubSection = styled.fieldset`
-  margin: 0 0 10px 0;
+const SubSectionContainer = styled.fieldset`
+  margin: 20px 0 10px 0;
   padding: 10px;
   border: 1px solid #eee;
   border-radius: 5px;
-`
+`;
+
+const SubSection = styled(SubSectionContainer)`
+  margin-top: 0;
+`;
 
 const Legend = styled.legend`
   padding: 2px 20px;
   background-color: #eee;
   border-radius: 1em;
-`
+`;
 
 const InputFeedback = styled.div`
   color: red;
   margin: 5px 0 10px 0;
-`
+`;
 
 function Fields<T extends object>({schema, fields, values, errors, touched, isSubmitting, path = "", setFieldValue, setFieldTouched}: FieldProps<T>) {
     const handleChange = (e: any, value?: string) => {
         if (e.target) {
-            setFieldValue(e.target.name, e.target.value)
+            setFieldValue(e.target.name, e.target.value);
         } else {
-            setFieldValue(e, value)
+            setFieldValue(e, value);
         }
-    }
+    };
 
     const handleBlur = (e: any) => {
-        setFieldTouched((e.target && e.target.name) || e, true)
-    }
+        setFieldTouched((e.target && e.target.name) || e, true);
+    };
 
     return (
         <>
@@ -83,11 +87,10 @@ function Fields<T extends object>({schema, fields, values, errors, touched, isSu
                 const fullPath = [path, key].filter(part => part).join(".");
 
                 const {label, tests} = field.describe();
-                const {Type, props, itemLabel} = {Type: "input", ...field._meta};
-                const value: string[] = getIn(values, fullPath)
-                const error = getIn(errors, fullPath)
-                const touch = getIn(touched, fullPath)
-                const FormElement = (typeof Type === "string" && styled(Type as any)``) || Type;
+                const {Component, props, itemLabel} = {Component: "input", ...field._meta};
+                const value: string[] = getIn(values, fullPath);
+                const error = getIn(errors, fullPath);
+                const touch = getIn(touched, fullPath);
 
                 if (field._type === "array") {
                     const {min, max} = tests.reduce((o: {min: number; max: number | undefined}, test: { name: string; params: any }) => {
@@ -97,7 +100,7 @@ function Fields<T extends object>({schema, fields, values, errors, touched, isSu
                             o.max = test.params.max;
                         }
                         return o;
-                    }, {min: 0, max: undefined})
+                    }, {min: 0, max: undefined});
 
                     const itemsCount = (value && value.length) || 0;
 
@@ -121,7 +124,7 @@ function Fields<T extends object>({schema, fields, values, errors, touched, isSu
                                 )) || null;
 
                                 return (
-                                    <SubSection>
+                                    <SubSectionContainer>
                                         {label && <Legend>{label}</Legend>}
                                         {typeof error === "string" && <ErrorMessage name={fullPath}>
                                             {message => <InputFeedback>{message}</InputFeedback>}
@@ -179,7 +182,7 @@ function Fields<T extends object>({schema, fields, values, errors, touched, isSu
                                             );
                                         })}
                                         {AddOption}
-                                    </SubSection>
+                                    </SubSectionContainer>
                                 )}}
                         />
                     )
@@ -202,6 +205,23 @@ function Fields<T extends object>({schema, fields, values, errors, touched, isSu
 
                 const isValid = !(error && touch);
 
+                const componentProps = {
+                    ...props,
+                    as: Component,
+                    id: fullPath,
+                    name: fullPath,
+                    value,
+                    onChange: handleChange,
+                    onBlur: handleBlur,
+                    disabled: isSubmitting,
+                    className: (!isValid && "invalid") || ""
+                };
+
+                const additionalProps = typeof Component !== "string" && {
+                    isValid,
+                    formStyles
+                };
+
                 return (
                     <Section
                         key={fullPath}
@@ -210,17 +230,8 @@ function Fields<T extends object>({schema, fields, values, errors, touched, isSu
                             label={label} name={fullPath} field={field}
                         />
                         <Field
-                            {...props}
-                            as={FormElement}
-                            id={fullPath}
-                            name={fullPath}
-                            value={value}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            disabled={isSubmitting}
-                            isValid={isValid}
-                            className={(!isValid && "invalid") || ""}
-                            formStyles={formStyles}
+                            {...componentProps}
+                            {...additionalProps}
                         />
                         <ErrorMessage name={fullPath}>
                             {message => <InputFeedback>{message}</InputFeedback>}
