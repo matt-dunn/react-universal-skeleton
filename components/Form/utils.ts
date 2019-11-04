@@ -1,6 +1,7 @@
 import React from "react";
 import * as Yup from 'yup';
 import immutable from "object-path-immutable";
+import {sortBy} from "lodash";
 
 import {Fields, FieldSetMap, SchemaWithFields, FormContextType} from "./types";
 import {ActionType} from "../actions/form";
@@ -42,6 +43,14 @@ export function flattenFields<T>(fields: Fields<T>, path: string, fieldPath = ""
         return map;
     }, {children: []} as FieldSetMap<T>) as FieldSetMap<T>
 }
+
+export function sortFields<T>(map: FieldSetMap<T>): FieldSetMap<T> {
+    return Object.keys(map).reduce((sortedMap, key) => {
+        sortedMap[key] = sortBy(map[key], a => ((a.schema._meta || {}).order || 0))
+        return sortedMap;
+    }, {} as FieldSetMap<T>);
+}
+
 
 export function performAction<T>(schema: any, action: ActionType, data: T, value?: string): T | undefined | null {
     switch (action) {

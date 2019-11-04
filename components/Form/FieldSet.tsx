@@ -1,6 +1,6 @@
 import React, {useContext} from "react";
 import {string} from "yup";
-import {ErrorMessage, getIn, Field as FormikField, useFormikContext} from "formik";
+import {ErrorMessage, getIn, Field, useFormikContext} from "formik";
 
 import FormLabel from "./Label";
 import {formStyles, InputFeedback, Section} from "./styles";
@@ -70,7 +70,7 @@ export function FieldSet<T extends object>({fields}: FieldSetProps<T>) {
                             name={fullPath}
                             field={field}
                         />
-                        <FormikField
+                        <Field
                             {...componentProps}
                             {...additionalProps}
                         />

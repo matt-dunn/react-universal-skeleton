@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import {ValidationError} from "yup";
 
 import {MapDataToAction, useForm} from "components/actions/form";
+
 import {getDefault, FormContext, performAction} from "./utils";
 import FieldSetWrapper from "./FieldWrapper";
 import {FieldSetMap, InitialFormData, SchemaWithFields} from "./types";
@@ -58,36 +59,32 @@ function Form<T, P>({schema, onSubmit, children}: FormProps<T, P>) {
                         isInitialValid
                     } = props;
 
-                    if (schema.fields) {
-                        return (
-                            <FormContainer onSubmit={handleSubmit} method="post" className={(!isValid && "invalid") || ""}>
-                                {formData.error &&
-                                <InputFeedback>There was a problem submitting: {formData.error.message}</InputFeedback>}
+                    return schema.fields && (
+                        <FormContainer onSubmit={handleSubmit} method="post" className={(!isValid && "invalid") || ""}>
+                            {formData.error &&
+                            <InputFeedback>There was a problem submitting: {formData.error.message}</InputFeedback>}
 
-                                <FieldSetWrapper
-                                    fields={schema.fields}
+                            <FieldSetWrapper
+                                fields={schema.fields}
+                            >
+                                {children}
+                            </FieldSetWrapper>
+
+                            <p>
+                                <button
+                                    type="button"
+                                    className="outline"
+                                    onClick={handleReset}
+                                    disabled={!dirty || isSubmitting}
                                 >
-                                    {children}
-                                </FieldSetWrapper>
-
-                                <p>
-                                    <button
-                                        type="button"
-                                        className="outline"
-                                        onClick={handleReset}
-                                        disabled={!dirty || isSubmitting}
-                                    >
-                                        Reset
-                                    </button>
-                                    <button type="submit" disabled={isSubmitting} name="@@SUBMIT">
-                                        Submit {(isValid && isInitialValid) && "✔"}
-                                    </button>
-                                </p>
-                            </FormContainer>
-                        );
-                    }
-
-                    return null;
+                                    Reset
+                                </button>
+                                <button type="submit" disabled={isSubmitting} name="@@SUBMIT">
+                                    Submit {(isValid && isInitialValid) && "✔"}
+                                </button>
+                            </p>
+                        </FormContainer>
+                    ) || null;
                 }}
             </Formik>
         </FormContext.Provider>

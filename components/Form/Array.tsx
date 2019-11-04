@@ -14,7 +14,7 @@ export type ArrayProps<T extends object> = {
 
 function Array<T extends object>({field, path}: ArrayProps<T>) {
     const {schema} = useContext(FormContext) || {};
-    const {values, errors, isSubmitting, validateField, setFieldTouched, setFieldError} = useFormikContext<T>();
+    const {values, errors, isSubmitting, setFieldError} = useFormikContext<T>();
     const value: string[] = getIn(values, path);
     const {label} = field.describe();
     const {itemLabel} = field._meta;

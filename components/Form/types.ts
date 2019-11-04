@@ -1,5 +1,5 @@
-import {Schema, SchemaDescription} from "yup";
 import {ComponentType} from "react";
+import {Schema, SchemaDescription} from "yup";
 import {FlattenInterpolation} from "styled-components";
 import {FormikErrors, FormikTouched} from "formik";
 

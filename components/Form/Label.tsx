@@ -1,8 +1,9 @@
 import React from "react";
 
-import useWhatChanged from "components/whatChanged/useWhatChanged";
 import {Field} from "./types";
 import {Label, LabelIsRequired} from "./styles";
+
+import useWhatChanged from "components/whatChanged/useWhatChanged";
 
 type FormLabelProps<T> = {
     label: string;
