@@ -14,7 +14,7 @@ import useWhatChanged from "components/whatChanged/useWhatChanged";
 
 import {ActionType, MapDataToAction, useForm} from "components/actions/form";
 import {getDefault} from "./utils";
-import Fields, {SchemaWithFields} from "./Fields";
+import FieldSet, {SchemaWithFields} from "./FieldSet";
 
 export type FormStyles = {
     control: FlattenInterpolation<any>;
@@ -153,7 +153,7 @@ function Form<T, P>({schema, onSubmit}: FormProps<T, P>) {
                                 {formData.error &&
                                 <InputFeedback>There was a problem submitting: {formData.error.message}</InputFeedback>}
 
-                                <Fields
+                                <FieldSet
                                     schema={schema}
                                     fields={schema.fields}
                                     values={values}
