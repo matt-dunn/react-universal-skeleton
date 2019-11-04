@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useMemo} from "react";
 import {Schema, string} from "yup";
 import {ErrorMessage, FieldArray, FormikErrors, FormikTouched, getIn} from "formik";
 import styled from "styled-components";
@@ -37,18 +37,18 @@ const Legend = styled.legend`
 
 function Array<T extends object>({schema, field, values, errors, touched, isSubmitting, fullPath, setFieldValue, setFieldTouched}: ArrayProps<T>) {
     const value: string[] = getIn(values, fullPath);
-    const {label, tests} = field.describe();
+    const {label} = field.describe();
     const {itemLabel} = field._meta;
     const error = getIn(errors, fullPath);
 
-    const {min, max} = tests.reduce((o: {min: number; max: number | undefined}, test: { name: string; params: any }) => {
-        if (test.name === "min") {
-            o.min = test.params.min;
-        } else if (test.name === "max") {
-            o.max = test.params.max;
+    const {min, max} = useMemo(() => field.tests.reduce((o: {min: number; max: number | undefined}, test: { OPTIONS: {name: string; params: any }}) => {
+        if (test.OPTIONS.name === "min") {
+            o.min = test.OPTIONS.params.min;
+        } else if (test.OPTIONS.name === "max") {
+            o.max = test.OPTIONS.params.max;
         }
         return o;
-    }, {min: 0, max: undefined});
+    }, {min: 0, max: undefined}), [field.tests]);
 
     const itemsCount = (value && value.length) || 0;
 

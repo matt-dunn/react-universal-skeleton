@@ -18,7 +18,7 @@ export interface Field<T> extends SchemaDescription {
         fields: Fields<T>;
     };
     fields: Fields<T>;
-    tests: Array<{ name: string; params: object; OPTIONS: {name: string} }>;
+    tests: Array<{ name: string; params: object; OPTIONS: {name: string, params: any} }>;
 }
 
 export type Fields<T> = {
