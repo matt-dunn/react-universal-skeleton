@@ -1,12 +1,12 @@
 import {Schema, SchemaDescription, string} from "yup";
-import {ErrorMessage, FieldArray, FormikErrors, FormikTouched, getIn, Field} from "formik";
+import {ErrorMessage, FormikErrors, FormikTouched, getIn, Field} from "formik";
 import FormLabel from "./Label";
 import React, {ComponentType} from "react";
 import styled from "styled-components";
-import {getDefault} from "./utils";
 import {formStyles} from "./index";
+import Array from "./Array";
 
-interface Field<T> extends SchemaDescription {
+export interface Field<T> extends SchemaDescription {
     _meta: {
         Component?: ComponentType<any> | string;
         props?: any;
@@ -45,24 +45,7 @@ const Section = styled.div`
   margin: 0 0 10px 0;
 `;
 
-const SubSectionContainer = styled.fieldset`
-  margin: 20px 0 10px 0;
-  padding: 10px;
-  border: 1px solid #eee;
-  border-radius: 5px;
-`;
-
-const SubSection = styled(SubSectionContainer)`
-  margin-top: 0;
-`;
-
-const Legend = styled.legend`
-  padding: 2px 20px;
-  background-color: #eee;
-  border-radius: 1em;
-`;
-
-const InputFeedback = styled.div`
+export const InputFeedback = styled.div`
   color: red;
   margin: 5px 0 10px 0;
 `;
@@ -86,111 +69,31 @@ function Fields<T extends object>({schema, fields, values, errors, touched, isSu
                 const field = fields[key];
                 const fullPath = [path, key].filter(part => part).join(".");
 
-                const {label, tests} = field.describe();
-                const {Component, props, itemLabel} = {Component: "input", ...field._meta};
+                const {label} = field.describe();
+                const {Component, props} = {Component: "input", ...field._meta};
                 const value: string[] = getIn(values, fullPath);
                 const error = getIn(errors, fullPath);
                 const touch = getIn(touched, fullPath);
 
                 if (field._type === "array") {
-                    const {min, max} = tests.reduce((o: {min: number; max: number | undefined}, test: { name: string; params: any }) => {
-                        if (test.name === "min") {
-                            o.min = test.params.min;
-                        } else if (test.name === "max") {
-                            o.max = test.params.max;
-                        }
-                        return o;
-                    }, {min: 0, max: undefined});
-
-                    const itemsCount = (value && value.length) || 0;
-
                     return (
-                        <FieldArray
+                        <Array
                             key={fullPath}
-                            name={fullPath}
-                            render={arrayHelpers => {
-                                const AddOption = ((!max || itemsCount < max) && (
-                                    <button
-                                        disabled={isSubmitting}
-                                        name="@@ADD_ITEM"
-                                        value={fullPath}
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            arrayHelpers.push(getDefault(schema, fullPath))
-                                        }}
-                                    >
-                                        Add {itemLabel || label}
-                                    </button>
-                                )) || null;
-
-                                return (
-                                    <SubSectionContainer>
-                                        {label && <Legend>{label}</Legend>}
-                                        {typeof error === "string" && <ErrorMessage name={fullPath}>
-                                            {message => <InputFeedback>{message}</InputFeedback>}
-                                        </ErrorMessage>
-                                        }
-
-                                        {value && value.map((value, index) => {
-                                            const itemFullPath = `${fullPath}.${index}`;
-                                            const RemoveOption = (itemsCount > min && (
-                                                <button
-                                                    disabled={isSubmitting}
-                                                    name="@@REMOVE_ITEM"
-                                                    value={itemFullPath}
-                                                    onClick={(e) => {
-                                                        e.preventDefault();
-                                                        arrayHelpers.remove(index)
-                                                    }}
-                                                >
-                                                    Remove {itemLabel || label}
-                                                </button>
-                                            )) || null;
-
-                                            const InsertOption = ((!max || itemsCount < max) && (
-                                                <button
-                                                    disabled={isSubmitting}
-                                                    name="@@INSERT_ITEM"
-                                                    value={itemFullPath}
-                                                    onClick={(e) => {
-                                                        e.preventDefault();
-                                                        arrayHelpers.insert(index, getDefault(schema, fullPath))
-                                                    }}
-                                                >
-                                                    Insert {itemLabel || label}
-                                                </button>
-                                            )) || null;
-
-                                            return (
-                                                <SubSection
-                                                    key={itemFullPath}
-                                                >
-                                                    <Fields
-                                                        schema={schema}
-                                                        fields={field._subType.fields}
-                                                        values={values}
-                                                        errors={errors}
-                                                        touched={touched}
-                                                        setFieldValue={setFieldValue}
-                                                        setFieldTouched={setFieldTouched}
-                                                        isSubmitting={isSubmitting}
-                                                        path={itemFullPath}
-                                                    />
-                                                    {InsertOption}
-                                                    {RemoveOption}
-                                                </SubSection>
-                                            );
-                                        })}
-                                        {AddOption}
-                                    </SubSectionContainer>
-                                )}}
-                        />
+                            schema={schema}
+                            field={field}
+                            values={values}
+                            errors={errors}
+                            touched={touched}
+                            isSubmitting={isSubmitting}
+                            fullPath={fullPath}
+                            setFieldValue={setFieldValue}
+                            setFieldTouched={setFieldTouched}/>
                     )
                 } else if (field._type === "object") {
                     return (
                         <Fields
-                            schema={schema}
                             key={fullPath}
+                            schema={schema}
                             fields={field.fields}
                             values={values}
                             errors={errors}
