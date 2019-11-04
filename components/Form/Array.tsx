@@ -1,26 +1,24 @@
-import React, {useMemo} from "react";
+import React, {useContext, useMemo} from "react";
 import {Schema, string} from "yup";
-import {ErrorMessage, FieldArray, FormikErrors, getIn} from "formik";
+import {ErrorMessage, FieldArray, getIn, useFormikContext} from "formik";
 
-import {getDefault} from "./utils";
+import {FormContext, getDefault} from "./utils";
 import FieldSetWrapper from "./FieldWrapper";
-import {Field, SchemaWithFields} from "./types";
+import {Field} from "./types";
 import {Legend, SubSectionContainer, InputFeedback, SubSection} from "./styles";
 
 export type ArrayProps<T extends object> = {
-    schema: SchemaWithFields<T>;
     field: Schema<T> & Field<T>;
-    values: T;
-    errors: FormikErrors<T>;
-    isSubmitting: boolean;
-    fullPath: string;
+    path: string;
 }
 
-function Array<T extends object>({schema, field, values, errors, isSubmitting, fullPath}: ArrayProps<T>) {
-    const value: string[] = getIn(values, fullPath);
+function Array<T extends object>({field, path}: ArrayProps<T>) {
+    const {schema} = useContext(FormContext) || {};
+    const {values, errors, isSubmitting, validateField, setFieldTouched, setFieldError} = useFormikContext<T>();
+    const value: string[] = getIn(values, path);
     const {label} = field.describe();
     const {itemLabel} = field._meta;
-    const error = getIn(errors, fullPath);
+    const error = getIn(errors, path);
 
     const {min, max} = useMemo(() => field.tests.reduce((o: {min: number; max: number | undefined}, test: { OPTIONS: {name: string; params: any }}) => {
         if (test.OPTIONS.name === "min") {
@@ -33,19 +31,19 @@ function Array<T extends object>({schema, field, values, errors, isSubmitting, f
 
     const itemsCount = (value && value.length) || 0;
 
-    return (
+    return schema && (
         <FieldArray
-            key={fullPath}
-            name={fullPath}
+            name={path}
             render={arrayHelpers => {
                 const AddOption = ((!max || itemsCount < max) && (
                     <button
                         disabled={isSubmitting}
                         name="@@ADD_ITEM"
-                        value={fullPath}
-                        onClick={(e) => {
-                            e.preventDefault();
-                            arrayHelpers.push(getDefault(schema, fullPath))
+                        value={path}
+                        type="button"
+                        onClick={() => {
+                            arrayHelpers.push(getDefault(schema, path));
+                            value && value.length === 0 && setFieldError(path as keyof T & string, undefined as any);
                         }}
                     >
                         Add {itemLabel || label}
@@ -55,22 +53,20 @@ function Array<T extends object>({schema, field, values, errors, isSubmitting, f
                 return (
                     <SubSectionContainer>
                         {label && <Legend>{label}</Legend>}
-                        {typeof error === "string" && <ErrorMessage name={fullPath}>
+                        {typeof error === "string" && <ErrorMessage name={path}>
                             {message => <InputFeedback><em>{message}</em></InputFeedback>}
                         </ErrorMessage>
                         }
 
                         {value && value.map((value, index) => {
-                            const itemFullPath = `${fullPath}.${index}`;
+                            const itemFullPath = `${path}.${index}`;
                             const RemoveOption = (itemsCount > min && (
                                 <button
                                     disabled={isSubmitting}
                                     name="@@REMOVE_ITEM"
                                     value={itemFullPath}
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        arrayHelpers.remove(index)
-                                    }}
+                                    type="button"
+                                    onClick={() => arrayHelpers.remove(index)}
                                 >
                                     Remove {itemLabel || label}
                                 </button>
@@ -81,10 +77,8 @@ function Array<T extends object>({schema, field, values, errors, isSubmitting, f
                                     disabled={isSubmitting}
                                     name="@@INSERT_ITEM"
                                     value={itemFullPath}
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        arrayHelpers.insert(index, getDefault(schema, fullPath))
-                                    }}
+                                    type="button"
+                                    onClick={() => arrayHelpers.insert(index, getDefault(schema, path))}
                                 >
                                     Insert {itemLabel || label}
                                 </button>
@@ -107,7 +101,7 @@ function Array<T extends object>({schema, field, values, errors, isSubmitting, f
                     </SubSectionContainer>
                 )}}
         />
-    )
+    ) || null;
 }
 
 export default Array;

@@ -41,7 +41,7 @@ export const formStyles: FormStyles = {
     controlInvalid: css`
         border-color: red;
     `
-}
+};
 
 export const FormContainer = styled.form`
   border: 1px solid #ccc;

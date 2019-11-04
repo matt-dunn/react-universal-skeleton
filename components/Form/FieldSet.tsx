@@ -36,12 +36,8 @@ export function FieldSet<T extends object>({fields}: FieldSetProps<T>) {
                     return (
                         <Array
                             key={fullPath}
-                            schema={schema}
                             field={field}
-                            values={values}
-                            errors={errors}
-                            isSubmitting={isSubmitting}
-                            fullPath={fullPath}
+                            path={fullPath}
                         />
                     )
                 }

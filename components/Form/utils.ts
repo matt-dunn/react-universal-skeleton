@@ -1,22 +1,17 @@
 import React from "react";
 import * as Yup from 'yup';
-import {Schema} from "yup";
 import immutable from "object-path-immutable";
 
-import {Fields, FieldSetMap, SchemaWithFields} from "./types";
+import {Fields, FieldSetMap, SchemaWithFields, FormContextType} from "./types";
 import {ActionType} from "../actions/form";
 
-export const FormContext = React.createContext<FormContext | undefined>(undefined);
+export const FormContext = React.createContext<FormContextType | undefined>(undefined);
 
-export const getDefault = (schema: Schema<any>, path = "") => {
+export const getDefault = (schema: SchemaWithFields<any>, path = "") => {
     const pathSchema = Yup.reach(schema, path);
 
     return ((pathSchema as any)._type === "array" && (Yup.reach(schema, path) as any)._subType.getDefault()) || (pathSchema as any).getDefault()
 };
-
-export type FormContext = {
-    schema: SchemaWithFields<any>;
-}
 
 export function flattenFields<T>(fields: Fields<T>, path: string, fieldPath = ""): FieldSetMap<T> {
     return Object.keys(fields).reduce((map, key) => {

@@ -46,3 +46,8 @@ export type FieldSetMap<T> = {
     [key: string]: FieldMap<Partial<T>>[];
 }
 
+export type FormContextType = {
+    schema: SchemaWithFields<any>;
+}
+
+
