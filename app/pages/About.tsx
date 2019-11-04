@@ -19,6 +19,7 @@ import {IExampleItemState} from '../reducers/__dummy__/example';
 import {IExampleGetList, IExampleGetItem, ExampleEditItem} from "../components/api/__dummy__/example";
 
 import MyForm from "components/Form";
+import {FieldsX} from "components/Form/FieldSet";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 import * as Yup from "yup";
@@ -120,6 +121,7 @@ const schema = Yup.object().shape({
         .ensure()
         .meta({
             order: 3,
+            category: "extra",
             Component: "textarea",
             props: {
                 placeholder: "Enter your notes",
@@ -226,10 +228,30 @@ const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIt
                 About page (Lazy Loaded)
             </Title>
 
-            <MyForm
-                schema={schema}
-                onSubmit={handleSubmit}
-            />
+            <div style={{maxWidth: "800px"}}>
+                <MyForm
+                    schema={schema}
+                    onSubmit={handleSubmit}
+                >
+                    {({children, extra}) => {
+                        return (
+                            <div style={{display: "flex"}}>
+                                <section style={{flexGrow: 1, width: "50%", marginRight: "10px"}}>
+                                    <FieldsX
+                                        fields={children}
+                                    />
+                                </section>
+                                <section style={{flexGrow: 1, width: "50%", marginLeft: "10px"}}>
+                                    <p>ifewhfo iewhfioewhfoi ehwife whfoi ewhf ewiofh eiohfioewhfoi ewhfoi ewh oiehf oiewhf oeihf oiehf oiehfeoihfo ehf oehf oiewhf oiehf iwhe fhoiwh odew.</p>
+                                    <FieldsX
+                                        fields={extra}
+                                    />
+                                </section>
+                            </div>
+                        )
+                    }}
+                </MyForm>
+            </div>
 
             <AboveTheFold>
                 {/*<List items={items} onExampleGetList={onExampleGetList} onExampleEditItem={onExampleEditItem} activePage={parseInt(page || "0", 10)}>*/}
@@ -241,9 +263,9 @@ const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIt
                 {/*    {({ isVisible }) => <List isShown={isVisible} items={items} onExampleGetList={onExampleGetList} onExampleEditItem={onExampleEditItem}/>}*/}
                 {/*</TrackVisibility>*/}
 
-                <List items={items} onExampleGetList={onExampleGetList} onExampleEditItem={onExampleEditItem} activePage={parseInt(page || "0", 10)}>
-                    {renderListItem}
-                </List>
+                {/*<List items={items} onExampleGetList={onExampleGetList} onExampleEditItem={onExampleEditItem} activePage={parseInt(page || "0", 10)}>*/}
+                {/*    {renderListItem}*/}
+                {/*</List>*/}
 
                 <ClientOnly>
                 </ClientOnly>

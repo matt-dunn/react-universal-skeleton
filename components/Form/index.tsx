@@ -13,7 +13,7 @@ import {ValidationError} from "yup";
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
 import {ActionType, MapDataToAction, useForm} from "components/actions/form";
-import {getDefault} from "./utils";
+import {getDefault, FormContext} from "./utils";
 import FieldSet, {SchemaWithFields} from "./FieldSet";
 
 export type FormStyles = {
@@ -104,7 +104,8 @@ function performAction<T>(schema: any, action: ActionType, data: T, value?: stri
         }
     }
 }
-function Form<T, P>({schema, onSubmit}: FormProps<T, P>) {
+
+function Form<T, P>({schema, onSubmit, children}: FormProps<T, P>) {
     const [formData, submit] = useForm<Yup.InferType<typeof schema>, P, ValidationError[]>(
         schema,
         values => schema.validate(values, {abortEarly: false}),
@@ -124,7 +125,7 @@ function Form<T, P>({schema, onSubmit}: FormProps<T, P>) {
     useWhatChanged(Form, { formData, submit, initialValues });
 
     return (
-        <>
+        <FormContext.Provider value={{schema}}>
             {formData.payload && <pre>{JSON.stringify(formData.payload)}</pre>}
 
             <Formik
@@ -156,14 +157,8 @@ function Form<T, P>({schema, onSubmit}: FormProps<T, P>) {
                                 <InputFeedback>There was a problem submitting: {formData.error.message}</InputFeedback>}
 
                                 <FieldSet
-                                    schema={schema}
                                     fields={schema.fields}
-                                    values={values}
-                                    errors={errors}
-                                    touched={touched}
-                                    isSubmitting={isSubmitting}
-                                    setFieldValue={setFieldValue}
-                                    setFieldTouched={setFieldTouched}
+                                    children={children}
                                 />
 
                                 <p>
@@ -186,7 +181,7 @@ function Form<T, P>({schema, onSubmit}: FormProps<T, P>) {
                     return null;
                 }}
             </Formik>
-        </>
+        </FormContext.Provider>
     )
 }
 

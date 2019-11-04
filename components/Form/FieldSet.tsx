@@ -1,10 +1,11 @@
 import {Schema, SchemaDescription, string} from "yup";
-import {ErrorMessage, FormikErrors, FormikTouched, getIn, Field} from "formik";
+import {ErrorMessage, FormikErrors, FormikTouched, getIn, Field, useFormikContext} from "formik";
 import FormLabel from "./Label";
-import React, {ComponentType} from "react";
+import React, {ComponentType, useContext, useMemo} from "react";
 import styled from "styled-components";
 import {formStyles} from "./index";
 import Array from "./Array";
+import {FormContext} from "./utils";
 
 export interface Field<T> extends SchemaDescription {
     _meta: {
@@ -25,16 +26,17 @@ export type Fields<T> = {
     [field: string]: Schema<T> & Field<T>;
 };
 
-type FieldProps<T extends object> = {
-    schema: SchemaWithFields<T>;
+type FieldProps<T> = {
+    // schema: SchemaWithFields<T>;
     fields: Fields<T>;
-    values: T;
-    errors: FormikErrors<T>;
-    touched: FormikTouched<T>;
-    isSubmitting: boolean;
+    // values: T;
+    // errors: FormikErrors<T>;
+    // touched: FormikTouched<T>;
+    // isSubmitting: boolean;
     path?: string;
-    setFieldValue: (field: keyof T & string, value: any, shouldValidate?: boolean) => void;
-    setFieldTouched: (field: keyof T & string, isTouched?: boolean, shouldValidate?: boolean) => void;
+    children?: (map: any) => JSX.Element;
+    // setFieldValue: (field: keyof T & string, value: any, shouldValidate?: boolean) => void;
+    // setFieldTouched: (field: keyof T & string, isTouched?: boolean, shouldValidate?: boolean) => void;
 }
 
 export interface SchemaWithFields<T> extends Schema<T> {
@@ -55,7 +57,58 @@ export const InputFeedback = styled.label`
   }
 `;
 
-function FieldSet<T extends object>({schema, fields, values, errors, touched, isSubmitting, path = "", setFieldValue, setFieldTouched}: FieldProps<T>) {
+const flattenFields = (fields, path, fieldPath = "") => {
+    console.log("*******")
+    return Object.keys(fields).reduce((map, key) => {
+        const field = fields[key];
+
+        if (field._type === "object") {
+            const objectFields = flattenFields(field.fields, path, key)
+            Object.keys(objectFields).forEach(category => {
+                if (!map[category]) {
+                    map[category] = [];
+                }
+
+                map[category] = map[category].concat(objectFields[category])
+            })
+        } else {
+            const {category = "children"} = field._meta;
+
+            if (!map[category]) {
+                map[category] = [];
+            }
+
+            map[category].push({
+                schema: field,
+                fullPath: [path, fieldPath, key].filter(part => part).join(".")
+            });
+        }
+
+        return map;
+    }, {children: []})
+}
+
+function FieldSet<T>({fields, path = "", children}: FieldProps<T>) {
+    const fieldSet = useMemo(() => flattenFields(fields, path), [fields, path]);
+
+    return (children && children(fieldSet)) || (
+        <>
+            {Object.keys(fieldSet).map(key => {
+                return (
+                    <FieldsX
+                        key={key}
+                        fields={fieldSet[key]}
+                    />
+                )
+            })}
+        </>
+    );
+}
+
+export function FieldsX<T extends object>({fields}: FieldProps<T>) {
+    const {schema} = useContext(FormContext) || {}
+    const {values, errors, touched, isSubmitting, setFieldValue, setFieldTouched} = useFormikContext();
+
     const handleChange = (e: any, value?: string) => {
         if (e.target) {
             setFieldValue(e.target.name, e.target.value);
@@ -71,8 +124,8 @@ function FieldSet<T extends object>({schema, fields, values, errors, touched, is
     return (
         <>
             {Object.keys(fields).sort((a, b) => ((fields[a]._meta || {}).order || 0) - ((fields[b]._meta || {}).order || 0)).map(key => {
-                const field = fields[key];
-                const fullPath = [path, key].filter(part => part).join(".");
+                const field = fields[key].schema;
+                const fullPath = fields[key].fullPath//[path, key].filter(part => part).join(".");
 
                 const {label} = field.describe();
                 const {Component, props} = {Component: "input", ...field._meta};
@@ -94,7 +147,7 @@ function FieldSet<T extends object>({schema, fields, values, errors, touched, is
                             setFieldValue={setFieldValue}
                             setFieldTouched={setFieldTouched}/>
                     )
-                } else if (field._type === "object") {
+                } else if (field._type === "objectXXX") {
                     return (
                         <FieldSet
                             key={fullPath}
