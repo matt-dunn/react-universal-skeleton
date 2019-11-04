@@ -40,8 +40,9 @@ function Array<T extends object>({field, path}: ArrayProps<T>) {
                         disabled={isSubmitting}
                         name="@@ADD_ITEM"
                         value={path}
-                        type="button"
-                        onClick={() => {
+                        type="submit"
+                        onClick={e => {
+                            e.preventDefault();
                             arrayHelpers.push(getDefault(schema, path));
                             value && value.length === 0 && setFieldError(path as keyof T & string, undefined as any);
                         }}
@@ -65,8 +66,11 @@ function Array<T extends object>({field, path}: ArrayProps<T>) {
                                     disabled={isSubmitting}
                                     name="@@REMOVE_ITEM"
                                     value={itemFullPath}
-                                    type="button"
-                                    onClick={() => arrayHelpers.remove(index)}
+                                    type="submit"
+                                    onClick={e => {
+                                        e.preventDefault();
+                                        arrayHelpers.remove(index)
+                                    }}
                                 >
                                     Remove {itemLabel || label}
                                 </button>
@@ -77,8 +81,11 @@ function Array<T extends object>({field, path}: ArrayProps<T>) {
                                     disabled={isSubmitting}
                                     name="@@INSERT_ITEM"
                                     value={itemFullPath}
-                                    type="button"
-                                    onClick={() => arrayHelpers.insert(index, getDefault(schema, path))}
+                                    type="submit"
+                                    onClick={e => {
+                                        e.preventDefault();
+                                        arrayHelpers.insert(index, getDefault(schema, path))
+                                    }}
                                 >
                                     Insert {itemLabel || label}
                                 </button>
