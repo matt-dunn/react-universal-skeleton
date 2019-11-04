@@ -14,7 +14,7 @@ const Label = styled.label`
   color: #666;
   margin: 2px 0;
   display: block;
-`
+`;
 
 const LabelIsRequired = styled.span`
   color: red;
@@ -28,7 +28,7 @@ const LabelIsRequired = styled.span`
     margin-left: 2px;
     text-indent: 0;
   }
-`
+`;
 
 const typedMemo: <T>(c: T) => T = React.memo;
 

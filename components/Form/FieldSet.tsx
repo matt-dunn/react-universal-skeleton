@@ -1,8 +1,9 @@
+import React, {useContext} from "react";
 import {string} from "yup";
 import {ErrorMessage, getIn, Field as FormikField, useFormikContext} from "formik";
-import FormLabel from "./Label";
-import React, {useContext} from "react";
 import styled from "styled-components";
+
+import FormLabel from "./Label";
 import {formStyles} from "./index";
 import Array from "./Array";
 import {FormContext} from "./utils";
@@ -29,7 +30,7 @@ export const InputFeedback = styled.label`
 export function FieldSet<T extends object>({fields}: FieldSetProps<T>) {
     const {schema} = useContext(FormContext) || {};
     const {values, errors, touched, isSubmitting, setFieldValue, setFieldTouched} = useFormikContext<T>();
-console.log("??",fields)
+
     const handleChange = (e: any, value?: string) => {
         if (e.target) {
             setFieldValue(e.target.name, e.target.value);
@@ -44,7 +45,7 @@ console.log("??",fields)
 
     return (
         <>
-            {fields.sort((a, b) => ((a.schema._meta || {}).order || 0) - ((b.schema._meta || {}).order || 0)).map(item => {
+            {fields.map(item => {
                 const field = item.schema;
                 const fullPath = item.fullPath;
 

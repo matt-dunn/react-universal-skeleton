@@ -1,19 +1,15 @@
 import React, {useMemo} from 'react'
 import styled, {css} from "styled-components";
-import immutable from "object-path-immutable";
-import {
-    Formik,
-    setIn
-} from 'formik';
+import {Formik, setIn} from 'formik';
 import * as Yup from 'yup';
 import {ValidationError} from "yup";
 
-import useWhatChanged from "components/whatChanged/useWhatChanged";
-
-import {ActionType, MapDataToAction, useForm} from "components/actions/form";
-import {getDefault, FormContext} from "./utils";
+import {MapDataToAction, useForm} from "components/actions/form";
+import {getDefault, FormContext, performAction} from "./utils";
 import FieldSetWrapper from "./FieldWrapper";
 import {FieldSetMap, FormStyles, InitialFormData, SchemaWithFields} from "./types";
+
+import useWhatChanged from "components/whatChanged/useWhatChanged";
 
 export type FormProps<T, P> = {
     schema: SchemaWithFields<T>;
@@ -75,26 +71,6 @@ const InputFeedback = styled.div`
   margin: 5px 0 10px 0;
 `;
 
-function performAction<T>(schema: any, action: ActionType, data: T, value?: string): T | undefined | null {
-    switch (action) {
-        case "add": {
-            return (value && immutable.push(data, value, getDefault(schema, value))) || data;
-        }
-        case "remove": {
-            return immutable.del(data, value)
-        }
-        case "insert": {
-            if (value) {
-                const parts = value.split(".");
-                const index = parseInt(parts.slice(-1).join("."), 10);
-                const path = parts.slice(0, -1).join(".");
-                return immutable.insert(data, path, getDefault(schema, value), index)
-            }
-            break;
-        }
-    }
-}
-
 function Form<T, P>({schema, onSubmit, children}: FormProps<T, P>) {
     const [formData, submit] = useForm<Yup.InferType<typeof schema>, P, ValidationError[]>(
         schema,
@@ -127,15 +103,10 @@ function Form<T, P>({schema, onSubmit, children}: FormProps<T, P>) {
             >
                 {props => {
                     const {
-                        values,
-                        touched,
-                        errors,
                         dirty,
                         isSubmitting,
                         handleSubmit,
                         handleReset,
-                        setFieldTouched,
-                        setFieldValue,
                         isValid,
                         isInitialValid
                     } = props;

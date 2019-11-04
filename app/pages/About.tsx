@@ -94,15 +94,12 @@ const schema = Yup.object().shape({
             }
         }),
     flavour: Yup.object()
-        .meta({
-            order: 0
-        })
         .shape({
             favourite: Yup.string()
                 .label("Flavour")
                 .ensure()
                 .meta({
-                    order: 1,
+                    order: 0,
                     Component: FancySelect,
                     props: {
                         options: [

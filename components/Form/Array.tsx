@@ -1,6 +1,6 @@
 import React, {useMemo} from "react";
 import {Schema, string} from "yup";
-import {ErrorMessage, FieldArray, FormikErrors, FormikTouched, getIn} from "formik";
+import {ErrorMessage, FieldArray, FormikErrors, getIn} from "formik";
 import styled from "styled-components";
 
 import {getDefault} from "./utils";
