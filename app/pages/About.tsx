@@ -239,7 +239,7 @@ const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIt
                                     />
                                 </section>
                                 <section style={{flexGrow: 1, width: "50%", marginLeft: "10px"}}>
-                                    <p>ifewhfo iewhfioewhfoi ehwife whfoi ewhf ewiofh eiohfioewhfoi ewhfoi ewh oiehf oiewhf oeihf oiehf oiehfeoihfo ehf oehf oiewhf oiehf iwhe fhoiwh odew.</p>
+                                    <p style={{fontSize: "14px", backgroundColor: "#eee", padding: "10px", borderRadius: "10px", margin: "0 0 10px 0"}}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
                                     <FieldsSet
                                         fields={extra}
                                     />
