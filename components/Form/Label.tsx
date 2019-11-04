@@ -1,34 +1,14 @@
 import React from "react";
-import styled from "styled-components";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 import {Field} from "./types";
+import {Label, LabelIsRequired} from "./styles";
 
 type FormLabelProps<T> = {
     label: string;
     name: string;
     field: Field<T>;
 }
-
-const Label = styled.label`
-  color: #666;
-  margin: 2px 0;
-  display: block;
-`;
-
-const LabelIsRequired = styled.span`
-  color: red;
-  text-indent: -900em;
-  overflow: hidden;
-  display: inline-block;
-
-  &:before {
-    float: left;
-    content: '*';
-    margin-left: 2px;
-    text-indent: 0;
-  }
-`;
 
 const typedMemo: <T>(c: T) => T = React.memo;
 

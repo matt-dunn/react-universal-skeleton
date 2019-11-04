@@ -1,10 +1,9 @@
 import React, {useContext} from "react";
 import {string} from "yup";
 import {ErrorMessage, getIn, Field as FormikField, useFormikContext} from "formik";
-import styled from "styled-components";
 
 import FormLabel from "./Label";
-import {formStyles} from "./index";
+import {formStyles, InputFeedback, Section} from "./styles";
 import Array from "./Array";
 import {FormContext} from "./utils";
 import {FieldMap} from "./types";
@@ -12,20 +11,6 @@ import {FieldMap} from "./types";
 export type FieldSetProps<T> = {
     fields?: FieldMap<Partial<T>>[];
 }
-
-const Section = styled.section`
-  margin: 0 0 10px 0;
-`;
-
-export const InputFeedback = styled.label`
-  color: red;
-  display: block;
-  margin: 5px 0 10px 0;
-  
-  em {
-    font-style: normal;
-  }
-`;
 
 export function FieldSet<T extends object>({fields}: FieldSetProps<T>) {
     const {schema} = useContext(FormContext) || {};

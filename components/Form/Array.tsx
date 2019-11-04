@@ -1,12 +1,11 @@
 import React, {useMemo} from "react";
 import {Schema, string} from "yup";
 import {ErrorMessage, FieldArray, FormikErrors, getIn} from "formik";
-import styled from "styled-components";
 
 import {getDefault} from "./utils";
 import FieldSetWrapper from "./FieldWrapper";
 import {Field, SchemaWithFields} from "./types";
-import {InputFeedback} from "./FieldSet";
+import {Legend, SubSectionContainer, InputFeedback, SubSection} from "./styles";
 
 export type ArrayProps<T extends object> = {
     schema: SchemaWithFields<T>;
@@ -16,23 +15,6 @@ export type ArrayProps<T extends object> = {
     isSubmitting: boolean;
     fullPath: string;
 }
-
-const SubSectionContainer = styled.fieldset`
-  margin: 20px 0 10px 0;
-  padding: 10px;
-  border: 1px solid #eee;
-  border-radius: 5px;
-`;
-
-const SubSection = styled(SubSectionContainer)`
-  margin-top: 0;
-`;
-
-const Legend = styled.legend`
-  padding: 2px 20px;
-  background-color: #eee;
-  border-radius: 1em;
-`;
 
 function Array<T extends object>({schema, field, values, errors, isSubmitting, fullPath}: ArrayProps<T>) {
     const value: string[] = getIn(values, fullPath);

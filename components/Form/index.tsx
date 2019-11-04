@@ -1,5 +1,4 @@
 import React, {useMemo} from 'react'
-import styled, {css} from "styled-components";
 import {Formik, setIn} from 'formik';
 import * as Yup from 'yup';
 import {ValidationError} from "yup";
@@ -7,7 +6,9 @@ import {ValidationError} from "yup";
 import {MapDataToAction, useForm} from "components/actions/form";
 import {getDefault, FormContext, performAction} from "./utils";
 import FieldSetWrapper from "./FieldWrapper";
-import {FieldSetMap, FormStyles, InitialFormData, SchemaWithFields} from "./types";
+import {FieldSetMap, InitialFormData, SchemaWithFields} from "./types";
+
+import {FormContainer, InputFeedback} from "./styles";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
@@ -16,60 +17,6 @@ export type FormProps<T, P> = {
     onSubmit: MapDataToAction<any, P>;
     children?: (map: FieldSetMap<T>) => JSX.Element;
 }
-
-export const formStyles: FormStyles = {
-    control: css`
-        font-size: inherit;
-        border: 1px solid rgb(204, 204, 204);
-        border-radius: 4px;
-    `,
-    controlInvalid: css`
-        border-color: red;
-    `
-}
-
-const FormContainer = styled.form`
-  border: 1px solid #ccc;
-  background-color: #fdfdfd;
-  border-radius: 4px;
-  padding: 10px;
-  margin: 20px 0;
-  box-sizing: border-box;
-  
-  button {
-    font-size: inherit;
-    padding: 5px;
-    border: 1px solid #ccc;
-    background-color: #eee;
-    border-radius: 3px;
-    margin: 10px 8px 10px 0;
-  }
-  
-  input {
-    padding: 9px 8px;
-    ${formStyles.control};
-    width: 100%;
-  }
-  
-  textarea {
-    padding: 9px 8px;
-    ${formStyles.control};
-    min-width: 100%;
-    min-height: 10em;
-  }
-  
-  input,
-  textarea {
-      &.invalid {
-        border-color: red;
-      }
-  }
-`;
-
-const InputFeedback = styled.div`
-  color: red;
-  margin: 5px 0 10px 0;
-`;
 
 function Form<T, P>({schema, onSubmit, children}: FormProps<T, P>) {
     const [formData, submit] = useForm<Yup.InferType<typeof schema>, P, ValidationError[]>(
