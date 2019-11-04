@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import styled, {css} from "styled-components";
 
 import ReactSelect from "react-select";
-import {FormStyles} from "components/Form";
+import {FormStyles} from "components/Form/types";
 
 const SelectStyle = css<{isValid?: boolean; formElementStyles: FormStyles}>`
   font-size: inherit;

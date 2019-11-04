@@ -13,11 +13,8 @@ export type ArrayProps<T extends object> = {
     field: Schema<T> & Field<T>;
     values: T;
     errors: FormikErrors<T>;
-    touched: FormikTouched<T>;
     isSubmitting: boolean;
     fullPath: string;
-    setFieldValue: (field: keyof T & string, value: any, shouldValidate?: boolean) => void;
-    setFieldTouched: (field: keyof T & string, isTouched?: boolean, shouldValidate?: boolean) => void;
 }
 
 const SubSectionContainer = styled.fieldset`
@@ -37,7 +34,7 @@ const Legend = styled.legend`
   border-radius: 1em;
 `;
 
-function Array<T extends object>({schema, field, values, errors, touched, isSubmitting, fullPath, setFieldValue, setFieldTouched}: ArrayProps<T>) {
+function Array<T extends object>({schema, field, values, errors, isSubmitting, fullPath}: ArrayProps<T>) {
     const value: string[] = getIn(values, fullPath);
     const {label} = field.describe();
     const {itemLabel} = field._meta;

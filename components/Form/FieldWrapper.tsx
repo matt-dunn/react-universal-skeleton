@@ -1,13 +1,14 @@
 import React, {useMemo} from "react";
-import {Fields} from "./types";
+import {Field, Fields, FieldSetMap} from "./types";
 import FieldsSet from "./FieldSet";
 
-type FieldWrapperProps<T> = {
+export type FieldWrapperProps<T> = {
     fields: Fields<T>;
     path?: string;
-    children?: (map: any) => JSX.Element;
+    children?: (map: FieldSetMap<T>) => JSX.Element;
 }
-const flattenFields = (fields, path, fieldPath = "") => {
+
+function flattenFields<T>(fields: Fields<T>, path: string, fieldPath = ""): FieldSetMap<T> {
     return Object.keys(fields).reduce((map, key) => {
         const field = fields[key];
 
@@ -34,11 +35,11 @@ const flattenFields = (fields, path, fieldPath = "") => {
         }
 
         return map;
-    }, {children: []})
+    }, {children: []} as FieldSetMap<T>) as FieldSetMap<T>
 }
 
 function FieldWrapper<T>({fields, path = "", children}: FieldWrapperProps<T>) {
-    const fieldSet = useMemo(() => flattenFields(fields, path), [fields, path]);
+    const fieldSet = useMemo<FieldSetMap<T>>(() => flattenFields(fields, path), [fields, path]);
 
     return (children && children(fieldSet)) || (
         <>

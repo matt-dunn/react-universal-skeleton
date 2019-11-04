@@ -9,6 +9,7 @@ export interface Field<T> extends SchemaDescription {
         props?: any;
         order?: number;
         itemLabel?: string;
+        category?: string;
     };
     _type: string;
     _subType: {
@@ -19,7 +20,7 @@ export interface Field<T> extends SchemaDescription {
 }
 
 export type Fields<T> = {
-    [field: string]: Schema<T> & Field<T>;
+    [key: string]: Schema<T> & Field<T>;
 };
 
 export interface SchemaWithFields<T> extends Schema<T> {
@@ -34,5 +35,14 @@ export type FormStyles = {
 export type InitialFormData<T> = {
     errors: FormikErrors<T>;
     touched: FormikTouched<T>;
+}
+
+export type FieldMap<T> = {
+    schema: Schema<T> & Field<T>;
+    fullPath: string;
+}
+
+export type FieldSetMap<T> = {
+    [key: string]: FieldMap<Partial<T>>[];
 }
 

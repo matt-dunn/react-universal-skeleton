@@ -13,11 +13,12 @@ import useWhatChanged from "components/whatChanged/useWhatChanged";
 import {ActionType, MapDataToAction, useForm} from "components/actions/form";
 import {getDefault, FormContext} from "./utils";
 import FieldSetWrapper from "./FieldWrapper";
-import {FormStyles, InitialFormData, SchemaWithFields} from "./types";
+import {FieldSetMap, FormStyles, InitialFormData, SchemaWithFields} from "./types";
 
 export type FormProps<T, P> = {
     schema: SchemaWithFields<T>;
     onSubmit: MapDataToAction<any, P>;
+    children?: (map: FieldSetMap<T>) => JSX.Element;
 }
 
 export const formStyles: FormStyles = {

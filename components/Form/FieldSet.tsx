@@ -1,15 +1,15 @@
-import {Schema, SchemaDescription, string} from "yup";
-import {ErrorMessage, FormikErrors, FormikTouched, getIn, Field, useFormikContext} from "formik";
+import {string} from "yup";
+import {ErrorMessage, getIn, Field as FormikField, useFormikContext} from "formik";
 import FormLabel from "./Label";
-import React, {ComponentType, useContext, useMemo} from "react";
+import React, {useContext} from "react";
 import styled from "styled-components";
 import {formStyles} from "./index";
 import Array from "./Array";
 import {FormContext} from "./utils";
-import {Fields} from "./types";
+import {FieldMap} from "./types";
 
 export type FieldSetProps<T> = {
-    fields: Fields<T>;
+    fields: FieldMap<Partial<T>>[]
 }
 
 const Section = styled.section`
@@ -28,8 +28,8 @@ export const InputFeedback = styled.label`
 
 export function FieldSet<T extends object>({fields}: FieldSetProps<T>) {
     const {schema} = useContext(FormContext) || {};
-    const {values, errors, touched, isSubmitting, setFieldValue, setFieldTouched} = useFormikContext();
-
+    const {values, errors, touched, isSubmitting, setFieldValue, setFieldTouched} = useFormikContext<T>();
+console.log("??",fields)
     const handleChange = (e: any, value?: string) => {
         if (e.target) {
             setFieldValue(e.target.name, e.target.value);
@@ -44,9 +44,9 @@ export function FieldSet<T extends object>({fields}: FieldSetProps<T>) {
 
     return (
         <>
-            {Object.keys(fields).sort((a, b) => ((fields[a]._meta || {}).order || 0) - ((fields[b]._meta || {}).order || 0)).map(key => {
-                const field = fields[key].schema;
-                const fullPath = fields[key].fullPath//[path, key].filter(part => part).join(".");
+            {fields.sort((a, b) => ((a.schema._meta || {}).order || 0) - ((b.schema._meta || {}).order || 0)).map(item => {
+                const field = item.schema;
+                const fullPath = item.fullPath;
 
                 const {label} = field.describe();
                 const {Component, props} = {Component: "input", ...field._meta};
@@ -54,7 +54,7 @@ export function FieldSet<T extends object>({fields}: FieldSetProps<T>) {
                 const error = getIn(errors, fullPath);
                 const touch = getIn(touched, fullPath);
 
-                if (field._type === "array") {
+                if (schema && field._type === "array") {
                     return (
                         <Array
                             key={fullPath}
@@ -62,11 +62,9 @@ export function FieldSet<T extends object>({fields}: FieldSetProps<T>) {
                             field={field}
                             values={values}
                             errors={errors}
-                            touched={touched}
                             isSubmitting={isSubmitting}
                             fullPath={fullPath}
-                            setFieldValue={setFieldValue}
-                            setFieldTouched={setFieldTouched}/>
+                        />
                     )
                 }
 
@@ -98,7 +96,7 @@ export function FieldSet<T extends object>({fields}: FieldSetProps<T>) {
                             name={fullPath}
                             field={field}
                         />
-                        <Field
+                        <FormikField
                             {...componentProps}
                             {...additionalProps}
                         />
