@@ -48,6 +48,12 @@ const Header = () => {
                         exact activeClassName="active"
                     >About</NavLink>
                 </MenuLink>
+                <MenuLink>
+                    <NavLink
+                        to="/forms"
+                        exact activeClassName="active"
+                    >Forms</NavLink>
+                </MenuLink>
             </Menu>
         </Container>
     )

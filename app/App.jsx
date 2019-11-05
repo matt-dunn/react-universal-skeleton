@@ -23,6 +23,11 @@ const About = importComponent(() => import("./pages/About"), {
     ErrorComponent
 });
 
+const Forms = importComponent(() => import("./pages/Forms"), {
+    LoadingComponent,
+    ErrorComponent
+});
+
 const Login = importComponent(() => import("./pages/Login"), {
     LoadingComponent,
     ErrorComponent
@@ -63,6 +68,7 @@ const App = () => {
                 <Switch>
                     <Route exact path="/" component={Home} />
                     <Route exact path="/about/:page?" render={() => <About />} />
+                    <Route exact path="/forms" render={() => <Forms />} />
                     <Route path="/login/:from?" render={() => <Login />} />
                     <Route component={Error404} />
                     {/*<Redirect to="/" />*/}
