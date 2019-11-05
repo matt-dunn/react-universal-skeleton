@@ -13,7 +13,7 @@ export type FieldWrapperProps<T> = {
 function FieldWrapper<T>({fields, path = "", children}: FieldWrapperProps<T>) {
     const fieldSet = useMemo<FieldSetMap<T>>(() => sortFields(flattenFields(fields, path)), [fields, path]);
 
-    return (children && children(fieldSet)) || (
+    return children ? children(fieldSet) : (
         <>
             {Object.keys(fieldSet).map(key => {
                 return (

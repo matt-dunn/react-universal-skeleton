@@ -4,15 +4,16 @@ import {ErrorMessage, FieldArray, getIn, useFormikContext} from "formik";
 
 import {FormContext, getDefault} from "./utils";
 import FieldSetWrapper from "./FieldWrapper";
-import {Field} from "./types";
+import {Field, FieldSetMap} from "./types";
 import {Legend, SubSectionContainer, InputFeedback, SubSection} from "./styles";
 
 export type ArrayProps<T extends object> = {
     field: Schema<T> & Field<T>;
     path: string;
+    children?: (map: FieldSetMap<T>) => JSX.Element;
 }
 
-function Array<T extends object>({field, path}: ArrayProps<T>) {
+function Array<T extends object>({field, path, children}: ArrayProps<T>) {
     const {schema} = useContext(FormContext) || {};
     const {values, errors, isSubmitting, setFieldError} = useFormikContext<T>();
     const value: string[] = getIn(values, path);
@@ -98,7 +99,9 @@ function Array<T extends object>({field, path}: ArrayProps<T>) {
                                     <FieldSetWrapper
                                         fields={field._subType.fields}
                                         path={itemFullPath}
-                                    />
+                                    >
+                                        {children}
+                                    </FieldSetWrapper>
                                     {InsertOption}
                                     {RemoveOption}
                                 </SubSection>

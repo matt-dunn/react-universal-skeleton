@@ -11,6 +11,7 @@ import {AboveTheFold, ClientOnly} from "components/actions";
 import List from "app/components/List";
 import Item from "app/components/Item";
 import EditItem from "app/components/EditItem";
+import {ResponsiveGrid} from "components/Grid";
 
 import Page from '../styles/Page'
 import * as actions from '../actions';
@@ -49,6 +50,12 @@ const AboutItem = styled(EditItem)`
 const AboutListItem = styled(EditItem)<{isImportant?: boolean}>`
   ${({isImportant}) => isImportant && css`background-color: rgba(230, 230, 230, 0.5);`}
 `
+
+const GridItems = styled(ResponsiveGrid("ol"))``;
+
+const GridItem = styled.li`
+    padding: 0 10px 0 0;
+`;
 
 const importantIds = ["item-1", "item-2"]
 
@@ -132,6 +139,7 @@ const schema = Yup.object().shape({
                 .label("Name")
                 .meta({
                     order: 0,
+                    category: "set1",
                     props: {
                         placeholder: "Enter name",
                         type: "text"
@@ -143,6 +151,7 @@ const schema = Yup.object().shape({
                 .label("Address")
                 .meta({
                     order: 1,
+                    category: "set2",
                     props: {
                         placeholder: "Enter address",
                         type: "text"
@@ -244,7 +253,29 @@ const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIt
                                     <section style={{flexGrow: 1, width: "50%", marginRight: "10px"}}>
                                         <FieldsSet
                                             fields={children}
-                                        />
+                                        >
+                                            {({set1, set2, children}) => {
+                                                return (
+                                                    <>
+                                                        <GridItems minItemWidth={150} totalPaddingWidth={0}>
+                                                            <GridItem>
+                                                            <FieldsSet
+                                                                fields={set1}
+                                                            />
+                                                            </GridItem>
+                                                            <GridItem>
+                                                            <FieldsSet
+                                                                fields={set2}
+                                                            />
+                                                            </GridItem>
+                                                        </GridItems>
+                                                        <FieldsSet
+                                                            fields={children}
+                                                        />
+                                                    </>
+                                                )
+                                            }}
+                                        </FieldsSet>
                                     </section>
                                     <section style={{flexGrow: 1, width: "50%", marginLeft: "10px"}}>
                                         <p style={{fontSize: "14px", backgroundColor: "#eee", padding: "10px", borderRadius: "10px", margin: "0 0 10px 0"}}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
@@ -269,9 +300,9 @@ const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIt
                 {/*    {({ isVisible }) => <List isShown={isVisible} items={items} onExampleGetList={onExampleGetList} onExampleEditItem={onExampleEditItem}/>}*/}
                 {/*</TrackVisibility>*/}
 
-                {/*<List items={items} onExampleGetList={onExampleGetList} onExampleEditItem={onExampleEditItem} activePage={parseInt(page || "0", 10)}>*/}
-                {/*    {renderListItem}*/}
-                {/*</List>*/}
+                <List items={items} onExampleGetList={onExampleGetList} onExampleEditItem={onExampleEditItem} activePage={parseInt(page || "0", 10)}>
+                    {renderListItem}
+                </List>
 
                 <ClientOnly>
                 </ClientOnly>

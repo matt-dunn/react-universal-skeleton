@@ -6,13 +6,14 @@ import FormLabel from "./Label";
 import {formStyles, InputFeedback, Section} from "./styles";
 import Array from "./Array";
 import {FormContext} from "./utils";
-import {FieldMap} from "./types";
+import {FieldMap, FieldSetMap} from "./types";
 
 export type FieldSetProps<T> = {
     fields?: FieldMap<Partial<T>>[];
+    children?: (map: FieldSetMap<Partial<T>>) => JSX.Element;
 }
 
-export function FieldSet<T extends object>({fields}: FieldSetProps<T>) {
+export function FieldSet<T extends object>({fields, children}: FieldSetProps<T>) {
     const {schema} = useContext(FormContext) || {};
     const {values, errors, touched, isSubmitting, setFieldValue, setFieldTouched} = useFormikContext<T>();
 
@@ -38,7 +39,9 @@ export function FieldSet<T extends object>({fields}: FieldSetProps<T>) {
                             key={fullPath}
                             field={field}
                             path={fullPath}
-                        />
+                        >
+                            {children}
+                        </Array>
                     )
                 }
 

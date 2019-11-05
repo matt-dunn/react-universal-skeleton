@@ -1,7 +1,6 @@
 import React, {ReactNode, useRef} from "react";
 import useViewportWidth, {ViewportDimensions} from "../hooks/useViewportWidth";
 import styled, {css} from "styled-components";
-import {Container} from "postcss";
 
 const calculateMaxChildren = (length: number, dimensions?: ViewportDimensions, minItemWidth?: number) => {
     const {width} = dimensions || {};
@@ -25,6 +24,7 @@ const Container = styled.ol<{length: number; totalPaddingWidth?: number; dimensi
           width: ${(totalPaddingWidth && `calc(${width} - ${totalPaddingWidth}px)`) || width};
           &:nth-child(${maxLength}n) {
             border-right: none;
+            padding-right: 0;
           }
         `;
       }}
