@@ -44,15 +44,15 @@ const Header = () => {
                 </MenuLink>
                 <MenuLink>
                     <NavLink
-                        to="/about"
+                        to="/data"
                         exact activeClassName="active"
-                    >About</NavLink>
+                    >API SSR Example</NavLink>
                 </MenuLink>
                 <MenuLink>
                     <NavLink
                         to="/forms"
                         exact activeClassName="active"
-                    >Forms</NavLink>
+                    >Schema Forms</NavLink>
                 </MenuLink>
             </Menu>
         </Container>

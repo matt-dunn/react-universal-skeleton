@@ -18,7 +18,7 @@ import { ToastifyStyles } from './styles/toasify'
 
 import ErrorHandler from "components/actions/ErrorHandler";
 
-const About = importComponent(() => import("./pages/About"), {
+const Data = importComponent(() => import("./pages/Data"), {
     LoadingComponent,
     ErrorComponent
 });
@@ -72,7 +72,7 @@ const App = () => {
             <ErrorHandler handler={handler}>
                 <Switch>
                     <Route exact path="/" component={Home} />
-                    <Route exact path="/about/:page?" render={() => <About />} />
+                    <Route exact path="/data/:page?" render={() => <Data />} />
                     <Route exact path="/forms" render={() => <Forms />} />
                     <Route exact path="/mystyled" render={() => <MyStyled />} />
                     <Route path="/login/:from?" render={() => <Login />} />
