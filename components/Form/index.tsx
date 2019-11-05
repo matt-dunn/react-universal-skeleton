@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 import {ValidationError} from "yup";
 import classnames from "classnames";
 
-import {MapDataToAction, useForm} from "components/actions/form";
+import {MapDataToAction, useForm, State} from "components/actions/form";
 
 import {getDefault, FormContext, performAction} from "./utils";
 import FieldSetWrapper from "./FieldWrapper";
@@ -14,20 +14,29 @@ import {FormContainer, FormFooterOptions, InputFeedback} from "./styles";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
-export type FormProps<T, P> = {
+export type FormProps<T, P, S> = {
+    formId: string;
     schema: SchemaWithFields<T>;
-    onSubmit: MapDataToAction<any, P>;
+    onSubmit: MapDataToAction<T, P, S>;
     children?: (map: FieldSetMap<T>) => JSX.Element;
     className?: string;
+    context?: S;
 }
 
-function Form<T, P>({schema, onSubmit, children, className}: FormProps<T, P>) {
-    const [formData, submit] = useForm<Yup.InferType<typeof schema>, P, ValidationError[]>(
+function Form<T, P, S>({formId, schema, onSubmit, children, className, context}: FormProps<T, P, S>) {
+    const [formData, submit] = useForm<Yup.InferType<typeof schema>, P, ValidationError[], typeof schema, S>(
+        formId,
         schema,
         values => schema.validate(values, {abortEarly: false}),
-        onSubmit,
-        performAction
+        onSubmit as any,
+        performAction,
+        {
+            formId,
+            data: context
+        } as State<S>
     );
+
+    const formState = formData.state.toString();
 
     const {errors: initialErrors, touched: initialTouched} = useMemo<InitialFormData<Yup.InferType<typeof schema>>>(() => formData.innerFormErrors && formData.innerFormErrors.reduce(({errors, touched}, {path, message}) => ({
         errors: setIn(errors, path, message),
@@ -67,6 +76,12 @@ function Form<T, P>({schema, onSubmit, children, className}: FormProps<T, P>) {
                             method="post"
                             className={classnames({invalid: !isValid}, className)}
                         >
+                            <input
+                                name="@@FORMSTATE"
+                                value={formState}
+                                type="hidden"
+                                readOnly={true}
+                            />
                             {formData.error &&
                             <InputFeedback>There was a problem submitting: {formData.error.message}</InputFeedback>}
 
@@ -97,8 +112,12 @@ function Form<T, P>({schema, onSubmit, children, className}: FormProps<T, P>) {
                     ) || null;
                 }}
             </Formik>
+
+            <pre>{JSON.stringify(formData.state)}</pre>
         </FormContext.Provider>
     )
 }
 
-export default React.memo(Form)
+const typedMemo: <T>(c: T) => T = React.memo;
+
+export default typedMemo(Form)

@@ -32,6 +32,7 @@ const Forms = () => {
 
             <div style={{maxWidth: "800px", margin: "0 auto"}}>
                 <Form
+                    formId="my-form"
                     schema={schemaComplex}
                     onSubmit={handleSubmit}
                 >

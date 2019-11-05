@@ -70,6 +70,10 @@ export const FormContainer = styled.form`
       border-color: #007bff;
       color: #fff;
     }
+    
+    &[disabled] {
+      opacity: 0.5;
+    }
   }
   
   input {

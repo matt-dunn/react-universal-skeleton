@@ -35,7 +35,7 @@ const parseHelmetTemplate = helmet => (template, ...vars) => {
         .join("") || "";
 };
 
-import {FormDataProvider, FormData} from "components/actions/form";
+import {FormDataProvider, parseFormData} from "components/actions/form";
 
 import {set} from "lodash";
 
@@ -50,9 +50,9 @@ export default async (req, res) => {
         set(o, key, req.body[key])
         return o;
     }, {});
-    const formData = FormData(req.method === "POST" && {data: postData});
+    const formData = parseFormData(req.method === "POST" && postData);
 
-    console.log("POSTED", postData)
+    console.log("FORMDATA", formData)
 
     const app = (
         <FormDataProvider value={formData}>
