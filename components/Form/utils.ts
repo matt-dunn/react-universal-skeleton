@@ -28,7 +28,7 @@ export function flattenFields<T>(fields: Fields<T>, path: string, fieldPath = ""
                 map[category] = map[category].concat(objectFields[category])
             })
         } else {
-            const {category = "children"} = field._meta;
+            const {category = "children"} = field._meta || {};
 
             if (!map[category]) {
                 map[category] = [];
