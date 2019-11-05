@@ -47,9 +47,9 @@ const importantIds = ["item-1", "item-2"]
 const Data = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditItem, $status}: DataProps) => {
     const { page } = useParams();
 
-    const renderListItem = useCallback((item: IExampleItemState) => {
+    const renderListItem = useCallback(({item, disabled}) => {
         // return <div>ITEM - {item.name}</div>
-        return <DataListItem item={item} onChange={onExampleEditItem} type="primary" isImportant={importantIds.indexOf(item.id) !== -1}/>
+        return <DataListItem item={item} disabled={disabled} onChange={onExampleEditItem} type="primary" isImportant={importantIds.indexOf(item.id) !== -1}/>
     }, [onExampleEditItem])
 
     const renderItem = useCallback(({ isVisible }) => <Item isShown={isVisible} item={item} onExampleGetItem={onExampleGetItem}/>, [item, onExampleGetItem])

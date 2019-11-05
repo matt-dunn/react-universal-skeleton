@@ -16,6 +16,7 @@ export type ItemProps = {
     onChange?: (item: IExampleItemState) => Promise<IExampleResponse>;
     type?: "primary" | "secondary";
     className?: string;
+    disabled?: boolean;
 };
 
 const Container = styled.div<{type?: string}>`
@@ -38,7 +39,7 @@ const Saving = styled.div`
   font-size: 10px;
 `;
 
-const Item = ({item, onChange, type, className}: ItemProps) => {
+const Item = ({item, onChange, type, className, disabled}: ItemProps) => {
     const {id, name, $status} = item;
     const {complete, isActive, processing, hasError, error, lastUpdated} = Status($status);
 
@@ -68,7 +69,7 @@ const Item = ({item, onChange, type, className}: ItemProps) => {
         [item, save, value]
     );
 
-    useWhatChanged(Item, {saving, inputEl, item, onChange, value, handleChange, save}, {idProp: "item.id"});
+    useWhatChanged(Item, {saving, inputEl, item, onChange, value, handleChange, disabled, save}, {idProp: "item.id"});
 
     return (
         <div className={className}>
@@ -77,6 +78,7 @@ const Item = ({item, onChange, type, className}: ItemProps) => {
                     multiline
                     label="Item"
                     value={value}
+                    disabled={disabled}
                     onChange={handleChange}
                 />
             </Container>

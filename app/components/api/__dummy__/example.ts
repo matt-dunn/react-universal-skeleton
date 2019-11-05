@@ -44,7 +44,7 @@ const exampleApi: IExampleApi = {
                     name: `Item ${i + 1}`
                 }
             }));
-        }, 150)
+        }, (process as any).browser ? 2000 : 0)
     }),
     exampleGetItem:() => new Promise<IExampleResponse>((resolve, reject) => {
         console.log("API CALL: exampleGetItem")

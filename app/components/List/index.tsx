@@ -25,7 +25,7 @@ export type ListProps = {
     $status?: IStatus;
     isShown?: boolean;
     activePage?: number;
-    children?: (item: IExampleItemState) => JSX.Element;
+    children?: ({item, disabled}: {item: IExampleItemState; disabled: boolean}) => JSX.Element;
 };
 
 const ListContainer = styled.div`
@@ -121,9 +121,10 @@ const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditIt
                     <ListItems minItemWidth={200} totalPaddingWidth={20}>
                         {items.map(item => (
                             <ListItem key={item.id}>
-                                {(children && children(item)) ||
+                                {(children && children({item, disabled: processing})) ||
                                 <Item
                                     item={item}
+                                    disabled={processing}
                                     onChange={onExampleEditItem}
                                 />
                                 }
@@ -141,7 +142,7 @@ const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditIt
                     >
                         <PageLink
                             className={(page === activePage && "active") || ""}
-                            to={`/about/${page}`}
+                            to={`/data/${page}`}
                         >
                             {page + 1}
                         </PageLink>
