@@ -30,7 +30,7 @@ const Forms = () => {
                 Forms (Lazy Loaded)
             </Title>
 
-            <div style={{maxWidth: "800px"}}>
+            <div style={{maxWidth: "800px", margin: "0 auto"}}>
                 <Form
                     schema={schemaComplex}
                     onSubmit={handleSubmit}

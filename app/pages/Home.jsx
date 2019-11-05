@@ -61,7 +61,7 @@ const Home = () => {
                             Schema Forms
                         </h2>
                         <aside>
-                            Example of dynamically building a form from a Yup schema with server side processing. Forms can be rendered in a custom layout.
+                            Example of dynamically building responsive forms from a Yup schema with server side validation and processing. Forms can be rendered in a custom layout.
                         </aside>
                     </NavLink>
                 </MenuLink>
