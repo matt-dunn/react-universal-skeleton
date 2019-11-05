@@ -94,6 +94,8 @@ export const LabelIsRequired = styled.span`
   text-indent: -900em;
   overflow: hidden;
   display: inline-block;
+  line-height: 1;
+  position: absolute;
 
   &:before {
     float: left;
