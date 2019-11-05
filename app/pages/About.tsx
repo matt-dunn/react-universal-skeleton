@@ -20,11 +20,10 @@ import {IExampleItemState} from '../reducers/__dummy__/example';
 import {IExampleGetList, IExampleGetItem, ExampleEditItem} from "../components/api/__dummy__/example";
 
 import MyForm from "components/Form";
-import FieldsSet from "components/Form/FieldSet";
+import FieldSet from "components/Form/FieldSet";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 import * as Yup from "yup";
-import {string} from "yup";
 import {ValidationError} from "yup";
 import FancySelect from "components/FancySelect";
 import {MapDataToAction} from "components/actions/form";
@@ -51,9 +50,9 @@ const AboutListItem = styled(EditItem)<{isImportant?: boolean}>`
   ${({isImportant}) => isImportant && css`background-color: rgba(230, 230, 230, 0.5);`}
 `
 
-const GridItems = styled(ResponsiveGrid("ol"))``;
+const GridItems = styled(ResponsiveGrid("div"))``;
 
-const GridItem = styled.li`
+const GridItem = styled.div`
     padding: 0 10px 0 0;
 `;
 
@@ -242,49 +241,49 @@ const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIt
                 >
                     {({children, extra, other}) => {
                         return (
-                            <div>
+                            <>
                                 <div style={{borderBottom: "1px solid #dfdfdf", margin: "0 0 20px 0", padding: "0 0 10px 0"}}>
-                                    <FieldsSet
+                                    <FieldSet
                                         fields={other}
                                     />
                                     <p style={{fontSize: "14px", backgroundColor: "#eee", padding: "10px", borderRadius: "10px", margin: "0 0 10px 0"}}>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
                                 </div>
-                                <div style={{display: "flex"}}>
-                                    <section style={{flexGrow: 1, width: "50%", marginRight: "10px"}}>
-                                        <FieldsSet
+                                <GridItems minItemWidth={250}>
+                                    <GridItem>
+                                        <FieldSet
                                             fields={children}
                                         >
                                             {({set1, set2, children}) => {
                                                 return (
                                                     <>
-                                                        <GridItems minItemWidth={150} totalPaddingWidth={0}>
+                                                        <GridItems minItemWidth={150}>
                                                             <GridItem>
-                                                            <FieldsSet
+                                                            <FieldSet
                                                                 fields={set1}
                                                             />
                                                             </GridItem>
                                                             <GridItem>
-                                                            <FieldsSet
+                                                            <FieldSet
                                                                 fields={set2}
                                                             />
                                                             </GridItem>
                                                         </GridItems>
-                                                        <FieldsSet
+                                                        <FieldSet
                                                             fields={children}
                                                         />
                                                     </>
                                                 )
                                             }}
-                                        </FieldsSet>
-                                    </section>
-                                    <section style={{flexGrow: 1, width: "50%", marginLeft: "10px"}}>
+                                        </FieldSet>
+                                    </GridItem>
+                                    <GridItem>
                                         <p style={{fontSize: "14px", backgroundColor: "#eee", padding: "10px", borderRadius: "10px", margin: "0 0 10px 0"}}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                                        <FieldsSet
+                                        <FieldSet
                                             fields={extra}
                                         />
-                                    </section>
-                                </div>
-                            </div>
+                                    </GridItem>
+                                </GridItems>
+                            </>
                         )
                     }}
                 </MyForm>
