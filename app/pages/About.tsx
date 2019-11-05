@@ -258,14 +258,14 @@ const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIt
                                                     <>
                                                         <GridItems minItemWidth={150}>
                                                             <GridItem>
-                                                            <FieldSet
-                                                                fields={set1}
-                                                            />
+                                                                <FieldSet
+                                                                    fields={set1}
+                                                                />
                                                             </GridItem>
                                                             <GridItem>
-                                                            <FieldSet
-                                                                fields={set2}
-                                                            />
+                                                                <FieldSet
+                                                                    fields={set2}
+                                                                />
                                                             </GridItem>
                                                         </GridItems>
                                                         <FieldSet
