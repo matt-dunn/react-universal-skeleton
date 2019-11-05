@@ -20,7 +20,7 @@ import {IExampleGetList, IExampleGetItem, ExampleEditItem} from "../components/a
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
-export type AboutProps = {
+export type DataProps = {
     items: IExampleItemState[];
     item?: IExampleItemState;
     onExampleGetList: IExampleGetList;
@@ -33,38 +33,38 @@ const Title = styled.h2`
     color: #ccc;
 `;
 
-const AboutItem = styled(EditItem)`
+const DataItem = styled(EditItem)`
   margin: 50px auto;
   max-width: 300px;
 `
 
-const AboutListItem = styled(EditItem)<{isImportant?: boolean}>`
+const DataListItem = styled(EditItem)<{isImportant?: boolean}>`
   ${({isImportant}) => isImportant && css`background-color: rgba(230, 230, 230, 0.5);`}
 `
 
 const importantIds = ["item-1", "item-2"]
 
-const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditItem, $status}: AboutProps) => {
+const Data = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditItem, $status}: DataProps) => {
     const { page } = useParams();
 
     const renderListItem = useCallback((item: IExampleItemState) => {
         // return <div>ITEM - {item.name}</div>
-        return <AboutListItem item={item} onChange={onExampleEditItem} type="primary" isImportant={importantIds.indexOf(item.id) !== -1}/>
+        return <DataListItem item={item} onChange={onExampleEditItem} type="primary" isImportant={importantIds.indexOf(item.id) !== -1}/>
     }, [onExampleEditItem])
 
     const renderItem = useCallback(({ isVisible }) => <Item isShown={isVisible} item={item} onExampleGetItem={onExampleGetItem}/>, [item, onExampleGetItem])
 
-    useWhatChanged(About, { items, item, onExampleGetList, onExampleGetItem, onExampleEditItem, $status, renderListItem, page});
+    useWhatChanged(Data, { items, item, onExampleGetList, onExampleGetItem, onExampleEditItem, $status, renderListItem, page});
 
     return (
         <Page>
             <Helmet>
-                <title>About Page</title>
-                <meta name="description" content="Universal App About Page" />
-                <meta name="keywords" content="about,..." />
+                <title>API SSR Example</title>
+                <meta name="description" content="Universal App Data Page" />
+                <meta name="keywords" content="api, ssr,..." />
             </Helmet>
             <Title>
-                About page (Lazy Loaded)
+                API SSR Example (Lazy Loaded)
             </Title>
 
             <AboveTheFold>
@@ -97,7 +97,7 @@ const About = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIt
             {/*    {({ isVisible }) => items && items[0] && items[0].id && <EditItem item={items[0]} onChange={onExampleEditItem}/>}*/}
             {/*</TrackVisibility>*/}
 
-            {items && items[0] && items[0].id && <AboutItem item={items[0]} onChange={onExampleEditItem}/>}
+            {items && items[0] && items[0].id && <DataItem item={items[0]} onChange={onExampleEditItem}/>}
 
             <div style={{height: "110vh"}}/>
 
@@ -133,6 +133,6 @@ const mapDispatchToProps = (dispatch: Dispatch<actions.RootActions>) => {
 const container = connect(
     mapStateToProps,
     mapDispatchToProps
-)(About);
+)(Data);
 
 export default container
