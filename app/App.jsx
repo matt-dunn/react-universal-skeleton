@@ -28,6 +28,11 @@ const Forms = importComponent(() => import("./pages/Forms"), {
     ErrorComponent
 });
 
+const MyStyled = importComponent(() => import("./pages/MyStyled"), {
+    LoadingComponent,
+    ErrorComponent
+});
+
 const Login = importComponent(() => import("./pages/Login"), {
     LoadingComponent,
     ErrorComponent
@@ -69,6 +74,7 @@ const App = () => {
                     <Route exact path="/" component={Home} />
                     <Route exact path="/about/:page?" render={() => <About />} />
                     <Route exact path="/forms" render={() => <Forms />} />
+                    <Route exact path="/mystyled" render={() => <MyStyled />} />
                     <Route path="/login/:from?" render={() => <Login />} />
                     <Route component={Error404} />
                     {/*<Redirect to="/" />*/}
