@@ -27,12 +27,6 @@ export function FieldSet<T extends object>({fields, children}: FieldSetProps<T>)
                 const field = item.schema;
                 const fullPath = item.fullPath;
 
-                const {label} = field.describe();
-                const {Component, props} = {Component: "input", ...field._meta};
-                const value: string[] = getIn(values, fullPath);
-                const error = getIn(errors, fullPath);
-                const touch = getIn(touched, fullPath);
-
                 if (schema && field._type === "array") {
                     return (
                         <Array
@@ -45,6 +39,11 @@ export function FieldSet<T extends object>({fields, children}: FieldSetProps<T>)
                     )
                 }
 
+                const {label} = field.describe();
+                const {Component, props} = {Component: "input", ...field._meta};
+                const value: string[] = getIn(values, fullPath);
+                const error = getIn(errors, fullPath);
+                const touch = getIn(touched, fullPath);
                 const isValid = !(error && touch);
 
                 const componentProps = {
