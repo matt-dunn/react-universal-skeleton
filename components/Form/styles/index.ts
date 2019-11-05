@@ -10,6 +10,12 @@ export const SubSectionContainer = styled.fieldset`
 
 export const SubSection = styled(SubSectionContainer)`
   margin-top: 0;
+  
+  > legend {
+    font-size: 85%;
+    opacity: 0.75;
+    text-align: right;
+  }
 `;
 
 export const Legend = styled.legend`

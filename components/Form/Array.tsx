@@ -96,6 +96,7 @@ function Array<T extends object>({field, path, children}: ArrayProps<T>) {
                                 <SubSection
                                     key={itemFullPath}
                                 >
+                                    {(max && max > 1) && <Legend>{itemLabel || label} {index + 1}</Legend>}
                                     <FieldSetWrapper
                                         fields={field._subType.fields}
                                         path={itemFullPath}
