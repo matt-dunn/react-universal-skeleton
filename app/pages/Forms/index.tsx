@@ -2,17 +2,16 @@ import React from 'react'
 import {Helmet} from 'react-helmet-async'
 import styled from "styled-components";
 import * as Yup from "yup";
-import {ValidationError} from "yup";
 
 import {ResponsiveGrid} from "components/Grid";
+import Form from "components/Form";
+import FieldSet from "components/Form/FieldSet";
+import {MapDataToAction} from "components/actions/form";
 
 import Page from '../../styles/Page'
 
-import Form from "components/Form";
-import FieldSet from "components/Form/FieldSet";
-
-import FancySelect from "components/FancySelect";
-import {MapDataToAction} from "components/actions/form";
+import {dummyApiCall, MyFormResponse} from "./utils";
+import schemaComplex from "./schemas/complex";
 
 const Title = styled.h2`
     color: #ccc;
@@ -24,157 +23,7 @@ const GridItem = styled.div`
     padding: 0 10px 0 0;
 `;
 
-const validateEmailApi = (function() {
-    let t: number;
-
-    return (email: string): Promise<boolean | ValidationError> => {
-        console.log("#####VALIDATE EMAIL")
-        clearTimeout(t);
-        return new Promise((resolve, reject) => {
-            if (email === "matt.j.dunn@gmail.com") {
-                throw new Error("Email validation failed")
-            }
-
-            t = setTimeout(() => {
-                // reject(new Error("Email validation failed"))
-                resolve(!email.startsWith("demo@"))
-            }, 0)
-        })
-    }
-})()
-
-const schema = Yup.object().shape({
-    email: Yup.string()
-        .label("Email")
-        .ensure()
-        .meta({
-            order: 1,
-            props: {
-                placeholder: "Enter your email",
-                type: "text"
-            }
-        })
-        .required('Email is required')
-        .ensure()
-        .email()
-        .test("email", "Email ${value} is unavailable", function(value: string) {
-            if (!value || !Yup.string().email().isValidSync(value)) {
-                return true;
-            } else {
-                return validateEmailApi(value)
-                    .catch(reason => new ValidationError(reason.message, value, this.path))
-            }
-        }),
-    flavour: Yup.object()
-        .shape({
-            favourite: Yup.string()
-                .label("Flavour")
-                .ensure()
-                .meta({
-                    order: 0,
-                    category: "other",
-                    Component: FancySelect,
-                    props: {
-                        options: [
-                            { value: '', label: 'Select...' },
-                            { value: 'chocolate', label: 'Chocolate' },
-                            { value: 'strawberry', label: 'Strawberry' },
-                            { value: 'vanilla', label: 'Vanilla' },
-                        ]
-                    }
-                })
-                .required('Flavour is required')
-        }),
-    notes: Yup.string()
-        .required('Notes is required')
-        .label("Notes")
-        .ensure()
-        .meta({
-            order: 3,
-            category: "extra",
-            Component: "textarea",
-            props: {
-                placeholder: "Enter notes",
-                type: "text"
-            }
-        }),
-    items: Yup.array(Yup.object()
-        .shape({
-            name: Yup.string()
-                .label("Name")
-                .meta({
-                    order: 0,
-                    category: "set1",
-                    props: {
-                        placeholder: "Enter name",
-                        type: "text"
-                    }
-                })
-                .ensure()
-                .required(),
-            address: Yup.string()
-                .label("Address")
-                .meta({
-                    order: 1,
-                    category: "set2",
-                    props: {
-                        placeholder: "Enter address",
-                        type: "text"
-                    }
-                })
-                .ensure(),
-            friends: Yup.array(Yup.object()
-                .shape({
-                    nickname: Yup.string()
-                        .label("Nickname")
-                        .meta({
-                            order: 0,
-                            props: {
-                                placeholder: "Enter nickname",
-                                type: "text"
-                            }
-                        })
-                        .ensure()
-                        .required(),
-                })
-            )
-                .label("Friends")
-                .meta({
-                    order: 2,
-                    itemLabel: "Friend"
-                })
-                .max(2)
-        }))
-        .label("People")
-        .meta({
-            order: 2,
-            itemLabel: "Person"
-        })
-        .ensure()
-        .min(1)
-        .max(5)
-});
-
-type MyFormResponse = {
-    chosenFlavour: string;
-    yourEmail: string;
-}
-
-const dummyApiCall = (flavour: string, email: string): Promise<MyFormResponse> => {
-    console.log("#####CALL API")
-    return new Promise((resolve, reject) => {
-        if (flavour === "vanilla") {
-            // throw new APIError("Authentication Failed", "auth", 403)
-            throw new Error("Don't like VANILLA!!!")
-        }
-
-        setTimeout(() => {
-            resolve({chosenFlavour: `FLAVOUR: ${flavour}`, yourEmail: `EMAIL: ${email}`})
-        }, 2000);
-    })
-};
-
-const handleSubmit: MapDataToAction<Yup.InferType<typeof schema>, MyFormResponse> = values => dummyApiCall(values.flavour.favourite, values.email)
+const handleSubmit: MapDataToAction<Yup.InferType<typeof schemaComplex>, MyFormResponse> = values => dummyApiCall(values.flavour.favourite, values.email);
 
 const Forms = () => {
     return (
@@ -190,7 +39,7 @@ const Forms = () => {
 
             <div style={{maxWidth: "800px"}}>
                 <Form
-                    schema={schema}
+                    schema={schemaComplex}
                     onSubmit={handleSubmit}
                 >
                     {({children, extra, other}) => {
