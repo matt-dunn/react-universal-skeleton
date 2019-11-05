@@ -5,7 +5,7 @@ import {ErrorMessage, FieldArray, getIn, useFormikContext} from "formik";
 import {FormContext, getDefault} from "./utils";
 import FieldSetWrapper from "./FieldWrapper";
 import {Field, FieldSetMap} from "./types";
-import {Legend, SubSectionContainer, InputFeedback, SubSection} from "./styles";
+import {Legend, SubSectionContainer, InputFeedback, SubSection, FormOptions} from "./styles";
 
 export type ArrayProps<T extends object> = {
     field: Schema<T> & Field<T>;
@@ -106,12 +106,16 @@ function Array<T extends object>({field, path, children, className}: ArrayProps<
                                     >
                                         {children}
                                     </FieldSetWrapper>
-                                    {InsertOption}
-                                    {RemoveOption}
+                                    {(InsertOption || RemoveOption) && <FormOptions>
+                                        {InsertOption}
+                                        {RemoveOption}
+                                    </FormOptions>}
                                 </SubSection>
                             );
                         })}
-                        {AddOption}
+                        {AddOption && <FormOptions align={"left"}>
+                            {AddOption}
+                        </FormOptions>}
                     </SubSectionContainer>
                 )}}
         />

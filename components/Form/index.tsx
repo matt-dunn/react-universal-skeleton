@@ -10,7 +10,7 @@ import {getDefault, FormContext, performAction} from "./utils";
 import FieldSetWrapper from "./FieldWrapper";
 import {FieldSetMap, InitialFormData, SchemaWithFields} from "./types";
 
-import {FormContainer, InputFeedback} from "./styles";
+import {FormContainer, FormFooterOptions, InputFeedback} from "./styles";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
@@ -76,19 +76,23 @@ function Form<T, P>({schema, onSubmit, children, className}: FormProps<T, P>) {
                                 {children}
                             </FieldSetWrapper>
 
-                            <p>
+                            <FormFooterOptions>
                                 <button
                                     type="button"
-                                    className="outline"
                                     onClick={handleReset}
                                     disabled={!dirty || isSubmitting}
                                 >
                                     Reset
                                 </button>
-                                <button type="submit" disabled={isSubmitting} name="@@SUBMIT">
+                                <button
+                                    type="submit"
+                                    disabled={isSubmitting}
+                                    name="@@SUBMIT"
+                                    className="primary"
+                                >
                                     Submit {(isValid && isInitialValid) && "✔"}
                                 </button>
-                            </p>
+                            </FormFooterOptions>
                         </FormContainer>
                     ) || null;
                 }}

@@ -8,7 +8,7 @@ const SelectStyle = css<{isValid?: boolean; formElementStyles: FormStyles}>`
   font-size: inherit;
   background-color: transparent;
   flex-grow: 1;
-  > div {
+  > div:first-child {
     ${({formElementStyles}) => formElementStyles.control}
     &, &:hover {
       ${({isValid, formElementStyles}) => !isValid && formElementStyles.controlInvalid}

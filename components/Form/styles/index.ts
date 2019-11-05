@@ -60,11 +60,16 @@ export const FormContainer = styled.form`
   
   button {
     font-size: inherit;
-    padding: 5px;
+    padding: .375rem .75rem;
     border: 1px solid #ccc;
     background-color: #eee;
-    border-radius: 3px;
-    margin: 10px 8px 10px 0;
+    border-radius: .25rem;
+    
+    &.primary {
+      background-color: #007bff;
+      border-color: #007bff;
+      color: #fff;
+    }
   }
   
   input {
@@ -111,3 +116,21 @@ export const LabelIsRequired = styled.span`
   }
 `;
 
+export const FormOptions = styled.aside<{align?: 'left' | 'right'}>`
+  margin: 10px 0 0 0;
+  text-align: ${({align}) => align || "right"};
+
+  button {
+    margin-right: 10px;
+  }
+  
+  *:last-child {
+    margin-right: 0;
+  }
+`
+
+export const FormFooterOptions = styled(FormOptions)`
+  border-top: 1px solid #eee;
+  padding: 10px 0 0 0;
+  font-size: 110%;
+`
