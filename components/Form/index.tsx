@@ -2,6 +2,7 @@ import React, {useMemo} from 'react'
 import {Formik, setIn} from 'formik';
 import * as Yup from 'yup';
 import {ValidationError} from "yup";
+import classnames from "classnames";
 
 import {MapDataToAction, useForm} from "components/actions/form";
 
@@ -17,9 +18,10 @@ export type FormProps<T, P> = {
     schema: SchemaWithFields<T>;
     onSubmit: MapDataToAction<any, P>;
     children?: (map: FieldSetMap<T>) => JSX.Element;
+    className?: string;
 }
 
-function Form<T, P>({schema, onSubmit, children}: FormProps<T, P>) {
+function Form<T, P>({schema, onSubmit, children, className}: FormProps<T, P>) {
     const [formData, submit] = useForm<Yup.InferType<typeof schema>, P, ValidationError[]>(
         schema,
         values => schema.validate(values, {abortEarly: false}),
@@ -60,7 +62,11 @@ function Form<T, P>({schema, onSubmit, children}: FormProps<T, P>) {
                     } = props;
 
                     return schema.fields && (
-                        <FormContainer onSubmit={handleSubmit} method="post" className={(!isValid && "invalid") || ""}>
+                        <FormContainer
+                            onSubmit={handleSubmit}
+                            method="post"
+                            className={classnames({invalid: !isValid}, className)}
+                        >
                             {formData.error &&
                             <InputFeedback>There was a problem submitting: {formData.error.message}</InputFeedback>}
 

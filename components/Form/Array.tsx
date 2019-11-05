@@ -11,9 +11,10 @@ export type ArrayProps<T extends object> = {
     field: Schema<T> & Field<T>;
     path: string;
     children?: (map: FieldSetMap<T>) => JSX.Element;
+    className?: string;
 }
 
-function Array<T extends object>({field, path, children}: ArrayProps<T>) {
+function Array<T extends object>({field, path, children, className}: ArrayProps<T>) {
     const {schema} = useContext(FormContext) || {};
     const {values, errors, isSubmitting, setFieldError} = useFormikContext<T>();
     const value: string[] = getIn(values, path);
@@ -53,7 +54,9 @@ function Array<T extends object>({field, path, children}: ArrayProps<T>) {
                 )) || null;
 
                 return (
-                    <SubSectionContainer>
+                    <SubSectionContainer
+                        className={className}
+                    >
                         {label && <Legend>{label}</Legend>}
                         {typeof error === "string" && <ErrorMessage name={path}>
                             {message => <InputFeedback><em>{message}</em></InputFeedback>}

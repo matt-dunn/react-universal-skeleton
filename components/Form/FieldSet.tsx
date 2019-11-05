@@ -11,9 +11,10 @@ import {FieldMap, FieldSetMap} from "./types";
 export type FieldSetProps<T> = {
     fields?: FieldMap<Partial<T>>[];
     children?: (map: FieldSetMap<Partial<T>>) => JSX.Element;
+    className?: string;
 }
 
-export function FieldSet<T extends object>({fields, children}: FieldSetProps<T>) {
+export function FieldSet<T extends object>({fields, children, className}: FieldSetProps<T>) {
     const {schema} = useContext(FormContext) || {};
     const {values, errors, touched, isSubmitting, setFieldValue, setFieldTouched} = useFormikContext<T>();
 
@@ -33,6 +34,7 @@ export function FieldSet<T extends object>({fields, children}: FieldSetProps<T>)
                             key={fullPath}
                             field={field}
                             path={fullPath}
+                            className={className}
                         >
                             {children}
                         </Array>
@@ -66,6 +68,7 @@ export function FieldSet<T extends object>({fields, children}: FieldSetProps<T>)
                 return (
                     <Section
                         key={fullPath}
+                        className={className}
                     >
                         <FormLabel
                             label={label}
