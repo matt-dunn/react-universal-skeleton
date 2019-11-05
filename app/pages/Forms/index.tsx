@@ -16,7 +16,13 @@ const Title = styled.h2`
     color: #ccc;
 `;
 
-const handleSubmit: MapDataToAction<Yup.InferType<typeof schemaComplex>, MyFormResponse> = values => dummyApiCall(values.flavour.favourite, values.email);
+const formState = {
+    moose: 34,
+    loose: "hello"
+}
+
+const handleSubmit: MapDataToAction<Yup.InferType<typeof schemaComplex>, MyFormResponse, typeof formState> = values => dummyApiCall(values.flavour.favourite, values.email);
+
 
 const Forms = () => {
     return (
@@ -33,6 +39,19 @@ const Forms = () => {
             <div style={{maxWidth: "800px", margin: "0 auto"}}>
                 <Form
                     formId="my-form"
+                    schema={schemaComplex}
+                    onSubmit={handleSubmit}
+                    // onSubmit={(values, state) => {
+                    //     console.error("@@@@", values,state.loose)
+                    //     return dummyApiCall(values.flavour.favourite, values.email);
+                    // }}
+                    context={formState}
+                >
+                    {layoutComplex}
+                </Form>
+
+                <Form
+                    formId="my-form2"
                     schema={schemaComplex}
                     onSubmit={handleSubmit}
                 >
