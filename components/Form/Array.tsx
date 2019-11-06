@@ -4,7 +4,7 @@ import {ErrorMessage, FieldArray, getIn, useFormikContext} from "formik";
 
 import {FormContext, getDefault} from "./utils";
 import FieldSetWrapper from "./FieldWrapper";
-import {Field, FieldSetMap, FormMetaData} from "./types";
+import {Field, FieldSetMap, FormMetaData, typedMemo} from "./types";
 import {Legend, SubSectionContainer, InputFeedback, SubSection, FormOptions} from "./styles";
 
 export type ArrayProps<T, P, S> = {
@@ -122,4 +122,4 @@ function Array<T, P, S>({field, path, children, className}: ArrayProps<T, P, S>)
     ) || null;
 }
 
-export default Array;
+export default typedMemo(Array);

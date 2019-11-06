@@ -6,7 +6,7 @@ import FormLabel from "./Label";
 import {formStyles, InputFeedback, Section} from "./styles";
 import Array from "./Array";
 import {FormContext} from "./utils";
-import {FieldMap, FieldSetMap, FormMetaData} from "./types";
+import {FieldMap, FieldSetMap, FormMetaData, typedMemo} from "./types";
 
 export type FieldSetProps<T, P, S> = {
     fields?: FieldMap<T>[];
@@ -89,4 +89,4 @@ export function FieldSet<T, P, S>({fields, children, className}: FieldSetProps<T
     );
 }
 
-export default FieldSet;
+export default typedMemo(FieldSet);

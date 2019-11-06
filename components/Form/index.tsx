@@ -8,7 +8,7 @@ import {MapDataToAction, useForm} from "components/actions/form";
 
 import {getDefault, FormContext, performAction} from "./utils";
 import FieldSetWrapper from "./FieldWrapper";
-import {FieldSetMap, FormMetaData, InitialFormData, SchemaWithFields} from "./types";
+import {FieldSetMap, FormMetaData, InitialFormData, SchemaWithFields, typedMemo} from "./types";
 
 import {FormContainer, FormFooterOptions, InputFeedback} from "./styles";
 
@@ -108,7 +108,5 @@ function Form<T, P, S>({formId, schema, onSubmit, children, className, context}:
         </FormContext.Provider>
     )
 }
-
-const typedMemo: <T>(c: T) => T = React.memo;
 
 export default typedMemo(Form)

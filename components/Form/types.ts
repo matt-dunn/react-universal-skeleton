@@ -1,4 +1,4 @@
-import {ComponentType} from "react";
+import React, {ComponentType} from "react";
 import {Schema, SchemaDescription, ValidationError} from "yup";
 import {FlattenInterpolation} from "styled-components";
 import {FormikErrors, FormikTouched} from "formik";
@@ -60,3 +60,5 @@ export type FormMetaData<C, P> = {
     error?: ErrorLike;
     payload?: P;
 }
+
+export const typedMemo: <T>(c: T) => T = React.memo;

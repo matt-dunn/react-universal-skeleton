@@ -1,6 +1,6 @@
 import React, {useMemo} from "react";
 
-import {Fields, FieldSetMap, FormMetaData} from "./types";
+import {Fields, FieldSetMap, FormMetaData, typedMemo} from "./types";
 import FieldsSet from "./FieldSet";
 import {flattenFields, sortFields, useFormContext} from "./utils";
 
@@ -14,12 +14,12 @@ function FieldWrapper<T, P, S>({fields, path = "", children}: FieldWrapperProps<
     const {formData} = useFormContext<T, P, S>();
     const fieldSet = useMemo<FieldSetMap<T>>(() => sortFields(flattenFields(fields, path)), [fields, path]);
 
-    const metadata: FormMetaData<S, P> = {
+    const metadata: FormMetaData<S, P> = useMemo(() => ({
         formId: formData.state.formId,
         context: formData.state.data,
         error: formData.error,
         payload: formData.payload
-    };
+    }), [formData.error, formData.payload, formData.state.data, formData.state.formId]);
 
     return children ? children(fieldSet, metadata) : (
         <>
@@ -33,4 +33,4 @@ function FieldWrapper<T, P, S>({fields, path = "", children}: FieldWrapperProps<
     );
 }
 
-export default FieldWrapper;
+export default typedMemo(FieldWrapper);
