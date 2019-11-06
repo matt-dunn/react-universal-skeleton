@@ -69,8 +69,10 @@ function Form<T, P, S>({formId, schema, onSubmit, children, className, context}:
 
                     return schema.fields && (
                         <FormContainer
+                            id={formId}
                             onSubmit={handleSubmit}
                             method="post"
+                            action={`#${formId}`}
                             className={classnames({invalid: !isValid}, className)}
                         >
                             <input
