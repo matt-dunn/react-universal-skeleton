@@ -40,7 +40,7 @@ export interface State<S> {
     toString(): string;
 }
 
-export type FormData<T = any, P = any, E = any, S = any> = {
+export type FormDataState<T = any, P = any, E = any, S = any> = {
     isProcessed: boolean;
     data?: T;
     isSubmitted: boolean;
@@ -69,8 +69,8 @@ export class FormState<S> implements State<S> {
     }
 }
 
-export const FormData = <T extends Record<string, any> = any, P = any, E = any, S = any>(formData?: FormData<T, P, E, S>): FormData<T, P, E, S> => {
-    const {isProcessed = false, data, payload, error, action, innerFormErrors, state} = formData || {} as FormData<T, P, E, S>;
+export const FormDataState = <T extends Record<string, any> = any, P = any, E = any, S = any>(formData?: FormDataState<T, P, E, S>): FormDataState<T, P, E, S> => {
+    const {isProcessed = false, data, payload, error, action, innerFormErrors, state} = formData || {} as FormDataState<T, P, E, S>;
 
     return {
         isProcessed,
@@ -99,20 +99,20 @@ export const parseFormData = (payload: any) => {
         return o;
     }, {data: {}, action: undefined, state: undefined} as { data: {[key: string]: string}; action?: Action; state?: State<any> });
 
-    return FormData({data, action, state} as FormData)
+    return FormDataState({data, action, state} as FormDataState)
 };
 
-const FormDataContext = React.createContext<FormData | undefined>(undefined);
+const FormDataContext = React.createContext<FormDataState | undefined>(undefined);
 
 export const FormDataProvider = FormDataContext.Provider;
 
-export const useCurrentFormData = <T = any, P = any, E = any, S = any>(formId: string, context?: S): FormData<T, P, E, S> => {
+export const useCurrentFormData = <T = any, P = any, E = any, S = any>(formId: string, context?: S): FormDataState<T, P, E, S> => {
     const formData = useContext(FormDataContext);
 
     if (formData && formData.state && formData.state.formId === formId) {
-        return formData as FormData<T, P, E, S>;
+        return formData as FormDataState<T, P, E, S>;
     } else {
-        return FormData({state: {formId, data: context}} as FormData<T, P, E, S>);
+        return FormDataState({state: {formId, data: context}} as FormDataState<T, P, E, S>);
     }
 };
 
@@ -124,25 +124,25 @@ export interface PerformAction<T, S> {
     (schema: S, action: ActionType, data: T, value?: string): T | undefined | null;
 }
 
-export const useForm = <T, P = any, E = any, S = any, D = any>(formId: string, schema: any, formValidator: (values: T) => Promise<any>, mapDataToAction: MapDataToAction<T, P, D>, performAction?: PerformAction<T, S>, context?: D): [FormData<T, P | undefined, E, D>, (data: T) => Promise<P>] => {
+export const useForm = <T, P = any, E = any, S = any, D = any>(formId: string, schema: any, formValidator: (values: T) => Promise<any>, mapDataToAction: MapDataToAction<T, P, D>, performAction?: PerformAction<T, S>, context?: D): [FormDataState<T, P | undefined, E, D>, (data: T) => Promise<P>] => {
     const formDataContext = useCurrentFormData<T, P, E, D>(formId, context);
-    const [formData, setFormData] = useState<FormData<T, P | undefined, E>>(formDataContext);
+    const [formData, setFormData] = useState<FormDataState<T, P | undefined, E>>(formDataContext);
 
     const submit = useCallback(async(data: T): Promise<P> => {
-        setFormData(formData => FormData({...formData, error: undefined}));
+        setFormData(formData => FormDataState({...formData, error: undefined}));
 
         try {
             const payload = await mapDataToAction(data, formData.state.data);
 
             formDataContext.payload = payload;
 
-            setFormData(formData => FormData({...formData, isProcessed: true, error: undefined, payload: payload, data}));
+            setFormData(formData => FormDataState({...formData, isProcessed: true, error: undefined, payload: payload, data}));
 
             return payload;
         } catch(reason) {
             formDataContext.error = errorLike(reason);
 
-            setFormData(formData => FormData({...formData, isProcessed: true, error: formDataContext.error, payload: undefined, data}));
+            setFormData(formData => FormDataState({...formData, isProcessed: true, error: formDataContext.error, payload: undefined, data}));
 
             return reason;
         }

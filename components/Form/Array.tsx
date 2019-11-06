@@ -6,12 +6,12 @@ import {FormContext, getDefault} from "./utils";
 import FieldSetWrapper from "./FieldWrapper";
 import {Field, FieldSetMap} from "./types";
 import {Legend, SubSectionContainer, InputFeedback, SubSection, FormOptions} from "./styles";
-import {FormData} from "../actions/form";
+import {FormDataState} from "../actions/form";
 
 export type ArrayProps<T, P, S> = {
     field: Schema<T> & Field<T>;
     path: string;
-    children?: (map: FieldSetMap<T>, formData: FormData<T, P, ValidationError[], S>) => JSX.Element;
+    children?: (map: FieldSetMap<T>, formData: FormDataState<T, P, ValidationError[], S>) => JSX.Element;
     className?: string;
 }
 

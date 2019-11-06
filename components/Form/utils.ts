@@ -4,7 +4,7 @@ import immutable from "object-path-immutable";
 import {sortBy} from "lodash";
 
 import {Fields, FieldSetMap, SchemaWithFields, FormContextType} from "./types";
-import {ActionType, FormData} from "../actions/form";
+import {ActionType} from "../actions/form";
 
 export const FormContext = React.createContext<FormContextType<any, any, any> | undefined>(undefined);
 

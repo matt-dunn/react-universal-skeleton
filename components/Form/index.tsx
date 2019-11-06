@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 import {ValidationError} from "yup";
 import classnames from "classnames";
 
-import {MapDataToAction, useForm, FormData} from "components/actions/form";
+import {MapDataToAction, useForm, FormDataState} from "components/actions/form";
 
 import {getDefault, FormContext, performAction} from "./utils";
 import FieldSetWrapper from "./FieldWrapper";
@@ -16,7 +16,7 @@ export type FormProps<T, P, S> = {
     formId: string;
     schema: SchemaWithFields<T>;
     onSubmit: MapDataToAction<T, P, S>;
-    children?: (map: FieldSetMap<T>, formData: FormData<T, P, ValidationError[], S>) => JSX.Element;
+    children?: (map: FieldSetMap<T>, formData: FormDataState<T, P, ValidationError[], S>) => JSX.Element;
     className?: string;
     context?: S;
 }

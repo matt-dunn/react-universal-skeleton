@@ -3,7 +3,7 @@ import {Schema, SchemaDescription, ValidationError} from "yup";
 import {FlattenInterpolation} from "styled-components";
 import {FormikErrors, FormikTouched} from "formik";
 
-import {FormData} from "components/actions/form";
+import {FormDataState} from "components/actions/form";
 
 export interface Field<T> extends SchemaDescription {
     _meta: {
@@ -50,7 +50,7 @@ export type FieldSetMap<T> = {
 
 export type FormContextType<T, P, S> = {
     schema: SchemaWithFields<any>;
-    formData: FormData<T, P, ValidationError[], S>;
+    formData: FormDataState<T, P, ValidationError[], S>;
 }
 
 

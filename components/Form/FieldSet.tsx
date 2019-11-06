@@ -7,12 +7,12 @@ import {formStyles, InputFeedback, Section} from "./styles";
 import Array from "./Array";
 import {FormContext} from "./utils";
 import {FieldMap, FieldSetMap} from "./types";
-import {FormData} from "../actions/form";
+import {FormDataState} from "../actions/form";
 
 export type FieldSetProps<T, P, S> = {
     fields?: FieldMap<T>[];
     // children?: (map: FieldSetMap<Partial<T>>) => JSX.Element;
-    children?: (map: FieldSetMap<T>, formData: FormData<T, P, ValidationError[], S>) => JSX.Element;
+    children?: (map: FieldSetMap<T>, formData: FormDataState<T, P, ValidationError[], S>) => JSX.Element;
     className?: string;
 }
 
