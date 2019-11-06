@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import styled, {css} from "styled-components";
+import classnames from "classnames";
 
 import ReactSelect from "react-select";
 import {FormStyles} from "components/Form/types";
@@ -43,9 +44,10 @@ type FancySelectProps = {
     onChange: (name: string | any, value: string, shouldValidate?: boolean) => void;
     onBlur: (name: string | any, touched?: boolean, shouldValidate?: boolean) => void;
     formStyles: FormStyles;
+    className?: string;
 }
 
-const FancySelect = ({id, disabled, isValid, options, name, value, onChange, onBlur, formStyles}: FancySelectProps): JSX.Element => {
+const FancySelect = ({id, disabled, isValid, options, name, value, onChange, onBlur, formStyles, className}: FancySelectProps): JSX.Element => {
     const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
@@ -63,6 +65,7 @@ const FancySelect = ({id, disabled, isValid, options, name, value, onChange, onB
         return (
             <Select
                 inputId={id}
+                className={className}
                 name={name}
                 value={defaultValue}
                 options={options}
@@ -77,7 +80,7 @@ const FancySelect = ({id, disabled, isValid, options, name, value, onChange, onB
         return (
             <BasicSelect
                 id={id}
-                className="no-js"
+                className={classnames("no-js", className)}
                 name={name}
                 value={value}
                 onChange={handleSelectChange}
