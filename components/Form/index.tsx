@@ -12,8 +12,6 @@ import {FieldSetMap, InitialFormData, SchemaWithFields} from "./types";
 
 import {FormContainer, FormFooterOptions, InputFeedback} from "./styles";
 
-import useWhatChanged from "components/whatChanged/useWhatChanged";
-
 export type FormProps<T, P, S> = {
     formId: string;
     schema: SchemaWithFields<T>;
@@ -42,13 +40,9 @@ function Form<T, P, S>({formId, schema, onSubmit, children, className, context}:
 
     const initialValues: Yup.InferType<typeof schema> = formData.data || getDefault(schema);
 
-    console.log("@@@INITIAL DATA", initialValues)
-
-    useWhatChanged(Form, { formData, submit, initialValues });
-
     return (
         <FormContext.Provider value={{schema}}>
-            {formData.payload && <pre>{JSON.stringify(formData.payload)}</pre>}
+            {formData.payload && <pre style={{whiteSpace: "normal"}}>{JSON.stringify(formData.payload)}</pre>}
 
             <Formik
                 initialValues={initialValues}
@@ -81,8 +75,8 @@ function Form<T, P, S>({formId, schema, onSubmit, children, className, context}:
                                 type="hidden"
                                 readOnly={true}
                             />
-                            {formData.error &&
-                            <InputFeedback>There was a problem submitting: {formData.error.message}</InputFeedback>}
+
+                            {formData.error && <InputFeedback>{formData.error.message}</InputFeedback>}
 
                             <FieldSetWrapper
                                 fields={schema.fields}
@@ -112,7 +106,7 @@ function Form<T, P, S>({formId, schema, onSubmit, children, className, context}:
                 }}
             </Formik>
 
-            {/*<pre>{JSON.stringify(formData.state)}</pre>*/}
+            <pre style={{whiteSpace: "normal"}}>{JSON.stringify(formData.state)}</pre>
         </FormContext.Provider>
     )
 }

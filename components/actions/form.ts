@@ -55,9 +55,9 @@ export class FormState<S> implements State<S> {
     public formId: string;
     public data?: S;
 
-    constructor(state: State<S>) {
-        this.formId = state.formId;
-        this.data = state.data;
+    constructor(state?: State<S>) {
+        this.formId = (state && state.formId) || "";
+        this.data = state && state.data;
     }
 
     public toString = () => {

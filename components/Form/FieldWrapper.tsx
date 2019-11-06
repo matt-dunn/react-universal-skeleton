@@ -15,14 +15,12 @@ function FieldWrapper<T>({fields, path = "", children}: FieldWrapperProps<T>) {
 
     return children ? children(fieldSet) : (
         <>
-            {Object.keys(fieldSet).map(key => {
-                return (
-                    <FieldsSet
-                        key={key}
-                        fields={fieldSet[key]}
-                    />
-                )
-            })}
+            {Object.keys(fieldSet).map(key => (
+                <FieldsSet
+                    key={key}
+                    fields={fieldSet[key]}
+                />
+            ))}
         </>
     );
 }
