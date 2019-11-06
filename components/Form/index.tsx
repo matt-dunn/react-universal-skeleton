@@ -30,10 +30,7 @@ function Form<T, P, S>({formId, schema, onSubmit, children, className, context}:
         values => schema.validate(values, {abortEarly: false}),
         onSubmit as any,
         performAction,
-        {
-            formId,
-            data: context
-        } as State<S>
+        context
     );
 
     const formState = formData.state.toString();
