@@ -28,7 +28,7 @@ export enum ActionType {
     "@@SUBMIT" = "submit"
 }
 
-type Action = {
+export type Action = {
     type: ActionType;
     value?: string;
 }
