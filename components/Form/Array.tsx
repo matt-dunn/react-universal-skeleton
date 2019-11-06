@@ -1,17 +1,16 @@
 import React, {useContext, useMemo} from "react";
-import {Schema, string, ValidationError} from "yup";
+import {Schema, string} from "yup";
 import {ErrorMessage, FieldArray, getIn, useFormikContext} from "formik";
 
 import {FormContext, getDefault} from "./utils";
 import FieldSetWrapper from "./FieldWrapper";
-import {Field, FieldSetMap} from "./types";
+import {Field, FieldSetMap, FormMetaData} from "./types";
 import {Legend, SubSectionContainer, InputFeedback, SubSection, FormOptions} from "./styles";
-import {FormDataState} from "../actions/form";
 
 export type ArrayProps<T, P, S> = {
     field: Schema<T> & Field<T>;
     path: string;
-    children?: (map: FieldSetMap<T>, formData: FormDataState<T, P, ValidationError[], S>) => JSX.Element;
+    children?: (map: FieldSetMap<T>, metadata: FormMetaData<S, P>) => JSX.Element;
     className?: string;
 }
 

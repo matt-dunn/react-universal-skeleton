@@ -1,18 +1,16 @@
 import React, {useContext} from "react";
-import {string, ValidationError} from "yup";
+import {string} from "yup";
 import {ErrorMessage, getIn, Field, useFormikContext} from "formik";
 
 import FormLabel from "./Label";
 import {formStyles, InputFeedback, Section} from "./styles";
 import Array from "./Array";
 import {FormContext} from "./utils";
-import {FieldMap, FieldSetMap} from "./types";
-import {FormDataState} from "../actions/form";
+import {FieldMap, FieldSetMap, FormMetaData} from "./types";
 
 export type FieldSetProps<T, P, S> = {
     fields?: FieldMap<T>[];
-    // children?: (map: FieldSetMap<Partial<T>>) => JSX.Element;
-    children?: (map: FieldSetMap<T>, formData: FormDataState<T, P, ValidationError[], S>) => JSX.Element;
+    children?: (map: FieldSetMap<T>, metadata: FormMetaData<S, P>) => JSX.Element;
     className?: string;
 }
 

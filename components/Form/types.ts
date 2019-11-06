@@ -4,6 +4,7 @@ import {FlattenInterpolation} from "styled-components";
 import {FormikErrors, FormikTouched} from "formik";
 
 import {FormDataState} from "components/actions/form";
+import {ErrorLike} from "../error";
 
 export interface Field<T> extends SchemaDescription {
     _meta: {
@@ -53,4 +54,9 @@ export type FormContextType<T, P, S> = {
     formData: FormDataState<T, P, ValidationError[], S>;
 }
 
-
+export type FormMetaData<C, P> = {
+    formId: string;
+    context?: C;
+    error?: ErrorLike;
+    payload?: P;
+}

@@ -4,11 +4,11 @@ import * as Yup from 'yup';
 import {ValidationError} from "yup";
 import classnames from "classnames";
 
-import {MapDataToAction, useForm, FormDataState} from "components/actions/form";
+import {MapDataToAction, useForm} from "components/actions/form";
 
 import {getDefault, FormContext, performAction} from "./utils";
 import FieldSetWrapper from "./FieldWrapper";
-import {FieldSetMap, InitialFormData, SchemaWithFields} from "./types";
+import {FieldSetMap, FormMetaData, InitialFormData, SchemaWithFields} from "./types";
 
 import {FormContainer, FormFooterOptions, InputFeedback} from "./styles";
 
@@ -16,7 +16,7 @@ export type FormProps<T, P, S> = {
     formId: string;
     schema: SchemaWithFields<T>;
     onSubmit: MapDataToAction<T, P, S>;
-    children?: (map: FieldSetMap<T>, formData: FormDataState<T, P, ValidationError[], S>) => JSX.Element;
+    children?: (map: FieldSetMap<T>, metadata: FormMetaData<S, P>) => JSX.Element;
     className?: string;
     context?: S;
 }
