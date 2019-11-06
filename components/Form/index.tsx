@@ -113,7 +113,7 @@ function Form<T, P, S>({formId, schema, onSubmit, children, className, context}:
                 }}
             </Formik>
 
-            <pre>{JSON.stringify(formData.state)}</pre>
+            {/*<pre>{JSON.stringify(formData.state)}</pre>*/}
         </FormContext.Provider>
     )
 }

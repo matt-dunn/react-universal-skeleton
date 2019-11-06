@@ -110,14 +110,10 @@ export const FormDataProvider = FormDataContext.Provider;
 export const useFormData = <T = any, P = any, E = any, S = any>(formId: string, state: State<S>): FormData<T, P, E, S> => {
     const formData = useContext(FormDataContext);
 
-    console.log(">>>>", state)
-
-
-    if (state && state.formId === formId) {
-        // formData && !formData.state.formId && (formData.state = new FormState(state));
+    if (formData && formData.state && formData.state.formId === formId) {
         return formData as FormData<T, P, E, S>;
     } else {
-        return FormData({...formData, data: undefined} as FormData<T, P, E, S>);
+        return FormData({state} as FormData<T, P, E, S>);
     }
 };
 
