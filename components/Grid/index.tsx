@@ -13,11 +13,25 @@ export type ResponsiveGridProps = {
 const calculateMaxChildren = (length: number, dimensions?: ViewportDimensions, minItemWidth?: number) => {
     const {width} = dimensions || {};
 
-    if (width && minItemWidth && width / length < minItemWidth) {
+    if (width && minItemWidth && (width / length) < minItemWidth) {
         return Math.floor(width / minItemWidth);
     }
 
     return length;
+};
+
+const calculateChildStyle = (length: number, dimensions?: ViewportDimensions, minItemWidth?: number, totalPaddingWidth?: number) => {
+    const maxLength = calculateMaxChildren(length, dimensions, minItemWidth);
+    const width = `${100 / maxLength}%`;
+    return css`
+          ${(minItemWidth && `min-width: ${minItemWidth - (totalPaddingWidth || 0)}px`) || ""};
+          ${!dimensions && `flex-grow: 1`};
+          width: ${(totalPaddingWidth && `calc(${width} - ${totalPaddingWidth}px)`) || width};
+          ${dimensions && `&:nth-child(${maxLength}n) {
+            border-right: none;
+            padding-right: 0;`}
+          }
+      `;
 };
 
 const Container = styled.ol<{length: number; totalPaddingWidth?: number; dimensions?: ViewportDimensions; minItemWidth?: number}>`
@@ -25,17 +39,7 @@ const Container = styled.ol<{length: number; totalPaddingWidth?: number; dimensi
     flex-wrap: wrap;
     
     > * {
-      ${({length, totalPaddingWidth, dimensions, minItemWidth}) => {
-    const maxLength = calculateMaxChildren(length, dimensions, minItemWidth);
-    const width = `${100 / maxLength}%`;
-    return css`
-          width: ${(totalPaddingWidth && `calc(${width} - ${totalPaddingWidth}px)`) || width};
-          &:nth-child(${maxLength}n) {
-            border-right: none;
-            padding-right: 0;
-          }
-        `;
-}}
+      ${({length, totalPaddingWidth, dimensions, minItemWidth}) => calculateChildStyle(length, dimensions, minItemWidth, totalPaddingWidth)};
     }
 `;
 
