@@ -44,7 +44,7 @@ export type FormData<T = any, P = any, E = any, S = any> = {
     isProcessed: boolean;
     data?: T;
     isSubmitted: boolean;
-    payload: P;
+    payload?: P;
     error?: ErrorLike;
     innerFormErrors: E;
     action?: Action;
@@ -106,7 +106,7 @@ const FormDataContext = React.createContext<FormData | undefined>(undefined);
 
 export const FormDataProvider = FormDataContext.Provider;
 
-export const useFormData = <T = any, P = any, E = any, S = any>(formId: string, context?: S): FormData<T, P, E, S> => {
+export const useCurrentFormData = <T = any, P = any, E = any, S = any>(formId: string, context?: S): FormData<T, P, E, S> => {
     const formData = useContext(FormDataContext);
 
     if (formData && formData.state && formData.state.formId === formId) {
@@ -125,14 +125,14 @@ export interface PerformAction<T, S> {
 }
 
 export const useForm = <T, P = any, E = any, S = any, D = any>(formId: string, schema: any, formValidator: (values: T) => Promise<any>, mapDataToAction: MapDataToAction<T, P, D>, performAction?: PerformAction<T, S>, context?: D): [FormData<T, P | undefined, E, D>, (data: T) => Promise<P>] => {
-    const formDataContext = useFormData<T, P, E, D>(formId, context);
+    const formDataContext = useCurrentFormData<T, P, E, D>(formId, context);
     const [formData, setFormData] = useState<FormData<T, P | undefined, E>>(formDataContext);
 
     const submit = useCallback(async(data: T): Promise<P> => {
         setFormData(formData => FormData({...formData, error: undefined}));
 
         try {
-            const payload= await mapDataToAction(data, formData.state.data);
+            const payload = await mapDataToAction(data, formData.state.data);
 
             formDataContext.payload = payload;
 

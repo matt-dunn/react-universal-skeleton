@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 import {ValidationError} from "yup";
 import classnames from "classnames";
 
-import {MapDataToAction, useForm, State} from "components/actions/form";
+import {MapDataToAction, useForm, FormData} from "components/actions/form";
 
 import {getDefault, FormContext, performAction} from "./utils";
 import FieldSetWrapper from "./FieldWrapper";
@@ -16,7 +16,7 @@ export type FormProps<T, P, S> = {
     formId: string;
     schema: SchemaWithFields<T>;
     onSubmit: MapDataToAction<T, P, S>;
-    children?: (map: FieldSetMap<T>) => JSX.Element;
+    children?: (map: FieldSetMap<T>, formData: FormData<T, P, ValidationError[], S>) => JSX.Element;
     className?: string;
     context?: S;
 }
@@ -41,9 +41,7 @@ function Form<T, P, S>({formId, schema, onSubmit, children, className, context}:
     const initialValues: Yup.InferType<typeof schema> = formData.data || getDefault(schema);
 
     return (
-        <FormContext.Provider value={{schema}}>
-            {formData.payload && <pre style={{whiteSpace: "normal"}}>{JSON.stringify(formData.payload)}</pre>}
-
+        <FormContext.Provider value={{schema, formData}}>
             <Formik
                 initialValues={initialValues}
                 initialErrors={initialErrors}

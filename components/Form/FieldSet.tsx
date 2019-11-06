@@ -1,5 +1,5 @@
 import React, {useContext} from "react";
-import {string} from "yup";
+import {string, ValidationError} from "yup";
 import {ErrorMessage, getIn, Field, useFormikContext} from "formik";
 
 import FormLabel from "./Label";
@@ -7,14 +7,16 @@ import {formStyles, InputFeedback, Section} from "./styles";
 import Array from "./Array";
 import {FormContext} from "./utils";
 import {FieldMap, FieldSetMap} from "./types";
+import {FormData} from "../actions/form";
 
-export type FieldSetProps<T> = {
-    fields?: FieldMap<Partial<T>>[];
-    children?: (map: FieldSetMap<Partial<T>>) => JSX.Element;
+export type FieldSetProps<T, P, S> = {
+    fields?: FieldMap<T>[];
+    // children?: (map: FieldSetMap<Partial<T>>) => JSX.Element;
+    children?: (map: FieldSetMap<T>, formData: FormData<T, P, ValidationError[], S>) => JSX.Element;
     className?: string;
 }
 
-export function FieldSet<T extends object>({fields, children, className}: FieldSetProps<T>) {
+export function FieldSet<T, P, S>({fields, children, className}: FieldSetProps<T, P, S>) {
     const {schema} = useContext(FormContext) || {};
     const {values, errors, touched, isSubmitting, setFieldValue, setFieldTouched} = useFormikContext<T>();
 

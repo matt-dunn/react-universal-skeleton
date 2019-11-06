@@ -1,20 +1,21 @@
 import React, {useContext, useMemo} from "react";
-import {Schema, string} from "yup";
+import {Schema, string, ValidationError} from "yup";
 import {ErrorMessage, FieldArray, getIn, useFormikContext} from "formik";
 
 import {FormContext, getDefault} from "./utils";
 import FieldSetWrapper from "./FieldWrapper";
 import {Field, FieldSetMap} from "./types";
 import {Legend, SubSectionContainer, InputFeedback, SubSection, FormOptions} from "./styles";
+import {FormData} from "../actions/form";
 
-export type ArrayProps<T extends object> = {
+export type ArrayProps<T, P, S> = {
     field: Schema<T> & Field<T>;
     path: string;
-    children?: (map: FieldSetMap<T>) => JSX.Element;
+    children?: (map: FieldSetMap<T>, formData: FormData<T, P, ValidationError[], S>) => JSX.Element;
     className?: string;
 }
 
-function Array<T extends object>({field, path, children, className}: ArrayProps<T>) {
+function Array<T, P, S>({field, path, children, className}: ArrayProps<T, P, S>) {
     const {schema} = useContext(FormContext) || {};
     const {values, errors, isSubmitting, setFieldError} = useFormikContext<T>();
     const value: string[] = getIn(values, path);

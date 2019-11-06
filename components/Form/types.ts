@@ -1,7 +1,9 @@
 import {ComponentType} from "react";
-import {Schema, SchemaDescription} from "yup";
+import {Schema, SchemaDescription, ValidationError} from "yup";
 import {FlattenInterpolation} from "styled-components";
 import {FormikErrors, FormikTouched} from "formik";
+
+import {FormData} from "components/actions/form";
 
 export interface Field<T> extends SchemaDescription {
     _meta: {
@@ -46,8 +48,9 @@ export type FieldSetMap<T> = {
     [key: string]: FieldMap<Partial<T>>[];
 }
 
-export type FormContextType = {
+export type FormContextType<T, P, S> = {
     schema: SchemaWithFields<any>;
+    formData: FormData<T, P, ValidationError[], S>;
 }
 
 

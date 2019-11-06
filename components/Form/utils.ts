@@ -1,12 +1,16 @@
-import React from "react";
+import React, {useContext} from "react";
 import * as Yup from 'yup';
 import immutable from "object-path-immutable";
 import {sortBy} from "lodash";
 
 import {Fields, FieldSetMap, SchemaWithFields, FormContextType} from "./types";
-import {ActionType} from "../actions/form";
+import {ActionType, FormData} from "../actions/form";
 
-export const FormContext = React.createContext<FormContextType | undefined>(undefined);
+export const FormContext = React.createContext<FormContextType<any, any, any> | undefined>(undefined);
+
+export const useFormContext = <T, P, S>(): FormContextType<T, P, S> => {
+    return (useContext(FormContext) || {}) as FormContextType<T, P, S>;
+};
 
 export const getDefault = (schema: SchemaWithFields<any>, path = "") => {
     const pathSchema = Yup.reach(schema, path);
