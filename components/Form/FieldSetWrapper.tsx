@@ -1,8 +1,8 @@
 import React, {useMemo} from "react";
 
 import {Fields, FieldSetMap, FormMetaData, typedMemo} from "./types";
-import {FieldSet} from "./FieldSet";
 import {flattenFields, sortFields, useFormContext} from "./utils";
+import {Collections} from "./Collections";
 
 export type FieldSetWrapperProps<T, P, S> = {
     fields: Fields<T>;
@@ -21,16 +21,7 @@ function FieldSetWrapper<T, P, S>({fields, path = "", children}: FieldSetWrapper
         payload: formData.payload
     }), [formData.error, formData.payload, formData.state.data, formData.state.formId]);
 
-    return children ? children(fieldSet, metadata) : (
-        <>
-            {Object.keys(fieldSet).map(key => (
-                <FieldSet
-                    key={key}
-                    fields={fieldSet[key]}
-                />
-            ))}
-        </>
-    );
+    return children ? children(fieldSet, metadata) : <Collections map={fieldSet}/>;
 }
 
 const MemoFieldSetWrapper = typedMemo(FieldSetWrapper);
