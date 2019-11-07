@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react'
+import React, {useMemo, useRef} from 'react'
 import {Formik, setIn} from 'formik';
 import * as Yup from 'yup';
 import {ValidationError} from "yup";
@@ -6,7 +6,7 @@ import classnames from "classnames";
 
 import {MapDataToAction, useForm} from "components/actions/form";
 
-import {getDefault, FormContext, performAction, useFormSubmission} from "./utils";
+import {getDefault, FormContext, performAction, FormErrorFocus} from "./utils";
 import {FieldSetWrapper} from "./FieldSetWrapper";
 import {FieldSetMap, FormMetaData, InitialFormData, SchemaWithFields, typedMemo} from "./types";
 
@@ -22,7 +22,7 @@ export type FormProps<T, P, S> = {
 }
 
 function Form<T, P, S>({formId, schema, onSubmit, children, className, context}: FormProps<T, P, S>) {
-    const [formData, submit] = useForm<Yup.InferType<typeof schema>, P, ValidationError[], typeof schema, S>(
+    const [formData, handleSubmit] = useForm<Yup.InferType<typeof schema>, P, ValidationError[], typeof schema, S>(
         formId,
         schema,
         values => schema.validate(values, {abortEarly: false}),
@@ -31,7 +31,7 @@ function Form<T, P, S>({formId, schema, onSubmit, children, className, context}:
         context
     );
 
-    const [formRef, validate, setSubmitting] = useFormSubmission<Yup.InferType<typeof schema>>(schema);
+    const formRef = useRef<HTMLFormElement>(null);
 
     const formState = formData.state.toString();
 
@@ -48,8 +48,8 @@ function Form<T, P, S>({formId, schema, onSubmit, children, className, context}:
                 initialValues={initialValues}
                 initialErrors={initialErrors}
                 initialTouched={initialTouched}
-                onSubmit={values => submit(values)}
-                validate={validate}
+                onSubmit={handleSubmit}
+                validationSchema={schema}
             >
                 {props => {
                     const {
@@ -65,14 +65,13 @@ function Form<T, P, S>({formId, schema, onSubmit, children, className, context}:
                         <FormContainer
                             id={formId}
                             ref={formRef}
-                            onSubmit={(e) => {
-                                handleSubmit(e);
-                                setSubmitting();
-                            }}
+                            onSubmit={handleSubmit}
                             method="post"
                             action={`#${formId}`}
                             className={classnames({invalid: !isValid}, className)}
                         >
+                            <FormErrorFocus formRef={formRef}/>
+
                             <input
                                 name="@@FORMSTATE"
                                 value={formState}

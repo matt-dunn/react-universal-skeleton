@@ -1,10 +1,10 @@
 import React, {RefObject, useCallback, useContext, useEffect, useRef, useState} from "react";
 import * as Yup from 'yup';
-import {FormikErrors, yupToFormErrors} from "formik";
+import {FormikErrors, useFormikContext, yupToFormErrors} from "formik";
 import immutable from "object-path-immutable";
 import {sortBy} from "lodash";
 
-import {Fields, FieldSetMap, SchemaWithFields, FormContextType} from "./types";
+import {Fields, FieldSetMap, SchemaWithFields, FormContextType, typedMemo} from "./types";
 import {ActionType} from "../actions/form";
 
 export const FormContext = React.createContext<FormContextType<any, any, any> | undefined>(undefined);
@@ -77,51 +77,33 @@ export function performAction<T>(schema: any, action: ActionType, data: T, value
     }
 }
 
-export enum SubmittingPhase {
-    "none"= "NONE",
-    "submitting" = "SUBMITTING",
-    "complete" = "COMPLETE"
+export type FormErrorFocusProps = {
+    formRef: RefObject<HTMLFormElement>;
 }
 
-export function useFormSubmission<T>(schema: SchemaWithFields<T>): [RefObject<HTMLFormElement>, (values: T) => void | object | Promise<FormikErrors<T>>, () => void, string] {
-    const [submittingPhase, setSubmittingPhase] = useState<SubmittingPhase>(SubmittingPhase.none);
-    const formRef = useRef<HTMLFormElement>(null);
+function FormErrorFocus<T>({formRef}: FormErrorFocusProps) {
+    const {isSubmitting, isValidating} = useFormikContext<T>();
 
-    useEffect(() => {
-        if (submittingPhase === SubmittingPhase.complete) {
-            setSubmittingPhase(SubmittingPhase.none);
-
-            // Move into next tick so avoid attempting to focus on a disabled input element
-            setTimeout(() => {
-                if (formRef.current && (!document.activeElement || (document.activeElement as HTMLInputElement).tabIndex < 0)) {
-                    const target = formRef.current.querySelector<HTMLInputElement>(".invalid");
-                    if (target) {
-                        if (target.tabIndex >= 0) {
-                            target.focus();
-                        } else {
-                            const focusable = target.querySelector<HTMLInputElement>("[tabIndex]");
-                            focusable && focusable.focus();
-                        }
+    if (isSubmitting && !isValidating) {
+        // Move into next tick so avoid attempting to focus on a disabled input element
+        setTimeout(() => {
+            if (formRef.current && (!document.activeElement || (document.activeElement as HTMLInputElement).tabIndex < 0)) {
+                const target = formRef.current.querySelector<HTMLInputElement>(".invalid");
+                if (target) {
+                    if (target.tabIndex >= 0) {
+                        target.focus();
+                    } else {
+                        const focusable = target.querySelector<HTMLInputElement>("[tabIndex]");
+                        focusable && focusable.focus();
                     }
                 }
-            })
-        }
-    }, [submittingPhase]);
+            }
+        });
+    }
 
-    const validate = useCallback((values: any) => {
-        return schema.validate(values, {abortEarly: false})
-            .then(() => ({}))
-            .catch(err => {
-                if (err.name === 'ValidationError') {
-                    return(yupToFormErrors(err));
-                } else {
-                    throw err;
-                }
-            })
-            .finally(() => setSubmittingPhase(phase => (phase === SubmittingPhase.submitting && SubmittingPhase.complete) || phase))
-    }, [schema]);
-
-    const setSubmitting = () => setSubmittingPhase(SubmittingPhase.submitting);
-
-    return [formRef, validate, setSubmitting, submittingPhase]
+    return null;
 }
+
+const MemoFormErrorFocus = typedMemo(FormErrorFocus);
+
+export {MemoFormErrorFocus as FormErrorFocus};
