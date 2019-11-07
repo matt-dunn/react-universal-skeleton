@@ -7,7 +7,7 @@ import classnames from "classnames";
 import {MapDataToAction, useForm} from "components/actions/form";
 
 import {getDefault, FormContext, performAction, useFormSubmission} from "./utils";
-import FieldSetWrapper from "./FieldWrapper";
+import {FieldSetWrapper} from "./FieldSetWrapper";
 import {FieldSetMap, FormMetaData, InitialFormData, SchemaWithFields, typedMemo} from "./types";
 
 import {FormContainer, FormFooterOptions, InputFeedback} from "./styles";
@@ -115,4 +115,6 @@ function Form<T, P, S>({formId, schema, onSubmit, children, className, context}:
     )
 }
 
-export default typedMemo(Form)
+const MemoForm = typedMemo(Form);
+
+export {MemoForm as Form};

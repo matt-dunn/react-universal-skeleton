@@ -4,13 +4,13 @@ import {Fields, FieldSetMap, FormMetaData, typedMemo} from "./types";
 import {FieldSet} from "./FieldSet";
 import {flattenFields, sortFields, useFormContext} from "./utils";
 
-export type FieldWrapperProps<T, P, S> = {
+export type FieldSetWrapperProps<T, P, S> = {
     fields: Fields<T>;
     path?: string;
     children?: (map: FieldSetMap<T>, metadata: FormMetaData<S, P>) => JSX.Element;
 }
 
-function FieldWrapper<T, P, S>({fields, path = "", children}: FieldWrapperProps<T, P, S>) {
+function FieldSetWrapper<T, P, S>({fields, path = "", children}: FieldSetWrapperProps<T, P, S>) {
     const {formData} = useFormContext<T, P, S>();
     const fieldSet = useMemo<FieldSetMap<T>>(() => sortFields(flattenFields(fields, path)), [fields, path]);
 
@@ -33,6 +33,6 @@ function FieldWrapper<T, P, S>({fields, path = "", children}: FieldWrapperProps<
     );
 }
 
-const MemoFieldWrapper = typedMemo(FieldWrapper);
+const MemoFieldSetWrapper = typedMemo(FieldSetWrapper);
 
-export {MemoFieldWrapper as FieldWrapper};
+export {MemoFieldSetWrapper as FieldSetWrapper};

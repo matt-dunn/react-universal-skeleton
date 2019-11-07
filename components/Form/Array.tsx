@@ -3,7 +3,7 @@ import {Schema, string} from "yup";
 import {ErrorMessage, FieldArray, getIn, useFormikContext} from "formik";
 
 import {FormContext, getDefault} from "./utils";
-import {FieldWrapper} from "./FieldWrapper";
+import {FieldSetWrapper} from "./FieldSetWrapper";
 import {Field, FieldSetMap, FormMetaData, typedMemo} from "./types";
 import {Legend, SubSectionContainer, InputFeedback, SubSection, FormOptions} from "./styles";
 
@@ -100,12 +100,12 @@ function Array<T, P, S>({field, path, children, className}: ArrayProps<T, P, S>)
                                     key={itemFullPath}
                                 >
                                     {(max && max > 1) && <Legend>{itemLabel || label} {index + 1}</Legend>}
-                                    <FieldWrapper
+                                    <FieldSetWrapper
                                         fields={field._subType.fields}
                                         path={itemFullPath}
                                     >
                                         {children}
-                                    </FieldWrapper>
+                                    </FieldSetWrapper>
                                     {(InsertOption || RemoveOption) && <FormOptions>
                                         {InsertOption}
                                         {RemoveOption}
