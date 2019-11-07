@@ -1,4 +1,4 @@
-import React, {RefObject, useContext} from "react";
+import React, {RefObject, useContext, useEffect} from "react";
 import * as Yup from 'yup';
 import {useFormikContext} from "formik";
 import immutable from "object-path-immutable";
@@ -80,24 +80,32 @@ export type FormErrorFocusProps = {
     formRef: RefObject<HTMLFormElement>;
 }
 
-function FormErrorFocus<T>({formRef}: FormErrorFocusProps) {
-    const {isSubmitting, isValidating} = useFormikContext<T>();
-
-    if (isSubmitting && !isValidating) {
-        // Move into next tick so avoid attempting to focus on a disabled input element
-        setTimeout(() => {
-            if (formRef.current && (!document.activeElement || (document.activeElement as HTMLInputElement).tabIndex < 0)) {
-                const target = formRef.current.querySelector<HTMLInputElement>(".invalid");
-                if (target) {
-                    if (target.tabIndex >= 0) {
-                        target.focus();
-                    } else {
-                        const focusable = target.querySelector<HTMLInputElement>("[tabIndex]");
-                        focusable && focusable.focus();
-                    }
+function setFocus(form: HTMLFormElement) {
+    // Move into next tick so avoid attempting to focus on a disabled input element
+    setTimeout(() => {
+        if (!document.activeElement || (document.activeElement as HTMLInputElement).tabIndex < 0) {
+            const target = form.querySelector<HTMLInputElement>(".invalid");
+            if (target) {
+                if (target.tabIndex >= 0) {
+                    target.focus();
+                } else {
+                    const focusable = target.querySelector<HTMLInputElement>("[tabIndex]");
+                    focusable && focusable.focus();
                 }
             }
-        });
+        }
+    });
+}
+
+function FormErrorFocus<T>({formRef}: FormErrorFocusProps) {
+    const {isSubmitting, isValidating, isValid, errors} = useFormikContext<T>();
+
+    useEffect(() => {
+        !isValid && formRef.current && setFocus(formRef.current);
+    }, [formRef, isValid])
+
+    if (isSubmitting && !isValidating) {
+        formRef.current && setFocus(formRef.current);
     }
 
     return null;
