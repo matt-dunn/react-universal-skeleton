@@ -6,7 +6,7 @@ import classnames from "classnames";
 
 import {MapDataToAction, useForm} from "components/actions/form";
 
-import {getDefault, FormContext, performAction} from "./utils";
+import {getDefault, FormContext, performAction, useFormSubmission} from "./utils";
 import FieldSetWrapper from "./FieldWrapper";
 import {FieldSetMap, FormMetaData, InitialFormData, SchemaWithFields, typedMemo} from "./types";
 
@@ -31,6 +31,8 @@ function Form<T, P, S>({formId, schema, onSubmit, children, className, context}:
         context
     );
 
+    const [formRef, validate, setSubmitting] = useFormSubmission<Yup.InferType<typeof schema>>(schema);
+
     const formState = formData.state.toString();
 
     const {errors: initialErrors, touched: initialTouched} = useMemo<InitialFormData<Yup.InferType<typeof schema>>>(() => formData.innerFormErrors && formData.innerFormErrors.reduce(({errors, touched}, {path, message}) => ({
@@ -47,7 +49,7 @@ function Form<T, P, S>({formId, schema, onSubmit, children, className, context}:
                 initialErrors={initialErrors}
                 initialTouched={initialTouched}
                 onSubmit={values => submit(values)}
-                validationSchema={schema}
+                validate={validate}
             >
                 {props => {
                     const {
@@ -62,7 +64,11 @@ function Form<T, P, S>({formId, schema, onSubmit, children, className, context}:
                     return schema.fields && (
                         <FormContainer
                             id={formId}
-                            onSubmit={handleSubmit}
+                            ref={formRef}
+                            onSubmit={(e) => {
+                                handleSubmit(e);
+                                setSubmitting();
+                            }}
                             method="post"
                             action={`#${formId}`}
                             className={classnames({invalid: !isValid}, className)}
