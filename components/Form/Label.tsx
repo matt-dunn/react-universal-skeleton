@@ -5,13 +5,13 @@ import {Label, LabelIsRequired} from "./styles";
 
 type FormLabelProps<T> = {
     label: string;
-    name: string;
+    id: string;
     field: Field<T>;
 }
 
-const FormLabel = function<T>({label, name, field}: FormLabelProps<T>) {
+const FormLabel = function<T>({label, id, field}: FormLabelProps<T>) {
     return (
-        <Label htmlFor={name as string}>
+        <Label htmlFor={id}>
             {label}
             {field && field.tests.filter(test => test.OPTIONS.name === "required").length > 0 && <LabelIsRequired aria-label="required"> is required</LabelIsRequired>}
         </Label>

@@ -47,7 +47,7 @@ type FancySelectProps = {
     className?: string;
 }
 
-const FancySelect = ({id, disabled, isValid, options, name, value, onChange, onBlur, formStyles, className}: FancySelectProps): JSX.Element => {
+const FancySelect = ({id, disabled, isValid, options, name, value, onChange, onBlur, formStyles, className, ...props}: FancySelectProps): JSX.Element => {
     const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
@@ -74,6 +74,7 @@ const FancySelect = ({id, disabled, isValid, options, name, value, onChange, onB
                 isDisabled={disabled}
                 isValid={isValid}
                 formElementStyles={formStyles}
+                {...props}
             />
         )
     } else {

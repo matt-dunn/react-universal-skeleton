@@ -5,7 +5,7 @@ import {ErrorMessage, getIn, Field, useFormikContext} from "formik";
 import {FormLabel} from "./Label";
 import {formStyles, InputFeedback, Section} from "./styles";
 import {Array} from "./Array";
-import {FormContext} from "./utils";
+import {FormContext, useFormContext} from "./utils";
 import {FieldMap, FieldSetMap, FormMetaData, typedMemo} from "./types";
 
 export type FieldSetProps<T, P, S> = {
@@ -17,6 +17,7 @@ export type FieldSetProps<T, P, S> = {
 function FieldSet<T, P, S>({fields, children, className}: FieldSetProps<T, P, S>) {
     const {schema} = useContext(FormContext) || {};
     const {values, errors, touched, isSubmitting, setFieldValue, setFieldTouched} = useFormikContext<T>();
+    const {formData} = useFormContext<T, P, S>();
 
     const handleChange = (e: React.ChangeEvent<HTMLFormElement>, value?: string) => setFieldValue(((e.target && e.target.name) || e) as keyof T & string, (e.target && e.target.value) || value || "");
 
@@ -47,17 +48,26 @@ function FieldSet<T, P, S>({fields, children, className}: FieldSetProps<T, P, S>
                 const error = getIn(errors, fullPath);
                 const touch = getIn(touched, fullPath);
                 const isValid = !(error && touch);
+                const isRequired = field.tests.filter(test => test.OPTIONS.name === "required").length > 0;
+                const fieldId = `${formData.state.formId}-${fullPath}`;
+                const fieldIdError = `${fieldId}-error`;
 
                 const componentProps = {
                     ...props,
                     as: Component,
-                    id: fullPath,
+                    id: fieldId,
                     name: fullPath,
                     value,
                     onChange: handleChange,
                     onBlur: handleBlur,
                     disabled: isSubmitting,
                     className: (!isValid && "invalid") || ""
+                };
+
+                const ariaProps = {
+                    "aria-invalid": (!isValid && "true") || null,
+                    "aria-required": (isRequired && "true") || null,
+                    "aria-describedby": (!isValid && fieldIdError) || null
                 };
 
                 const additionalProps = typeof Component !== "string" && {
@@ -72,15 +82,16 @@ function FieldSet<T, P, S>({fields, children, className}: FieldSetProps<T, P, S>
                     >
                         <FormLabel
                             label={label}
-                            name={fullPath}
+                            id={fieldId}
                             field={field}
                         />
                         <Field
                             {...componentProps}
                             {...additionalProps}
+                            {...ariaProps}
                         />
                         <ErrorMessage name={fullPath}>
-                            {message => <InputFeedback htmlFor={fullPath}><em>{message}</em></InputFeedback>}
+                            {message => <InputFeedback id={fieldIdError} htmlFor={fieldId}><em>{message}</em></InputFeedback>}
                         </ErrorMessage>
                     </Section>
                 )
