@@ -18,4 +18,6 @@ const FormLabel = function<T>({label, name, field}: FormLabelProps<T>) {
     );
 };
 
-export default typedMemo(FormLabel);
+const MemoFormLabel = typedMemo(FormLabel);
+
+export {MemoFormLabel as FormLabel};

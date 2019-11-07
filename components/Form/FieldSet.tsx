@@ -2,9 +2,9 @@ import React, {useContext} from "react";
 import {string} from "yup";
 import {ErrorMessage, getIn, Field, useFormikContext} from "formik";
 
-import FormLabel from "./Label";
+import {FormLabel} from "./Label";
 import {formStyles, InputFeedback, Section} from "./styles";
-import Array from "./Array";
+import {Array} from "./Array";
 import {FormContext} from "./utils";
 import {FieldMap, FieldSetMap, FormMetaData, typedMemo} from "./types";
 
@@ -14,7 +14,7 @@ export type FieldSetProps<T, P, S> = {
     className?: string;
 }
 
-export function FieldSet<T, P, S>({fields, children, className}: FieldSetProps<T, P, S>) {
+function FieldSet<T, P, S>({fields, children, className}: FieldSetProps<T, P, S>) {
     const {schema} = useContext(FormContext) || {};
     const {values, errors, touched, isSubmitting, setFieldValue, setFieldTouched} = useFormikContext<T>();
 
@@ -89,4 +89,6 @@ export function FieldSet<T, P, S>({fields, children, className}: FieldSetProps<T
     );
 }
 
-export default typedMemo(FieldSet);
+const MemoFieldSet = typedMemo(FieldSet);
+
+export {MemoFieldSet as FieldSet};

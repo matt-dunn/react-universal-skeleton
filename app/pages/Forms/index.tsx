@@ -3,7 +3,7 @@ import {Helmet} from 'react-helmet-async'
 import styled from "styled-components";
 import * as Yup from "yup";
 
-import Form from "components/Form";
+import {Form} from "components/Form/index";
 import {MapDataToAction} from "components/actions/form";
 
 import Page from '../../styles/Page'

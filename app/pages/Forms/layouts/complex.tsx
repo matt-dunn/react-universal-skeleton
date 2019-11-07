@@ -2,8 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import {ResponsiveGrid} from "components/Grid";
-import FieldSet from "components/Form/FieldSet";
-import {FieldSetMap} from "components/Form/types";
+import {FieldSet, FieldSetMap} from "components/Form";
 
 const GridItems = styled(ResponsiveGrid("div"))``;
 

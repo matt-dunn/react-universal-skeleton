@@ -3,7 +3,7 @@ import {Schema, string} from "yup";
 import {ErrorMessage, FieldArray, getIn, useFormikContext} from "formik";
 
 import {FormContext, getDefault} from "./utils";
-import FieldSetWrapper from "./FieldWrapper";
+import {FieldWrapper} from "./FieldWrapper";
 import {Field, FieldSetMap, FormMetaData, typedMemo} from "./types";
 import {Legend, SubSectionContainer, InputFeedback, SubSection, FormOptions} from "./styles";
 
@@ -100,12 +100,12 @@ function Array<T, P, S>({field, path, children, className}: ArrayProps<T, P, S>)
                                     key={itemFullPath}
                                 >
                                     {(max && max > 1) && <Legend>{itemLabel || label} {index + 1}</Legend>}
-                                    <FieldSetWrapper
+                                    <FieldWrapper
                                         fields={field._subType.fields}
                                         path={itemFullPath}
                                     >
                                         {children}
-                                    </FieldSetWrapper>
+                                    </FieldWrapper>
                                     {(InsertOption || RemoveOption) && <FormOptions>
                                         {InsertOption}
                                         {RemoveOption}
@@ -122,4 +122,6 @@ function Array<T, P, S>({field, path, children, className}: ArrayProps<T, P, S>)
     ) || null;
 }
 
-export default typedMemo(Array);
+const MemoArray = typedMemo(Array);
+
+export {MemoArray as Array};
