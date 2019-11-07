@@ -1,6 +1,6 @@
-import React, {RefObject, useCallback, useContext, useEffect, useRef, useState} from "react";
+import React, {RefObject, useContext} from "react";
 import * as Yup from 'yup';
-import {FormikErrors, useFormikContext, yupToFormErrors} from "formik";
+import {useFormikContext} from "formik";
 import immutable from "object-path-immutable";
 import {sortBy} from "lodash";
 
@@ -51,11 +51,10 @@ export function flattenFields<T>(fields: Fields<T>, path: string, fieldPath = ""
 
 export function sortFields<T>(map: FieldSetMap<T>): FieldSetMap<T> {
     return Object.keys(map).reduce((sortedMap, key) => {
-        sortedMap[key] = sortBy(map[key], a => ((a.schema._meta || {}).order || 0))
+        sortedMap[key] = sortBy(map[key], a => ((a.schema._meta || {}).order || 0));
         return sortedMap;
     }, {} as FieldSetMap<T>);
 }
-
 
 export function performAction<T>(schema: any, action: ActionType, data: T, value?: string): T | undefined | null {
     switch (action) {
