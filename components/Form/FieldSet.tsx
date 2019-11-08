@@ -6,11 +6,11 @@ import {FormLabel} from "./Label";
 import {formStyles, InputFeedback, Section} from "./styles";
 import {Array} from "./Array";
 import {FormContext, useFormContext} from "./utils";
-import {FieldMap, FieldSetMap, FormMetaData, typedMemo} from "./types";
+import {FieldMap, FieldSetChildren, typedMemo} from "./types";
 
 export type FieldSetProps<T, P, S> = {
     fields?: FieldMap<T>[];
-    children?: (map: FieldSetMap<T>, metadata: FormMetaData<S, P>) => JSX.Element;
+    children?: FieldSetChildren<T, P, S>;
     className?: string;
 }
 

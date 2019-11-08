@@ -4,13 +4,13 @@ import {ErrorMessage, FieldArray, getIn, useFormikContext} from "formik";
 
 import {FormContext, getDefault} from "./utils";
 import {FieldSetWrapper} from "./FieldSetWrapper";
-import {Field, FieldSetMap, FormMetaData, typedMemo} from "./types";
+import {Field, FieldSetChildren, typedMemo} from "./types";
 import {Legend, SubSectionContainer, InputFeedback, SubSection, FormOptions} from "./styles";
 
 export type ArrayProps<T, P, S> = {
     field: Schema<T> & Field<T>;
     path: string;
-    children?: (map: FieldSetMap<T>, metadata: FormMetaData<S, P>) => JSX.Element;
+    children?: FieldSetChildren<T, P, S>;
     className?: string;
 }
 

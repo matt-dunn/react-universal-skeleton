@@ -8,14 +8,14 @@ import {MapDataToAction, useForm} from "components/actions/form";
 
 import {getDefault, FormContext, performAction, FormErrorFocus} from "./utils";
 import {FieldSetWrapper} from "./FieldSetWrapper";
-import {FieldSetMap, FormMetaData, InitialFormData, SchemaWithFields, typedMemo} from "./types";
+import {FieldSetChildren, InitialFormData, SchemaWithFields, typedMemo} from "./types";
 import {FormContainer, FormFooterOptions, InputFeedback} from "./styles";
 
 export type FormProps<T, P, S> = {
     formId: string;
     schema: SchemaWithFields<T>;
     onSubmit: MapDataToAction<T, P, S>;
-    children?: (map: FieldSetMap<T>, metadata: FormMetaData<S, P>) => JSX.Element;
+    children?: FieldSetChildren<T, P, S>;
     className?: string;
     context?: S;
 }

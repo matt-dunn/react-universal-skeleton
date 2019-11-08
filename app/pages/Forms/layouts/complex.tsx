@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import {ResponsiveGrid} from "components/Grid";
-import {FieldSet, FieldSetMap} from "components/Form";
+import {FieldSet, FieldSetChildrenProps} from "components/Form";
 
 const GridItems = styled(ResponsiveGrid("div"))``;
 
@@ -10,7 +10,7 @@ const GridItem = styled.div`
     padding: 0 10px 0 0;
 `;
 
-function layout<T>({children, extra, other}: FieldSetMap<T>) {
+function layout<T, P, S>({map: {children, extra, other}}: Pick<FieldSetChildrenProps<T, P, S>, 'map'>) {
     return (
         <>
             <div style={{borderBottom: "1px solid #dfdfdf", margin: "0 0 20px 0", padding: "0 0 10px 0"}}>
@@ -24,7 +24,7 @@ function layout<T>({children, extra, other}: FieldSetMap<T>) {
                     <FieldSet
                         fields={children}
                     >
-                        {({set1, set2, children}) => {
+                        {({map: {set1, set2, children}}) => {
                             return (
                                 <>
                                     <GridItems minItemWidth={150}>

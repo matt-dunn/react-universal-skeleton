@@ -52,13 +52,13 @@ const Forms = () => {
                     // }}
                     context={formState}
                 >
-                    {(map, metadata) => {
+                    {({map, metadata}) => {
                         // console.log(metadata, metadata.payload && metadata.payload.chosenFlavour)
                         // console.log(metadata, metadata.context && metadata.context.firstName)
 
                         return (
                             <>
-                                {layoutComplex(map)}
+                                {layoutComplex({map})}
                                 {metadata.payload && <pre style={{whiteSpace: "normal"}}>{JSON.stringify(metadata.payload)}</pre>}
                             </>
                         )
@@ -71,7 +71,7 @@ const Forms = () => {
                     onSubmit={handleSubmit}
                     context={formState2}
                 >
-                    {(map, metadata) => {
+                    {({map, metadata}) => {
                         // console.log(metadata, metadata.payload && metadata.payload.chosenFlavour)
                         // console.log(metadata, metadata.context && metadata.context.address)
 

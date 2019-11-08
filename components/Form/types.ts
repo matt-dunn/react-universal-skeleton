@@ -62,4 +62,12 @@ export type FormMetaData<C, P> = {
     payload?: P;
 }
 
+export type FieldSetChildrenProps<T, P, S> = {
+    map: FieldSetMap<T>;
+    metadata: FormMetaData<S, P>;
+}
+
+export type FieldSetChildren<T, P, S> = {
+    ({map, metadata}: FieldSetChildrenProps<T, P, S>): JSX.Element;
+}
 export const typedMemo: <T>(c: T) => T = React.memo;
