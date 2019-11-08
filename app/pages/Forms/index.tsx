@@ -26,8 +26,29 @@ const formState2 = {
     address: "somewhere..."
 }
 
+const simpleSchema = Yup.object().shape({
+    username: Yup.string()
+        .label("Username")
+        .required()
+        .ensure(),
+    password: Yup.string()
+        .label("Password")
+        .required()
+        .ensure()
+        .meta({
+            props: {
+                type: "password"
+            }
+        })
+})
+
+export type MySimpleFormResponse = {
+    newUsername: string;
+}
+
 const Forms = () => {
     const handleSubmit: MapDataToAction<Yup.InferType<typeof schemaComplex>, MyFormResponse, any> = values => dummyApiCall(values.flavour.favourite, values.email);
+    const handleSubmit2: MapDataToAction<Yup.InferType<typeof simpleSchema>, MySimpleFormResponse, any> = values => Promise.resolve({newUsername: values.username});
 
     return (
         <Page>
@@ -70,6 +91,24 @@ const Forms = () => {
                     schema={schemaComplex}
                     onSubmit={handleSubmit}
                     context={formState2}
+                >
+                    {({map, metadata}) => {
+                        // console.log(metadata, metadata.payload && metadata.payload.chosenFlavour)
+                        // console.log(metadata, metadata.context && metadata.context.address)
+
+                        return (
+                            <>
+                                <Collections map={map}/>
+                                {metadata.payload && <pre style={{whiteSpace: "normal"}}>{JSON.stringify(metadata.payload)}</pre>}
+                            </>
+                        )
+                    }}
+                </Form>
+
+                <Form
+                    formId="my-form3"
+                    schema={simpleSchema}
+                    onSubmit={handleSubmit2}
                 >
                     {({map, metadata}) => {
                         // console.log(metadata, metadata.payload && metadata.payload.chosenFlavour)
