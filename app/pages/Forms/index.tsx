@@ -10,7 +10,7 @@ import Page from '../../styles/Page'
 
 import {dummyApiCall, MyFormResponse} from "./utils";
 import schemaComplex from "./schemas/complex";
-import layoutComplex from "./layouts/complex";
+import ComplexLayout from "./layouts/Complex";
 
 const Title = styled.h2`
     color: #ccc;
@@ -58,7 +58,7 @@ const Forms = () => {
 
                         return (
                             <>
-                                {layoutComplex({map})}
+                                <ComplexLayout map={map}/>
                                 {metadata.payload && <pre style={{whiteSpace: "normal"}}>{JSON.stringify(metadata.payload)}</pre>}
                             </>
                         )
