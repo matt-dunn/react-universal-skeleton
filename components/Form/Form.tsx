@@ -16,7 +16,7 @@ export type FormProps<T, P, S> = {
     schema: SchemaWithFields<T>;
     onSubmit: MapDataToAction<T, P, S>;
     children?: FieldSetChildren<T, P, S>;
-    complete?: CompleteChildren<Yup.InferType<SchemaWithFields<T>>, P, S>
+    complete?: CompleteChildren<Yup.InferType<SchemaWithFields<T>>, P, S>;
     className?: string;
     context?: S;
 }

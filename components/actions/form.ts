@@ -149,7 +149,7 @@ export const useForm = <T, P = any, E = any, S = any, D = any>(formId: string, s
 
             return reason;
         }
-    }, [formData.state.data, formDataContext.error, formDataContext.payload, mapDataToAction]);
+    }, [formData.state.data, formDataContext.error, formDataContext.isComplete, formDataContext.payload, mapDataToAction]);
 
     const apiContext = useContext(APIContext);
 
