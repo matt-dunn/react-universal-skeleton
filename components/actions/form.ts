@@ -42,8 +42,9 @@ export interface State<S> {
 
 export type FormDataState<T = any, P = any, E = any, S = any> = {
     isProcessed: boolean;
-    data?: T;
     isSubmitted: boolean;
+    isComplete: boolean;
+    data?: T;
     payload?: P;
     error?: ErrorLike;
     innerFormErrors: E;
@@ -70,11 +71,12 @@ export class FormState<S> implements State<S> {
 }
 
 export const FormDataState = <T extends Record<string, any> = any, P = any, E = any, S = any>(formData?: FormDataState<T, P, E, S>): FormDataState<T, P, E, S> => {
-    const {isProcessed = false, data, payload, error, action, innerFormErrors, state} = formData || {} as FormDataState<T, P, E, S>;
+    const {isProcessed = false, isComplete = false, data, payload, error, action, innerFormErrors, state} = formData || {} as FormDataState<T, P, E, S>;
 
     return {
         isProcessed,
         isSubmitted: (action && action.type === "submit") || false,
+        isComplete,
         data,
         innerFormErrors,
         payload,
@@ -135,8 +137,9 @@ export const useForm = <T, P = any, E = any, S = any, D = any>(formId: string, s
             const payload = await mapDataToAction(data, formData.state.data);
 
             formDataContext.payload = payload;
+            formDataContext.isComplete = true;
 
-            setFormData(formData => FormDataState({...formData, isProcessed: true, error: undefined, payload: payload, data}));
+            setFormData(formData => FormDataState({...formData, isProcessed: true, isComplete: true, error: undefined, payload: payload, data}));
 
             return payload;
         } catch(reason) {

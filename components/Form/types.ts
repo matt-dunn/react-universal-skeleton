@@ -70,4 +70,14 @@ export type FieldSetChildrenProps<T, P, S> = {
 export type FieldSetChildren<T, P, S> = {
     ({map, metadata}: FieldSetChildrenProps<T, P, S>): JSX.Element;
 }
+
+export type CompleteChildrenProps<T, P, S> = {
+    values: T;
+    metadata: FormMetaData<S, P>;
+}
+
+export type CompleteChildren<T, P, S> = {
+    ({values, metadata}: CompleteChildrenProps<T, P, S>): JSX.Element;
+}
+
 export const typedMemo: <T>(c: T) => T = React.memo;

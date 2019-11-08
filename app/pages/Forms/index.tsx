@@ -16,6 +16,18 @@ const Title = styled.h2`
     color: #ccc;
 `;
 
+const SubmissionFeedback = styled.section`
+  padding: 20px 10px 10px 10px;
+  background-color: orange;
+  border-radius: 4px;
+  
+  pre {
+    border: 1px solid #999;
+    background-color: #eee;
+    padding: 5px;
+  }
+`
+
 const formState = {
     firstName: "pat",
     lastName: "mustard"
@@ -109,19 +121,19 @@ const Forms = () => {
                     formId="my-form3"
                     schema={simpleSchema}
                     onSubmit={handleSubmit2}
-                >
-                    {({map, metadata}) => {
-                        // console.log(metadata, metadata.payload && metadata.payload.chosenFlavour)
-                        // console.log(metadata, metadata.context && metadata.context.address)
+                    complete={
+                        ({values, metadata}) => {
+                            return (
+                                <SubmissionFeedback>
+                                    The form has been submitted.
 
-                        return (
-                            <>
-                                <Collections map={map}/>
-                                {metadata.payload && <pre style={{whiteSpace: "normal"}}>{JSON.stringify(metadata.payload)}</pre>}
-                            </>
-                        )
-                    }}
-                </Form>
+                                    <pre style={{whiteSpace: "normal"}}>values: {JSON.stringify(values)}</pre>
+                                    <pre style={{whiteSpace: "normal"}}>metadata: {JSON.stringify(metadata)}</pre>
+                                </SubmissionFeedback>
+                            )
+                        }
+                    }
+                />
             </div>
         </Page>
     )

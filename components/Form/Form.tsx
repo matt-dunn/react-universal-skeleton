@@ -8,7 +8,7 @@ import {MapDataToAction, useForm} from "components/actions/form";
 
 import {getDefault, FormContext, performAction, FormErrorFocus} from "./utils";
 import {FieldSetWrapper} from "./FieldSetWrapper";
-import {FieldSetChildren, InitialFormData, SchemaWithFields, typedMemo} from "./types";
+import {CompleteChildren, FieldSetChildren, FormMetaData, InitialFormData, SchemaWithFields, typedMemo} from "./types";
 import {FormContainer, FormFooterOptions, InputFeedback} from "./styles";
 
 export type FormProps<T, P, S> = {
@@ -16,11 +16,12 @@ export type FormProps<T, P, S> = {
     schema: SchemaWithFields<T>;
     onSubmit: MapDataToAction<T, P, S>;
     children?: FieldSetChildren<T, P, S>;
+    complete?: CompleteChildren<Yup.InferType<SchemaWithFields<T>>, P, S>
     className?: string;
     context?: S;
 }
 
-function Form<T, P, S>({formId, schema, onSubmit, children, className, context}: FormProps<T, P, S>) {
+function Form<T, P, S>({formId, schema, onSubmit, children, className, context, complete}: FormProps<T, P, S>) {
     const [formData, handleSubmit] = useForm<Yup.InferType<typeof schema>, P, ValidationError[], typeof schema, S>(
         formId,
         schema,
@@ -57,8 +58,26 @@ function Form<T, P, S>({formId, schema, onSubmit, children, className, context}:
                         handleSubmit,
                         handleReset,
                         isValid,
-                        isInitialValid
+                        isInitialValid,
+                        values
                     } = props;
+
+                    if (complete && formData.isComplete) {
+                        const metadata: FormMetaData<S, P> = {
+                            formId: formData.state.formId,
+                            context: formData.state.data,
+                            error: formData.error,
+                            payload: formData.payload
+                        };
+
+                        return (
+                            <section
+                                id={formId}
+                            >
+                                {complete({values, metadata})}
+                            </section>
+                        )
+                    }
 
                     return schema.fields && (
                         <FormContainer
