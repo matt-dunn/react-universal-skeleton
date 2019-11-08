@@ -10,7 +10,7 @@ const GridItem = styled.div`
     padding: 0 10px 0 0;
 `;
 
-function layout<T, P, S>({map: {children, extra, other}}: Pick<FieldSetChildrenProps<T, P, S>, 'map'>) {
+function ComplexLayout<T, P, S>({map: {children, extra, other}}: Pick<FieldSetChildrenProps<T, P, S>, 'map'>) {
     return (
         <>
             <div style={{borderBottom: "1px solid #dfdfdf", margin: "0 0 20px 0", padding: "0 0 10px 0"}}>
@@ -58,4 +58,4 @@ function layout<T, P, S>({map: {children, extra, other}}: Pick<FieldSetChildrenP
     )
 }
 
-export default layout;
+export default ComplexLayout;
