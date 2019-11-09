@@ -75,7 +75,7 @@ const Forms = () => {
 
             <div style={{maxWidth: "800px", margin: "0 auto"}}>
                 <Form
-                    formId="my-form"
+                    id="my-form"
                     schema={schemaComplex}
                     onSubmit={handleSubmit}
                     // onSubmit={(values, context) => {
@@ -99,7 +99,7 @@ const Forms = () => {
                 </Form>
 
                 <Form
-                    formId="my-form2"
+                    id="my-form2"
                     schema={schemaComplex}
                     onSubmit={handleSubmit}
                     context={formState2}
@@ -118,7 +118,7 @@ const Forms = () => {
                 </Form>
 
                 <Form
-                    formId="my-form3"
+                    id="my-form3"
                     schema={simpleSchema}
                     onSubmit={handleSubmit2}
                     complete={

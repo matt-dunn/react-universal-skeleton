@@ -12,7 +12,7 @@ import {CompleteChildren, FieldSetChildren, FormMetaData, InitialFormData, Schem
 import {FormContainer, FormFooterOptions, InputFeedback} from "./styles";
 
 export type FormProps<T, P, S> = {
-    formId: string;
+    id: string;
     schema: SchemaWithFields<T>;
     onSubmit: MapDataToAction<T, P, S>;
     children?: FieldSetChildren<T, P, S>;
@@ -21,9 +21,9 @@ export type FormProps<T, P, S> = {
     context?: S;
 }
 
-function Form<T, P, S>({formId, schema, onSubmit, children, className, context, complete}: FormProps<T, P, S>) {
+function Form<T, P, S>({id, schema, onSubmit, children, className, context, complete}: FormProps<T, P, S>) {
     const [formData, handleSubmit] = useForm<Yup.InferType<typeof schema>, P, ValidationError[], typeof schema, S>(
-        formId,
+        id,
         schema,
         values => schema.validate(values, {abortEarly: false}),
         onSubmit as any,
@@ -72,7 +72,7 @@ function Form<T, P, S>({formId, schema, onSubmit, children, className, context, 
 
                         return (
                             <section
-                                id={formId}
+                                id={id}
                             >
                                 {complete({values, metadata})}
                             </section>
@@ -81,11 +81,11 @@ function Form<T, P, S>({formId, schema, onSubmit, children, className, context, 
 
                     return schema.fields && (
                         <FormContainer
-                            id={formId}
+                            id={id}
                             ref={formRef}
                             onSubmit={handleSubmit}
                             method="post"
-                            action={`#${formId}`}
+                            action={`#${id}`}
                             className={classnames({invalid: !isValid}, className)}
                         >
                             <FormErrorFocus formRef={formRef}/>
