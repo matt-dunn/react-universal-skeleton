@@ -38,7 +38,7 @@ function Form<T, P, S>({id, schema, onSubmit, children, className, context, comp
     const {errors: initialErrors, touched: initialTouched} = useMemo<InitialFormData<Yup.InferType<typeof schema>>>(() => formData.innerFormErrors && formData.innerFormErrors.reduce(({errors, touched}, {path, message}) => ({
         errors: setIn(errors, path, message),
         touched: setIn(touched, path, true)
-    }), {errors: {}, touched: {}}) || {} as InitialFormData<Yup.InferType<typeof schema>>, [formData.innerFormErrors]);
+    }), {errors: {}, touched: {}}) || {} as InitialFormData<Yup.InferType<typeof schema>>, [formData.innerFormErrors, schema]);
 
     const initialValues: Yup.InferType<typeof schema> = formData.data || getDefault(schema);
 
@@ -63,9 +63,9 @@ function Form<T, P, S>({id, schema, onSubmit, children, className, context, comp
                         setErrors
                     } = props;
 
-                    useEffect(() => {
-                        setErrors(initialErrors);
-                    }, [initialErrors])
+                    // useEffect(() => {
+                    //     setErrors(initialErrors);
+                    // }, [setErrors])
 
                     if (complete && formData.isComplete) {
                         const metadata: FormMetaData<S, P> = {

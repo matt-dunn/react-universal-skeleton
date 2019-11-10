@@ -154,7 +154,7 @@ export const useForm = <T, P = any, S = any, D = any>(formId: string, schema: an
 
             return reason;
         }
-    }, [formData.state.data, formDataContext.error, formDataContext.isComplete, formDataContext.payload, mapDataToAction]);
+    }, [formData.state.data, formDataContext.error, formDataContext.innerFormErrors, formDataContext.isComplete, formDataContext.payload, mapDataToAction]);
 
     const apiContext = useContext(APIContext);
 

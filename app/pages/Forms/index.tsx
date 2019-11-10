@@ -39,7 +39,7 @@ type X = {
     moose?: boolean;
 }
 
-const formState2:X = {
+const formState2: X = {
     age: 34,
     address: "somewhere..."
 }
