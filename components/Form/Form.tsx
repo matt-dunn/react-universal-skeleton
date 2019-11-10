@@ -6,7 +6,7 @@ import classnames from "classnames";
 
 import {MapDataToAction, useForm} from "components/actions/form";
 
-import {getDefault, FormContext, performAction, FormErrorFocus} from "./utils";
+import {getDefault, FormContext, performAction, FormErrorFocus, FormValidationErrors} from "./utils";
 import {FieldSetWrapper} from "./FieldSetWrapper";
 import {CompleteChildren, FieldSetChildren, FormMetaData, InitialFormData, SchemaWithFields, typedMemo} from "./types";
 import {FormContainer, FormFooterOptions, InputFeedback} from "./styles";
@@ -60,12 +60,7 @@ function Form<T, P, S>({id, schema, onSubmit, children, className, context, comp
                         isValid,
                         isInitialValid,
                         values,
-                        setErrors
                     } = props;
-
-                    // useEffect(() => {
-                    //     setErrors(initialErrors);
-                    // }, [setErrors])
 
                     if (complete && formData.isComplete) {
                         const metadata: FormMetaData<S, P> = {
@@ -94,6 +89,8 @@ function Form<T, P, S>({id, schema, onSubmit, children, className, context, comp
                             className={classnames({invalid: !isValid}, className)}
                         >
                             <FormErrorFocus formRef={formRef}/>
+
+                            <FormValidationErrors errors={initialErrors}/>
 
                             <input
                                 name="@@FORMSTATE"
