@@ -93,10 +93,16 @@ const Forms = () => {
                     // }}
                     context={formState}
                 >
-                    {({fieldsetMap, metadata}) => {
+                    {({fieldsetMap, metadata, isComplete, values, ...props}) => {
+                        console.log("???", isComplete, values, props)
                         // console.log(metadata, metadata.payload && metadata.payload.chosenFlavour)
                         // console.log(metadata, metadata.context && metadata.context.firstName)
 
+                        if (isComplete) {
+                            return (
+                                <div>DONE!!!!</div>
+                            )
+                        }
                         return (
                             <>
                                 <ComplexLayout fieldsetMap={fieldsetMap}/>
@@ -124,8 +130,7 @@ const Forms = () => {
                         }
                     }
                 >
-                    {({fieldsetMap, metadata, ...props}) => {
-                        console.log("???", props)
+                    {({fieldsetMap, metadata}) => {
                         // console.log(metadata, metadata.payload && metadata.payload.chosenFlavour)
                         // console.log(metadata, metadata.context && metadata.context.address)
 
