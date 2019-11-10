@@ -29,7 +29,8 @@ export const dummyApiCall = (flavour: string, email: string): Promise<MyFormResp
     return new Promise((resolve, reject) => {
         if (flavour === "vanilla") {
             // throw new APIError("Authentication Failed", "auth", 403)
-            throw new Error("Don't like VANILLA!!!")
+            // throw new Error("Don't like VANILLA!!!")
+            throw new ValidationError(["OOPS"], "", "notes")
         }
 
         setTimeout(() => {

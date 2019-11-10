@@ -33,7 +33,13 @@ const formState = {
     lastName: "mustard"
 }
 
-const formState2 = {
+type X = {
+    age: number;
+    address: string;
+    moose?: boolean;
+}
+
+const formState2:X = {
     age: 34,
     address: "somewhere..."
 }
@@ -43,15 +49,17 @@ const simpleSchema = Yup.object().shape({
         .label("Username")
         .required()
         .ensure(),
-    password: Yup.string()
-        .label("Password")
-        .required()
-        .ensure()
-        .meta({
-            props: {
-                type: "password"
-            }
-        })
+    password: Yup.object().shape({
+        secret: Yup.string()
+            .label("Password")
+            .required()
+            .ensure()
+            .meta({
+                props: {
+                    type: "password"
+                }
+            })
+    })
 })
 
 export type MySimpleFormResponse = {
@@ -85,13 +93,13 @@ const Forms = () => {
                     // }}
                     context={formState}
                 >
-                    {({map, metadata}) => {
+                    {({fieldsetMap, metadata}) => {
                         // console.log(metadata, metadata.payload && metadata.payload.chosenFlavour)
                         // console.log(metadata, metadata.context && metadata.context.firstName)
 
                         return (
                             <>
-                                <ComplexLayout map={map}/>
+                                <ComplexLayout fieldsetMap={fieldsetMap}/>
                                 {metadata.payload && <pre style={{whiteSpace: "normal"}}>{JSON.stringify(metadata.payload)}</pre>}
                             </>
                         )
@@ -103,14 +111,27 @@ const Forms = () => {
                     schema={schemaComplex}
                     onSubmit={handleSubmit}
                     context={formState2}
+                    complete={
+                        ({values, metadata}) => {
+                            return (
+                                <SubmissionFeedback>
+                                    The form has been submitted.
+
+                                    <pre style={{whiteSpace: "normal"}}>values: {JSON.stringify(values)}</pre>
+                                    <pre style={{whiteSpace: "normal"}}>metadata: {JSON.stringify(metadata)}</pre>
+                                </SubmissionFeedback>
+                            )
+                        }
+                    }
                 >
-                    {({map, metadata}) => {
+                    {({fieldsetMap, metadata, ...props}) => {
+                        console.log("???", props)
                         // console.log(metadata, metadata.payload && metadata.payload.chosenFlavour)
                         // console.log(metadata, metadata.context && metadata.context.address)
 
                         return (
                             <>
-                                <Collections map={map}/>
+                                <Collections fieldsetMap={fieldsetMap}/>
                                 {metadata.payload && <pre style={{whiteSpace: "normal"}}>{JSON.stringify(metadata.payload)}</pre>}
                             </>
                         )
@@ -121,6 +142,7 @@ const Forms = () => {
                     id="my-form3"
                     schema={simpleSchema}
                     onSubmit={handleSubmit2}
+                    context={formState2}
                     complete={
                         ({values, metadata}) => {
                             return (
@@ -128,7 +150,7 @@ const Forms = () => {
                                     The form has been submitted.
 
                                     <pre style={{whiteSpace: "normal"}}>values: {JSON.stringify(values)}</pre>
-                                    <pre style={{whiteSpace: "normal"}}>metadata: {JSON.stringify(metadata)}</pre>
+                                    <pre style={{whiteSpace: "normal"}}>metadata: {JSON.stringify(metadata.context && metadata.context.moose)}</pre>
                                 </SubmissionFeedback>
                             )
                         }

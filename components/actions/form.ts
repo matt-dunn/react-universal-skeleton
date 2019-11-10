@@ -2,6 +2,7 @@ import React, {useCallback, useContext, useState} from "react";
 
 import {errorLike, ErrorLike} from "components/error";
 import {APIContext} from "./contexts";
+import {ValidationError} from "yup";
 
 if (!(global as any).atob) {
     (global as any).atob = (str: string) => Buffer.from(str, 'base64').toString('binary');
@@ -40,14 +41,14 @@ export interface State<S> {
     toString(): string;
 }
 
-export type FormDataState<T = any, P = any, E = any, S = any> = {
+export type FormDataState<T = any, P = any, S = any> = {
     isProcessed: boolean;
     isSubmitted: boolean;
     isComplete: boolean;
     data?: T;
     payload?: P;
     error?: ErrorLike;
-    innerFormErrors: E;
+    innerFormErrors?: ValidationError[];
     action?: Action;
     state: State<S>;
 };
@@ -70,8 +71,8 @@ export class FormState<S> implements State<S> {
     }
 }
 
-export const FormDataState = <T extends Record<string, any> = any, P = any, E = any, S = any>(formData?: FormDataState<T, P, E, S>): FormDataState<T, P, E, S> => {
-    const {isProcessed = false, isComplete = false, data, payload, error, action, innerFormErrors, state} = formData || {} as FormDataState<T, P, E, S>;
+export const FormDataState = <T extends Record<string, any> = any, P = any, S = any>(formData?: FormDataState<T, P, S>): FormDataState<T, P, S> => {
+    const {isProcessed = false, isComplete = false, data, payload, error, action, innerFormErrors = [], state} = formData || {} as FormDataState<T, P, S>;
 
     return {
         isProcessed,
@@ -108,13 +109,13 @@ const FormDataContext = React.createContext<FormDataState | undefined>(undefined
 
 export const FormDataProvider = FormDataContext.Provider;
 
-export const useCurrentFormData = <T = any, P = any, E = any, S = any>(formId: string, context?: S): FormDataState<T, P, E, S> => {
+export const useCurrentFormData = <T = any, P = any, S = any>(formId: string, context?: S): FormDataState<T, P, S> => {
     const formData = useContext(FormDataContext);
 
     if (formData && formData.state && formData.state.formId === formId) {
-        return formData as FormDataState<T, P, E, S>;
+        return formData as FormDataState<T, P, S>;
     } else {
-        return FormDataState({state: {formId, data: context}} as FormDataState<T, P, E, S>);
+        return FormDataState({state: {formId, data: context}} as FormDataState<T, P, S>);
     }
 };
 
@@ -126,12 +127,12 @@ export interface PerformAction<T, S> {
     (schema: S, action: ActionType, data: T, value?: string): T | undefined | null;
 }
 
-export const useForm = <T, P = any, E = any, S = any, D = any>(formId: string, schema: any, formValidator: (values: T) => Promise<any>, mapDataToAction: MapDataToAction<T, P, D>, performAction?: PerformAction<T, S>, context?: D): [FormDataState<T, P | undefined, E, D>, (data: T) => Promise<P>] => {
-    const formDataContext = useCurrentFormData<T, P, E, D>(formId, context);
-    const [formData, setFormData] = useState<FormDataState<T, P | undefined, E>>(formDataContext);
+export const useForm = <T, P = any, S = any, D = any>(formId: string, schema: any, formValidator: (values: T) => Promise<any>, mapDataToAction: MapDataToAction<T, P, D>, performAction?: PerformAction<T, S>, context?: D): [FormDataState<T, P | undefined, D>, (data: T) => Promise<P>] => {
+    const formDataContext = useCurrentFormData<T, P, D>(formId, context);
+    const [formData, setFormData] = useState<FormDataState<T, P | undefined>>(formDataContext);
 
     const submit = useCallback(async(data: T): Promise<P> => {
-        setFormData(formData => FormDataState({...formData, error: undefined}));
+        setFormData(formData => FormDataState({...formData, error: undefined, innerFormErrors: undefined}));
 
         try {
             const payload = await mapDataToAction(data, formData.state.data);
@@ -143,9 +144,13 @@ export const useForm = <T, P = any, E = any, S = any, D = any>(formId: string, s
 
             return payload;
         } catch(reason) {
-            formDataContext.error = errorLike(reason);
+            if (reason.name === "ValidationError") {
+                formDataContext.innerFormErrors = [reason].concat(reason.inner);
+            } else {
+                formDataContext.error = errorLike(reason);
+            }
 
-            setFormData(formData => FormDataState({...formData, isProcessed: true, error: formDataContext.error, payload: undefined, data}));
+            setFormData(formData => FormDataState({...formData, isProcessed: true, innerFormErrors: formDataContext.innerFormErrors, error: formDataContext.error, payload: undefined, data}));
 
             return reason;
         }
@@ -157,8 +162,8 @@ export const useForm = <T, P = any, E = any, S = any, D = any>(formId: string, s
         formDataContext.data && apiContext.push(formValidator(formDataContext.data)
             .then(submit)
             .catch(reason => {
-                if (reason.inner) {
-                    formDataContext.innerFormErrors = reason.inner;
+                if (reason.name === "ValidationError") {
+                    formDataContext.innerFormErrors = [reason].concat(reason.inner);
                 } else {
                     formDataContext.error = reason;
                 }

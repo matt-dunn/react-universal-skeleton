@@ -1,4 +1,4 @@
-import React, {useMemo, useRef} from 'react'
+import React, {useEffect, useMemo, useRef} from 'react'
 import {Formik, setIn} from 'formik';
 import * as Yup from 'yup';
 import {ValidationError} from "yup";
@@ -22,7 +22,7 @@ export type FormProps<T, P, S> = {
 }
 
 function Form<T, P, S>({id, schema, onSubmit, children, className, context, complete}: FormProps<T, P, S>) {
-    const [formData, handleSubmit] = useForm<Yup.InferType<typeof schema>, P, ValidationError[], typeof schema, S>(
+    const [formData, handleSubmit] = useForm<Yup.InferType<typeof schema>, P, typeof schema, S>(
         id,
         schema,
         values => schema.validate(values, {abortEarly: false}),
@@ -38,7 +38,7 @@ function Form<T, P, S>({id, schema, onSubmit, children, className, context, comp
     const {errors: initialErrors, touched: initialTouched} = useMemo<InitialFormData<Yup.InferType<typeof schema>>>(() => formData.innerFormErrors && formData.innerFormErrors.reduce(({errors, touched}, {path, message}) => ({
         errors: setIn(errors, path, message),
         touched: setIn(touched, path, true)
-    }), {errors: {}, touched: {}}) || {}, [formData.innerFormErrors]);
+    }), {errors: {}, touched: {}}) || {} as InitialFormData<Yup.InferType<typeof schema>>, [formData.innerFormErrors]);
 
     const initialValues: Yup.InferType<typeof schema> = formData.data || getDefault(schema);
 
@@ -59,8 +59,13 @@ function Form<T, P, S>({id, schema, onSubmit, children, className, context, comp
                         handleReset,
                         isValid,
                         isInitialValid,
-                        values
+                        values,
+                        setErrors
                     } = props;
+
+                    useEffect(() => {
+                        setErrors(initialErrors);
+                    }, [initialErrors])
 
                     if (complete && formData.isComplete) {
                         const metadata: FormMetaData<S, P> = {
@@ -97,7 +102,7 @@ function Form<T, P, S>({id, schema, onSubmit, children, className, context, comp
                                 readOnly={true}
                             />
 
-                            {formData.error && <InputFeedback>{formData.error.message}</InputFeedback>}
+                            {(formData.error && formData.error.message) && <InputFeedback>{formData.error.message}</InputFeedback>}
 
                             <FieldSetWrapper
                                 fields={schema.fields}

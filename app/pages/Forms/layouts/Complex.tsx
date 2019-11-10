@@ -10,7 +10,7 @@ const GridItem = styled.div`
     padding: 0 10px 0 0;
 `;
 
-function ComplexLayout<T, P, S>({map: {children, extra, other}}: Pick<FieldSetChildrenProps<T, P, S>, 'map'>) {
+function ComplexLayout<T, P, S>({fieldsetMap: {children, extra, other}}: Pick<FieldSetChildrenProps<T, P, S>, 'fieldsetMap'>) {
     return (
         <>
             <div style={{borderBottom: "1px solid #dfdfdf", margin: "0 0 20px 0", padding: "0 0 10px 0"}}>
@@ -24,7 +24,7 @@ function ComplexLayout<T, P, S>({map: {children, extra, other}}: Pick<FieldSetCh
                     <FieldSet
                         fields={children}
                     >
-                        {({map: {set1, set2, children}}) => {
+                        {({fieldsetMap: {set1, set2, children}}) => {
                             return (
                                 <>
                                     <GridItems minItemWidth={150}>

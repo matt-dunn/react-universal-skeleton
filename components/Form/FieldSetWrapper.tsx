@@ -12,7 +12,7 @@ export type FieldSetWrapperProps<T, P, S> = {
 
 function FieldSetWrapper<T, P, S>({fields, path = "", children}: FieldSetWrapperProps<T, P, S>) {
     const {formData} = useFormContext<T, P, S>();
-    const fieldSet = useMemo<FieldSetMap<T>>(() => sortFields(flattenFields(fields, path)), [fields, path]);
+    const fieldsetMap = useMemo<FieldSetMap<T>>(() => sortFields(flattenFields(fields, path)), [fields, path]);
 
     const metadata: FormMetaData<S, P> = useMemo(() => ({
         formId: formData.state.formId,
@@ -21,7 +21,7 @@ function FieldSetWrapper<T, P, S>({fields, path = "", children}: FieldSetWrapper
         payload: formData.payload
     }), [formData.error, formData.payload, formData.state.data, formData.state.formId]);
 
-    return children ? children({map: fieldSet, metadata}) : <Collections map={fieldSet}/>;
+    return children ? children({fieldsetMap, metadata}) : <Collections fieldsetMap={fieldsetMap}/>;
 }
 
 const MemoFieldSetWrapper = typedMemo(FieldSetWrapper);

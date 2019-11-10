@@ -98,7 +98,7 @@ function setFocus(form: HTMLFormElement) {
 }
 
 function FormErrorFocus<T>({formRef}: FormErrorFocusProps) {
-    const {isSubmitting, isValidating, isValid, errors} = useFormikContext<T>();
+    const {isSubmitting, isValidating, isValid} = useFormikContext<T>();
 
     useEffect(() => {
         !isValid && formRef.current && setFocus(formRef.current);

@@ -52,7 +52,7 @@ export type FieldSetMap<T> = {
 
 export type FormContextType<T, P, S> = {
     schema: SchemaWithFields<any>;
-    formData: FormDataState<T, P, ValidationError[], S>;
+    formData: FormDataState<T, P, S>;
 }
 
 export type FormMetaData<C, P> = {
@@ -63,12 +63,12 @@ export type FormMetaData<C, P> = {
 }
 
 export type FieldSetChildrenProps<T, P, S> = {
-    map: FieldSetMap<T>;
+    fieldsetMap: FieldSetMap<T>;
     metadata: FormMetaData<S, P>;
 }
 
 export type FieldSetChildren<T, P, S> = {
-    ({map, metadata}: FieldSetChildrenProps<T, P, S>): JSX.Element;
+    ({fieldsetMap, metadata}: FieldSetChildrenProps<T, P, S>): JSX.Element;
 }
 
 export type CompleteChildrenProps<T, P, S> = {

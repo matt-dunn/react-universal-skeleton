@@ -4,16 +4,16 @@ import {FieldSetMap, typedMemo} from "./types";
 import {FieldSet} from "./FieldSet";
 
 export type CollectionsProps<T, P, S> = {
-    map: FieldSetMap<T>;
+    fieldsetMap: FieldSetMap<T>;
 }
 
-function Collections<T, P, S>({map}: CollectionsProps<T, P, S>) {
+function Collections<T, P, S>({fieldsetMap}: CollectionsProps<T, P, S>) {
     return (
         <>
-            {Object.keys(map).map(key => (
+            {Object.keys(fieldsetMap).map(key => (
                 <FieldSet
                     key={key}
-                    fields={map[key]}
+                    fields={fieldsetMap[key]}
                 />
             ))}
         </>
