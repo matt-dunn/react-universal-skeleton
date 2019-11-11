@@ -112,7 +112,7 @@ const schema = Yup.object().shape({
             itemLabel: "Person"
         })
         .ensure()
-        .min(1)
+        // .min(1)
         .max(5)
 });
 
