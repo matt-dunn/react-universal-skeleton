@@ -12,6 +12,7 @@ import {CompleteChildren, FieldSetChildren, FormMetaData, InitialFormData, Schem
 import {FormContainer} from "./styles";
 import {FormValidationErrors} from "./FormValidationErrors";
 import {FormErrorFocus} from "./FormErrorFocus";
+import {FormOptions} from "./FormOptions";
 
 export type FormProps<T, P, S> = {
     id: string;
@@ -113,23 +114,7 @@ function Form<T, P, S>({id, schema, onSubmit, children, className, context, comp
                                 {children}
                             </FieldSetWrapper>
 
-                            <aside className="options main">
-                                <button
-                                    type="button"
-                                    onClick={handleReset}
-                                    disabled={!dirty || isSubmitting}
-                                >
-                                    Reset
-                                </button>
-                                <button
-                                    type="submit"
-                                    disabled={isSubmitting}
-                                    name="@@SUBMIT"
-                                    className="primary"
-                                >
-                                    Submit {(isValid && isInitialValid) && "✔"}
-                                </button>
-                            </aside>
+                            {!children && <FormOptions/>}
                         </FormWrapper>
                     ) || null;
                 }}

@@ -12,8 +12,11 @@ import {dummyApiCall, MyFormResponse} from "./utils";
 import schemaComplex from "./schemas/complex";
 import ComplexLayout from "./layouts/Complex";
 
-import {useFormikContext} from "formik";
-import {formStyles} from "../../../components/Form/styles";
+import {FormContainer} from "components/form"
+import {FormOptions} from "components/Form/FormOptions";
+
+// import {useFormikContext} from "formik";
+// import {formStyles} from "../../../components/Form/styles";
 
 const Title = styled.h2`
     color: #ccc;
@@ -69,13 +72,11 @@ export type MySimpleFormResponse = {
     newUsername: string;
 }
 
-import {FormContainer} from "components/form"
-
 const MyFormContainer = styled(FormContainer)`
   --invalid-color: orange;
   
   border: 4px solid #ccc;
-  padding: 30px;
+  padding: 30px 30px 10px 30px;
   background-color: inherit;
   border-radius: 15px;
 
@@ -139,6 +140,7 @@ const Forms = () => {
                             <>
                                 <ComplexLayout fieldsetMap={fieldsetMap}/>
                                 {metadata.payload && <pre style={{whiteSpace: "normal"}}>{JSON.stringify(metadata.payload)}</pre>}
+                                <FormOptions/>
                             </>
                         )
                     }}
@@ -170,6 +172,7 @@ const Forms = () => {
                             <>
                                 <Collections fieldsetMap={fieldsetMap}/>
                                 {metadata.payload && <pre style={{whiteSpace: "normal"}}>{JSON.stringify(metadata.payload)}</pre>}
+                                <FormOptions/>
                             </>
                         )
                     }}
