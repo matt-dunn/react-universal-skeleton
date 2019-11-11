@@ -106,7 +106,7 @@ const Forms = () => {
                 Forms (Lazy Loaded)
             </Title>
 
-            <div style={{maxWidth: "800px", margin: "0 auto"}}>
+            <div style={{maxWidth: "800px", margin: "20px auto"}}>
                 <Form
                     id="my-form"
                     schema={schemaComplex}
@@ -118,16 +118,23 @@ const Forms = () => {
                     // }}
                     context={formState}
                     as={MyFormContainer}
+                    complete={
+                        ({values, metadata}) => {
+                            return (
+                                <SubmissionFeedback>
+                                    The form has been submitted.
+
+                                    <pre style={{whiteSpace: "normal"}}>values: {JSON.stringify(values)}</pre>
+                                    <pre style={{whiteSpace: "normal"}}>metadata: {JSON.stringify(metadata)}</pre>
+                                </SubmissionFeedback>
+                            )
+                        }
+                    }
                 >
-                    {({fieldsetMap, metadata, isComplete}) => {
+                    {({fieldsetMap, metadata}) => {
                         // console.log(metadata, metadata.payload && metadata.payload.chosenFlavour)
                         // console.log(metadata, metadata.context && metadata.context.firstName)
 
-                        if (isComplete) {
-                            return (
-                                <div>DONE!!!!</div>
-                            )
-                        }
                         return (
                             <>
                                 <ComplexLayout fieldsetMap={fieldsetMap}/>

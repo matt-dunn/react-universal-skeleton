@@ -1,4 +1,5 @@
 import {ValidationError} from "yup";
+import {APIError} from "../../../components/api";
 
 export type MyFormResponse = {
     chosenFlavour: string;
@@ -29,8 +30,8 @@ export const dummyApiCall = (flavour: string, email: string): Promise<MyFormResp
     return new Promise((resolve, reject) => {
         if (flavour === "vanilla") {
             // throw new APIError("Authentication Failed", "auth", 403)
-            // throw new Error("Don't like VANILLA!!!")
-            throw new ValidationError(["OOPS"], "", "notes")
+            // throw new Error("Don't like VANILLA... choose something else...")
+            throw new ValidationError("Don't like VANILLA... choose something else...", "", "flavour.favourite")
         }
 
         setTimeout(() => {
