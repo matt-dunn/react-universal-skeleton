@@ -45,7 +45,7 @@ export type FieldSetMap<T> = {
 }
 
 export type FormContextType<T, P, S> = {
-    schema: Field<any>;
+    schema: Field<T>;
     formData: FormDataState<T, P, S>;
 }
 

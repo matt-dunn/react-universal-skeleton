@@ -1,5 +1,6 @@
 import {useFormikContext} from "formik";
 import {RefObject, useEffect} from "react";
+
 import {typedMemo} from "./types";
 
 export type FormErrorFocusProps = {
@@ -28,7 +29,7 @@ function FormErrorFocus<T>({formRef}: FormErrorFocusProps) {
 
     useEffect(() => {
         !isValid && formRef.current && setFocus(formRef.current);
-    }, [formRef, isValid])
+    }, [formRef, isValid]);
 
     if (isSubmitting && !isValidating) {
         formRef.current && setFocus(formRef.current);

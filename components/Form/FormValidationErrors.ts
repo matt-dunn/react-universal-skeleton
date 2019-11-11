@@ -6,6 +6,7 @@ import {typedMemo} from "./types";
 export type FormValidationErrorsProps<T> = {
     errors: FormikErrors<T>;
 }
+
 function FormValidationErrors<T>({errors}: FormValidationErrorsProps<T>) {
     const {setErrors} = useFormikContext<T>();
 

@@ -36,7 +36,7 @@ function iterateSchema<T>(schema: Field<T>, path = ""): any {
 
         if (min > 0) {
             const item = iterateSchema(schema._subType);
-            return Array.from(Array(Math.min(min, max || 0)).keys()).map(() => ({...item}))
+            return Array.from(Array(Math.min(min, max || 0)).keys()).map(() => ({...item}));
         }
 
         return schema.getDefault()
@@ -44,7 +44,7 @@ function iterateSchema<T>(schema: Field<T>, path = ""): any {
         const fields = schema.fields;
 
         return Object.keys(fields).reduce((o, key) => {
-            o[key] = iterateSchema(fields[key], [path, key].filter(part => part).join("."))
+            o[key] = iterateSchema(fields[key], [path, key].filter(part => part).join("."));
             return o;
         }, {} as {[key: string]: any})
     } else {
@@ -61,14 +61,15 @@ export function flattenFields<T>(fields: Fields<T>, path: string, fieldPath = ""
         const field = fields[key];
 
         if (field._type === "object") {
-            const objectFields = flattenFields(field.fields, path, key)
+            const objectFields = flattenFields(field.fields, path, key);
+
             Object.keys(objectFields).forEach(category => {
                 if (!map[category]) {
                     map[category] = [];
                 }
 
-                map[category] = map[category].concat(objectFields[category])
-            })
+                map[category] = map[category].concat(objectFields[category]);
+            });
         } else {
             const {category = "children"} = field._meta || {};
 
@@ -83,7 +84,7 @@ export function flattenFields<T>(fields: Fields<T>, path: string, fieldPath = ""
         }
 
         return map;
-    }, {children: []} as FieldSetMap<T>) as FieldSetMap<T>
+    }, {children: []} as FieldSetMap<T>) as FieldSetMap<T>;
 }
 
 export function sortFields<T>(map: FieldSetMap<T>): FieldSetMap<T> {
@@ -99,14 +100,14 @@ export function performAction<T>(schema: any, action: ActionType, data: T, value
             return (value && immutable.push(data, value, getDefault(schema, value))) || data;
         }
         case "remove": {
-            return immutable.del(data, value)
+            return immutable.del(data, value);
         }
         case "insert": {
             if (value) {
                 const parts = value.split(".");
                 const index = parseInt(parts.slice(-1).join("."), 10);
                 const path = parts.slice(0, -1).join(".");
-                return immutable.insert(data, path, getDefault(schema, value), index)
+                return immutable.insert(data, path, getDefault(schema, value), index);
             }
             break;
         }
