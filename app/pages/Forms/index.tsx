@@ -12,6 +12,9 @@ import {dummyApiCall, MyFormResponse} from "./utils";
 import schemaComplex from "./schemas/complex";
 import ComplexLayout from "./layouts/Complex";
 
+import {useFormikContext} from "formik";
+import {formStyles} from "../../../components/Form/styles";
+
 const Title = styled.h2`
     color: #ccc;
 `;
@@ -66,6 +69,27 @@ export type MySimpleFormResponse = {
     newUsername: string;
 }
 
+import {FormContainer} from "components/form"
+
+const MyFormContainer = styled(FormContainer)`
+  --invalid-color: orange;
+  
+  border: none;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+
+  label.feedback {
+    color: var(--invalid-color);
+  }
+
+  input,
+  textarea {
+      &.invalid {
+        border-color: var(--invalid-color);
+      }
+  }
+`;
+
 const Forms = () => {
     const handleSubmit: MapDataToAction<Yup.InferType<typeof schemaComplex>, MyFormResponse, any> = values => dummyApiCall(values.flavour.favourite, values.email);
     const handleSubmit2: MapDataToAction<Yup.InferType<typeof simpleSchema>, MySimpleFormResponse, any> = values => Promise.resolve({newUsername: values.username});
@@ -92,9 +116,9 @@ const Forms = () => {
                     //     return dummyApiCall(values.flavour.favourite, values.email);
                     // }}
                     context={formState}
+                    as={MyFormContainer}
                 >
-                    {({fieldsetMap, metadata, isComplete, values, ...props}) => {
-                        console.log("???", isComplete, values, props)
+                    {({fieldsetMap, metadata, isComplete}) => {
                         // console.log(metadata, metadata.payload && metadata.payload.chosenFlavour)
                         // console.log(metadata, metadata.context && metadata.context.firstName)
 

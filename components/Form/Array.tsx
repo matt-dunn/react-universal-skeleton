@@ -1,11 +1,11 @@
 import React, {useContext, useMemo} from "react";
 import {Schema, string} from "yup";
 import {ErrorMessage, FieldArray, getIn, useFormikContext} from "formik";
+import classnames from "classnames";
 
 import {FormContext, getDefault} from "./utils";
 import {FieldSetWrapper} from "./FieldSetWrapper";
 import {Field, FieldSetChildren, typedMemo} from "./types";
-import {Legend, SubSectionContainer, InputFeedback, SubSection, FormOptions} from "./styles";
 
 export type ArrayProps<T, P, S> = {
     field: Schema<T> & Field<T>;
@@ -54,12 +54,14 @@ function Array<T, P, S>({field, path, children, className}: ArrayProps<T, P, S>)
                 )) || null;
 
                 return (
-                    <SubSectionContainer
-                        className={className}
+                    <fieldset
+                        className={classnames("subSectionContainer", className)}
                     >
-                        {label && <Legend>{label}</Legend>}
-                        {typeof error === "string" && <ErrorMessage name={path}>
-                            {message => <InputFeedback><em>{message}</em></InputFeedback>}
+                        {label && <legend>{label}</legend>}
+
+                        {typeof error === "string" &&
+                        <ErrorMessage name={path}>
+                            {message => <label className="feedback"><em>{message}</em></label>}
                         </ErrorMessage>
                         }
 
@@ -96,27 +98,28 @@ function Array<T, P, S>({field, path, children, className}: ArrayProps<T, P, S>)
                             )) || null;
 
                             return (
-                                <SubSection
+                                <fieldset
                                     key={itemFullPath}
+                                    className="subSection"
                                 >
-                                    {(max && max > 1) && <Legend>{itemLabel || label} {index + 1}</Legend>}
+                                    {(max && max > 1) && <legend>{itemLabel || label} {index + 1}</legend>}
                                     <FieldSetWrapper
                                         fields={field._subType.fields}
                                         path={itemFullPath}
                                     >
                                         {children}
                                     </FieldSetWrapper>
-                                    {(InsertOption || RemoveOption) && <FormOptions>
+                                    {(InsertOption || RemoveOption) && <aside className="options">
                                         {InsertOption}
                                         {RemoveOption}
-                                    </FormOptions>}
-                                </SubSection>
+                                    </aside>}
+                                </fieldset>
                             );
                         })}
-                        {AddOption && <FormOptions align={"left"}>
+                        {AddOption && <aside className="options left">
                             {AddOption}
-                        </FormOptions>}
-                    </SubSectionContainer>
+                        </aside>}
+                    </fieldset>
                 )}}
         />
     ) || null;

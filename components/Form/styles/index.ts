@@ -1,42 +1,6 @@
 import styled, {css} from "styled-components";
+
 import {FormStyles} from "../types";
-
-export const SubSectionContainer = styled.fieldset`
-  margin: 20px 0 10px 0;
-  padding: 10px;
-  border: 1px solid #eee;
-  border-radius: 5px;
-`;
-
-export const SubSection = styled(SubSectionContainer)`
-  margin-top: 0;
-  
-  > legend {
-    font-size: 85%;
-    opacity: 0.75;
-    text-align: right;
-  }
-`;
-
-export const Legend = styled.legend`
-  padding: 2px 20px;
-  background-color: #eee;
-  border-radius: 1em;
-`;
-
-export const Section = styled.section`
-  margin: 0 0 10px 0;
-`;
-
-export const InputFeedback = styled.label`
-  color: red;
-  display: block;
-  margin: 5px 0 10px 0;
-  
-  em {
-    font-style: normal;
-  }
-`;
 
 export const formStyles: FormStyles = {
     control: css`
@@ -46,17 +10,23 @@ export const formStyles: FormStyles = {
         border-radius: 4px;
     `,
     controlInvalid: css`
-        border-color: red;
+        border-color: var(--invalid-color);
     `
 };
 
 export const FormContainer = styled.form`
+  --invalid-color: red;
+
   border: 1px solid #ccc;
   background-color: #fdfdfd;
   border-radius: 4px;
   padding: 10px;
   margin: 20px 0;
   box-sizing: border-box;
+  
+  section {
+    margin: 0 0 10px 0;
+  }
   
   button {
     font-size: inherit;
@@ -93,48 +63,85 @@ export const FormContainer = styled.form`
   input,
   textarea {
       &.invalid {
-        border-color: red;
+        border-color: var(--invalid-color);
       }
   }
-`;
-
-export const Label = styled.label`
-  color: #666;
-  margin: 2px 0;
-  display: block;
-`;
-
-export const LabelIsRequired = styled.span`
-  color: red;
-  text-indent: -900em;
-  overflow: hidden;
-  display: inline-block;
-  line-height: 1;
-  position: absolute;
-
-  &:before {
-    float: left;
-    content: '*';
-    margin-left: 2px;
-    text-indent: 0;
-  }
-`;
-
-export const FormOptions = styled.aside<{align?: 'left' | 'right'}>`
-  margin: 10px 0 0 0;
-  text-align: ${({align}) => align || "right"};
-
-  button {
-    margin-right: 10px;
+  
+  fieldset {
+    margin: 20px 0 10px 0;
+    padding: 10px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    
+    &.subSection {
+      margin-top: 0;
+  
+      > legend {
+        font-size: 85%;
+        opacity: 0.75;
+        text-align: right;
+      }
+    }
+    
+    legend {
+      padding: 2px 20px;
+      background-color: #eee;
+      border-radius: 1em;
+    }
   }
   
-  *:last-child {
-    margin-right: 0;
+  label {
+    color: #666;
+    margin: 2px 0;
+    display: block;
+    
+    span.isRequired {
+      color: var(--invalid-color);
+      text-indent: -900em;
+      overflow: hidden;
+      display: inline-block;
+      line-height: 1;
+      position: absolute;
+    
+      &:before {
+        float: left;
+        content: '*';
+        margin-left: 2px;
+        text-indent: 0;
+      }
+    }
   }
-`
-
-export const FormFooterOptions = styled(FormOptions)`
-  border-top: 1px solid #eee;
-  padding: 10px 0 0 0;
-  font-size: 110%;
-`
+  
+  label.feedback {
+    color: var(--invalid-color);
+    display: block;
+    margin: 5px 0 10px 0;
+    
+    em {
+      font-style: normal;
+    }
+  }
+  
+  aside.options {
+    margin: 10px 0 0 0;
+    text-align: right;
+    
+    &.left {
+      text-align: left;
+    }
+    
+    button {
+      margin-right: 10px;
+    }
+    
+    *:last-child {
+      margin-right: 0;
+    }
+    
+    &.main {
+      border-top: 1px solid #eee;
+      padding: 10px 0 0 0;
+      font-size: 110%;
+    }
+  }
+`;

@@ -3,7 +3,7 @@ import {string} from "yup";
 import {ErrorMessage, getIn, Field, useFormikContext} from "formik";
 
 import {FormLabel} from "./Label";
-import {formStyles, InputFeedback, Section} from "./styles";
+import {formStyles} from "./styles";
 import {Array} from "./Array";
 import {FormContext, useFormContext} from "./utils";
 import {FieldMap, FieldSetChildren, typedMemo} from "./types";
@@ -76,7 +76,7 @@ function FieldSet<T, P, S>({fields, children, className}: FieldSetProps<T, P, S>
                 };
 
                 return (
-                    <Section
+                    <section
                         key={fullPath}
                         className={className}
                     >
@@ -91,9 +91,9 @@ function FieldSet<T, P, S>({fields, children, className}: FieldSetProps<T, P, S>
                             {...ariaProps}
                         />
                         <ErrorMessage name={fullPath}>
-                            {message => <InputFeedback id={fieldIdError} htmlFor={fieldId}><em>{message}</em></InputFeedback>}
+                            {message => <label className="feedback" id={fieldIdError} htmlFor={fieldId}><em>{message}</em></label>}
                         </ErrorMessage>
-                    </Section>
+                    </section>
                 )
             })}
         </>

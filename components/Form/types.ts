@@ -1,7 +1,7 @@
 import React, {ComponentType} from "react";
-import {Schema, SchemaDescription, ValidationError} from "yup";
+import {Schema, SchemaDescription} from "yup";
 import {FlattenInterpolation} from "styled-components";
-import {FormikContextType, FormikErrors, FormikTouched} from "formik";
+import {FormikErrors, FormikTouched} from "formik";
 
 import {FormDataState} from "components/actions/form";
 
@@ -62,7 +62,7 @@ export type FormMetaData<C, P> = {
     payload?: P;
 }
 
-export interface FieldSetChildrenProps<T, P, S> extends FormikContextType<T> {
+export interface FieldSetChildrenProps<T, P, S> {
     fieldsetMap: FieldSetMap<T>;
     metadata: FormMetaData<S, P>;
     isComplete: boolean;

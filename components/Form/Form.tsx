@@ -1,15 +1,15 @@
-import React, {useEffect, useMemo, useRef} from 'react'
+import React, {useMemo, useRef} from 'react'
 import {Formik, setIn} from 'formik';
 import * as Yup from 'yup';
-import {ValidationError} from "yup";
 import classnames from "classnames";
+import styled from "styled-components";
 
 import {MapDataToAction, useForm} from "components/actions/form";
 
 import {getDefault, FormContext, performAction, FormErrorFocus, FormValidationErrors} from "./utils";
 import {FieldSetWrapper} from "./FieldSetWrapper";
 import {CompleteChildren, FieldSetChildren, FormMetaData, InitialFormData, SchemaWithFields, typedMemo} from "./types";
-import {FormContainer, FormFooterOptions, InputFeedback} from "./styles";
+import {FormContainer} from "./styles";
 
 export type FormProps<T, P, S> = {
     id: string;
@@ -19,9 +19,12 @@ export type FormProps<T, P, S> = {
     complete?: CompleteChildren<Yup.InferType<SchemaWithFields<T>>, P, S>;
     className?: string;
     context?: S;
+    as?: keyof JSX.IntrinsicElements | React.ComponentType<any>;
 }
 
-function Form<T, P, S>({id, schema, onSubmit, children, className, context, complete}: FormProps<T, P, S>) {
+const FormWrapper = styled.form``;
+
+function Form<T, P, S>({id, schema, onSubmit, children, className, context, complete, as = FormContainer}: FormProps<T, P, S>) {
     const [formData, handleSubmit] = useForm<Yup.InferType<typeof schema>, P, typeof schema, S>(
         id,
         schema,
@@ -80,9 +83,10 @@ function Form<T, P, S>({id, schema, onSubmit, children, className, context, comp
                     }
 
                     return schema.fields && (
-                        <FormContainer
+                        <FormWrapper
                             id={id}
                             ref={formRef}
+                            as={as}
                             onSubmit={handleSubmit}
                             method="post"
                             action={`#${id}`}
@@ -99,7 +103,7 @@ function Form<T, P, S>({id, schema, onSubmit, children, className, context, comp
                                 readOnly={true}
                             />
 
-                            {(formData.error && formData.error.message) && <InputFeedback>{formData.error.message}</InputFeedback>}
+                            {(formData.error && formData.error.message) && <label className="feedback">{formData.error.message}</label>}
 
                             <FieldSetWrapper
                                 fields={schema.fields}
@@ -107,7 +111,7 @@ function Form<T, P, S>({id, schema, onSubmit, children, className, context, comp
                                 {children}
                             </FieldSetWrapper>
 
-                            <FormFooterOptions>
+                            <aside className="options main">
                                 <button
                                     type="button"
                                     onClick={handleReset}
@@ -123,8 +127,8 @@ function Form<T, P, S>({id, schema, onSubmit, children, className, context, comp
                                 >
                                     Submit {(isValid && isInitialValid) && "✔"}
                                 </button>
-                            </FormFooterOptions>
-                        </FormContainer>
+                            </aside>
+                        </FormWrapper>
                     ) || null;
                 }}
             </Formik>

@@ -1,7 +1,6 @@
 import React from "react";
 
 import {Field, typedMemo} from "./types";
-import {Label, LabelIsRequired} from "./styles";
 
 type FormLabelProps<T> = {
     label: string;
@@ -11,10 +10,10 @@ type FormLabelProps<T> = {
 
 const FormLabel = function<T>({label, id, field}: FormLabelProps<T>) {
     return (
-        <Label htmlFor={id}>
+        <label htmlFor={id}>
             {label}
-            {field && field.tests.filter(test => test.OPTIONS.name === "required").length > 0 && <LabelIsRequired aria-label="required"> is required</LabelIsRequired>}
-        </Label>
+            {field && field.tests.filter(test => test.OPTIONS.name === "required").length > 0 && <span className="isRequired" aria-label="required"> is required</span>}
+        </label>
     );
 };
 
