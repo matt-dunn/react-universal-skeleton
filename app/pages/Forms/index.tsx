@@ -66,7 +66,7 @@ const simpleSchema = Yup.object().shape({
                 }
             })
     })
-})
+});
 
 export type MySimpleFormResponse = {
     newUsername: string;
@@ -76,7 +76,7 @@ const MyFormContainer = styled(FormContainer)`
   --invalid-color: orange;
   
   border: 4px solid #ccc;
-  padding: 30px 30px 10px 30px;
+  padding: 15px 30px;
   background-color: inherit;
   border-radius: 15px;
 

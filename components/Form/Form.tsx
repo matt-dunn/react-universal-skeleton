@@ -59,12 +59,8 @@ function Form<T, P, S>({id, schema, onSubmit, children, className, context, comp
             >
                 {props => {
                     const {
-                        dirty,
-                        isSubmitting,
                         handleSubmit,
-                        handleReset,
                         isValid,
-                        isInitialValid,
                         values,
                     } = props;
 
