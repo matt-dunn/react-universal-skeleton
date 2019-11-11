@@ -7,7 +7,7 @@ import {Array} from "./Array";
 import {FormContext, useFormContext} from "./utils";
 import {FieldMap, FieldSetChildren, typedMemo} from "./types";
 
-export type FieldSetProps<T, P, S> = {
+type FieldSetProps<T, P, S> = {
     fields?: FieldMap<T>[];
     children?: FieldSetChildren<T, P, S>;
     className?: string;

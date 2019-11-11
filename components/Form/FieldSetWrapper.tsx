@@ -4,7 +4,7 @@ import {Fields, FieldSetChildren, FieldSetMap, FormMetaData, typedMemo} from "./
 import {flattenFields, sortFields, useFormContext} from "./utils";
 import {Collections} from "./Collections";
 
-export type FieldSetWrapperProps<T, P, S> = {
+type FieldSetWrapperProps<T, P, S> = {
     fields: Fields<T>;
     path?: string;
     children?: FieldSetChildren<T, P, S>;

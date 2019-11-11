@@ -6,7 +6,7 @@ import {FormContext, getArrayMeta, getDefault} from "./utils";
 import {FieldSetWrapper} from "./FieldSetWrapper";
 import {Field, FieldSetChildren, typedMemo} from "./types";
 
-export type ArrayProps<T, P, S> = {
+type ArrayProps<T, P, S> = {
     field: Field<T>;
     path: string;
     children?: FieldSetChildren<T, P, S>;

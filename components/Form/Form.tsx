@@ -15,7 +15,7 @@ import {FormValidationErrors} from "./FormValidationErrors";
 import {FormErrorFocus} from "./FormErrorFocus";
 import {FormOptions} from "./FormOptions";
 
-export type FormProps<T, P, S> = {
+type FormProps<T, P, S> = {
     id: string;
     schema: Schema<T>;
     onSubmit: MapDataToAction<T, P, S>;

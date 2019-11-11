@@ -3,7 +3,7 @@ import React from "react";
 import {FieldSetMap, typedMemo} from "./types";
 import {FieldSet} from "./FieldSet";
 
-export type CollectionsProps<T, P, S> = {
+type CollectionsProps<T, P, S> = {
     fieldsetMap: FieldSetMap<T>;
 }
 

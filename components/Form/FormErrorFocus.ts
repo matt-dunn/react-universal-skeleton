@@ -3,7 +3,7 @@ import {RefObject, useEffect} from "react";
 
 import {typedMemo} from "./types";
 
-export type FormErrorFocusProps = {
+type FormErrorFocusProps = {
     formRef: RefObject<HTMLFormElement>;
 }
 

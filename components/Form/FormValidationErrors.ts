@@ -3,7 +3,7 @@ import {useEffect} from "react";
 
 import {typedMemo} from "./types";
 
-export type FormValidationErrorsProps<T> = {
+type FormValidationErrorsProps<T> = {
     errors: FormikErrors<T>;
 }
 
