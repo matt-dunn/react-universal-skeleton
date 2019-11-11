@@ -1,11 +1,11 @@
-import React, {RefObject, useContext, useEffect} from "react";
+import React, {RefObject, useContext} from "react";
 import * as Yup from 'yup';
-import {FormikErrors, useFormikContext} from "formik";
 import immutable from "object-path-immutable";
 import {sortBy} from "lodash";
 
-import {Fields, FieldSetMap, SchemaWithFields, FormContextType, typedMemo} from "./types";
+import {Fields, FieldSetMap, FormContextType, SchemaWithFields, typedMemo} from "./types";
 import {ActionType} from "../actions/form";
+import {FormErrorFocus} from "./FormErrorFocus";
 
 export const FormContext = React.createContext<FormContextType<any, any, any> | undefined>(undefined);
 
@@ -75,60 +75,3 @@ export function performAction<T>(schema: any, action: ActionType, data: T, value
         }
     }
 }
-
-function setFocus(form: HTMLFormElement) {
-    // Move into next tick so avoid attempting to focus on a disabled input element
-    setTimeout(() => {
-        if (!document.activeElement || (document.activeElement as HTMLInputElement).tabIndex < 0) {
-            const target = form.querySelector<HTMLInputElement>(".invalid");
-            if (target) {
-                if (target.tabIndex >= 0) {
-                    target.focus();
-                } else {
-                    const focusable = target.querySelector<HTMLInputElement>("[tabIndex]");
-                    focusable && focusable.focus();
-                }
-            }
-        }
-    });
-}
-
-export type FormErrorFocusProps = {
-    formRef: RefObject<HTMLFormElement>;
-}
-
-function FormErrorFocus<T>({formRef}: FormErrorFocusProps) {
-    const {isSubmitting, isValidating, isValid} = useFormikContext<T>();
-
-    useEffect(() => {
-        !isValid && formRef.current && setFocus(formRef.current);
-    }, [formRef, isValid])
-
-    if (isSubmitting && !isValidating) {
-        formRef.current && setFocus(formRef.current);
-    }
-
-    return null;
-}
-
-const MemoFormErrorFocus = typedMemo(FormErrorFocus);
-
-export {MemoFormErrorFocus as FormErrorFocus};
-
-export type FormValidationErrorsProps<T> = {
-    errors: FormikErrors<T>;
-}
-
-function FormValidationErrors<T>({errors}: FormValidationErrorsProps<T>) {
-    const {setErrors} = useFormikContext<T>();
-
-    useEffect(() => {
-        setErrors(errors);
-    }, [setErrors, errors]);
-
-    return null;
-}
-
-const MemoFormValidationErrors = typedMemo(FormValidationErrors);
-
-export {MemoFormValidationErrors as FormValidationErrors};
