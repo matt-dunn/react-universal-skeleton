@@ -1,4 +1,4 @@
-import React, {useCallback} from "react";
+import React, {ReactElement, useCallback} from "react";
 import styled, {css} from "styled-components";
 import { Link } from 'react-router-dom';
 
@@ -25,7 +25,7 @@ export type ListProps = {
     $status?: IStatus;
     isShown?: boolean;
     activePage?: number;
-    children?: ({item, disabled}: {item: IExampleItemState; disabled: boolean}) => JSX.Element;
+    children?: ({item, disabled}: {item: IExampleItemState; disabled: boolean}) => ReactElement<any>;
 };
 
 const ListContainer = styled.div`

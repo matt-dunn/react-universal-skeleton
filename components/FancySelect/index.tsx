@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, ReactElement} from 'react'
 import styled, {css} from "styled-components";
 import classnames from "classnames";
 
@@ -47,7 +47,7 @@ type FancySelectProps = {
     className?: string;
 }
 
-const FancySelect = ({id, disabled, isValid, options, name, value, onChange, onBlur, formStyles, className, ...props}: FancySelectProps): JSX.Element => {
+const FancySelect = ({id, disabled, isValid, options, name, value, onChange, onBlur, formStyles, className, ...props}: FancySelectProps): ReactElement<any> => {
     const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {

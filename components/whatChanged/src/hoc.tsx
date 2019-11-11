@@ -12,7 +12,7 @@
 
 /* eslint no-underscore-dangle: "off" */
 /* eslint no-console: "off" */
-import React, { ComponentType, PureComponent } from 'react';
+import React, {ComponentType, PureComponent, ReactElement} from 'react';
 
 import { outputPathParts, deepDiff, getIdentifier, IOptions } from './utils';
 
@@ -32,7 +32,7 @@ export default (
             );
         }
 
-        public render = (): JSX.Element => {
+        public render = (): ReactElement<any> => {
           return (
               <WrappedComponent {...this.props as P} />
           );

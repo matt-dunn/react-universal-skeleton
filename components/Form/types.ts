@@ -1,4 +1,4 @@
-import React, {ComponentType} from "react";
+import React, {ComponentType, ReactElement} from "react";
 import {Schema} from "yup";
 import {FlattenInterpolation} from "styled-components";
 import {FormikErrors, FormikTouched} from "formik";
@@ -63,7 +63,7 @@ export interface FieldSetChildrenProps<T, P, S> {
 }
 
 export type FieldSetChildren<T, P, S> = {
-    ({fieldsetMap, metadata}: FieldSetChildrenProps<T, P, S>): JSX.Element;
+    ({fieldsetMap, metadata}: FieldSetChildrenProps<T, P, S>): ReactElement<any>;
 }
 
 export type CompleteChildrenProps<T, P, S> = {
@@ -72,7 +72,7 @@ export type CompleteChildrenProps<T, P, S> = {
 }
 
 export type CompleteChildren<T, P, S> = {
-    ({values, metadata}: CompleteChildrenProps<T, P, S>): JSX.Element;
+    ({values, metadata}: CompleteChildrenProps<T, P, S>): ReactElement<any>;
 }
 
 export const typedMemo: <T>(c: T) => T = React.memo;
