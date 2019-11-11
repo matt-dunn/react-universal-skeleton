@@ -48,7 +48,7 @@ function iterateSchema<T>(schema: Field<T>, path = ""): any {
             return o;
         }, {} as {[key: string]: any})
     } else {
-        return schema.getDefault();
+        return schema.getDefault() || "";
     }
 }
 

@@ -8,7 +8,6 @@ import {validateEmailApi} from "../utils";
 const schema = Yup.object().shape({
     email: Yup.string()
         .label("Email")
-        .ensure()
         .meta({
             order: 1,
             props: {
@@ -30,7 +29,6 @@ const schema = Yup.object().shape({
         .shape({
             favourite: Yup.string()
                 .label("Flavour")
-                .ensure()
                 .meta({
                     order: 0,
                     category: "other",
@@ -49,7 +47,6 @@ const schema = Yup.object().shape({
     notes: Yup.string()
         .required('Notes is required')
         .label("Notes")
-        .ensure()
         .meta({
             order: 3,
             category: "extra",
@@ -71,7 +68,6 @@ const schema = Yup.object().shape({
                         type: "text"
                     }
                 })
-                .ensure()
                 .required(),
             address: Yup.string()
                 .label("Address")
@@ -82,8 +78,7 @@ const schema = Yup.object().shape({
                         placeholder: "Enter address",
                         type: "text"
                     }
-                })
-                .ensure(),
+                }),
             friends: Yup.array(Yup.object()
                 .shape({
                     nickname: Yup.string()
@@ -95,7 +90,6 @@ const schema = Yup.object().shape({
                                 type: "text"
                             }
                         })
-                        .ensure()
                         .required(),
                 })
             )
@@ -111,7 +105,6 @@ const schema = Yup.object().shape({
             order: 2,
             itemLabel: "Person"
         })
-        .ensure()
         // .min(1)
         .max(5)
 });
