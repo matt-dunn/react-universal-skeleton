@@ -1,14 +1,13 @@
 import React, {useContext, useMemo} from "react";
-import {Schema, string} from "yup";
 import {ErrorMessage, FieldArray, getIn, useFormikContext} from "formik";
 import classnames from "classnames";
 
-import {FormContext, getDefault} from "./utils";
+import {FormContext, getArrayMeta, getDefault} from "./utils";
 import {FieldSetWrapper} from "./FieldSetWrapper";
 import {Field, FieldSetChildren, typedMemo} from "./types";
 
 export type ArrayProps<T, P, S> = {
-    field: Schema<T> & Field<T>;
+    field: Field<T>;
     path: string;
     children?: FieldSetChildren<T, P, S>;
     className?: string;
@@ -22,14 +21,7 @@ function Array<T, P, S>({field, path, children, className}: ArrayProps<T, P, S>)
     const {itemLabel} = field._meta;
     const error = getIn(errors, path);
 
-    const {min, max} = useMemo(() => field.tests.reduce((o: {min: number; max: number | undefined}, test: { OPTIONS: {name: string; params: any }}) => {
-        if (test.OPTIONS.name === "min") {
-            o.min = test.OPTIONS.params.min;
-        } else if (test.OPTIONS.name === "max") {
-            o.max = test.OPTIONS.params.max;
-        }
-        return o;
-    }, {min: 0, max: undefined}), [field.tests]);
+    const {min, max} = useMemo(() => getArrayMeta(field), [field]);
 
     const itemsCount = (value && value.length) || 0;
 
@@ -45,7 +37,7 @@ function Array<T, P, S>({field, path, children, className}: ArrayProps<T, P, S>)
                         type="submit"
                         onClick={e => {
                             e.preventDefault();
-                            arrayHelpers.push(getDefault(schema, path));
+                            arrayHelpers.push(getDefault(schema, `${path}.0`));
                             value && value.length === 0 && setFieldError(path as keyof T & string, undefined as any);
                         }}
                     >
@@ -90,7 +82,7 @@ function Array<T, P, S>({field, path, children, className}: ArrayProps<T, P, S>)
                                     type="submit"
                                     onClick={e => {
                                         e.preventDefault();
-                                        arrayHelpers.insert(index, getDefault(schema, path))
+                                        arrayHelpers.insert(index, getDefault(schema, `${path}.0`))
                                     }}
                                 >
                                     Insert {itemLabel || label}

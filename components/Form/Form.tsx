@@ -1,6 +1,7 @@
 import React, {useMemo, useRef} from 'react'
 import {Formik, setIn} from 'formik';
 import * as Yup from 'yup';
+import {Schema} from "yup";
 import classnames from "classnames";
 import styled from "styled-components";
 
@@ -8,7 +9,7 @@ import {MapDataToAction, useForm} from "components/actions/form";
 
 import {getDefault, FormContext, performAction} from "./utils";
 import {FieldSetWrapper} from "./FieldSetWrapper";
-import {CompleteChildren, FieldSetChildren, FormMetaData, InitialFormData, SchemaWithFields, typedMemo} from "./types";
+import {CompleteChildren, FieldSetChildren, FormMetaData, InitialFormData, Field, typedMemo} from "./types";
 import {FormContainer} from "./styles";
 import {FormValidationErrors} from "./FormValidationErrors";
 import {FormErrorFocus} from "./FormErrorFocus";
@@ -16,10 +17,10 @@ import {FormOptions} from "./FormOptions";
 
 export type FormProps<T, P, S> = {
     id: string;
-    schema: SchemaWithFields<T>;
+    schema: Schema<T>;
     onSubmit: MapDataToAction<T, P, S>;
     children?: FieldSetChildren<T, P, S>;
-    complete?: CompleteChildren<Yup.InferType<SchemaWithFields<T>>, P, S>;
+    complete?: CompleteChildren<Yup.InferType<Field<T>>, P, S>;
     className?: string;
     context?: S;
     as?: keyof JSX.IntrinsicElements | React.ComponentType<any>;
@@ -37,6 +38,7 @@ function Form<T, P, S>({id, schema, onSubmit, children, className, context, comp
         context
     );
 
+    const extendedSchema: Field<T> = schema as any;
     const formRef = useRef<HTMLFormElement>(null);
 
     const formState = formData.state.toString();
@@ -46,10 +48,10 @@ function Form<T, P, S>({id, schema, onSubmit, children, className, context, comp
         touched: setIn(touched, path, true)
     }), {errors: {}, touched: {}}) || {} as InitialFormData<Yup.InferType<typeof schema>>, [formData.innerFormErrors, schema]);
 
-    const initialValues: Yup.InferType<typeof schema> = formData.data || getDefault(schema);
+    const initialValues: Yup.InferType<typeof schema> = formData.data || getDefault(extendedSchema);
 
     return (
-        <FormContext.Provider value={{schema, formData}}>
+        <FormContext.Provider value={{schema: extendedSchema, formData}}>
             <Formik
                 initialValues={initialValues}
                 initialErrors={initialErrors}
@@ -81,7 +83,7 @@ function Form<T, P, S>({id, schema, onSubmit, children, className, context, comp
                         )
                     }
 
-                    return schema.fields && (
+                    return extendedSchema.fields && (
                         <FormWrapper
                             id={id}
                             ref={formRef}
@@ -105,7 +107,7 @@ function Form<T, P, S>({id, schema, onSubmit, children, className, context, comp
                             {(formData.error && formData.error.message) && <label className="feedback">{formData.error.message}</label>}
 
                             <FieldSetWrapper
-                                fields={schema.fields}
+                                fields={extendedSchema.fields}
                             >
                                 {children}
                             </FieldSetWrapper>

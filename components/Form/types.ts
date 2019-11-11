@@ -1,13 +1,12 @@
 import React, {ComponentType} from "react";
-import {Schema, SchemaDescription} from "yup";
+import {Schema} from "yup";
 import {FlattenInterpolation} from "styled-components";
 import {FormikErrors, FormikTouched} from "formik";
 
 import {FormDataState} from "components/actions/form";
+import {ErrorLike} from "components/error";
 
-import {ErrorLike} from "../error";
-
-export interface Field<T> extends SchemaDescription {
+export interface Field<T> extends Schema<T> {
     _meta: {
         Component?: ComponentType<any> | string;
         props?: any;
@@ -16,20 +15,15 @@ export interface Field<T> extends SchemaDescription {
         category?: string;
     };
     _type: string;
-    _subType: {
-        fields: Fields<T>;
-    };
+    _subType: Field<T>;
     fields: Fields<T>;
     tests: { name: string; params: object; OPTIONS: {name: string; params: any} }[];
+    getDefault: () => any;
 }
 
 export type Fields<T> = {
-    [key: string]: Schema<T> & Field<T>;
+    [key: string]: Field<T>;
 };
-
-export interface SchemaWithFields<T> extends Schema<T> {
-    fields?: Fields<T>;
-}
 
 export type FormStyles = {
     control: FlattenInterpolation<any>;
@@ -42,7 +36,7 @@ export type InitialFormData<T> = {
 }
 
 export type FieldMap<T> = {
-    schema: Schema<T> & Field<T>;
+    schema: Field<T>;
     fullPath: string;
 }
 
@@ -51,7 +45,7 @@ export type FieldSetMap<T> = {
 }
 
 export type FormContextType<T, P, S> = {
-    schema: SchemaWithFields<any>;
+    schema: Field<any>;
     formData: FormDataState<T, P, S>;
 }
 

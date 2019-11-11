@@ -1,5 +1,4 @@
 import React, {useContext} from "react";
-import {string} from "yup";
 import {ErrorMessage, getIn, Field, useFormikContext} from "formik";
 
 import {FormLabel} from "./Label";
