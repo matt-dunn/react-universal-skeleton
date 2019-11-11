@@ -1,11 +1,10 @@
-import React, {RefObject, useContext} from "react";
+import React, {useContext} from "react";
 import * as Yup from 'yup';
 import immutable from "object-path-immutable";
 import {sortBy} from "lodash";
 
-import {Fields, FieldSetMap, FormContextType, SchemaWithFields, typedMemo} from "./types";
+import {Fields, FieldSetMap, FormContextType, SchemaWithFields} from "./types";
 import {ActionType} from "../actions/form";
-import {FormErrorFocus} from "./FormErrorFocus";
 
 export const FormContext = React.createContext<FormContextType<any, any, any> | undefined>(undefined);
 

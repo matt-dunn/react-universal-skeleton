@@ -5,6 +5,7 @@ import {typedMemo} from "./types";
 export type FormErrorFocusProps = {
     formRef: RefObject<HTMLFormElement>;
 }
+
 function setFocus(form: HTMLFormElement) {
     // Move into next tick so avoid attempting to focus on a disabled input element
     setTimeout(() => {
