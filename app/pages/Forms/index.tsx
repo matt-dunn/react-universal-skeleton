@@ -74,9 +74,10 @@ import {FormContainer} from "components/form"
 const MyFormContainer = styled(FormContainer)`
   --invalid-color: orange;
   
-  border: none;
-  background-color: #f9f9f9;
-  border-radius: 10px;
+  border: 4px solid #ccc;
+  padding: 30px;
+  background-color: inherit;
+  border-radius: 15px;
 
   label.feedback {
     color: var(--invalid-color);
@@ -179,7 +180,7 @@ const Forms = () => {
                                     The form has been submitted.
 
                                     <pre style={{whiteSpace: "normal"}}>values: {JSON.stringify(values)}</pre>
-                                    <pre style={{whiteSpace: "normal"}}>metadata: {JSON.stringify(metadata.context && metadata.context.moose)}</pre>
+                                    <pre style={{whiteSpace: "normal"}}>metadata: {JSON.stringify(metadata && metadata.context)}</pre>
                                 </SubmissionFeedback>
                             )
                         }
