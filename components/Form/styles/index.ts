@@ -131,12 +131,12 @@ export const FormContainer = styled.form`
       
       .radio-option {
         display: flex;
-        align-items: baseline;
-        margin: 2px 0;
+        align-items: center;
+        margin: 5px 0;
 
           label {
             display: inline;
-            margin: 0 0 0 5px;
+            margin: 0 0 0 10px;
           }
     
           input {

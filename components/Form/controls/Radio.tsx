@@ -1,6 +1,7 @@
 import React from "react";
 
 import {FormStyles, typedMemo} from "../types";
+import {Checkbox} from "./Checkbox";
 
 type Option = {
     value: string;
@@ -21,7 +22,7 @@ type RadioProps = {
 }
 
 function Radio({options, name, value, onChange, onBlur, formStyles, isValid, id, ...props}: RadioProps) {
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => onChange(name, e.currentTarget.value);
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>, value: string | boolean) => onChange(name, value.toString());
 
     const handleBlur = () => onBlur(name, true);
 
@@ -35,14 +36,17 @@ function Radio({options, name, value, onChange, onBlur, formStyles, isValid, id,
                         key={option.value}
                         className="radio-option"
                     >
-                        <input
+                        <Checkbox
                             onChange={handleChange}
                             onBlur={handleBlur}
                             type="radio"
                             name={name}
-                            value={option.value}
+                            option={option.value}
+                            value={option.value === value}
                             {...props}
                             id={`${id}-${index}`}
+                            formStyles={formStyles}
+                            isValid={isValid}
                         />
                         <label
                             htmlFor={`${id}-${index}`}

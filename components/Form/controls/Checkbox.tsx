@@ -12,17 +12,20 @@ type CheckboxProps = {
     id: string;
     disabled?: boolean;
     isValid?: boolean;
-    options: Option[];
     name: string;
-    value?: string;
-    onChange: (name: string | any, value: boolean, shouldValidate?: boolean) => void;
+    value?: boolean | string;
+    onChange: (name: string | any, value: boolean | string, shouldValidate?: boolean) => void;
     onBlur: (name: string | any, touched?: boolean, shouldValidate?: boolean) => void;
     formStyles: FormStyles;
     className?: string;
+    type: 'radio' | 'checkbox';
+    option?: string;
 }
 
 const Container = styled.span<{isValid?: boolean; formStyles: FormStyles}>`
   position: relative;
+  height: 24px;
+  width: 24px;
 
   input {
       position: absolute;
@@ -77,15 +80,15 @@ const Container = styled.span<{isValid?: boolean; formStyles: FormStyles}>`
   }
 `;
 
-function Checkbox({options, name, value, onChange, onBlur, formStyles, isValid, ...props}: CheckboxProps) {
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => onChange(name, e.currentTarget.checked);
+function Checkbox({name, type = "checkbox", value, onChange, onBlur, formStyles, isValid, option, ...props}: CheckboxProps) {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => onChange(name, option === undefined ? e.currentTarget.checked : option);
 
     const handleBlur = () => onBlur(name, true);
 
     return (
         <Container formStyles={formStyles} isValid={isValid}>
             <input
-                type="checkbox"
+                type={type}
                 checked={Boolean(value)}
                 onChange={handleChange}
                 onBlur={handleBlur}
