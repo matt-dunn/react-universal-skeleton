@@ -162,7 +162,7 @@ export const FormContainer = styled.form`
   label.feedback {
     color: var(--invalid-color);
     display: block;
-    margin: 5px 0 10px 0;
+    margin: 5px 0 15px 0;
     
     em {
       font-style: normal;

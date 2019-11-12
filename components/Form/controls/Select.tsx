@@ -20,7 +20,7 @@ type SelectProps = {
     className?: string;
 }
 
-function Select({options, name, value, onChange, onBlur, formStyles, isValid, ...props}: SelectProps) {
+function Select({options, onChange, onBlur, formStyles, isValid, ...props}: SelectProps) {
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => onChange(name, e.currentTarget.value);
 
     const handleBlur = () => onBlur(name, true);

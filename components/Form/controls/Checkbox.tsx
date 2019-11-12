@@ -80,7 +80,7 @@ const Container = styled.span<{isValid?: boolean; formStyles: FormStyles}>`
   }
 `;
 
-function Checkbox({name, type = "checkbox", value, onChange, onBlur, formStyles, isValid, option, ...props}: CheckboxProps) {
+function Checkbox({type = "checkbox", value, onChange, onBlur, formStyles, isValid, option, ...props}: CheckboxProps) {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => onChange(name, option === undefined ? e.currentTarget.checked : option);
 
     const handleBlur = () => onBlur(name, true);
@@ -90,6 +90,7 @@ function Checkbox({name, type = "checkbox", value, onChange, onBlur, formStyles,
             <input
                 type={type}
                 checked={Boolean(value)}
+                value={option === undefined ? "true" : option}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 {...props}
