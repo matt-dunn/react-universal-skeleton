@@ -7,6 +7,7 @@ import {Field, FieldMeta, Fields, FieldSetMap, FormComponent, FormContextType} f
 import {ActionType} from "../actions/form";
 import {Select} from "./controls/Select";
 import {Checkbox} from "./controls/Checkbox";
+import {Radio} from "./controls/Radio";
 
 export const FormContext = React.createContext<FormContextType<any, any, any> | undefined>(undefined);
 
@@ -145,6 +146,14 @@ export const getTypeProps = (schema: Field, additionalProps: any = {}): {Compone
     if (Component === "select") {
         return {
             Component: Select,
+            props: {
+                ...props,
+                ...additionalProps
+            }
+        }
+    } else if (Component === "radio") {
+        return {
+            Component: Radio,
             props: {
                 ...props,
                 ...additionalProps

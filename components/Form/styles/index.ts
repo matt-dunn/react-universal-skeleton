@@ -123,6 +123,27 @@ export const FormContainer = styled.form`
       background-color: #eee;
       border-radius: 1em;
     }
+    
+    &.radio {
+      border: none;
+      margin: 0 0 0 10px;
+      padding: 0;
+      
+      .radio-option {
+        display: flex;
+        align-items: baseline;
+        margin: 2px 0;
+
+          label {
+            display: inline;
+            margin: 0 0 0 5px;
+          }
+    
+          input {
+            width: initial;
+          }
+      }
+    }
   }
   
   label {

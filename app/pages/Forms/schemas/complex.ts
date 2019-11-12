@@ -62,6 +62,22 @@ const schema = Yup.object().shape({
             }
         })
         .required('Simple Select is required'),
+    simpleRadio: Yup.string()
+        .label("Simple Radio")
+        .meta({
+            order: 1,
+            category: "otherLeft",
+            Component: "radio",
+            props: {
+                options: [
+                    { value: '', label: 'Select value...' },
+                    { value: 'value1', label: 'Value 1' },
+                    { value: 'value2', label: 'Value 2' },
+                    { value: 'value3', label: 'Value 3' }
+                ]
+            }
+        })
+        .required(),
     flavour: Yup.object()
         .shape({
             favourite: Yup.string()
