@@ -1,6 +1,7 @@
 import React from "react";
 
 import {Field, typedMemo} from "./types";
+import {getFieldMeta} from "./utils";
 
 type FormLabelProps<T> = {
     label: string;
@@ -9,10 +10,12 @@ type FormLabelProps<T> = {
 }
 
 const FormLabel = function<T>({label, id, field}: FormLabelProps<T>) {
+    const {required} = getFieldMeta(field);
+
     return (
         <label htmlFor={id}>
             {label}
-            {field && field.tests.filter(test => test.OPTIONS.name === "required").length > 0 && <span className="isRequired" aria-label="required"> is required</span>}
+            {required && <span className="isRequired" aria-label="required"> is required</span>}
         </label>
     );
 };

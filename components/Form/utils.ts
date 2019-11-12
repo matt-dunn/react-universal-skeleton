@@ -1,10 +1,11 @@
-import React, {useContext} from "react";
+import React, {ComponentType, useContext} from "react";
 import * as Yup from 'yup';
 import immutable from "object-path-immutable";
-import {sortBy} from "lodash";
+import {sortBy, isFunction} from "lodash";
 
-import {Field, Fields, FieldSetMap, FormContextType} from "./types";
+import {Field, FieldMeta, Fields, FieldSetMap, FormComponent, FormContextType} from "./types";
 import {ActionType} from "../actions/form";
+import {Select} from "./controls/Select";
 
 export const FormContext = React.createContext<FormContextType<any, any, any> | undefined>(undefined);
 
@@ -12,19 +13,22 @@ export const useFormContext = <T, P, S>(): FormContextType<T, P, S> => {
     return (useContext(FormContext) || {}) as FormContextType<T, P, S>;
 };
 
-export type ArrayMeta = {
+export type FieldInferredMeta = {
     min: number;
     max: number | undefined;
+    required: boolean;
 }
 
-export function getArrayMeta<T>(schema: Field<T>): ArrayMeta {
-    const defaultMeta = {min: 0, max: undefined} as ArrayMeta;
+export function getFieldMeta<T>(schema: Field<T>): FieldInferredMeta {
+    const defaultMeta = {min: 0, max: undefined, required: false} as FieldInferredMeta;
 
-    return schema && schema._type === "array" && schema.tests.reduce((o: ArrayMeta, test: { OPTIONS: {name: string; params: any }}) => {
+    return schema && schema.tests.reduce((o: FieldInferredMeta, test: { OPTIONS: {name: string; params: any }}) => {
         if (test.OPTIONS.name === "min") {
             o.min = parseInt(test.OPTIONS.params.min, 10);
         } else if (test.OPTIONS.name === "max") {
             o.max = parseInt(test.OPTIONS.params.max, 10);
+        } else if (test.OPTIONS.name === "required") {
+            o.required = true;
         }
         return o;
     }, defaultMeta) || defaultMeta;
@@ -32,7 +36,7 @@ export function getArrayMeta<T>(schema: Field<T>): ArrayMeta {
 
 function iterateSchema<T>(schema: Field<T>, path = ""): any {
     if (schema._type === "array") {
-        const {min, max} = getArrayMeta(schema);
+        const {min, max} = getFieldMeta(schema);
 
         if (min > 0) {
             const item = iterateSchema(schema._subType);
@@ -113,3 +117,51 @@ export function performAction<T>(schema: any, action: ActionType, data: T, value
         }
     }
 }
+
+function isComponent(arg: any): arg is ComponentType {
+    return isFunction(arg);
+}
+
+export const getTypeProps = (schema: Field, additionalProps: any = {}): {Component: FormComponent; props: any} => {
+    const {_type: type, _meta: {Component, props = {}} = {} as FieldMeta} = schema;
+
+    if (isComponent(Component)) {
+        return {
+            Component,
+            props: {
+                ...props,
+                ...additionalProps
+            }
+        }
+    }
+
+    const {min, max} = getFieldMeta(schema);
+
+    if (Component === "select") {
+        return {
+            Component: Select,
+            props
+        }
+    } else if (type === "number") {
+        const typeProps: React.InputHTMLAttributes<HTMLInputElement> = {
+            type: "number",
+            min,
+            max,
+            ...props
+        };
+        return {
+            Component: "input",
+            props: typeProps
+        }
+    }
+
+    const typeProps: React.InputHTMLAttributes<HTMLInputElement> = {
+        type: "text",
+        maxLength: max,
+        ...props
+    };
+    return {
+        Component: Component || "input",
+        props: typeProps
+    }
+};

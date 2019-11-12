@@ -2,7 +2,7 @@ import React, {useContext, useMemo} from "react";
 import {ErrorMessage, FieldArray, getIn, useFormikContext} from "formik";
 import classnames from "classnames";
 
-import {FormContext, getArrayMeta, getDefault} from "./utils";
+import {FormContext, getFieldMeta, getDefault} from "./utils";
 import {FieldSetWrapper} from "./FieldSetWrapper";
 import {Field, FieldSetChildren, typedMemo} from "./types";
 
@@ -18,10 +18,10 @@ function Array<T, P, S>({field, path, children, className}: ArrayProps<T, P, S>)
     const {values, errors, isSubmitting, setFieldError} = useFormikContext<T>();
     const value: string[] = getIn(values, path);
     const {label} = field.describe();
-    const {itemLabel} = field._meta;
+    const {itemLabel} = field._meta || {itemLabel: ""};
     const error = getIn(errors, path);
 
-    const {min, max} = useMemo(() => getArrayMeta(field), [field]);
+    const {min, max} = useMemo(() => getFieldMeta(field), [field]);
 
     const itemsCount = (value && value.length) || 0;
 

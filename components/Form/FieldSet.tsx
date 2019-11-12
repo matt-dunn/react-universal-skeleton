@@ -4,7 +4,7 @@ import {ErrorMessage, getIn, Field, useFormikContext} from "formik";
 import {FormLabel} from "./Label";
 import {formStyles} from "./styles";
 import {Array} from "./Array";
-import {FormContext, useFormContext} from "./utils";
+import {FormContext, getTypeProps, useFormContext} from "./utils";
 import {FieldMap, FieldSetChildren, typedMemo} from "./types";
 
 type FieldSetProps<T, P, S> = {
@@ -42,7 +42,6 @@ function FieldSet<T, P, S>({fields, children, className}: FieldSetProps<T, P, S>
                 }
 
                 const {label} = field.describe();
-                const {Component, props} = {Component: "input", ...field._meta};
                 const value: string[] = getIn(values, fullPath);
                 const error = getIn(errors, fullPath);
                 const touch = getIn(touched, fullPath);
@@ -50,10 +49,14 @@ function FieldSet<T, P, S>({fields, children, className}: FieldSetProps<T, P, S>
                 const isRequired = field.tests.filter(test => test.OPTIONS.name === "required").length > 0;
                 const fieldId = `${formData.state.formId}-${fullPath}`;
                 const fieldIdError = `${fieldId}-error`;
+                const additionalProps = {
+                    isValid,
+                    formStyles
+                };
+                const {Component, props} = getTypeProps(field, additionalProps);
 
                 const componentProps = {
                     ...props,
-                    as: Component,
                     id: fieldId,
                     name: fullPath,
                     value,
@@ -69,11 +72,6 @@ function FieldSet<T, P, S>({fields, children, className}: FieldSetProps<T, P, S>
                     "aria-describedby": (!isValid && fieldIdError) || null
                 };
 
-                const additionalProps = typeof Component !== "string" && {
-                    isValid,
-                    formStyles
-                };
-
                 return (
                     <section
                         key={fullPath}
@@ -85,8 +83,8 @@ function FieldSet<T, P, S>({fields, children, className}: FieldSetProps<T, P, S>
                             field={field}
                         />
                         <Field
+                            as={Component}
                             {...componentProps}
-                            {...additionalProps}
                             {...ariaProps}
                         />
                         <ErrorMessage name={fullPath}>

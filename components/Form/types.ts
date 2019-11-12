@@ -6,14 +6,26 @@ import {FormikErrors, FormikTouched} from "formik";
 import {FormDataState} from "components/actions/form";
 import {ErrorLike} from "components/error";
 
-export interface Field<T> extends Schema<T> {
-    _meta: {
-        Component?: ComponentType<any> | string;
-        props?: any;
-        order?: number;
-        itemLabel?: string;
-        category?: string;
-    };
+export interface IntrinsicFormElements {
+    // button: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
+    input: React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
+    select: React.DetailedHTMLProps<React.SelectHTMLAttributes<HTMLSelectElement>, HTMLSelectElement>;
+    textarea: React.DetailedHTMLProps<React.TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement>;
+}
+
+export type FormComponent = keyof IntrinsicFormElements | ComponentType<any>;
+
+export interface FieldMeta<P = any> {
+    Component?: FormComponent;
+    props?: P;
+    order?: number;
+    itemLabel?: string;
+    category?: string;
+
+}
+
+export interface Field<T = any, P = any> extends Schema<T> {
+    _meta?: FieldMeta<P>;
     _type: string;
     _subType: Field<T>;
     fields: Fields<T>;
