@@ -145,7 +145,10 @@ export const getTypeProps = (schema: Field, additionalProps: any = {}): {Compone
     if (Component === "select") {
         return {
             Component: Select,
-            props
+            props: {
+                ...props,
+                ...additionalProps
+            }
         }
     } else if (type === "number") {
         const typeProps: React.InputHTMLAttributes<HTMLInputElement> = {
@@ -161,7 +164,10 @@ export const getTypeProps = (schema: Field, additionalProps: any = {}): {Compone
     } else if (type === "boolean") {
         return {
             Component: Checkbox,
-            props
+            props: {
+                ...props,
+                ...additionalProps
+            }
         }
     }
 

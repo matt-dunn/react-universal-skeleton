@@ -11,6 +11,11 @@ export const formStyles: FormStyles = {
     `,
     controlInvalid: css`
         border-color: var(--invalid-color);
+    `,
+    controlFocus: css`
+      outline: none;
+      border-color: #4086f7 !important;
+      box-shadow: 0 0 0 1px #4086f7;
     `
 };
 
@@ -50,7 +55,7 @@ export const FormContainer = styled.form`
     padding: 9px 8px;
     ${formStyles.control};
     
-    &[type='text'] {
+    &:not([type='checkbox']) {
       width: 100%;
     }
   }
@@ -66,16 +71,21 @@ export const FormContainer = styled.form`
   select,
   input,
   textarea {
-      &.invalid {
-        border-color: var(--invalid-color);
-      }
+    &:focus {
+        ${formStyles.controlFocus};
+    }
+
+    &.invalid {
+      border-color: var(--invalid-color);
+    }
   }
   
   [data-type='boolean'] {
     label:first-child {
+      display: flex;
         > span:first-child {
           display: inline-block;
-          margin: 0 10px 0 0;
+          margin: 0 14px 0 0;
         }
     }
   }

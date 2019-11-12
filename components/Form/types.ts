@@ -40,6 +40,7 @@ export type Fields<T> = {
 export type FormStyles = {
     control: FlattenInterpolation<any>;
     controlInvalid: FlattenInterpolation<any>;
+    controlFocus: FlattenInterpolation<any>;
 }
 
 export type InitialFormData<T> = {
