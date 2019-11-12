@@ -73,23 +73,10 @@ export type MySimpleFormResponse = {
 }
 
 const MyFormContainer = styled(FormContainer)`
-  --invalid-color: orange;
-  
   border: 4px solid #ccc;
   padding: 15px 30px;
   background-color: inherit;
   border-radius: 15px;
-
-  label.feedback {
-    color: var(--invalid-color);
-  }
-
-  input,
-  textarea {
-      &.invalid {
-        border-color: var(--invalid-color);
-      }
-  }
 `;
 
 const Forms = () => {

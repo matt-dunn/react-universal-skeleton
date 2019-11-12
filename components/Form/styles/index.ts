@@ -20,7 +20,7 @@ export const formStyles: FormStyles = {
 };
 
 export const FormContainer = styled.form`
-  --invalid-color: red;
+  --invalid-color: #e20020;
 
   border: 1px solid #ccc;
   background-color: #fdfdfd;
