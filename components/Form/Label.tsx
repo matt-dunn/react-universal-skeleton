@@ -7,7 +7,7 @@ type FormLabelProps<T> = {
     label: string;
     id: string;
     field: Field<T>;
-    children: ReactNode
+    children: ReactNode;
 }
 
 const FormLabel = function<T>({label, id, field, children}: FormLabelProps<T>) {
