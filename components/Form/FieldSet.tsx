@@ -82,17 +82,19 @@ function FieldSet<T, P, S>({fields, children, className}: FieldSetProps<T, P, S>
                     <section
                         key={fullPath}
                         className={className}
+                        data-type={field._type}
                     >
                         <FormLabel
                             label={label}
                             id={fieldId}
                             field={field}
-                        />
-                        <Field
-                            as={Component}
-                            {...componentProps}
-                            {...ariaProps}
-                        />
+                        >
+                            <Field
+                                as={Component}
+                                {...componentProps}
+                                {...ariaProps}
+                            />
+                        </FormLabel>
                         <ErrorMessage name={fullPath}>
                             {message => <label className="feedback" id={fieldIdError} htmlFor={fieldId}><em>{message}</em></label>}
                         </ErrorMessage>

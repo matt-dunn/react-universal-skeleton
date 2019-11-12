@@ -31,14 +31,14 @@ const schema = Yup.object().shape({
         .max(10)
         .meta({
             order: 2,
-            category: "other"
+            category: "otherLeft"
         })
         .required(),
     booleanTest: Yup.boolean()
         .label("Boolean Type")
         .meta({
             order: -1,
-            category: "other"
+            category: "otherLeft"
         })
         // .default(true)
         .required()
@@ -47,7 +47,7 @@ const schema = Yup.object().shape({
         .label("Simple Select")
         .meta({
             order: 0,
-            category: "other",
+            category: "otherLeft",
             Component: "select",
             props: {
                 options: [
@@ -68,7 +68,7 @@ const schema = Yup.object().shape({
                 .label("Flavour")
                 .meta({
                     order: 1,
-                    category: "other",
+                    category: "otherRight",
                     Component: FancySelect,
                     props: {
                         options: [

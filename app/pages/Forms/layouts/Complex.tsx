@@ -10,14 +10,23 @@ const GridItem = styled.div`
     padding: 0 10px 0 0;
 `;
 
-function ComplexLayout<T, P, S>({fieldsetMap: {children, extra, other}}: Pick<FieldSetChildrenProps<T, P, S>, 'fieldsetMap'>) {
+function ComplexLayout<T, P, S>({fieldsetMap: {children, extra, otherLeft, otherRight}}: Pick<FieldSetChildrenProps<T, P, S>, 'fieldsetMap'>) {
     return (
         <>
-            <div style={{borderBottom: "1px solid #dfdfdf", margin: "0 0 20px 0", padding: "0 0 10px 0"}}>
-                <FieldSet
-                    fields={other}
-                />
-                <p style={{fontSize: "14px", backgroundColor: "#eee", padding: "10px", borderRadius: "10px", margin: "0 0 10px 0"}}>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+            <div style={{borderBottom: "1px solid #dfdfdf", margin: "0 0 20px 0", padding: "0 0 10px 0", display: "flex"}}>
+                <GridItems minItemWidth={150}>
+                    <GridItem>
+                        <FieldSet
+                            fields={otherLeft}
+                        />
+                    </GridItem>
+                    <GridItem>
+                        <FieldSet
+                            fields={otherRight}
+                        />
+                        <p style={{fontSize: "14px", backgroundColor: "#eee", padding: "10px", borderRadius: "10px", margin: "0 0 10px 0"}}>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                    </GridItem>
+                </GridItems>
             </div>
             <GridItems minItemWidth={250}>
                 <GridItem>
