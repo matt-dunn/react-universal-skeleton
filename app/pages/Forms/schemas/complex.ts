@@ -25,11 +25,24 @@ const schema = Yup.object().shape({
                     .catch(reason => new ValidationError(reason.message, value, this.path))
             }
         }),
-    grip: Yup.number()
-        .label("Grip")
+    numberTest: Yup.number()
+        .label("Number Type")
         .min(2)
         .max(10)
+        .meta({
+            order: 2,
+            category: "other"
+        })
         .required(),
+    booleanTest: Yup.boolean()
+        .label("Boolean Type")
+        .meta({
+            order: -1,
+            category: "other"
+        })
+        // .default(true)
+        .required()
+        .oneOf([true], '${label} must be checked'),
     simpleSelect: Yup.string()
         .label("Simple Select")
         .meta({

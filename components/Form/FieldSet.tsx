@@ -18,7 +18,13 @@ function FieldSet<T, P, S>({fields, children, className}: FieldSetProps<T, P, S>
     const {values, errors, touched, isSubmitting, setFieldValue, setFieldTouched} = useFormikContext<T>();
     const {formData} = useFormContext<T, P, S>();
 
-    const handleChange = (e: React.ChangeEvent<HTMLFormElement>, value?: string) => setFieldValue(((e.target && e.target.name) || e) as keyof T & string, (e.target && e.target.value) || value || "");
+    const handleChange = (e: React.ChangeEvent<HTMLFormElement> | string, value?: string) => {
+        if (typeof e === "string") {
+            setFieldValue(e as keyof T & string, value === undefined ? "" : value);
+        } else {
+            setFieldValue((e.target && e.target.name) as keyof T & string, (e.target && e.target.value) === undefined ? "" : (e.target && e.target.value));
+        }
+    };
 
     const handleBlur = (e: any) =>  setFieldTouched((e.target && e.target.name) || e, true);
 
@@ -42,7 +48,7 @@ function FieldSet<T, P, S>({fields, children, className}: FieldSetProps<T, P, S>
                 }
 
                 const {label} = field.describe();
-                const value: string[] = getIn(values, fullPath);
+                const value = getIn(values, fullPath);
                 const error = getIn(errors, fullPath);
                 const touch = getIn(touched, fullPath);
                 const isValid = !(error && touch);

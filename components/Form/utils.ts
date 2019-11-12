@@ -6,6 +6,7 @@ import {sortBy, isFunction} from "lodash";
 import {Field, FieldMeta, Fields, FieldSetMap, FormComponent, FormContextType} from "./types";
 import {ActionType} from "../actions/form";
 import {Select} from "./controls/Select";
+import {Checkbox} from "./controls/Checkbox";
 
 export const FormContext = React.createContext<FormContextType<any, any, any> | undefined>(undefined);
 
@@ -52,7 +53,11 @@ function iterateSchema<T>(schema: Field<T>, path = ""): any {
             return o;
         }, {} as {[key: string]: any})
     } else {
-        return schema.getDefault() || "";
+        const defaultValue = schema.getDefault();
+        if (defaultValue !== undefined) {
+            return defaultValue
+        }
+        return schema._type === "boolean" ? false : "";
     }
 }
 
@@ -152,6 +157,11 @@ export const getTypeProps = (schema: Field, additionalProps: any = {}): {Compone
         return {
             Component: "input",
             props: typeProps
+        }
+    } else if (type === "boolean") {
+        return {
+            Component: Checkbox,
+            props
         }
     }
 
