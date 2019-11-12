@@ -2,6 +2,7 @@ import React from "react";
 
 import {FormStyles, typedMemo} from "../types";
 import {Checkbox} from "./Checkbox";
+import styled from "styled-components";
 
 type Option = {
     value: string;
@@ -21,6 +22,17 @@ type RadioProps = {
     className?: string;
 }
 
+const Label = styled.label`
+&& {
+    display: flex;
+    margin: 8px 0;
+    
+    > span:first-child {
+      margin: 0 8px 0 0;
+    }
+}
+`;
+
 function Radio({options, name, value, onChange, onBlur, formStyles, isValid, id, ...props}: RadioProps) {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>, value: string | boolean) => onChange(name, value.toString());
 
@@ -36,23 +48,23 @@ function Radio({options, name, value, onChange, onBlur, formStyles, isValid, id,
                         key={option.value}
                         className="radio-option"
                     >
-                        <Checkbox
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            type="radio"
-                            name={name}
-                            option={option.value}
-                            value={option.value === value}
-                            {...props}
-                            id={`${id}-${index}`}
-                            formStyles={formStyles}
-                            isValid={isValid}
-                        />
-                        <label
+                        <Label
                             htmlFor={`${id}-${index}`}
                         >
+                            <Checkbox
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                type="radio"
+                                name={name}
+                                option={option.value}
+                                value={option.value === value}
+                                {...props}
+                                id={`${id}-${index}`}
+                                formStyles={formStyles}
+                                isValid={isValid}
+                            />
                             {option.label || option.value}
-                        </label>
+                        </Label>
                     </div>
                 )
             })}

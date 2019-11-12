@@ -55,6 +55,7 @@ export const FormContainer = styled.form`
     padding: 9px 8px;
     ${formStyles.control};
     
+    &:not([type='radio']),
     &:not([type='checkbox']) {
       width: 100%;
     }
@@ -128,21 +129,6 @@ export const FormContainer = styled.form`
       border: none;
       margin: 0 0 0 10px;
       padding: 0;
-      
-      .radio-option {
-        display: flex;
-        align-items: center;
-        margin: 5px 0;
-
-          label {
-            display: inline;
-            margin: 0 0 0 10px;
-          }
-    
-          input {
-            width: initial;
-          }
-      }
     }
   }
   
