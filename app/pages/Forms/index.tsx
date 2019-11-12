@@ -110,40 +110,25 @@ const Forms = () => {
             <div style={{maxWidth: "800px", margin: "20px auto"}}>
                 <Form
                     id="my-form"
+                    as={MyFormContainer}
                     schema={schemaComplex}
                     onSubmit={handleSubmit}
-                    // onSubmit={(values, context) => {
-                    //     console.error("#####SUBMIT-STATE", context.moose)
-                    //
-                    //     return dummyApiCall(values.flavour.favourite, values.email);
-                    // }}
-                    context={formState}
-                    as={MyFormContainer}
-                    complete={
-                        ({values, metadata}) => {
-                            return (
-                                <SubmissionFeedback>
-                                    The form has been submitted.
+                    complete={({values, metadata}) => (
+                        <SubmissionFeedback>
+                            The form has been submitted.
 
-                                    <pre style={{whiteSpace: "normal"}}>values: {JSON.stringify(values)}</pre>
-                                    <pre style={{whiteSpace: "normal"}}>metadata: {JSON.stringify(metadata)}</pre>
-                                </SubmissionFeedback>
-                            )
-                        }
-                    }
+                            <pre style={{whiteSpace: "normal"}}>values: {JSON.stringify(values)}</pre>
+                            <pre style={{whiteSpace: "normal"}}>metadata: {JSON.stringify(metadata)}</pre>
+                        </SubmissionFeedback>
+                    )}
                 >
-                    {({fieldsetMap, metadata}) => {
-                        // console.log(metadata, metadata.payload && metadata.payload.chosenFlavour)
-                        // console.log(metadata, metadata.context && metadata.context.firstName)
-
-                        return (
-                            <>
-                                <ComplexLayout fieldsetMap={fieldsetMap}/>
-                                {metadata.payload && <pre style={{whiteSpace: "normal"}}>{JSON.stringify(metadata.payload)}</pre>}
-                                <FormOptions/>
-                            </>
-                        )
-                    }}
+                    {({fieldsetMap, metadata}) => (
+                        <>
+                            <ComplexLayout fieldsetMap={fieldsetMap}/>
+                            {metadata.payload && <pre style={{whiteSpace: "normal"}}>{JSON.stringify(metadata.payload)}</pre>}
+                            <FormOptions/>
+                        </>
+                    )}
                 </Form>
 
                 <Form

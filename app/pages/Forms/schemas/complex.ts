@@ -25,17 +25,41 @@ const schema = Yup.object().shape({
                     .catch(reason => new ValidationError(reason.message, value, this.path))
             }
         }),
+    grip: Yup.number()
+        .label("Grip")
+        .min(2)
+        .max(10)
+        .required(),
+    simpleSelect: Yup.string()
+        .label("Simple Select")
+        .meta({
+            order: 0,
+            category: "other",
+            Component: "select",
+            props: {
+                options: [
+                    { value: '', label: 'Select value...' },
+                    { value: 'value1', label: 'Value 1' },
+                    { value: 'value2', label: 'Value 2' },
+                    { value: 'value3', label: 'Value 3' },
+                    { value: 'value4', label: 'Value 4' },
+                    { value: 'value5', label: 'Value 5' },
+                    { value: 'value6', label: 'Value 6' },
+                ]
+            }
+        })
+        .required('Simple Select is required'),
     flavour: Yup.object()
         .shape({
             favourite: Yup.string()
                 .label("Flavour")
                 .meta({
-                    order: 0,
+                    order: 1,
                     category: "other",
                     Component: FancySelect,
                     props: {
                         options: [
-                            { value: '', label: 'Select...' },
+                            { value: '', label: 'Select your flavour...' },
                             { value: 'chocolate', label: 'Chocolate' },
                             { value: 'strawberry', label: 'Strawberry' },
                             { value: 'vanilla', label: 'Vanilla' },
@@ -47,6 +71,7 @@ const schema = Yup.object().shape({
     notes: Yup.string()
         .required('Notes is required')
         .label("Notes")
+        .max(100)
         .meta({
             order: 3,
             category: "extra",
