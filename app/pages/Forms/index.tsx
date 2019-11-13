@@ -14,6 +14,7 @@ import ComplexLayout from "./layouts/Complex";
 
 import {FormContainer} from "components/form"
 import {FormOptions} from "components/Form/FormOptions";
+import {ValidationError} from "yup";
 
 // import {useFormikContext} from "formik";
 // import {formStyles} from "../../../components/Form/styles";
@@ -81,7 +82,14 @@ const MyFormContainer = styled(FormContainer)`
 
 const Forms = () => {
     const handleSubmit: MapDataToAction<Yup.InferType<typeof schemaComplex>, MyFormResponse, any> = values => dummyApiCall(values.flavour.favourite, values.email);
-    const handleSubmit2: MapDataToAction<Yup.InferType<typeof simpleSchema>, MySimpleFormResponse, any> = values => Promise.resolve({newUsername: values.username});
+    const handleSubmit2: MapDataToAction<Yup.InferType<typeof simpleSchema>, MySimpleFormResponse, any> = values => {
+        if (values.username.toLowerCase() === "clem") {
+            throw new ValidationError("Invalid password", "", "password.secret");
+        } else if (values.username.toLowerCase() === "pat") {
+            throw new Error("Incorrect details");
+        }
+        return Promise.resolve({newUsername: values.username});
+    };
 
     return (
         <Page>

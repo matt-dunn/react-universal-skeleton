@@ -3,6 +3,7 @@ import React, {useCallback, useContext, useState} from "react";
 import {errorLike, ErrorLike} from "components/error";
 import {APIContext} from "./contexts";
 import {ValidationError} from "yup";
+import {get, isObject} from "lodash";
 
 if (!(global as any).atob) {
     (global as any).atob = (str: string) => Buffer.from(str, 'base64').toString('binary');
@@ -151,7 +152,8 @@ export const useForm = <T, Payload = any, Schema = any, Context = any>(
 
             return payload;
         } catch(reason) {
-            if (reason.name === "ValidationError") {
+            const pathValue = reason.path && get(data, reason.path);
+            if (reason.name === "ValidationError" && pathValue !== undefined && !isObject(pathValue)) {
                 formDataContext.innerFormErrors = [reason].concat(reason.inner);
             } else {
                 formDataContext.error = errorLike(reason);
