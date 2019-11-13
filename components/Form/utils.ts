@@ -1,5 +1,6 @@
 import React, {ComponentType, useContext} from "react";
 import * as Yup from 'yup';
+import {Schema} from "yup";
 import immutable from "object-path-immutable";
 import {sortBy, isFunction} from "lodash";
 
@@ -104,10 +105,10 @@ export function sortFields<T>(map: FieldSetMap<T>): FieldSetMap<T> {
     }, {} as FieldSetMap<T>);
 }
 
-export function performAction<T>(schema: any, action: ActionType, data: T, value?: string): T | undefined | null {
+export function performAction<T>(schema: Schema<any>, action: ActionType, data: T, value?: string): T | undefined | null {
     switch (action) {
         case "add": {
-            return (value && immutable.push(data, value, getDefault(schema, value))) || data;
+            return (value && immutable.push(data, value, getDefault(schema as Field, value))) || data;
         }
         case "remove": {
             return immutable.del(data, value);
@@ -117,7 +118,7 @@ export function performAction<T>(schema: any, action: ActionType, data: T, value
                 const parts = value.split(".");
                 const index = parseInt(parts.slice(-1).join("."), 10);
                 const path = parts.slice(0, -1).join(".");
-                return immutable.insert(data, path, getDefault(schema, value), index);
+                return immutable.insert(data, path, getDefault(schema as Field, value), index);
             }
             break;
         }

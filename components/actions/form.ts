@@ -120,14 +120,21 @@ export const useCurrentFormData = <T = any, Payload = any, Context = any>(formId
 };
 
 export interface MapDataToAction<T, Payload, Context> {
-    (data: T, state: FormDataState<T, Payload, Context>): Promise<Payload>;
+    (data: T, context: Context): Promise<Payload>;
 }
 
 export interface PerformAction<T, Schema> {
     (schema: Schema, action: ActionType, data: T, value?: string): T | undefined | null;
 }
 
-export const useForm = <T, Payload = any, Schema = any, Context = any>(formId: string, schema: any, formValidator: (values: T) => Promise<any>, mapDataToAction: MapDataToAction<T, Payload, Context>, performAction?: PerformAction<T, Schema>, context?: Context): [FormDataState<T, Payload | undefined, Context>, (data: T) => Promise<Payload>] => {
+export const useForm = <T, Payload = any, Schema = any, Context = any>(
+    formId: string,
+    schema: Schema,
+    formValidator: (values: T) => Promise<any>,
+    mapDataToAction: MapDataToAction<T, Payload, Context>,
+    performAction?: PerformAction<T, Schema>,
+    context?: Context
+): [FormDataState<T, Payload | undefined, Context>, (data: T) => Promise<Payload>] => {
     const formDataContext = useCurrentFormData<T, Payload, Context>(formId, context);
     const [formData, setFormData] = useState<FormDataState<T, Payload | undefined>>(formDataContext);
 

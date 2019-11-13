@@ -15,12 +15,12 @@ import {FormValidationErrors} from "./FormValidationErrors";
 import {FormErrorFocus} from "./FormErrorFocus";
 import {FormOptions} from "./FormOptions";
 
-type FormProps<T, Payload, Context> = {
+type FormProps<S, Payload, Context> = {
     id: string;
-    schema: Schema<T>;
-    onSubmit: MapDataToAction<Yup.InferType<T>, Payload, Context>;
-    children?: FieldSetChildren<T, Payload, Context>;
-    complete?: CompleteChildren<Yup.InferType<Field<T>>, Payload, Context>;
+    schema: Schema<S>;
+    onSubmit: MapDataToAction<any, Payload, Context>;
+    children?: FieldSetChildren<any, Payload, Context>;
+    complete?: CompleteChildren<any, Payload, Context>;
     className?: string;
     context?: Context;
     as?: keyof JSX.IntrinsicElements | React.ComponentType<any>;
@@ -28,17 +28,17 @@ type FormProps<T, Payload, Context> = {
 
 const FormWrapper = styled.form``;
 
-function Form<T, Payload, Context>({id, schema, onSubmit, children, className, context, complete, as = FormContainer}: FormProps<T, Payload, Context>) {
+function Form<S, Payload, Context>({id, schema, onSubmit, children, className, context, complete, as = FormContainer}: FormProps<S, Payload, Context>) {
     const [formData, handleSubmit] = useForm<Yup.InferType<typeof schema>, Payload, typeof schema, Context>(
         id,
         schema,
         values => schema.validate(values, {abortEarly: false}),
-        onSubmit as any,
+        onSubmit,
         performAction,
         context
     );
 
-    const extendedSchema: Field<T> = schema as any;
+    const extendedSchema: Field<S> = schema as Field<S>;
     const formRef = useRef<HTMLFormElement>(null);
 
     const formState = formData.state.toString();
