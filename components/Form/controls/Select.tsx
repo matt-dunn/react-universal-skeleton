@@ -21,9 +21,9 @@ type SelectProps = {
 }
 
 function Select({options, onChange, onBlur, formStyles, isValid, ...props}: SelectProps) {
-    const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => onChange(name, e.currentTarget.value);
+    const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => onChange(e.currentTarget.name, e.currentTarget.value);
 
-    const handleBlur = () => onBlur(name, true);
+    const handleBlur = (e: React.FocusEvent<HTMLSelectElement>) => onBlur(e.currentTarget.name, true);
 
     return (
         <select
