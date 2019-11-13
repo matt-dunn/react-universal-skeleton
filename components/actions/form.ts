@@ -155,7 +155,9 @@ export const useForm = <T, Payload = any, Schema = any, Context = any>(
             const pathValue = reason.path && get(data, reason.path);
             if (reason.name === "ValidationError" && pathValue !== undefined && !isObject(pathValue)) {
                 formDataContext.innerFormErrors = [reason].concat(reason.inner);
+                formDataContext.error = undefined;
             } else {
+                formDataContext.innerFormErrors = undefined;
                 formDataContext.error = errorLike(reason);
             }
 
