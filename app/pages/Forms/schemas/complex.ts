@@ -68,13 +68,14 @@ const schema = Yup.object().shape({
         .meta({
             order: 1,
             category: "otherLeft",
-            Component: "radio",
+            Component: "autoselect",
             props: {
                 options: [
                     { value: '', label: 'None' },
                     { value: 'value1', label: 'Value 1' },
                     { value: 'value2', label: 'Value 2' },
-                    { value: 'value3', label: 'Value 3' }
+                    { value: 'value3', label: 'Value 3' },
+                    // { value: 'value4', label: 'Value 4' },
                 ]
             }
         })

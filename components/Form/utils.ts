@@ -159,6 +159,14 @@ export const getTypeProps = (schema: Field, additionalProps: any = {}): {Compone
                 ...additionalProps
             }
         }
+    } else if (Component === "autoselect") {
+        return {
+            Component: (props.options && props.options.length > 4 && Select) || Radio,
+            props: {
+                ...props,
+                ...additionalProps
+            }
+        }
     } else if (type === "number") {
         const typeProps: React.InputHTMLAttributes<HTMLInputElement> = {
             type: "number",

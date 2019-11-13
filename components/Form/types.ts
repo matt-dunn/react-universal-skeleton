@@ -6,15 +6,16 @@ import {FormikErrors, FormikTouched} from "formik";
 import {FormDataState} from "components/actions/form";
 import {ErrorLike} from "components/error";
 
-export interface IntrinsicFormElements {
+export interface ComponentTypes {
     // button: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
     input: React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
     select: React.DetailedHTMLProps<React.SelectHTMLAttributes<HTMLSelectElement>, HTMLSelectElement>;
     textarea: React.DetailedHTMLProps<React.TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement>;
     radio: React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>;
+    autoselect: React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement|HTMLSelectElement>, HTMLInputElement|HTMLSelectElement>;
 }
 
-export type FormComponent = keyof IntrinsicFormElements | ComponentType<any>;
+export type FormComponent = keyof ComponentTypes | ComponentType<any>;
 
 export interface FieldMeta<P = any> {
     Component?: FormComponent;

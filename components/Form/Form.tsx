@@ -78,7 +78,7 @@ function Form<T, P, S>({id, schema, onSubmit, children, className, context, comp
                             <section
                                 id={id}
                             >
-                                {complete({values, metadata})}
+                                {complete({values: schema.cast(values), metadata})}
                             </section>
                         )
                     }
