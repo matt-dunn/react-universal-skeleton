@@ -175,7 +175,7 @@ const Forms = () => {
                                     The form has been submitted.
 
                                     <pre style={{whiteSpace: "normal", overflowWrap: "break-word"}}>values: {JSON.stringify(values)}</pre>
-                                    <pre style={{whiteSpace: "normal", overflowWrap: "break-word"}}>metadata: {JSON.stringify(metadata && metadata.context)}</pre>
+                                    <pre style={{whiteSpace: "normal", overflowWrap: "break-word"}}>metadata: {JSON.stringify(metadata)}</pre>
                                 </SubmissionFeedback>
                             )
                         }
