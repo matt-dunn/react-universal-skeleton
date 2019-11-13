@@ -104,15 +104,15 @@ const Forms = () => {
                         <SubmissionFeedback>
                             The form has been submitted.
 
-                            <pre style={{whiteSpace: "normal"}}>values: {JSON.stringify(values)}</pre>
-                            <pre style={{whiteSpace: "normal"}}>metadata: {JSON.stringify(metadata)}</pre>
+                            <pre style={{whiteSpace: "normal", overflowWrap: "break-word"}}>values: {JSON.stringify(values)}</pre>
+                            <pre style={{whiteSpace: "normal", overflowWrap: "break-word"}}>metadata: {JSON.stringify(metadata)}</pre>
                         </SubmissionFeedback>
                     )}
                 >
                     {({fieldsetMap, metadata}) => (
                         <>
                             <ComplexLayout fieldsetMap={fieldsetMap}/>
-                            {metadata.payload && <pre style={{whiteSpace: "normal"}}>{JSON.stringify(metadata.payload)}</pre>}
+                            {metadata.payload && <pre style={{whiteSpace: "normal", overflowWrap: "break-word"}}>{JSON.stringify(metadata.payload)}</pre>}
                             <FormOptions/>
                         </>
                     )}
@@ -129,8 +129,8 @@ const Forms = () => {
                                 <SubmissionFeedback>
                                     The form has been submitted.
 
-                                    <pre style={{whiteSpace: "normal"}}>values: {JSON.stringify(values)}</pre>
-                                    <pre style={{whiteSpace: "normal"}}>metadata: {JSON.stringify(metadata)}</pre>
+                                    <pre style={{whiteSpace: "normal", overflowWrap: "break-word"}}>values: {JSON.stringify(values)}</pre>
+                                    <pre style={{whiteSpace: "normal", overflowWrap: "break-word"}}>metadata: {JSON.stringify(metadata)}</pre>
                                 </SubmissionFeedback>
                             )
                         }
@@ -143,7 +143,7 @@ const Forms = () => {
                         return (
                             <>
                                 <Collections fieldsetMap={fieldsetMap}/>
-                                {metadata.payload && <pre style={{whiteSpace: "normal"}}>{JSON.stringify(metadata.payload)}</pre>}
+                                {metadata.payload && <pre style={{whiteSpace: "normal", overflowWrap: "break-word"}}>{JSON.stringify(metadata.payload)}</pre>}
                                 <FormOptions/>
                             </>
                         )
@@ -161,8 +161,8 @@ const Forms = () => {
                                 <SubmissionFeedback>
                                     The form has been submitted.
 
-                                    <pre style={{whiteSpace: "normal"}}>values: {JSON.stringify(values)}</pre>
-                                    <pre style={{whiteSpace: "normal"}}>metadata: {JSON.stringify(metadata && metadata.context)}</pre>
+                                    <pre style={{whiteSpace: "normal", overflowWrap: "break-word"}}>values: {JSON.stringify(values)}</pre>
+                                    <pre style={{whiteSpace: "normal", overflowWrap: "break-word"}}>metadata: {JSON.stringify(metadata && metadata.context)}</pre>
                                 </SubmissionFeedback>
                             )
                         }
