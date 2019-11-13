@@ -27,13 +27,16 @@ const schema = Yup.object().shape({
         }),
     numberTest: Yup.number()
         .label("Number Type")
+        .typeError('Please provide a number')
         .min(2)
         .max(10)
+        .nullable()
+        .transform((value: string, originalValue: string) => originalValue !== undefined  && originalValue !== null && originalValue.trim && originalValue.trim() === "" ? null: value)
+        // .required()
         .meta({
             order: 2,
             category: "otherLeft"
-        })
-        .required(),
+        }),
     booleanTest: Yup.boolean()
         .label("Boolean Type")
         .meta({
