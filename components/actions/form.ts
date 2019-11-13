@@ -138,7 +138,7 @@ export const useForm = <T, Payload = any, Schema = any, Context = any>(
     const formDataContext = useCurrentFormData<T, Payload, Context>(formId, context);
     const [formData, setFormData] = useState<FormDataState<T, Payload | undefined>>(formDataContext);
 
-    const submit = useCallback(async(data: T): Promise<Payload> => {
+    const submit = useCallback(async(data: T) => {
         setFormData(formData => FormDataState({...formData, error: undefined, innerFormErrors: undefined}));
 
         try {

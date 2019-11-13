@@ -69,15 +69,17 @@ export const FormContainer = styled.form`
     min-height: 10em;
   }
   
-  select,
-  input,
-  textarea {
-    &:focus {
-        ${formStyles.controlFocus};
-    }
-
-    &.invalid {
-      border-color: var(--invalid-color);
+  label {
+      > select,
+      > input,
+      > textarea {
+        &:focus {
+            ${formStyles.controlFocus};
+        }
+    
+        &.invalid {
+          border-color: var(--invalid-color);
+        }
     }
   }
   
