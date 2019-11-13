@@ -19,8 +19,8 @@ type FormProps<S, Payload, Context> = {
     id: string;
     schema: Schema<S>;
     onSubmit: MapDataToAction<any, Payload, Context>;
-    children?: FieldSetChildren<any, Payload, Context>;
-    complete?: CompleteChildren<any, Payload, Context>;
+    children?: FieldSetChildren<S, Payload, Context>;
+    complete?: CompleteChildren<S, Payload, Context>;
     className?: string;
     context?: Context;
     as?: keyof JSX.IntrinsicElements | React.ComponentType<any>;
@@ -29,7 +29,9 @@ type FormProps<S, Payload, Context> = {
 const FormWrapper = styled.form``;
 
 function Form<S, Payload, Context>({id, schema, onSubmit, children, className, context, complete, as = FormContainer}: FormProps<S, Payload, Context>) {
-    const [formData, handleSubmit] = useForm<Yup.InferType<typeof schema>, Payload, typeof schema, Context>(
+    type T = Yup.InferType<typeof schema>;
+
+    const [formData, handleSubmit] = useForm<T, Payload, typeof schema, Context>(
         id,
         schema,
         values => schema.validate(values, {abortEarly: false}),
@@ -43,12 +45,12 @@ function Form<S, Payload, Context>({id, schema, onSubmit, children, className, c
 
     const formState = formData.state.toString();
 
-    const {errors: initialErrors, touched: initialTouched} = useMemo<InitialFormData<Yup.InferType<typeof schema>>>(() => formData.innerFormErrors && formData.innerFormErrors.reduce(({errors, touched}, {path, message}) => ({
+    const {errors: initialErrors, touched: initialTouched} = useMemo<InitialFormData<T>>(() => formData.innerFormErrors && formData.innerFormErrors.reduce(({errors, touched}, {path, message}) => ({
         errors: setIn(errors, path, message),
         touched: setIn(touched, path, true)
-    }), {errors: {}, touched: {}}) || {} as InitialFormData<Yup.InferType<typeof schema>>, [formData.innerFormErrors, schema]);
+    }), {errors: {}, touched: {}}) || {} as InitialFormData<T>, [formData.innerFormErrors, schema]);
 
-    const initialValues: Yup.InferType<typeof schema> = formData.data || getDefault(extendedSchema);
+    const initialValues: T = formData.data || getDefault(extendedSchema);
 
     return (
         <FormContext.Provider value={{schema: extendedSchema, formData}}>
