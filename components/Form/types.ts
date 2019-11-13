@@ -17,17 +17,17 @@ export interface ComponentTypes {
 
 export type FormComponent = keyof ComponentTypes | ComponentType<any>;
 
-export interface FieldMeta<P = any> {
+export interface FieldMeta<Props = any> {
     Component?: FormComponent;
-    props?: P;
+    props?: Props;
     order?: number;
     itemLabel?: string;
     category?: string;
 
 }
 
-export interface Field<T = any, P = any> extends Schema<T> {
-    _meta?: FieldMeta<P>;
+export interface Field<T = any, Props = any> extends Schema<T> {
+    _meta?: FieldMeta<Props>;
     _type: string;
     _subType: Field<T>;
     fields: Fields<T>;
@@ -59,35 +59,35 @@ export type FieldSetMap<T> = {
     [key: string]: FieldMap<Partial<T>>[];
 }
 
-export type FormContextType<T, P, S> = {
+export type FormContextType<T, Payload, Context> = {
     schema: Field<T>;
-    formData: FormDataState<T, P, S>;
+    formData: FormDataState<T, Payload, Context>;
 }
 
-export type FormMetaData<C, P> = {
+export type FormMetaData<Context, Payload> = {
     formId: string;
-    context?: C;
+    context?: Context;
     error?: ErrorLike;
-    payload?: P;
+    payload?: Payload;
 }
 
-export interface FieldSetChildrenProps<T, P, S> {
+export interface FieldSetChildrenProps<T, Payload, Context> {
     fieldsetMap: FieldSetMap<T>;
-    metadata: FormMetaData<S, P>;
+    metadata: FormMetaData<Context, Payload>;
     isComplete: boolean;
 }
 
-export type FieldSetChildren<T, P, S> = {
-    ({fieldsetMap, metadata}: FieldSetChildrenProps<T, P, S>): ReactElement<any>;
+export type FieldSetChildren<T, Payload, Context> = {
+    ({fieldsetMap, metadata}: FieldSetChildrenProps<T, Payload, Context>): ReactElement<any>;
 }
 
-export type CompleteChildrenProps<T, P, S> = {
+export type CompleteChildrenProps<T, Payload, Context> = {
     values: T;
-    metadata: FormMetaData<S, P>;
+    metadata: FormMetaData<Context, Payload>;
 }
 
-export type CompleteChildren<T, P, S> = {
-    ({values, metadata}: CompleteChildrenProps<T, P, S>): ReactElement<any>;
+export type CompleteChildren<T, Payload, Context> = {
+    ({values, metadata}: CompleteChildrenProps<T, Payload, Context>): ReactElement<any>;
 }
 
 export const typedMemo: <T>(c: T) => T = React.memo;

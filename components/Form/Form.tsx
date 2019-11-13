@@ -15,21 +15,21 @@ import {FormValidationErrors} from "./FormValidationErrors";
 import {FormErrorFocus} from "./FormErrorFocus";
 import {FormOptions} from "./FormOptions";
 
-type FormProps<T, P, S> = {
+type FormProps<T, Payload, Context> = {
     id: string;
     schema: Schema<T>;
-    onSubmit: MapDataToAction<T, P, S>;
-    children?: FieldSetChildren<T, P, S>;
-    complete?: CompleteChildren<Yup.InferType<Field<T>>, P, S>;
+    onSubmit: MapDataToAction<Yup.InferType<T>, Payload, Context>;
+    children?: FieldSetChildren<T, Payload, Context>;
+    complete?: CompleteChildren<Yup.InferType<Field<T>>, Payload, Context>;
     className?: string;
-    context?: S;
+    context?: Context;
     as?: keyof JSX.IntrinsicElements | React.ComponentType<any>;
 }
 
 const FormWrapper = styled.form``;
 
-function Form<T, P, S>({id, schema, onSubmit, children, className, context, complete, as = FormContainer}: FormProps<T, P, S>) {
-    const [formData, handleSubmit] = useForm<Yup.InferType<typeof schema>, P, typeof schema, S>(
+function Form<T, Payload, Context>({id, schema, onSubmit, children, className, context, complete, as = FormContainer}: FormProps<T, Payload, Context>) {
+    const [formData, handleSubmit] = useForm<Yup.InferType<typeof schema>, Payload, typeof schema, Context>(
         id,
         schema,
         values => schema.validate(values, {abortEarly: false}),
@@ -67,7 +67,7 @@ function Form<T, P, S>({id, schema, onSubmit, children, className, context, comp
                     } = props;
 
                     if (complete && formData.isComplete) {
-                        const metadata: FormMetaData<S, P> = {
+                        const metadata: FormMetaData<Context, Payload> = {
                             formId: formData.state.formId,
                             context: formData.state.data,
                             error: formData.error,
