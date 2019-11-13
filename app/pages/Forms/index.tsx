@@ -81,8 +81,8 @@ const MyFormContainer = styled(FormContainer)`
 `;
 
 const Forms = () => {
-    const handleSubmit: MapDataToAction<Yup.InferType<typeof schemaComplex>, MyFormResponse, any> = values => dummyApiCall(values.flavour.favourite, values.email);
-    const handleSubmit2: MapDataToAction<Yup.InferType<typeof simpleSchema>, MySimpleFormResponse, any> = values => {
+    const handleSubmit: MapDataToAction<Yup.InferType<typeof schemaComplex>, MyFormResponse, typeof formState> = values => dummyApiCall(values.flavour.favourite, values.email);
+    const handleSubmit2: MapDataToAction<Yup.InferType<typeof simpleSchema>, MySimpleFormResponse, typeof formState2> = values => {
         if (values.username.toLowerCase() === "clem") {
             throw new ValidationError("Invalid password", "", "password.secret");
         } else if (values.username.toLowerCase() === "pat") {
@@ -107,7 +107,12 @@ const Forms = () => {
                     id="my-form"
                     as={MyFormContainer}
                     schema={schemaComplex}
+                    // onSubmit={function(values, context) {
+                    //     const z = context && context.lastName
+                    //     return dummyApiCall(values.flavour.favourite, values.email);
+                    // } as MapDataToAction<Yup.InferType<typeof schemaComplex>, MyFormResponse, typeof formState>}
                     onSubmit={handleSubmit}
+                    context={formState}
                     complete={({values, metadata}) => (
                         <SubmissionFeedback>
                             The form has been submitted.
@@ -130,7 +135,7 @@ const Forms = () => {
                     id="my-form2"
                     schema={schemaComplex}
                     onSubmit={handleSubmit}
-                    context={formState2}
+                    context={formState}
                     complete={
                         ({values, metadata}) => {
                             return (
