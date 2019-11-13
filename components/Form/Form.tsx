@@ -48,7 +48,7 @@ function Form<S, Payload, Context>({id, schema, onSubmit, children, className, c
     const {errors: initialErrors, touched: initialTouched} = useMemo<InitialFormData<T>>(() => formData.innerFormErrors && formData.innerFormErrors.reduce(({errors, touched}, {path, message}) => ({
         errors: setIn(errors, path, message),
         touched: setIn(touched, path, true)
-    }), {errors: {}, touched: {}}) || {} as InitialFormData<T>, [formData.innerFormErrors, schema]);
+    }), {errors: {}, touched: {}}) || {} as InitialFormData<T>, [formData.innerFormErrors]);
 
     const initialValues: T = formData.data || getDefault(extendedSchema);
 
