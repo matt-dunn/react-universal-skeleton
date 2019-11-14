@@ -9,11 +9,9 @@ const Title = styled.div`
 `
 
 const Loading = () => (
-    <Page>
-        <Title>
-            Loading...
-        </Title>
-    </Page>
+    <Title>
+        Loading...
+    </Title>
 )
 
 export default Loading

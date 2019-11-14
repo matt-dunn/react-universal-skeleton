@@ -1,20 +1,27 @@
-import React, {ReactNode, useEffect, useRef, useState} from "react";
+import React, {ComponentType, ReactElement, ReactNode, useEffect, useRef, useState} from "react";
 import styled from "styled-components";
 
 import Spinner from "./Spinner";
 
-export type LoadingProps = {
-    children: ReactNode | ReactNode[];
-    Loader?: ReactNode;
-    loading: boolean;
-    timeout?: number;
+type Loader = {
+    ({height}: {height: number}): ReactElement<any>;
 };
 
-const Container = styled.div`
-    position: relative;
+type LoadingProps = {
+    children?: ReactNode | ReactNode[];
+    Loader?: ComponentType<any>;
+    loaderRender?: Loader;
+    loading?: boolean;
+    timeout?: number;
+    height?: number;
+};
+
+const Container = styled.div<{height: number}>`
+  position: relative;
+  min-height: ${({height}) => `${height}px`};
 `;
 
-const Loading = ({children, loading, Loader = <Spinner/>, timeout = 500}: LoadingProps) => {
+const Loading = ({children, loading = true, Loader = Spinner, loaderRender, timeout = 500, height = 50}: LoadingProps) => {
     const [show, setShow] = useState(false);
     const t = useRef<number>();
 
@@ -31,9 +38,11 @@ const Loading = ({children, loading, Loader = <Spinner/>, timeout = 500}: Loadin
         return () => clearTimeout(t.current)
     }, [loading, timeout]);
 
+    const LoadingLoader = loaderRender ? loaderRender({height}) : <Loader height={height}/>;
+
     return (
-        <Container>
-            {show && loading && Loader}
+        <Container height={height}>
+            {show && loading && LoadingLoader}
             {children}
         </Container>
     );

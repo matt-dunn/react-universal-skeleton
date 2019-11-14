@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const Pulse = styled.div`
+const Pulse = styled.div<{height: number}>`
   @-webkit-keyframes sk-scaleout {
     0% {
       -webkit-transform: scale(0)
@@ -31,12 +31,12 @@ const Pulse = styled.div`
   &:after {
     position: absolute;
     content: ' ';
-    width: 50px;
-    height: 50px;
+    height: ${({height}) => `${height}px`};
+    width: ${({height}) => `${height}px`};
     background-color: #999;
     top: 50%;
     left: 50%;
-    margin: -25px 0 0 -25px;
+    margin: ${({height}) => `-${height / 2}px 0 0 -${height / 2}px`};
     border-radius: 100%;
     animation: sk-scaleout 1.0s infinite ease-in-out;
   }

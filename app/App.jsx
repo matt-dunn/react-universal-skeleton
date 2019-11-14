@@ -5,13 +5,13 @@ import {Switch, Route, generatePath} from 'react-router-dom'
 import importComponent from 'react-imported-component';
 
 import Header from './components/Header'
+import LoadingComponent from './components/Loading'
+import ErrorComponent from './components/Error'
 
 import Error403 from './pages/403';
 import Error404 from './pages/404';
 
 import Home from './pages/Home';
-import LoadingComponent from './pages/Loading'
-import ErrorComponent from './pages/Error'
 
 import { GlobalStyles } from './styles'
 import { ToastifyStyles } from './styles/toasify'

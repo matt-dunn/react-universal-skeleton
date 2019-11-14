@@ -2,14 +2,14 @@ import styled from "styled-components";
 
 import spinner from "./i/spinner.gif";
 
-const Loader = styled.div`
+const Loader = styled.div<{height: number}>`
   position: absolute;
-  height: 50px;
-  width: 50px;
+  height: ${({height}) => `${height}px`};
+  width: ${({height}) => `${height}px`};
   top: 50%;
   left: 50%;
-  margin: -25px 0 0 -25px;
-  background-size: 50px;
+  margin: ${({height}) => `-${height / 2}px 0 0 -${height / 2}px`};
+  background-size: ${({height}) => `${height}px`};
   z-index: -1;
   background-image: url(${spinner});
   background-repeat: no-repeat;
