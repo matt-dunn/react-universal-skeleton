@@ -14,9 +14,12 @@ const DEV_PORT = 3020;
 const DEV_HOST = "0.0.0.0";//"local.training.co.uk";
 const DEV_DOMAIN = DEV_HOST + ":" + DEV_PORT;
 
+const ENV = process.env.NODE_ENV || "production";
+
+console.log("ENV", ENV)
+
 module.exports = {
     entry: './client.js',
-    mode: "development",
     output: {
         path: path.resolve(ROOT, "dist"),
 

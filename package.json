@@ -101,7 +101,7 @@
     "webpack-dev-server": "^3.9.0"
   },
   "scripts": {
-    "wp-start": "webpack-dev-server --config ./app/webpack/client.config.js --progress --mode development",
+    "wp-start": "cross-env NODE_ENV=development webpack-dev-server --config ./app/webpack/client.config.js --progress --mode development",
     "wp-build": "webpack --config ./app/webpack/client.config.js",
     "dev": "yarn generate-imported-components && parcel app/index.html",
     "dev:server": "nodemon -e js,jsx,html,ts,tsx --ignore dist/ --ignore app/.imported.js --exec 'yarn dev:build && yarn start'",
