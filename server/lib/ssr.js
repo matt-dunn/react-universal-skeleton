@@ -100,6 +100,7 @@ export default async (req, res) => {
 
             const {helmet} = helmetContext;
 
+            res.setHeader('Content-Type', 'text/html; charset=utf-8');
             res.status(200)
             res.write(`
                 ${openHead}

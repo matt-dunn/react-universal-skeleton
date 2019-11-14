@@ -3,8 +3,10 @@ import express from 'express'
 import log from 'llog'
 import ssr from './lib/ssr'
 import bodyParser from 'body-parser'
+import helmet from 'helmet'
 
 const app = express()// Expose the public directory as /dist and point to the browser version
+app.use(helmet())
 app.use('/dist/client', express.static(path.resolve(process.cwd(), 'dist', 'client')));// Anything unresolved is serving the application and let
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }))
