@@ -126,7 +126,7 @@ export function performAction<T>(schema: Schema<any>, action: ActionType, data: 
 }
 
 function isComponent(arg: any): arg is ComponentType {
-    return isFunction(arg);
+    return isFunction(arg) || (arg && arg.$$typeof);
 }
 
 export const getTypeProps = (schema: Field, additionalProps: any = {}): {Component: FormComponent; props: any} => {
