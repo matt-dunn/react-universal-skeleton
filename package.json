@@ -88,6 +88,7 @@
     "postcss-modules": "^1.4.1",
     "react-hot-loader": "^4.12.13",
     "rimraf": "^3.0.0",
+    "source-map-support": "^0.5.16",
     "style-loader": "^1.0.0",
     "stylelint": "^11.0.0",
     "stylelint-config-recommended": "^3.0.0",
@@ -98,11 +99,18 @@
     "ts-loader": "^6.2.1",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.9.0"
+    "webpack-dev-server": "^3.9.0",
+    "webpack-node-externals": "^1.7.2"
   },
   "scripts": {
-    "wp-start": "cross-env NODE_ENV=development webpack-dev-server --config ./app/webpack/client.config.js --progress --mode development",
-    "wp-build": "webpack --config ./app/webpack/client.config.js",
+    "wp-start:dev": "cross-env NODE_ENV=development webpack-dev-server --config ./app/webpack/client.config.js --progress --mode development",
+    "wp-build:client": "cross-env NODE_ENV=development webpack --config ./app/webpack/client.config.js --progress --mode development",
+    "wp-build:server": "cross-env NODE_ENV=development webpack --config ./app/webpack/server.config.js --progress --mode development",
+    "wp-build": "concurrently \"yarn wp-build:client\" \"yarn wp-build:server\"",
+    "wp-dev:server": "nodemon -e js,jsx,html,ts,tsx --ignore dist/ --ignore app/.imported.js --exec 'yarn wp-build && yarn wp-start'",
+    "wp-start": "node dist/server/main.js",
+
+
     "dev": "yarn generate-imported-components && parcel app/index.html",
     "dev:server": "nodemon -e js,jsx,html,ts,tsx --ignore dist/ --ignore app/.imported.js --exec 'yarn dev:build && yarn start'",
     "dev:build": "rimraf dist && yarn generate-imported-components && yarn create-bundles",

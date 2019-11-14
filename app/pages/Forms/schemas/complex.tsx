@@ -2,15 +2,14 @@ import React from "react";
 import * as Yup from "yup";
 import {ValidationError} from "yup";
 
-// import FancySelect from "components/FancySelect";
+import FancySelect from "components/FancySelect";
 
 import {validateEmailApi} from "../utils";
-import importComponent from "react-imported-component";
 
-import ErrorComponent from '../../../components/Error';
+// import ErrorComponent from '../../../components/Error';
 // import {DefaultComponent} from "react-imported-component/dist/es5/types";
-import Loading from "components/Loading";
-import Pulse from "components/Loading/Pulse";
+// import Loading from "components/Loading";
+// import Pulse from "components/Loading/Pulse";
 
 const schema = Yup.object().shape({
     email: Yup.string()
@@ -97,11 +96,11 @@ const schema = Yup.object().shape({
                 .meta({
                     order: 1,
                     category: "otherRight",
-                    // Component: FancySelect,
-                    Component: importComponent(() => import("components/FancySelect"), {
-                        LoadingComponent: () => <Loading height={25} loader={({height}) => <Pulse height={height}/>}/>,
-                        ErrorComponent
-                    }),
+                    Component: FancySelect,
+                    // Component: importComponent(() => import("components/FancySelect"), {
+                    //     LoadingComponent: () => <Loading height={25} loader={({height}) => <Pulse height={height}/>}/>,
+                    //     ErrorComponent
+                    // }),
                     // Component: importComponent(() => {
                     //     return new Promise(resolve => {
                     //         setTimeout(() => {

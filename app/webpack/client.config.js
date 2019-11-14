@@ -21,7 +21,7 @@ console.log("ENV", ENV)
 module.exports = {
     entry: './client.js',
     output: {
-        path: path.resolve(ROOT, "dist"),
+        path: path.resolve(ROOT, "dist/client"),
 
         filename: "[name].js",
 
@@ -41,6 +41,7 @@ module.exports = {
         extensions: [".js", ".jsx", ".ts", ".tsx", ".scss"],
 
         alias: {
+            'react-dom': '@hot-loader/react-dom',
             "app": path.join(ROOT, "app"),
             "components": path.join(ROOT, "components"),
         }
