@@ -8,9 +8,9 @@ import {validateEmailApi} from "../utils";
 import importComponent from "react-imported-component";
 
 import ErrorComponent from '../../../components/Error';
-import {DefaultComponent} from "react-imported-component/dist/es5/types";
+// import {DefaultComponent} from "react-imported-component/dist/es5/types";
 import Loading from "components/Loading";
-// import Pulse from "components/Loading/Pulse";
+import Pulse from "components/Loading/Pulse";
 
 const schema = Yup.object().shape({
     email: Yup.string()
@@ -98,21 +98,21 @@ const schema = Yup.object().shape({
                     order: 1,
                     category: "otherRight",
                     // Component: FancySelect,
-                    // Component: importComponent(() => import("components/FancySelect"), {
-                    //     LoadingComponent: () => <Loading height={25} loader={({height}) => <Pulse height={height}/>}/>,
-                    //     ErrorComponent
-                    // }),
-                    Component: importComponent(() => {
-                        return new Promise(resolve => {
-                            setTimeout(() => {
-                                import("components/FancySelect")
-                                    .then(resolve)
-                            }, 1000)
-                        }) as Promise<DefaultComponent<any>>
-                    }, {
-                        LoadingComponent: function LoadingComponent(){ return <Loading height={25}/>},
+                    Component: importComponent(() => import("components/FancySelect"), {
+                        LoadingComponent: () => <Loading height={25} loader={({height}) => <Pulse height={height}/>}/>,
                         ErrorComponent
                     }),
+                    // Component: importComponent(() => {
+                    //     return new Promise(resolve => {
+                    //         setTimeout(() => {
+                    //             import("components/FancySelect")
+                    //                 .then(resolve)
+                    //         }, 1000)
+                    //     }) as Promise<DefaultComponent<any>>
+                    // }, {
+                    //     LoadingComponent: function LoadingComponent(){ return <Loading height={25}/>},
+                    //     ErrorComponent
+                    // }),
                     props: {
                         options: [
                             { value: '', label: 'Select your flavour...' },
