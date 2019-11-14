@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import {ResponsiveGrid} from "components/Grid";
 import {FieldSet, FieldSetChildrenProps} from "components/Form";
+import {FormOptions} from "components/Form/FormOptions";
 
 const GridItems = styled(ResponsiveGrid("div"))``;
 
@@ -25,6 +26,7 @@ function ComplexLayout<T, P, S>({fieldsetMap: {children, extra, otherLeft, other
                             fields={otherRight}
                         />
                         <p style={{fontSize: "14px", backgroundColor: "#eee", padding: "10px", borderRadius: "10px", margin: "0 0 10px 0"}}>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                        <FormOptions/>
                     </GridItem>
                 </GridItems>
             </div>
@@ -63,6 +65,7 @@ function ComplexLayout<T, P, S>({fieldsetMap: {children, extra, otherLeft, other
                     />
                 </GridItem>
             </GridItems>
+            <FormOptions/>
         </>
     )
 }

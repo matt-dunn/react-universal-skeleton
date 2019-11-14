@@ -63,7 +63,7 @@ const App = () => {
             <ToastifyStyles/>
 
             <Helmet>
-                <title>My App</title>
+                <title>Universal App Example</title>
                 <meta name="build.version" content={process.env.npm_package_version + ((process.env.NODE_ENV !== "production" && "-dev") || "")}/>
             </Helmet>
 

@@ -122,13 +122,7 @@ const Forms = () => {
                         </SubmissionFeedback>
                     )}
                 >
-                    {({fieldsetMap, metadata}) => (
-                        <>
-                            <ComplexLayout fieldsetMap={fieldsetMap}/>
-                            {metadata.payload && <pre style={{whiteSpace: "normal", overflowWrap: "break-word"}}>{JSON.stringify(metadata.payload)}</pre>}
-                            <FormOptions/>
-                        </>
-                    )}
+                    {ComplexLayout}
                 </Form>
 
                 <Form

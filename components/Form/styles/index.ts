@@ -51,10 +51,13 @@ export const FormContainer = styled.form`
     }
   }
   
+  textarea,
   input {
     padding: 9px 8px;
     ${formStyles.control};
-    
+  }
+   
+  input {
     &:not([type='radio']),
     &:not([type='checkbox']) {
       width: 100%;
@@ -62,8 +65,6 @@ export const FormContainer = styled.form`
   }
   
   textarea {
-    padding: 9px 8px;
-    ${formStyles.control};
     min-width: 100%;
     max-width: 100%;
     min-height: 10em;
