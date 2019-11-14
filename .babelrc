@@ -1,5 +1,6 @@
 {
   "plugins": [
+    "react-imported-component/babel", "babel-plugin-dynamic-import-node",
     "react-hot-loader/babel",
     "macros",
     "babel-plugin-styled-components",
@@ -10,7 +11,6 @@
         "components": "./components"
       }
     }],
-    "react-imported-component/babel",
     [
       "@babel/plugin-proposal-decorators",
       {
