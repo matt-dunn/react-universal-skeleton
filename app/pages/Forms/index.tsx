@@ -12,7 +12,7 @@ import {dummyApiCall, MyFormResponse} from "./utils";
 import schemaComplex from "./schemas/complex";
 import ComplexLayout from "./layouts/Complex";
 
-import {FormContainer} from "components/form"
+import {FormContainer} from "components/Form"
 import {FormOptions} from "components/Form/FormOptions";
 import {ValidationError} from "yup";
 
