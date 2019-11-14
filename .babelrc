@@ -1,4 +1,5 @@
 {
+  "presets": ["@babel/preset-env", "@babel/preset-react"],
   "plugins": [
     "react-imported-component/babel",
     "babel-plugin-dynamic-import-node",
