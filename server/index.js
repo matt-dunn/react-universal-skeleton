@@ -2,6 +2,7 @@ import path from 'path'
 import express from 'express'
 import https from "https";
 import expressStaticGzip from "express-static-gzip";
+import trailingSlash from "express-trailing-slash"
 import log from 'llog'
 import ssr from './lib/ssr'
 import bodyParser from 'body-parser'
@@ -13,6 +14,8 @@ const publicPathProd = "/";
 const app = express();
 
 app.use(helmet());
+
+app.use(trailingSlash({slash: true}))
 
 app.use(publicPathProd, expressStaticGzip(path.resolve(process.cwd(), 'dist', 'client'), {
     dotfiles : 'allow',
