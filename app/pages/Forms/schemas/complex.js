@@ -2,7 +2,11 @@ import React from "react";
 import * as Yup from "yup";
 import {ValidationError} from "yup";
 
-import FancySelect from "components/FancySelect";
+import loadable from '@loadable/component'
+
+// import FancySelect from "components/FancySelect";
+// import {FancySelect} from "./xx";
+const FancySelect = loadable(() => import('components/FancySelect'));
 
 import {validateEmailApi} from "../utils";
 
