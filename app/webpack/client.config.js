@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const BrotliPlugin = require('brotli-webpack-plugin');
+const LoadablePlugin = require('@loadable/webpack-plugin');
 
 const path = require('path');
 
@@ -102,8 +103,9 @@ module.exports = {
     },
     plugins: (function(environment, optimise) {
         const plugins = [
+            new LoadablePlugin(),
             new HtmlWebpackPlugin({
-                inject: true,
+                inject: environment !== "production",
                 template: path.resolve(__dirname, "../index.html"),
                 chunksSortMode: "none",
                 //favicon: path.resolve(__dirname, "../favicon.ico")

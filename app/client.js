@@ -4,6 +4,7 @@ import App from './App'
 import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter, withRouter } from 'react-router-dom'
 import { Provider } from 'react-redux';
+import { loadableReady } from '@loadable/component'
 
 import ErrorProvider from "components/actions/ErrorProvider";
 import {deserialize} from "components/state-mutate-with-status/utils";
@@ -46,9 +47,11 @@ const app = (
 const element = document.getElementById('app');
 
 if (window.__PRERENDERED_SSR__) {
-    ReactDOM.hydrate(app, element, () => {
-        window.__PRERENDERED_SSR__ = false;
-    });
+    loadableReady(() => {
+        ReactDOM.hydrate(app, element, () => {
+            window.__PRERENDERED_SSR__ = false;
+        });
+    })
 } else {
     ReactDOM.render(app, element, () => {
         window.__PRERENDERED_SSR__ = false;

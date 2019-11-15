@@ -37,7 +37,7 @@ const parseHelmetTemplate = helmet => (template, ...vars) => {
         .join("") || "";
 };
 
-const statsFile = path.resolve('dist/server/loadable-stats.json');
+const statsFile = path.resolve('dist/client/loadable-stats.json');
 
 export default async (req, res) => {
     const t1 = Date.now();
@@ -88,6 +88,10 @@ export default async (req, res) => {
             console.log("REDIRECT:", context.url)
             res.redirect(301, context.url);
         } else {
+            const scriptTags = extractor.getScriptTags();
+            const linkTags = extractor.getLinkTags();
+            const styleTags = extractor.getStyleTags();
+
             const [
                 startingHTMLFragment,
                 endingHTMLFragment
@@ -110,6 +114,8 @@ export default async (req, res) => {
                 {title}{meta}
                 <link rel="canonical" href="${req.protocol}://${req.hostname}${req.originalUrl}" />
                 `}
+                ${linkTags}
+                ${styleTags}
                 ${closeHead}
             `.trim())
             stream
@@ -119,6 +125,7 @@ export default async (req, res) => {
                             this.queue(data)
                         },
                         function end() {
+                            this.queue(scriptTags)
                             this.queue(
                                 `<script>
                                     window.__PRELOADED_STATE__ = ${serialize(store.getState()).replace(

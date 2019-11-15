@@ -113,11 +113,10 @@
     "webpack-node-externals": "^1.7.2"
   },
   "scripts": {
-    "client": "cross-env NODE_ENV=development webpack-dev-server --config ./app/webpack/client.config.js --progress",
+    "client": "cross-env NODE_ENV=development cross-env OPTIMISE=false webpack-dev-server --config ./app/webpack/client.config.js --progress",
     "server": "cross-env NODE_ENV=production cross-env OPTIMISE=false nodemon -e js,jsx,html,ts,tsx,css,scss --ignore dist/ --ignore reports/ --exec 'yarn build && yarn server:run'",
     "server:run": "node dist/server/main.js",
     "prod": "rimraf reports && yarn lint && yarn type-check && yarn coverage && yarn build",
-
     "build:client": "webpack --config ./app/webpack/client.config.js",
     "build:server": "webpack --config ./app/webpack/server.config.js",
     "build": "rimraf dist && concurrently \"yarn build:client\" \"yarn build:server\"",
