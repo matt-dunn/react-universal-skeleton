@@ -56,10 +56,10 @@ const App = () => {
             <ErrorHandler handler={handler}>
                 <Switch>
                     <Route exact path="/" component={Home} />
-                    <Route exact path="/data/:page?" component={loadable(() => import('./pages/Data'))} />
-                    <Route exact path="/forms" component={loadable(() => import('./pages/Forms'))} />
-                    <Route exact path="/mystyled" component={loadable(() => import('./pages/MyStyled'))} />
-                    <Route path="/login/:from?" component={loadable(() => import('./pages/Login'))} />
+                    <Route exact path="/data/:page?" component={loadable(() => import(/* webpackPrefetch: true */ './pages/Data'))} />
+                    <Route exact path="/forms" component={loadable(() => import(/* webpackPrefetch: true */ './pages/Forms'))} />
+                    <Route exact path="/mystyled" component={loadable(() => import(/* webpackPrefetch: true */ './pages/MyStyled'))} />
+                    <Route path="/login/:from?" component={loadable(() => import(/* webpackPrefetch: true */ './pages/Login'))} />
                     <Route component={Error404} />
                     {/*<Redirect to="/" />*/}
                 </Switch>
