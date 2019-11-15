@@ -11,6 +11,9 @@ Example using Parcel to bundle app with SSR and server side API calls.
         [ ] Client
     [ ] Optimising webpack config shared across dev/prod + client/server
     [ ] remove hardcoded 'dist'
+    [ ] lazy loading
+        - components
+        - show loading/error
     [ ] hot reload issues + better/faster support for server
 
 * Styled components
