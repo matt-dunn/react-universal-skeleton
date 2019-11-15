@@ -9,7 +9,6 @@
     "app": "^0.1.0",
     "body-parser": "^1.19.0",
     "classnames": "^2.2.6",
-    "components": "^0.1.0",
     "css-element-queries": "^1.2.1",
     "flux-standard-action": "^2.1.1",
     "formik": "^2.0.1",

@@ -31,7 +31,7 @@ const [
 // console.error(">>>>>",endingRawHTMLFragment)
 
 
-export const getHTMLFragments = ({ drainHydrateMarks }) => {
-    const startingHTMLFragment = `${startingRawHTMLFragment}${drainHydrateMarks}`
+export const getHTMLFragments = () => {
+    const startingHTMLFragment = `${startingRawHTMLFragment}`
     return [startingHTMLFragment, endingRawHTMLFragment]
 }
