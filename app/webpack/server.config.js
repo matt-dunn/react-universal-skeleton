@@ -6,7 +6,7 @@ const ROOT = path.join(__dirname, "../../");
 
 const environment = process.env.NODE_ENV || "production";
 
-console.log("Building server....", environment)
+console.log(`Building server.... environment: ${environment}`)
 
 module.exports = {
     entry: '../server/index.js',

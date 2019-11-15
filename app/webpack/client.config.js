@@ -20,8 +20,9 @@ const DEV_HOST = "0.0.0.0";
 const DEV_DOMAIN = DEV_HOST + ":" + DEV_PORT;
 
 const environment = process.env.NODE_ENV || "production";
+const optimise = process.env.OPTIMISE !== 'false';
 
-console.log("Building client....", environment)
+console.log(`Building client.... environment: ${environment}, optimise: ${optimise}`)
 
 module.exports = {
     entry: './client.js',
@@ -99,7 +100,7 @@ module.exports = {
             },
         ]
     },
-    plugins: (function(environment) {
+    plugins: (function(environment, optimise) {
         const plugins = [
             new HtmlWebpackPlugin({
                 inject: true,
@@ -116,7 +117,9 @@ module.exports = {
                 chunkFilename: '[id]-[hash].css',
                 ignoreOrder: false, // Enable to remove warnings about conflicting order
             }));
+        }
 
+        if (environment === "production" && optimise) {
             plugins.push(new CompressionPlugin({
                 filename: '[path].gz[query]',
                 algorithm: 'gzip',
@@ -134,7 +137,7 @@ module.exports = {
         }
 
         return plugins;
-    })(environment),
+    })(environment, optimise),
     devServer: {
         headers: {
             "Access-Control-Allow-Origin": DEV_PROTOCOL + "://" + DEV_DOMAIN
