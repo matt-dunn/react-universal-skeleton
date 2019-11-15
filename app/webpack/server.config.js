@@ -33,7 +33,7 @@ module.exports = {
 
         sourceMapFilename: "[name].map",
 
-        chunkFilename: "[id]-chunk.js",
+        // chunkFilename: "[id]-chunk.js",
 
         publicPath: "/",
 
@@ -47,7 +47,7 @@ module.exports = {
             path.join(ROOT, "node_modules")
         ],
 
-        extensions: [".js", ".jsx", ".ts", ".tsx", ".scss"],
+        extensions: [".js", ".jsx", ".ts", ".tsx", ".scss", ".css"],
 
         alias: {
             'react-dom': '@hot-loader/react-dom',

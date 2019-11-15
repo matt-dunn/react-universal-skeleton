@@ -25,11 +25,11 @@ module.exports = {
     output: {
         path: path.resolve(ROOT, "dist/client"),
 
-        filename: "[name].js",
+        filename: "[name]-[hash].js",
 
-        sourceMapFilename: "[name].map",
+        sourceMapFilename: "[name]-[hash].map",
 
-        chunkFilename: "[id]-chunk.js",
+        chunkFilename: "[id]-[chunkhash].js",
 
         publicPath: "/"
     },
@@ -40,7 +40,7 @@ module.exports = {
             path.join(ROOT, "node_modules")
         ],
 
-        extensions: [".js", ".jsx", ".ts", ".tsx", ".scss"],
+        extensions: [".js", ".jsx", ".ts", ".tsx", ".scss", ".css"],
 
         alias: {
             'react-dom': '@hot-loader/react-dom',
