@@ -21,20 +21,24 @@ const ENV = process.env.NODE_ENV || "production";
 console.log("ENV", ENV)
 
 module.exports = {
-    entry: '../server/index.js',
+    entry: '../server/lib/ssr.js',
+    mode: ENV,
     target: "node",
     externals: [nodeExternals()],
     devtool: "source-map",
     output: {
         path: path.resolve(ROOT, "dist/server"),
 
-        filename: "[name].js",
+        filename: "main.js",
 
         sourceMapFilename: "[name].map",
 
         chunkFilename: "[id]-chunk.js",
 
-        publicPath: "/"
+        publicPath: "/",
+
+        library: "app",
+        libraryTarget: "commonjs2"
     },
     context: path.resolve(__dirname, ".."),
     resolve: {
@@ -69,7 +73,7 @@ module.exports = {
                 test: /\.css$/,
                 use: [
                     {
-                        loader: "style-loader"
+                        loader: "style-loader/locals"
                     },
                     {
                         loader: "css-loader",

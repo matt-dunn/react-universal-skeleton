@@ -52,7 +52,7 @@ export const FormContainer = styled.form`
   }
   
   textarea,
-  input {
+  input[type] {
     padding: 9px 8px;
     ${formStyles.control};
   }
