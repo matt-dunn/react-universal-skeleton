@@ -21,7 +21,7 @@ const ENV = process.env.NODE_ENV || "production";
 console.log("ENV", ENV)
 
 module.exports = {
-    entry: '../server/lib/ssr.js',
+    entry: '../server/index.js',
     mode: ENV,
     target: "node",
     externals: [nodeExternals()],

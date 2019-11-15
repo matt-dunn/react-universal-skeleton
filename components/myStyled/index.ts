@@ -73,5 +73,3 @@ const myStyled = <P>(Component: MyStyledComponent<P>): MyStyled<P, MyStyledTempl
 // });
 
 export default myStyled;
-
-export { default as ServerStylesheet } from "./stylesheet";

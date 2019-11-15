@@ -10,7 +10,7 @@ const BUILD = {
 };
 
 const DEV_PROTOCOL = "http";
-const DEV_PORT = 3020;
+const DEV_PORT = 1234;
 const DEV_HOST = "0.0.0.0";//"local.training.co.uk";
 const DEV_DOMAIN = DEV_HOST + ":" + DEV_PORT;
 

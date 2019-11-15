@@ -5,6 +5,7 @@ import { StaticRouter } from 'react-router-dom'
 import { ServerStyleSheet } from 'styled-components'
 import log from 'llog'
 import through from 'through'
+import 'babel-polyfill';
 import App from '../../app/App'
 import { getHTMLFragments } from './client'
 import {serialize} from "components/state-mutate-with-status/utils";
