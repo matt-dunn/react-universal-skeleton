@@ -3,13 +3,10 @@ import ReactDOM from 'react-dom'
 import App from './App'
 import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter, withRouter } from 'react-router-dom'
-import { ToastContainer } from 'react-toastify';
 import { Provider } from 'react-redux';
 
 import ErrorProvider from "components/actions/ErrorProvider";
 import {deserialize} from "components/state-mutate-with-status/utils";
-
-// import './.imported';
 
 import getStore from "./store";
 import {FormDataState, FormDataProvider} from "components/actions/form";
@@ -35,10 +32,6 @@ const app = (
         <ErrorProvider value={{error}}>
             <HelmetProvider>
                 <Provider store={store}>
-                    <ToastContainer
-                        hideProgressBar
-                        pauseOnHover
-                    />
                     <BrowserRouter>
                         <ScrollToTop>
                             <App />
@@ -52,8 +45,7 @@ const app = (
 
 const element = document.getElementById('app');
 
-if (process.env.NODE_ENV === 'production') {
-    // rehydrate the bundle marks
+if (window.__PRERENDERED_SSR__) {
     ReactDOM.hydrate(app, element, () => {
         window.__PRERENDERED_SSR__ = false;
     });

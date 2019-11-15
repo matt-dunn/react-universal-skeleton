@@ -33,6 +33,7 @@ const handler = ({code, status}, location, history, props) => {
 }
 
 import AuthProvider from "./components/auth"
+import {ToastContainer} from "react-toastify";
 
 // Parcel seems to need the node_modules path prefixed otherwise server bundle get Unexpected Token error... :(
 // import '/node_modules/react-responsive-ui/style.css';
@@ -40,6 +41,10 @@ import AuthProvider from "./components/auth"
 const App = () => {
     return (
         <AuthProvider>
+            <ToastContainer
+                hideProgressBar
+                pauseOnHover
+            />
             <GlobalStyles/>
             <ToastifyStyles/>
 
