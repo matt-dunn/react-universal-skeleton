@@ -16,16 +16,16 @@ const BUILD = {
 
 const DEV_PROTOCOL = "https";
 const DEV_PORT = 1234;
-const DEV_HOST = "0.0.0.0";//"local.training.co.uk";
+const DEV_HOST = "0.0.0.0";
 const DEV_DOMAIN = DEV_HOST + ":" + DEV_PORT;
 
-const ENV = process.env.NODE_ENV || "production";
+const environment = process.env.NODE_ENV || "production";
 
-console.log("Building client....", ENV)
+console.log("Building client....", environment)
 
 module.exports = {
     entry: './client.js',
-    mode: ENV,
+    mode: environment,
     devtool: "source-map",
     output: {
         path: path.resolve(ROOT, "dist/client"),
@@ -69,54 +69,72 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                use: [
-                    {
-                        loader: MiniCssExtractPlugin.loader,
-                        options: {
-                            hmr: process.env.NODE_ENV === 'development',
-                        },
-                    },
-                    // {
-                    //     loader: "style-loader"
-                    // },
-                    {
+                use: (function(environment) {
+                    const rules = [];
+
+                    if (environment === "development") {
+                        rules.push({
+                            loader: "style-loader"
+                        });
+                    } else {
+                        rules.push({
+                            loader: MiniCssExtractPlugin.loader,
+                            options: {
+                                hmr: environment === 'development',
+                                reloadAll: true,
+                            },
+                        });
+                    }
+
+                    rules.push({
                         loader: "css-loader",
                         options: {
                             sourceMap: true,
                             importLoaders: 2
                         }
-                    },
-                ]
+                    });
+
+                    return rules;
+                })(environment)
             },
         ]
     },
-    plugins: [
-        new HtmlWebpackPlugin({
-            inject: true,
-            template: path.resolve(__dirname, "../index.html"),
-            chunksSortMode: "none",
-            //favicon: path.resolve(__dirname, "../favicon.ico")
-            build: BUILD
-        }),
-        new MiniCssExtractPlugin({
-            filename: '[name]-[hash].css',
-            chunkFilename: '[id]-[hash].css',
-            ignoreOrder: false, // Enable to remove warnings about conflicting order
-        }),
-        new CompressionPlugin({
-            filename: '[path].gz[query]',
-            algorithm: 'gzip',
-            test: /\.js$|\.css$|\.html$/,
-            threshold: 10240,
-            minRatio: 0.7
-        }),
-        new BrotliPlugin({
-            asset: '[path].br[query]',
-            test: /\.js$|\.css$|\.html$/,
-            threshold: 10240,
-            minRatio: 0.7
-        }),
-    ],
+    plugins: (function(environment) {
+        const plugins = [
+            new HtmlWebpackPlugin({
+                inject: true,
+                template: path.resolve(__dirname, "../index.html"),
+                chunksSortMode: "none",
+                //favicon: path.resolve(__dirname, "../favicon.ico")
+                build: BUILD
+            })
+        ];
+
+        if (environment === "production") {
+            plugins.push(new MiniCssExtractPlugin({
+                filename: '[name]-[hash].css',
+                chunkFilename: '[id]-[hash].css',
+                ignoreOrder: false, // Enable to remove warnings about conflicting order
+            }));
+
+            plugins.push(new CompressionPlugin({
+                filename: '[path].gz[query]',
+                algorithm: 'gzip',
+                test: /\.js$|\.css$|\.html$/,
+                threshold: 10240,
+                minRatio: 0.7
+            }));
+
+            plugins.push(new BrotliPlugin({
+                asset: '[path].br[query]',
+                test: /\.js$|\.css$|\.html$/,
+                threshold: 10240,
+                minRatio: 0.7
+            }))
+        }
+
+        return plugins;
+    })(environment),
     devServer: {
         headers: {
             "Access-Control-Allow-Origin": DEV_PROTOCOL + "://" + DEV_DOMAIN

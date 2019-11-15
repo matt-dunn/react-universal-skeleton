@@ -4,18 +4,13 @@ const path = require('path');
 
 const ROOT = path.join(__dirname, "../../");
 
-const BUILD = {
-    version: "DEV",
-    number: "0.0.0"
-};
+const environment = process.env.NODE_ENV || "production";
 
-const ENV = process.env.NODE_ENV || "production";
-
-console.log("Building server....", ENV)
+console.log("Building server....", environment)
 
 module.exports = {
     entry: '../server/index.js',
-    mode: ENV,
+    mode: environment,
     target: "node",
     externals: [nodeExternals()],
     devtool: "source-map",
