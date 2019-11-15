@@ -3,7 +3,6 @@ import { renderToNodeStream } from 'react-dom/server'
 import { HelmetProvider } from 'react-helmet-async'
 import { StaticRouter } from 'react-router-dom'
 import { ServerStyleSheet } from 'styled-components'
-import { printDrainHydrateMarks } from 'react-imported-component';
 import log from 'llog'
 import through from 'through'
 import App from '../../app/App'
@@ -89,7 +88,7 @@ export default async (req, res) => {
             const [
                 startingHTMLFragment,
                 endingHTMLFragment
-            ] = getHTMLFragments({drainHydrateMarks: printDrainHydrateMarks()})
+            ] = getHTMLFragments()
 
             const headString = "<head>"
             const splitter = '###SPLIT###'
