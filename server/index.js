@@ -19,6 +19,7 @@ app.use(trailingSlash({slash: true}))
 
 app.use(publicPathProd, expressStaticGzip(path.resolve(process.cwd(), 'dist', 'client'), {
     dotfiles : 'allow',
+    index: false,
     enableBrotli: true,
     orderPreference: ['br', 'gz'],
     setHeaders: function (res, path) {
