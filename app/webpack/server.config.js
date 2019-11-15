@@ -1,4 +1,5 @@
 const nodeExternals = require('webpack-node-externals');
+const LoadablePlugin = require('@loadable/webpack-plugin')
 
 const path = require('path');
 
@@ -75,6 +76,7 @@ module.exports = {
         ]
     },
     plugins: [
+        new LoadablePlugin(),
         // new webpack.BannerPlugin({
         //     banner: 'require("source-map-support").install();',
         //     raw: true,

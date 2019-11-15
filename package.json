@@ -4,6 +4,8 @@
   "main": "app/index.html",
   "private": true,
   "dependencies": {
+    "@loadable/component": "^5.10.3",
+    "@loadable/server": "^5.10.3",
     "@types/classnames": "^2.2.9",
     "@types/react-select": "^3.0.5",
     "body-parser": "^1.19.0",
@@ -45,6 +47,8 @@
     "@babel/preset-env": "^7.7.1",
     "@babel/preset-react": "^7.7.0",
     "@hot-loader/react-dom": "^16.9.0",
+    "@loadable/babel-plugin": "^5.10.3",
+    "@loadable/webpack-plugin": "^5.7.1",
     "@types/enzyme": "^3.10.3",
     "@types/is-promise": "^2.1.0",
     "@types/jest": "^24.0.18",

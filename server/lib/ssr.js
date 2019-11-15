@@ -6,19 +6,21 @@ import { ServerStyleSheet } from 'styled-components'
 import log from 'llog'
 import through from 'through'
 import 'babel-polyfill';
-import App from '../../app/App'
 import { getHTMLFragments } from './client'
 import {serialize} from "components/state-mutate-with-status/utils";
-
+import { ChunkExtractor } from '@loadable/server'
+import {FormDataProvider, parseFormData} from "components/actions/form";
+import {set} from "lodash";
+import path from "path";
 import { Provider } from 'react-redux';
-
-import getStore from "../../app/store";
 
 import {getDataFromTree} from "components/actions";
 import ErrorProvider from "components/actions/ErrorProvider";
 import {errorLike} from "components/error";
-
 import StylesheetServer from "components/myStyled/server";
+
+import getStore from "../../app/store";
+import App from '../../app/App'
 
 const parseHelmetTemplate = helmet => (template, ...vars) => {
     const matcher = /{(\w*)}/g;
@@ -35,9 +37,7 @@ const parseHelmetTemplate = helmet => (template, ...vars) => {
         .join("") || "";
 };
 
-import {FormDataProvider, parseFormData} from "components/actions/form";
-
-import {set} from "lodash";
+const statsFile = path.resolve('dist/server/loadable-stats.json');
 
 export default async (req, res) => {
     const t1 = Date.now();
@@ -54,7 +54,9 @@ export default async (req, res) => {
 
     console.log("FORMDATA", formData)
 
-    const app = (
+    const extractor = new ChunkExtractor({ statsFile });
+
+    const app = extractor.collectChunks(
         <FormDataProvider value={formData}>
             <ErrorProvider value={errorContext}>
                 <HelmetProvider context={helmetContext}>

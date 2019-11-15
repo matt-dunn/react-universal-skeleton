@@ -973,6 +973,12 @@
   dependencies:
     regenerator-runtime "^0.13.2"
 
+"@babel/runtime@^7.6.0":
+  version "7.7.2"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.7.2.tgz#111a78002a5c25fc8e3361bedc9529c696b85a6a"
+  dependencies:
+    regenerator-runtime "^0.13.2"
+
 "@babel/template@^7.1.0", "@babel/template@^7.4.0", "@babel/template@^7.4.4", "@babel/template@^7.6.0":
   version "7.6.0"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.6.0.tgz#7f0159c7f5012230dad64cca42ec9bdb5c9536e6"
@@ -1262,6 +1268,31 @@
     "@types/istanbul-lib-coverage" "^2.0.0"
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^13.0.0"
+
+"@loadable/babel-plugin@^5.10.3":
+  version "5.10.3"
+  resolved "https://registry.yarnpkg.com/@loadable/babel-plugin/-/babel-plugin-5.10.3.tgz#faadbe38036b29e449640c3974acececbaeb5739"
+  dependencies:
+    "@babel/plugin-syntax-dynamic-import" "^7.2.0"
+
+"@loadable/component@^5.10.3":
+  version "5.10.3"
+  resolved "https://registry.yarnpkg.com/@loadable/component/-/component-5.10.3.tgz#e1ad811ac4834a6ed187605d8464351d0c52896f"
+  dependencies:
+    "@babel/runtime" "^7.6.0"
+    hoist-non-react-statics "^3.3.0"
+
+"@loadable/server@^5.10.3":
+  version "5.10.3"
+  resolved "https://registry.yarnpkg.com/@loadable/server/-/server-5.10.3.tgz#421e1af549d58d67a0a459cd4f2ae7bf20ab4bc6"
+  dependencies:
+    lodash "^4.17.15"
+
+"@loadable/webpack-plugin@^5.7.1":
+  version "5.7.1"
+  resolved "https://registry.yarnpkg.com/@loadable/webpack-plugin/-/webpack-plugin-5.7.1.tgz#9fe4b19c347eaa72f8ff366ae9a9d2b724f86124"
+  dependencies:
+    mkdirp "^0.5.1"
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
