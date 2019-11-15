@@ -16,10 +16,12 @@ const DEV_DOMAIN = DEV_HOST + ":" + DEV_PORT;
 
 const ENV = process.env.NODE_ENV || "production";
 
-console.log("ENV", ENV)
+console.log("Building client....", ENV)
 
 module.exports = {
     entry: './client.js',
+    mode: ENV,
+    devtool: "source-map",
     output: {
         path: path.resolve(ROOT, "dist/client"),
 

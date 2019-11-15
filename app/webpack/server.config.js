@@ -12,13 +12,13 @@ const BUILD = {
 };
 
 const DEV_PROTOCOL = "http";
-const DEV_PORT = 3020;
+const DEV_PORT = 1234;
 const DEV_HOST = "0.0.0.0";//"local.training.co.uk";
 const DEV_DOMAIN = DEV_HOST + ":" + DEV_PORT;
 
 const ENV = process.env.NODE_ENV || "production";
 
-console.log("ENV", ENV)
+console.log("Building server....", ENV)
 
 module.exports = {
     entry: '../server/index.js',
@@ -29,7 +29,7 @@ module.exports = {
     output: {
         path: path.resolve(ROOT, "dist/server"),
 
-        filename: "main.js",
+        filename: "[name].js",
 
         sourceMapFilename: "[name].map",
 
@@ -94,11 +94,11 @@ module.exports = {
             //favicon: path.resolve(__dirname, "../favicon.ico")
             build: BUILD
         }),
-        new webpack.BannerPlugin({
-            banner: 'require("source-map-support").install();',
-            raw: true,
-            entryOnly: false
-        }),
+        // new webpack.BannerPlugin({
+        //     banner: 'require("source-map-support").install();',
+        //     raw: true,
+        //     entryOnly: false
+        // }),
     ],
     // devServer: {
     //     headers: {

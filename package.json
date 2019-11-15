@@ -104,8 +104,8 @@
   },
   "scripts": {
     "wp-start:dev": "cross-env NODE_ENV=development webpack-dev-server --config ./app/webpack/client.config.js --progress --mode development",
-    "wp-build:client": "cross-env NODE_ENV=development webpack --config ./app/webpack/client.config.js --progress --mode development",
-    "wp-build:server": "cross-env NODE_ENV=development webpack --config ./app/webpack/server.config.js --progress",
+    "wp-build:client": "cross-env NODE_ENV=production webpack --config ./app/webpack/client.config.js",
+    "wp-build:server": "cross-env NODE_ENV=production webpack --config ./app/webpack/server.config.js",
     "wp-build": "concurrently \"yarn wp-build:client\" \"yarn wp-build:server\"",
     "wp-dev:server": "nodemon -e js,jsx,html,ts,tsx --ignore dist/ --ignore app/.imported.js --exec 'yarn wp-build && yarn wp-start'",
     "wp-start": "node dist/server/main.js",
