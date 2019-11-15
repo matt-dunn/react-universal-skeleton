@@ -1,13 +1,25 @@
 import path from 'path'
 import express from 'express'
+import https from "https";
+import expressStaticGzip from "express-static-gzip";
 import log from 'llog'
 import ssr from './lib/ssr'
 import bodyParser from 'body-parser'
 import helmet from 'helmet'
 
+const publicPathProd = "/";
+
 const app = express()// Expose the public directory as /dist and point to the browser version
 app.use(helmet())
-app.use('/', express.static(path.resolve(process.cwd(), 'dist', 'client')));// Anything unresolved is serving the application and let
+app.use(publicPathProd, expressStaticGzip(path.resolve(process.cwd(), 'dist', 'client'), {
+    dotfiles : 'allow',
+    enableBrotli: true,
+    orderPreference: ['br', 'gz'],
+    setHeaders: function (res, path) {
+        res.setHeader("Cache-Control", "public, max-age=31536000");
+    }
+}));
+// app.use('/', express.static(path.resolve(process.cwd(), 'dist', 'client')));// Anything unresolved is serving the application and let
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }))
 // react-router do the routing!

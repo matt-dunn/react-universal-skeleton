@@ -1,5 +1,7 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
+const BrotliPlugin = require('brotli-webpack-plugin');
 
 const path = require('path');
 
@@ -10,7 +12,7 @@ const BUILD = {
     number: "0.0.0"
 };
 
-const DEV_PROTOCOL = "http";
+const DEV_PROTOCOL = "https";
 const DEV_PORT = 1234;
 const DEV_HOST = "0.0.0.0";//"local.training.co.uk";
 const DEV_DOMAIN = DEV_HOST + ":" + DEV_PORT;
@@ -99,7 +101,19 @@ module.exports = {
             chunkFilename: '[id]-[hash].css',
             ignoreOrder: false, // Enable to remove warnings about conflicting order
         }),
-
+        new CompressionPlugin({
+            filename: '[path].gz[query]',
+            algorithm: 'gzip',
+            test: /\.js$|\.css$|\.html$/,
+            threshold: 10240,
+            minRatio: 0.7
+        }),
+        new BrotliPlugin({
+            asset: '[path].br[query]',
+            test: /\.js$|\.css$|\.html$/,
+            threshold: 10240,
+            minRatio: 0.7
+        }),
     ],
     devServer: {
         headers: {
