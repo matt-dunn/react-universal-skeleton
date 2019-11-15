@@ -1,3 +1,4 @@
+import fs from 'fs';
 import path from 'path'
 import express from 'express'
 import https from "https";
@@ -7,10 +8,13 @@ import ssr from './lib/ssr'
 import bodyParser from 'body-parser'
 import helmet from 'helmet'
 
+const port = process.env.PORT || 1234;
 const publicPathProd = "/";
 
-const app = express()// Expose the public directory as /dist and point to the browser version
-app.use(helmet())
+const app = express();
+
+app.use(helmet());
+
 app.use(publicPathProd, expressStaticGzip(path.resolve(process.cwd(), 'dist', 'client'), {
     dotfiles : 'allow',
     enableBrotli: true,
@@ -19,14 +23,24 @@ app.use(publicPathProd, expressStaticGzip(path.resolve(process.cwd(), 'dist', 'c
         res.setHeader("Cache-Control", "public, max-age=31536000");
     }
 }));
-// app.use('/', express.static(path.resolve(process.cwd(), 'dist', 'client')));// Anything unresolved is serving the application and let
+
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }))
-// react-router do the routing!
-app.get('/*', ssr)
-app.post('/*', ssr)
-// Check for PORT environment variable, otherwise fallback on Parcel default port
-const port = process.env.PORT || 1234;
-app.listen(port, () => {
-    log.info(`Listening on port ${port}...`);
-});
+
+app.use(bodyParser.urlencoded({ extended: false }));
+
+app.get('/*', ssr);
+app.post('/*', ssr);
+
+import key from "./ssl/private.key";
+import cert from "./ssl/private.crt";
+import ca from "./ssl/private.pem";
+
+https
+    .createServer({
+        key,
+        cert,
+        ca
+    }, app)
+    .listen(port, () => {
+        log.info(`PRODUCTION app listening on port ${port}. Go to https://localhost:${port}${publicPathProd}`);
+    });

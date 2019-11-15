@@ -73,6 +73,10 @@ module.exports = {
                     },
                 ]
             },
+            {
+                test: /ssl\/.*$/i,
+                use: 'raw-loader',
+            },
         ]
     },
     plugins: [
