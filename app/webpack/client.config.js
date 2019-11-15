@@ -1,4 +1,5 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const path = require('path');
 
@@ -66,8 +67,14 @@ module.exports = {
                 test: /\.css$/,
                 use: [
                     {
-                        loader: "style-loader"
+                        loader: MiniCssExtractPlugin.loader,
+                        options: {
+                            hmr: process.env.NODE_ENV === 'development',
+                        },
                     },
+                    // {
+                    //     loader: "style-loader"
+                    // },
                     {
                         loader: "css-loader",
                         options: {
@@ -86,6 +93,11 @@ module.exports = {
             chunksSortMode: "none",
             //favicon: path.resolve(__dirname, "../favicon.ico")
             build: BUILD
+        }),
+        new MiniCssExtractPlugin({
+            filename: '[name]-[hash].css',
+            chunkFilename: '[id]-[hash].css',
+            ignoreOrder: false, // Enable to remove warnings about conflicting order
         }),
 
     ],
