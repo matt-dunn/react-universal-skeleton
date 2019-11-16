@@ -7,7 +7,6 @@
     }],
     "@loadable/babel-plugin",
     "react-hot-loader/babel",
-    "babel-plugin-styled-components",
     ["module-resolver", {
       "root": ["./"],
       "alias": {
