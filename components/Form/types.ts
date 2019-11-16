@@ -4,6 +4,7 @@ import {FormikErrors, FormikTouched} from "formik";
 
 import {FormDataState} from "components/actions/form";
 import {ErrorLike} from "components/error";
+import {SerializedStyles} from "@emotion/css";
 
 export interface ComponentTypes {
     // button: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
@@ -39,9 +40,9 @@ export type Fields<T> = {
 };
 
 export type FormStyles = {
-    control: FlattenInterpolation<any>;
-    controlInvalid: FlattenInterpolation<any>;
-    controlFocus: FlattenInterpolation<any>;
+    control: SerializedStyles;
+    controlInvalid: SerializedStyles;
+    controlFocus: SerializedStyles;
 }
 
 export type InitialFormData<T> = {
