@@ -42,10 +42,10 @@ module.exports = {
     },
     context: path.resolve(__dirname, ".."),
     resolve: {
-        modules: [
-            path.join(__dirname, "../../"),
-            path.join(ROOT, "node_modules")
-        ],
+        // modules: [
+        //     path.join(__dirname, "../../"),
+        //     path.join(ROOT, "node_modules")
+        // ],
 
         extensions: [".js", ".jsx", ".ts", ".tsx", ".scss", ".css"],
 
@@ -60,17 +60,20 @@ module.exports = {
             {
                 test: /\.tsx?$/,
                 use: 'ts-loader',
+                include: [path.resolve(ROOT, 'app'), path.resolve(ROOT, 'components'), path.resolve(ROOT, 'server')],
                 exclude: /node_modules/
             },
             {
                 test: /\.jsx?$/,
                 exclude: /node_modules/,
+                include: [path.resolve(ROOT, 'app'), path.resolve(ROOT, 'components'), path.resolve(ROOT, 'server')],
                 use: {
                     loader: "babel-loader"
                 }
             },
             {
                 test: /\.css$/,
+                include: [path.resolve(ROOT, 'app'), path.resolve(ROOT, 'components'), path.resolve(ROOT, 'server')],
                 use: (function(environment) {
                     const rules = [];
 

@@ -31,10 +31,10 @@ module.exports = {
     },
     context: path.resolve(__dirname, ".."),
     resolve: {
-        modules: [
-            path.join(__dirname, "../../"),
-            path.join(ROOT, "node_modules")
-        ],
+        // modules: [
+        //     path.join(__dirname, "../../"),
+        //     path.join(ROOT, "node_modules")
+        // ],
 
         extensions: [".js", ".jsx", ".ts", ".tsx", ".scss", ".css"],
 
@@ -49,10 +49,12 @@ module.exports = {
             {
                 test: /\.tsx?$/,
                 use: 'ts-loader',
+                include: [path.resolve(ROOT, 'app'), path.resolve(ROOT, 'components'), path.resolve(ROOT, 'server')],
                 exclude: /node_modules/
             },
             {
                 test: /\.jsx?$/,
+                include: [path.resolve(ROOT, 'app'), path.resolve(ROOT, 'components'), path.resolve(ROOT, 'server')],
                 exclude: /node_modules/,
                 use: {
                     loader: "babel-loader"
@@ -60,6 +62,7 @@ module.exports = {
             },
             {
                 test: /\.css$/,
+                include: [path.resolve(ROOT, 'app'), path.resolve(ROOT, 'components'), path.resolve(ROOT, 'server')],
                 use: [
                     {
                         loader: "css-loader",
@@ -71,6 +74,7 @@ module.exports = {
             },
             {
                 test: /ssl\/.*$/i,
+                include: [path.resolve(ROOT, 'app'), path.resolve(ROOT, 'components'), path.resolve(ROOT, 'server')],
                 use: 'raw-loader',
             },
         ]
