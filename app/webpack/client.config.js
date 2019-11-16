@@ -28,7 +28,8 @@ console.log(`Building client.... environment: ${environment}, optimise: ${optimi
 module.exports = {
     entry: './client.js',
     mode: environment,
-    devtool: "source-map",
+    devtool: "eval",
+    cache: true,
     output: {
         path: path.resolve(ROOT, "dist/client"),
 
