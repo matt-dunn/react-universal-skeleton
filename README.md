@@ -15,6 +15,7 @@ Example using Parcel to bundle app with SSR and server side API calls.
         - components
         - show loading/error
     [ ] hot reload issues + better/faster support for server
+    [ ] @loadable/component TS issue - loadable is changed during transpile which means it does not work directly with TS
 
 * Styled components
     [ ] Integration with CSS frameworks
