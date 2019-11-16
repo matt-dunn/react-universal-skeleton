@@ -26,7 +26,7 @@ type FormProps<S, Payload, Context> = {
     as?: keyof JSX.IntrinsicElements | React.ComponentType<any>;
 }
 
-const FormWrapper = styled.form``;
+const FormWrapper = styled.form<{as: keyof JSX.IntrinsicElements | React.ComponentType<any>}>``;
 
 function Form<S, Payload, Context>({id, schema, onSubmit, children, className, context, complete, as = FormContainer}: FormProps<S, Payload, Context>) {
     type T = Yup.InferType<typeof schema>;
