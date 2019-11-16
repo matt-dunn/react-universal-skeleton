@@ -2,7 +2,6 @@ import React from 'react'
 import { renderToNodeStream } from 'react-dom/server'
 import { HelmetProvider } from 'react-helmet-async'
 import { StaticRouter } from 'react-router-dom'
-import { ServerStyleSheet } from 'styled-components'
 import log from 'llog'
 import through from 'through'
 import 'babel-polyfill';
@@ -74,15 +73,13 @@ export default async (req, res) => {
     );
 
     try {
-        const sheet = new ServerStyleSheet()
-
         const stylesheetServer = StylesheetServer()
 
-        await getDataFromTree(stylesheetServer.collectStyles(sheet.collectStyles(app)));
+        await getDataFromTree(stylesheetServer.collectStyles(app));
 
-        const stream = stylesheetServer.interleaveWithNodeStream(sheet.interleaveWithNodeStream(
-            renderToNodeStream(stylesheetServer.collectStyles(sheet.collectStyles(app)))
-        ));
+        const stream = stylesheetServer.interleaveWithNodeStream(
+            renderToNodeStream(stylesheetServer.collectStyles(app))
+        );
 
         if (context.url) {
             console.log("REDIRECT:", context.url)

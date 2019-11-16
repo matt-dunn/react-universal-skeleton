@@ -1,6 +1,5 @@
 import React, {ComponentType, ReactElement} from "react";
 import {Schema} from "yup";
-import {FlattenInterpolation} from "styled-components";
 import {FormikErrors, FormikTouched} from "formik";
 
 import {FormDataState} from "components/actions/form";

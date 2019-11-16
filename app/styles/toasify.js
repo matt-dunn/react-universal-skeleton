@@ -1,6 +1,6 @@
-import { createGlobalStyle } from 'styled-components';
+import { Global, css } from '@emotion/core'
 
-export const ToastifyStyles = createGlobalStyle`
+export const ToastifyStyles = css`
 .Toastify__toast-container {
   z-index: 9999;
   position: fixed;

@@ -1,5 +1,5 @@
 import React, {ReactElement, ReactNode, useEffect, useRef, useState} from "react";
-import styled from "styled-components";
+import styled from '@emotion/styled'
 
 import Spinner from "./Spinner";
 

@@ -2,7 +2,7 @@ import React from "react";
 
 import {FormStyles, typedMemo} from "../types";
 import {Checkbox} from "./Checkbox";
-import styled from "styled-components";
+import styled from '@emotion/styled'
 
 type Option = {
     value: string;
@@ -27,7 +27,7 @@ const Label = styled.label`
     display: flex;
     margin: 8px 0;
     
-    > span:first-child {
+    > span:first-of-type {
       margin: 0 8px 0 0;
     }
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import {toast} from "react-toastify";
-import styled from "styled-components";
+import styled from '@emotion/styled'
 
 const Button = styled.button`
   padding: 5px 10px;

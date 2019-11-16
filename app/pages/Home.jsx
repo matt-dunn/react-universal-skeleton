@@ -1,6 +1,6 @@
 import React from 'react'
 import {Helmet} from 'react-helmet-async'
-import styled from "styled-components";
+import styled from '@emotion/styled'
 import {NavLink} from "react-router-dom";
 
 import Page from '../styles/Page'

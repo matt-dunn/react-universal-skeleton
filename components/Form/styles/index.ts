@@ -1,4 +1,5 @@
-import styled, {css} from "styled-components";
+import styled from '@emotion/styled'
+import {css} from '@emotion/core'
 
 import {FormStyles} from "../types";
 
@@ -15,7 +16,7 @@ export const formStyles: FormStyles = {
     controlFocus: css`
       outline: none;
       border-color: #4086f7 !important;
-      box-shadow: 0 0 0 1px #4086f7;
+      box-shadow: 0 0 0 1px #4086f7 !important;
     `
 };
 
@@ -85,9 +86,9 @@ export const FormContainer = styled.form`
   }
   
   [data-type='boolean'] {
-    label:first-child {
+    label:first-of-type {
       display: flex;
-        > span:first-child {
+        > span:first-of-type {
           display: inline-block;
           margin: 0 14px 0 0;
         }
@@ -140,7 +141,7 @@ export const FormContainer = styled.form`
     margin: 2px 0;
     display: block;
     
-    > span:first-child {
+    > span:first-of-type {
       display: block;
       margin-bottom: 5px;
     }

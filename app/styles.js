@@ -1,6 +1,6 @@
-import { createGlobalStyle } from 'styled-components';
+import { Global, css } from '@emotion/core'
 
-export const GlobalStyles = createGlobalStyle`
+export const GlobalStyles = css`
 /* Base 10 typography scale courtesty of @wesbos 1.6rem === 16px */
 html {
   font-size: 10px;

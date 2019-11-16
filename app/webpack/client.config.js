@@ -29,7 +29,7 @@ module.exports = {
     entry: './client.js',
     mode: environment,
     devtool: "eval",
-    cache: true,
+    cache: false,
     output: {
         path: path.resolve(ROOT, "dist/client"),
 

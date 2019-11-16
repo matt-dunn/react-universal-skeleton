@@ -3,7 +3,7 @@ import {Formik, setIn} from 'formik';
 import * as Yup from 'yup';
 import {Schema} from "yup";
 import classnames from "classnames";
-import styled from "styled-components";
+import styled from '@emotion/styled'
 
 import {MapDataToAction, useForm} from "components/actions/form";
 

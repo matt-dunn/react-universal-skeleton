@@ -1,6 +1,6 @@
 import React from 'react'
 import {Helmet} from 'react-helmet-async'
-import styled from "styled-components";
+import styled from '@emotion/styled'
 import * as Yup from "yup";
 
 import {Collections, Form} from "components/Form/index";

@@ -1,5 +1,6 @@
 import React, {ReactElement, useCallback} from "react";
-import styled, {css} from "styled-components";
+import styled from '@emotion/styled'
+import {css} from '@emotion/core'
 import { Link } from 'react-router-dom';
 
 import Status, {IStatus} from "components/state-mutate-with-status/status";

@@ -3,6 +3,7 @@ import React from 'react'
 import {Helmet} from 'react-helmet-async';
 import {Switch, Route, generatePath} from 'react-router-dom'
 import loadable from '@loadable/component'
+import { Global, css } from '@emotion/core'
 
 import Header from './components/Header'
 
@@ -41,8 +42,8 @@ const App = () => {
                 hideProgressBar
                 pauseOnHover
             />
-            <GlobalStyles/>
-            <ToastifyStyles/>
+            <Global styles={GlobalStyles}/>
+            <Global styles={ToastifyStyles}/>
 
             <Helmet
                 titleTemplate="%s - Universal App Example"

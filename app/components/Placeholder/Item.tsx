@@ -1,6 +1,6 @@
-import styled, {AnyStyledComponent} from "styled-components";
+import styled from '@emotion/styled'
 
-const PlaceHolderItem = (Component: AnyStyledComponent) => styled(Component)`
+const PlaceHolderItem = (Component: any) => styled(Component)`
   position: relative;
   min-height: calc(1.75em + 5px);
 

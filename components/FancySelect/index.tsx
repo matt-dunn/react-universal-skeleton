@@ -1,32 +1,36 @@
 import React, {useState, useEffect, ReactElement} from 'react'
-import styled, {css} from "styled-components";
+import styled from '@emotion/styled'
+import {css, CSSObject} from '@emotion/core'
 import classnames from "classnames";
 
 import ReactSelect from "react-select";
 import {FormStyles} from "components/Form/types";
 
-const SelectStyle = css<{isValid?: boolean; formElementStyles: FormStyles}>`
+const SelectStyle = ({isValid, formElementStyles}: {isValid?: boolean; formElementStyles: FormStyles}) => css`
   font-size: inherit;
   background-color: transparent;
   flex-grow: 1;
-  > div:first-child {
-    ${({formElementStyles}) => formElementStyles.control}
+  > span:first-of-type ~ div:first-of-type {
+    ${formElementStyles.controlFocus};
+  }
+  > div:first-of-type {
+    ${formElementStyles.control};
     &, &:hover {
-      ${({isValid, formElementStyles}) => !isValid && formElementStyles.controlInvalid}
+      ${!isValid && formElementStyles.controlInvalid};
     }
   }
 `;
 
 const BasicSelect = styled.select<{isValid?: boolean; formElementStyles: FormStyles}>`
-  ${SelectStyle};
+  ${props => SelectStyle(props)};
   height: 38px;
   width: 100%;
   ${({formElementStyles}) => formElementStyles.control}
   ${({isValid, formElementStyles}) => !isValid && formElementStyles.controlInvalid}
 `;
 
-const Select = styled(ReactSelect)`
-  ${SelectStyle}
+const Select = styled(ReactSelect)<{isValid?: boolean; formElementStyles: FormStyles}>`
+  ${props => SelectStyle(props)};
 `;
 
 type Option = {

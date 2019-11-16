@@ -1,12 +1,7 @@
 import React from "react";
 
 import {FormStyles, typedMemo} from "../types";
-import styled from "styled-components";
-
-type Option = {
-    value: string;
-    label: string;
-}
+import styled from '@emotion/styled'
 
 type CheckboxProps = {
     id: string;

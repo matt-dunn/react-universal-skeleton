@@ -1,5 +1,7 @@
 import React, {useCallback, useState, useRef, useEffect} from "react";
-import styled, {css} from "styled-components";
+import styled from '@emotion/styled'
+import {css} from '@emotion/core'
+
 // @ts-ignore
 import TextInput from 'react-responsive-ui/modules/TextInput'
 

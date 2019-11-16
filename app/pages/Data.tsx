@@ -1,6 +1,7 @@
 import React, {useCallback} from 'react'
 import {Helmet} from 'react-helmet-async'
-import styled, {css} from "styled-components";
+import styled from '@emotion/styled'
+import {css} from '@emotion/core'
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import TrackVisibility from 'react-on-screen';
