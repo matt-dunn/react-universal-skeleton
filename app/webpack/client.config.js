@@ -30,7 +30,7 @@ console.log(`Building client.... environment: ${environment}, optimise: ${optimi
 module.exports = {
     entry: './client.js',
     mode: environment,
-    devtool: "inline-source-map",
+    devtool: environment === "development" ? "eval-source-map" : "",
     cache: false,
     output: {
         path: path.resolve(ROOT, "dist/client"),
@@ -100,6 +100,7 @@ module.exports = {
     },
     plugins: (function(environment, optimise) {
         const plugins = [
+            new webpack.optimize.ModuleConcatenationPlugin(),
             new BundleAnalyzerPlugin({
                 openAnalyzer: false,
                 analyzerMode: 'static',
@@ -147,6 +148,9 @@ module.exports = {
 
         return plugins;
     })(environment, optimise),
+    optimization: {
+        minimize: environment === "production"
+    },
     devServer: {
         headers: {
             "Access-Control-Allow-Origin": DEV_PROTOCOL + "://" + DEV_DOMAIN

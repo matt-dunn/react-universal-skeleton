@@ -14,7 +14,7 @@ module.exports = {
     mode: environment,
     target: "node",
     externals: [nodeExternals()],
-    devtool: "eval",
+    devtool: "source-map",
     cache: false,
     output: {
         path: path.resolve(ROOT, "dist/server"),
