@@ -1,6 +1,7 @@
 {
+  "transpileOnly": true,
   "compilerOptions": {
-      "experimentalDecorators": true,
+    "experimentalDecorators": true,
     "esModuleInterop": true,
     "outDir": "./dist/",
     "sourceMap": true,

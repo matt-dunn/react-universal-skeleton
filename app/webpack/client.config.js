@@ -1,5 +1,6 @@
 const fs = require('fs');
 
+const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
@@ -28,7 +29,7 @@ console.log(`Building client.... environment: ${environment}, optimise: ${optimi
 module.exports = {
     entry: './client.js',
     mode: environment,
-    devtool: "eval",
+    devtool: "inline-source-map",
     cache: false,
     output: {
         path: path.resolve(ROOT, "dist/client"),
@@ -43,11 +44,6 @@ module.exports = {
     },
     context: path.resolve(__dirname, ".."),
     resolve: {
-        // modules: [
-        //     path.join(__dirname, "../../"),
-        //     path.join(ROOT, "node_modules")
-        // ],
-
         extensions: [".js", ".jsx", ".ts", ".tsx", ".scss", ".css"],
 
         alias: {
@@ -59,18 +55,14 @@ module.exports = {
     module :{
         rules: [
             {
-                test: /\.tsx?$/,
-                use: 'ts-loader',
-                include: [path.resolve(ROOT, 'app'), path.resolve(ROOT, 'components'), path.resolve(ROOT, 'server')],
-                exclude: /node_modules/
-            },
-            {
-                test: /\.jsx?$/,
+                test: /\.(js|jsx|ts|tsx)$/,
                 exclude: /node_modules/,
                 include: [path.resolve(ROOT, 'app'), path.resolve(ROOT, 'components'), path.resolve(ROOT, 'server')],
-                use: {
-                    loader: "babel-loader"
-                }
+                use: [
+                    {
+                        loader: "babel-loader",
+                    },
+                ]
             },
             {
                 test: /\.css$/,
@@ -107,6 +99,11 @@ module.exports = {
     },
     plugins: (function(environment, optimise) {
         const plugins = [
+            new webpack.SourceMapDevToolPlugin({
+                filename: null,
+                exclude: [/node_modules/],
+                test: /\.ts($|\?)/i
+            }),
             new LoadablePlugin(),
             new HtmlWebpackPlugin({
                 inject: environment !== "production",
