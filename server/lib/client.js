@@ -5,21 +5,23 @@ export const htmlPath = path.join(process.cwd(), 'dist', 'client', 'index.html')
 
 export const rawHTML = fs.readFileSync(htmlPath).toString();
 
-const headString = "<head>"
-const appString = '<div id="app"\>'
-const splitter = '###SPLIT###'
+const headString = "<head>";
+const appString = '<div id="app"\>';
+const splitter = '###SPLIT###';
+
 const [
     startingRawHTMLFragment,
     endingRawHTMLFragment
 ] = rawHTML
     .replace(appString, `${appString}${splitter}`)
-    .split(splitter)
+    .split(splitter);
+
 const [openHead, closeHead] = startingRawHTMLFragment
     .replace(headString, `${headString}${splitter}`)
-    .split(splitter)
+    .split(splitter);
 
 export const getHTMLFragments = () => {
-    return [openHead, closeHead, endingRawHTMLFragment]
+    return [openHead, closeHead, endingRawHTMLFragment];
 };
 
 export const parseHelmetTemplate = helmet => (template, ...vars) => {

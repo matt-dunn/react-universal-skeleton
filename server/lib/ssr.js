@@ -110,8 +110,7 @@ export default async (req, res) => {
                                 `<script>
                                     window.__PRELOADED_STATE__ = ${serialize(store.getState()).replace(
                                     /</g,
-                                    '\\u003c'
-                                )}
+                                    '\\u003c')}
                                     window.__PRELOADED_FORM_STATE__ = ${formData && JSON.stringify(formData).replace(
                                     /</g,
                                     '\\u003c')}
