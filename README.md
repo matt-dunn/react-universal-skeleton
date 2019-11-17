@@ -2,20 +2,77 @@
 
 Example using Parcel to bundle app with SSR and server side API calls.
 
+## Commands
+
+Run *client* with hot re-loading
+
+```
+yarn client
+```
+
+Run with SSR and reloading with full re-load without compressed assets (gzip/br)
+```
+yarn server
+```
+
+Just run the SSR server without build
+```
+yarn server:run
+```
+
+Full production build, running all production tasks with compressed assets (gzip/br)
+
+```
+yarn prod
+```
+
+Lint CSS/JS
+
+```
+yarn lint
+```
+
+Typescript
+
+```
+yarn type-check
+```
+
+Run all tests
+
+```
+yarn test
+```
+
+Run single/specific tests
+
+```
+yarn test -t '<match>'
+```
+
+Run all tests with coverage
+
+```
+yarn coverage
+```
+
 
 #### TODO:
 
 * Webpack
     [ ] Source maps
         [ ] Server
-        [ ] Client
+        [X] Client
     [ ] Optimising webpack config shared across dev/prod + client/server
     [ ] remove hardcoded 'dist'
-    [ ] lazy loading
+    [X] lazy loading
         - components
         - show loading/error
     [ ] hot reload issues + better/faster support for server
-    [ ] @loadable/component TS issue - loadable is changed during transpile which means it does not work directly with TS
+        [X] reload
+        [ ] reload keeping app state
+    [X] @loadable/component TS issue - loadable is changed during transpile which means it does not work directly with TS
+        - just use babel to transform TS instead of ts-loader
 
 * Styled components
     [ ] Integration with CSS frameworks
