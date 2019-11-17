@@ -9,7 +9,6 @@ const FancySelect = loadable(() => import('components/FancySelect'));
 import {validateEmailApi} from "../utils";
 
 // import ErrorComponent from '../../../components/Error';
-// import {DefaultComponent} from "react-imported-component/dist/es5/types";
 // import Loading from "components/Loading";
 // import Pulse from "components/Loading/Pulse";
 

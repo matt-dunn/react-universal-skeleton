@@ -48,7 +48,7 @@ module.exports = {
         extensions: [".js", ".jsx", ".ts", ".tsx", ".scss", ".css"],
 
         alias: {
-            // 'react-dom': '@hot-loader/react-dom',
+            'react-dom': '@hot-loader/react-dom',
             "app": path.join(ROOT, "app"),
             "components": path.join(ROOT, "components"),
         }
