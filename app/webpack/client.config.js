@@ -6,6 +6,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const BrotliPlugin = require('brotli-webpack-plugin');
 const LoadablePlugin = require('@loadable/webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const path = require('path');
 
@@ -47,7 +48,7 @@ module.exports = {
         extensions: [".js", ".jsx", ".ts", ".tsx", ".scss", ".css"],
 
         alias: {
-            'react-dom': '@hot-loader/react-dom',
+            // 'react-dom': '@hot-loader/react-dom',
             "app": path.join(ROOT, "app"),
             "components": path.join(ROOT, "components"),
         }
@@ -99,6 +100,11 @@ module.exports = {
     },
     plugins: (function(environment, optimise) {
         const plugins = [
+            new BundleAnalyzerPlugin({
+                openAnalyzer: false,
+                analyzerMode: 'static',
+                reportFilename: path.resolve(ROOT, "reports", "bundle.html")
+            }),
             new webpack.SourceMapDevToolPlugin({
                 filename: null,
                 exclude: [/node_modules/],
