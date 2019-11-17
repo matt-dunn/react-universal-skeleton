@@ -1,11 +1,13 @@
+const path = require('path');
+
 const webpack = require("webpack");
 const nodeExternals = require('webpack-node-externals');
-
-const path = require('path');
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 
 const ROOT = path.join(__dirname, "../../");
 
 const environment = process.env.NODE_ENV || "production";
+const optimise = process.env.OPTIMISE !== 'false';
 
 console.log(`Building server.... environment: ${environment}`)
 
@@ -71,13 +73,21 @@ module.exports = {
             },
         ]
     },
-    plugins: [
-        new webpack.BannerPlugin({
-            banner: 'require("source-map-support").install();',
-            raw: true,
-            entryOnly: false
-        }),
-    ],
+    plugins: (function(environment, optimise) {
+        const plugins = [
+            new webpack.BannerPlugin({
+                banner: 'require("source-map-support").install();',
+                raw: true,
+                entryOnly: false
+            }),
+        ];
+
+        if (environment === "development") {
+            plugins.push(new HardSourceWebpackPlugin());
+        }
+
+        return plugins;
+    })(environment, optimise),
     optimization: {
         minimize: environment === "production"
     },

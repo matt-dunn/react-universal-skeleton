@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
@@ -7,10 +8,14 @@ const CompressionPlugin = require('compression-webpack-plugin');
 const BrotliPlugin = require('brotli-webpack-plugin');
 const LoadablePlugin = require('@loadable/webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-
-const path = require('path');
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 
 const ROOT = path.join(__dirname, "../../");
+
+const environment = process.env.NODE_ENV || "production";
+const optimise = process.env.OPTIMISE !== 'false';
+
+console.log(`Building client.... environment: ${environment}, optimise: ${optimise}`)
 
 const BUILD = {
     version: "DEV",
@@ -21,11 +26,6 @@ const DEV_PROTOCOL = "https";
 const DEV_PORT = 1234;
 const DEV_HOST = "0.0.0.0";
 const DEV_DOMAIN = DEV_HOST + ":" + DEV_PORT;
-
-const environment = process.env.NODE_ENV || "production";
-const optimise = process.env.OPTIMISE !== 'false';
-
-console.log(`Building client.... environment: ${environment}, optimise: ${optimise}`)
 
 module.exports = {
     entry: './client.js',
@@ -127,6 +127,8 @@ module.exports = {
                 chunkFilename: '[id]-[hash].css',
                 ignoreOrder: false, // Enable to remove warnings about conflicting order
             }));
+        } else {
+            plugins.push(new HardSourceWebpackPlugin());
         }
 
         if (environment === "production" && optimise) {
