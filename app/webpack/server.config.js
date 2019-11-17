@@ -78,4 +78,7 @@ module.exports = {
             entryOnly: false
         }),
     ],
+    optimization: {
+        minimize: environment === "production"
+    },
 };
