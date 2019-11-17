@@ -27,7 +27,7 @@ const schema = Yup.object().shape({
         })
         .required('Email is required')
         .email()
-        .test("email", "Email ${value} is unavailable", function(value) {
+        .test("email", "Email ${value} is unavailable", function(value: string) {
             if (!value || !Yup.string().email().isValidSync(value)) {
                 return true;
             } else {
@@ -41,7 +41,7 @@ const schema = Yup.object().shape({
         .min(2)
         .max(10)
         .nullable()
-        .transform((value, originalValue) => originalValue !== undefined  && originalValue !== null && originalValue.trim && originalValue.trim() === "" ? null: value)
+        .transform((value: string, originalValue: string) => originalValue !== undefined  && originalValue !== null && originalValue.trim && originalValue.trim() === "" ? null: value)
         // .required()
         .meta({
             order: 2,
