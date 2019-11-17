@@ -4,8 +4,6 @@ import {ValidationError} from "yup";
 
 import loadable from '@loadable/component'
 
-// import FancySelect from "components/FancySelect";
-// import {FancySelect} from "./xx";
 const FancySelect = loadable(() => import('components/FancySelect'));
 
 import {validateEmailApi} from "../utils";
