@@ -61,7 +61,7 @@ export default async (req, res) => {
             </FormDataProvider>
         );
 
-        const stylesheetServer = StylesheetServer()
+        const stylesheetServer = StylesheetServer();
 
         await getDataFromTree(stylesheetServer.collectStyles(app));
 
@@ -70,7 +70,7 @@ export default async (req, res) => {
         );
 
         if (context.url) {
-            console.log("REDIRECT:", context.url)
+            console.log("REDIRECT:", context.url);
             res.redirect(301, context.url);
         } else {
             const scriptTags = extractor.getScriptTags();
@@ -81,7 +81,7 @@ export default async (req, res) => {
                 openHead,
                 closeHead,
                 endingHTMLFragment
-            ] = getHTMLFragments()
+            ] = getHTMLFragments();
 
             const {helmet} = helmetContext;
 
@@ -103,7 +103,7 @@ export default async (req, res) => {
                 .pipe(
                     through(
                         function write(data) {
-                            this.queue(data)
+                            this.queue(data);
                         },
                         function end() {
                             this.queue(
@@ -118,19 +118,19 @@ export default async (req, res) => {
                                     window.__PRERENDERED_SSR__ = true;
                                     window.__ERROR_STATE__ = ${JSON.stringify(errorContext && errorContext.error && errorLike(errorContext.error))}
                                 </script>`
-                            )
-                            this.queue(scriptTags)
-                            this.queue(endingHTMLFragment)
-                            this.queue(null)
+                            );
+                            this.queue(scriptTags);
+                            this.queue(endingHTMLFragment);
+                            this.queue(null);
                             console.log("----DONE", Date.now() - t1)
                         }
                     )
                 )
-                .pipe(res)
+                .pipe(res);
         }
     } catch (e) {
-        log.error(e)
-        res.status(500)
-        res.end()
+        log.error(e);
+        res.status(500);
+        res.end();
     }
 }
