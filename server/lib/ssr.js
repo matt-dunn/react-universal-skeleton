@@ -12,7 +12,7 @@ import { Provider } from 'react-redux';
 
 import {serialize} from "components/state-mutate-with-status/utils";
 import {FormDataProvider, parseFormData} from "components/actions/form";
-import {getDataFromTree} from "components/ssr/safePromise";
+import {getDataFromTree, AsyncDataContextProvider, AsyncData} from "components/ssr/safePromise";
 import ErrorProvider from "components/actions/ErrorProvider";
 import {errorLike} from "components/error";
 import StylesheetServer from "components/myStyled/server";
@@ -41,27 +41,32 @@ export default async (req, res) => {
         console.log("FORMDATA", formData);
 
         const extractor = new ChunkExtractor({ statsFile });
+        const asyncData = new AsyncData();
 
         const app = extractor.collectChunks(
-            <FormDataProvider value={formData}>
-                <ErrorProvider value={errorContext}>
-                    <HelmetProvider context={helmetContext}>
-                        <Provider store={store}>
-                            <StaticRouter
-                                location={req.originalUrl}
-                                context={context}
-                            >
-                                <App/>
-                            </StaticRouter>
-                        </Provider>
-                    </HelmetProvider>
-                </ErrorProvider>
-            </FormDataProvider>
+            <AsyncDataContextProvider value={asyncData}>
+                <FormDataProvider value={formData}>
+                    <ErrorProvider value={errorContext}>
+                        <HelmetProvider context={helmetContext}>
+                            <Provider store={store}>
+                                <StaticRouter
+                                    location={req.originalUrl}
+                                    context={context}
+                                >
+                                    <App/>
+                                </StaticRouter>
+                            </Provider>
+                        </HelmetProvider>
+                    </ErrorProvider>
+                </FormDataProvider>
+            </AsyncDataContextProvider>
         );
 
         const stylesheetServer = StylesheetServer();
 
         await getDataFromTree(stylesheetServer.collectStyles(app));
+
+        asyncData.counter = 0;
 
         const stream = stylesheetServer.interleaveWithNodeStream(
             renderToNodeStream(stylesheetServer.collectStyles(app))
@@ -114,6 +119,9 @@ export default async (req, res) => {
                                     '\\u003c')}
                                     window.__PRERENDERED_SSR__ = true;
                                     window.__ERROR_STATE__ = ${JSON.stringify(errorContext && errorContext.error && errorLike(errorContext.error))}
+                                    window.__ASYNC_DATA_STATE__ = ${asyncData && JSON.stringify(asyncData.data).replace(
+                                    /</g,
+                                    '\\u003c')}
                                 </script>`
                             );
                             this.queue(scriptTags);

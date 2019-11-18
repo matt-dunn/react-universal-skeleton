@@ -96,6 +96,10 @@ module.exports = {
                     return rules;
                 })(environment)
             },
+            {
+                test: /\.md$/i,
+                use: 'raw-loader',
+            },
         ]
     },
     plugins: (function(environment, optimise) {

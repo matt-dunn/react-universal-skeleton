@@ -1,7 +1,7 @@
 import React, {ReactElement, useContext} from "react";
 import { renderToStaticMarkup } from 'react-dom/server'
 
-import {AsyncContext} from "./contexts";
+import {AsyncContext, AsyncDataContext} from "./contexts";
 
 type SafePromise<T = any> = {
     (promise: Promise<T>): Promise<T>;
@@ -23,14 +23,21 @@ export const getDataFromTree = (app: ReactElement) => {
         .catch(ex => console.error(ex)) // Swallow exceptions - they should be handled by the app...
 };
 
-export const useSafePromise = <T>(): SafePromise<T> => {
+export const useSafePromise = <T, D = any>(): [SafePromise<T>, () => D] => {
     const asyncContext = useContext(AsyncContext);
+    const asyncDataContext = useContext(AsyncDataContext);
 
-    return (promise: Promise<T>) => {
+    return [(promise: Promise<T>) => {
         asyncContext && asyncContext.push(promise);
 
+        promise.then(payload => {
+            if (asyncDataContext) {
+                asyncDataContext.data.push(payload);
+            }
+        });
+
         return promise;
-    }
+    }, () => asyncDataContext && asyncDataContext.data[asyncDataContext.counter++]]
 };
 
 export const useSafePromiseWithEffect = <T>(): SafePromise<T> | undefined => {
@@ -44,3 +51,16 @@ export const useSafePromiseWithEffect = <T>(): SafePromise<T> | undefined => {
         }
     }
 };
+
+export const AsyncDataContextProvider = AsyncDataContext.Provider;
+
+export class AsyncData implements AsyncDataContext {
+    counter = 0;
+    data: any[] = [];
+
+    constructor(data?: any[]) {
+        if (data) {
+            this.data = data;
+        }
+    }
+}

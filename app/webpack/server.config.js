@@ -71,6 +71,10 @@ module.exports = {
                 include: [path.resolve(ROOT, 'app'), path.resolve(ROOT, 'components'), path.resolve(ROOT, 'server')],
                 use: 'raw-loader',
             },
+            {
+                test: /\.md$/i,
+                use: 'raw-loader',
+            },
         ]
     },
     plugins: (function(environment, optimise) {

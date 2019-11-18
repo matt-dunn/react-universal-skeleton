@@ -2,6 +2,7 @@ import React from 'react'
 import {Helmet} from 'react-helmet-async'
 import styled from '@emotion/styled'
 import {NavLink} from "react-router-dom";
+import loadable from '@loadable/component'
 
 import Page from '../styles/Page'
 
@@ -31,7 +32,16 @@ const MenuLink = styled.li`
   }
 `
 
+const Markdown = loadable(() => import('components/markdown'));
+
 const Home = () => {
+    // const loadOther = /* #__LOADABLE__ */ () => import('../../README.md')
+    // console.log(">>loadOther3", loadOther.requireAsync().then(x => console.log(x)))
+
+    // const content = "README.md"
+    const Content = loadable.lib(() => import(`../../README.md`));
+    const Content2 = loadable.lib(() => import(`../../test.md`));
+    // console.log(">>Content", Content)
     return (
         <Page>
             <Helmet>
@@ -66,6 +76,15 @@ const Home = () => {
                     </NavLink>
                 </MenuLink>
             </Menu>
+
+
+            <Content2>
+                {(content) => <Markdown content={content.default || content}/>}
+            </Content2>
+
+            <Content>
+                {(content) => <Markdown content={content.default || content}/>}
+            </Content>
         </Page>
     )
 };
