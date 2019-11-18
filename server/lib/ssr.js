@@ -1,5 +1,3 @@
-import 'babel-polyfill';
-
 import path from "path";
 import log from 'llog'
 import through from 'through'
