@@ -51,19 +51,19 @@ export const useSafePromise = <T, D = any>(): [SafePromise<T>, () => D | undefin
     ]
 };
 
-export const useAsync = <T>(promise: Promise<T>) => {
+export const useAsync = <T>(getContent: () => Promise<T>) => {
     const [safePromise, getData] = useSafePromise<T>();
     const [content, setContent] = useState<T>(getData());
 
     if (!(process as any).browser && !content) {
-        safePromise(promise)
+        safePromise(getContent());
     }
 
     useEffect(() => {
         if (!content) {
-            promise.then(content => setContent(content))
+            getContent().then(content => setContent(content));
         }
-    }, [promise, content, setContent]);
+    }, [getContent, content, setContent]);
 
     return [content];
 };

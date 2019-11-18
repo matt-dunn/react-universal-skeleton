@@ -13,7 +13,7 @@ type MarkdownProps = {
 }
 
 const Markdown = ({content}: MarkdownProps) => {
-    const [parsedContent] = useAsync(marked(content, {
+    const [parsedContent] = useAsync(() => marked(content, {
         gfm: true,
         breaks: false,
         pedantic: false,
