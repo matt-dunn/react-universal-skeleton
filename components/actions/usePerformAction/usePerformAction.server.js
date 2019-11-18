@@ -1,20 +1,22 @@
 import React, {useContext} from "react";
 import isPromise from 'is-promise';
 
-import {APIContext, ErrorContext, ErrorHandlerContext, FoldContext} from "../contexts";
+import {useSafePromiseWithEffect} from "components/ssr/safePromise";
+
+import {ErrorContext, ErrorHandlerContext, FoldContext} from "../contexts";
 
 const usePerformAction = action => {
     const {handleError} = useContext(ErrorHandlerContext) || {};
     const {processOnServer = false} = useContext(FoldContext) || {};
 
-    const context = useContext(APIContext);
-    const errorContext = useContext(ErrorContext)
+    const safePromise = useSafePromiseWithEffect();
+    const errorContext = useContext(ErrorContext);
 
-    if (processOnServer && context) {
+    if (processOnServer && safePromise) {
         const payload = action();
 
         if (isPromise(payload)) {
-            context.push(
+            safePromise(
                 payload
                     .catch(ex => {
                         if (handleError) {

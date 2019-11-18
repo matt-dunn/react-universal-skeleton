@@ -14,7 +14,7 @@ import { Provider } from 'react-redux';
 
 import {serialize} from "components/state-mutate-with-status/utils";
 import {FormDataProvider, parseFormData} from "components/actions/form";
-import {getDataFromTree} from "components/actions";
+import {getDataFromTree} from "components/ssr/safePromise";
 import ErrorProvider from "components/actions/ErrorProvider";
 import {errorLike} from "components/error";
 import StylesheetServer from "components/myStyled/server";

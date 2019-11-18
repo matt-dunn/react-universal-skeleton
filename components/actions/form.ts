@@ -1,9 +1,9 @@
 import React, {useCallback, useContext, useState} from "react";
-
-import {errorLike, ErrorLike} from "components/error";
-import {APIContext} from "./contexts";
 import {ValidationError} from "yup";
 import {get, isObject} from "lodash";
+
+import {errorLike, ErrorLike} from "components/error";
+import {useSafePromiseWithEffect} from "components/ssr/safePromise";
 
 if (!(global as any).atob) {
     (global as any).atob = (str: string) => Buffer.from(str, 'base64').toString('binary');
@@ -167,10 +167,10 @@ export const useForm = <T, Payload = any, Schema = any, Context = any>(
         }
     }, [formData.state.data, formDataContext.error, formDataContext.innerFormErrors, formDataContext.isComplete, formDataContext.payload, mapDataToAction]);
 
-    const apiContext = useContext(APIContext);
+    const safePromise = useSafePromiseWithEffect();
 
-    if (apiContext && formDataContext.isSubmitted && !formDataContext.isProcessed) {
-        formDataContext.data && apiContext.push(formValidator(formDataContext.data)
+    if (safePromise && formDataContext.isSubmitted && !formDataContext.isProcessed) {
+        formDataContext.data && safePromise(formValidator(formDataContext.data)
             .then(submit)
             .catch(reason => {
                 if (reason.name === "ValidationError") {
