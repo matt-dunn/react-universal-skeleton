@@ -1,7 +1,7 @@
-import React, {useEffect, useRef, useState} from "react";
+import React from "react";
 import sanitize from "sanitize-html";
 
-import {useSafePromise} from "components/ssr/safePromise";
+import {useAsync} from "components/ssr/safePromise";
 
 import marked from "./marked";
 import {Container} from "./style";
@@ -13,39 +13,20 @@ type MarkdownProps = {
 }
 
 const Markdown = ({content}: MarkdownProps) => {
-    const [safePromise, getData] = useSafePromise<string>();
-    const data = getData()
-    const xx = useRef()
-    const [parsedContent, setParsedContent] = useState();
+    const [parsedContent] = useAsync(marked(content, {
+        gfm: true,
+        breaks: false,
+        pedantic: false,
+        sanitize: false,
+        smartLists: true,
+        smartypants: true,
+        highlightRaw: true,
+        highlight
+    }));
 
-    // useEffect(() => {
-    if (!data) {
-        safePromise(marked(content, {
-                gfm: true,
-                breaks: false,
-                pedantic: false,
-                sanitize: false,
-                smartLists: true,
-                smartypants: true,
-                highlightRaw: true,
-                highlight
-            })
-        )
-    }
+    console.log("@@@@",parsedContent && parsedContent.substring(0, 20))
 
-    useEffect(() => {
-
-    }, [content, setParsedContent]);
-
-    console.log("@@@@",data)
-
-    if (data) {
-        return (
-            <Container dangerouslySetInnerHTML={{__html: sanitize(data, ALLOWED_CONTENT)}}/>
-        );
-    }
-
-    return null;
+    return ((parsedContent && <Container dangerouslySetInnerHTML={{__html: sanitize(parsedContent, ALLOWED_CONTENT)}}/>) || null);
 };
 
 export default Markdown
