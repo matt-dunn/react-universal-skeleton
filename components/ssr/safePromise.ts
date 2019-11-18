@@ -4,7 +4,7 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import {AsyncContext} from "./contexts";
 
 type SafePromise<T = any> = {
-    (promise: Promise<T>): Promise<T>
+    (promise: Promise<T>): Promise<T>;
 }
 
 export const getDataFromTree = (app: ReactElement) => {
