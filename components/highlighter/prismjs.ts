@@ -31,7 +31,7 @@ Prism.languages.css.selector = {
 
 Prism.hooks.add("wrap", env => {
     if (env.type === "hexcode" || env.type === "color" || env.type === "rgb") {
-        env.content = `<span><span style="margin-left:2px;background-color:${env.content};border-radius:1em;border:1px solid #f0f0f0;width:0.75em;height:0.75em;display:inline-block;margin-right:2px;"></span>${env.content}</span>`;
+        env.content = `<span><span style="margin-left:2px;background-color:${env.content};border-radius:1em;border:1px solid #f0f0f0;width:0.75em;height:0.75em;position:relative;top:0.125em;display:inline-block;margin-right:2px;"></span>${env.content}</span>`;
     }
 });
 

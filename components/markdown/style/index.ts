@@ -2,6 +2,20 @@ import styled from "@emotion/styled";
 
 import inconsolata from './fonts/inconsolata-regular.ttf';
 
+import {typography} from "components/typography";
+
+const {
+    lineHeightComputed,
+    fontSizeBase_unit,
+    fontSize_h1_unit,
+    fontSize_h2_unit,
+    fontSize_h3_unit,
+    fontSize_h4_unit,
+    fontSize_h5_unit,
+    fontSize_h6_unit,
+    lineHeightBase
+} = typography(1.4);
+
 export const Container = styled.article`
     @font-face {
       font-family: 'Inconsolata';
@@ -11,51 +25,48 @@ export const Container = styled.article`
     }
 
     font-family: inherit;
-    line-height: inherit;
-    font-size: inherit;
+    line-height: ${lineHeightBase};
+    font-size: ${fontSizeBase_unit};
     color: #555;
     text-align: left;
     font-weight: normal;
     //pointer-events: none;
     
     h1, h2, h3, h4, h5, h6 {
-      font-family: $headings-font-family;
-      font-weight: $headings-font-weight;
-      line-height: $headings-line-height;
-      color: $headings-color;
+      color: #555;
     }
     
     h1,
     h2,
     h3 {
-      margin-top: $line-height-computed;
-      margin-bottom: ($line-height-computed / 2);
+      margin-top: ${lineHeightComputed}rem;
+      margin-bottom: ${lineHeightComputed / 2}rem;
     }
     
     h4,
     h5,
     h6 {
-      margin-top: ($line-height-computed / 2);
-      margin-bottom: ($line-height-computed / 2);
+      margin-top: ${lineHeightComputed / 2}rem;
+      margin-bottom: ${lineHeightComputed / 2}rem;
     }
     
     h1 {
-      font-size: $font-size-h1;
+      font-size: ${fontSize_h1_unit};
     }
     h2 {
-      font-size: $font-size-h2;
+      font-size: ${fontSize_h2_unit};
     }
     h3 {
-      font-size: $font-size-h3;
+      font-size: ${fontSize_h3_unit};
     }
     h4 {
-      font-size: $font-size-h4;
+      font-size: ${fontSize_h4_unit};
     }
     h5 {
-      font-size: $font-size-h5;
+      font-size: ${fontSize_h5_unit};
     }
     h6 {
-      font-size: $font-size-h6;
+      font-size: ${fontSize_h6_unit};
     }
     
     p {
@@ -74,13 +85,13 @@ export const Container = styled.article`
     }
     
     pre {
-      font-size: $font-size-base;
+      font-size: inherit;
       word-break: break-all;
       word-break: break-word;
       white-space: pre-wrap;
     
       code {
-        font-size: $font-size-base;
+        font-size: inherit;
         background-color: #f6f8fa;
         padding: 5px;
         display: block;
@@ -93,16 +104,30 @@ export const Container = styled.article`
     
     code {
       background-color: rgba(27,31,35,0.05);
-      font-size: $font-size-content;
+      font-size: inherit;
     }
     
     blockquote {
       margin: 10px 0;
+      background-color: #f3f3f3;
+      padding: 10px 10px 10px 3em;
+      position: relative;
+      
+      &:before {
+        content: "“";
+        font-size: 5em;
+        color: #ddd;
+        position: absolute;
+        line-height: 1;
+        top: 6px;
+        left: 10px;
+        font-family: sans-serif;
+      }
     }
     
     table {
       border-collapse: collapse;
-      font-size: $font-size-base;
+      font-size: inherit;
       margin-bottom: 10px;
       display: block;
       width: 100%;
@@ -134,6 +159,14 @@ export const Container = styled.article`
       ul {
         margin-bottom: 0;
       }
+    }
+    
+    ul {
+      list-style: square;
+    }
+    
+    ol {
+      list-style: decimal;
     }
     
     ul .task-list-item {
