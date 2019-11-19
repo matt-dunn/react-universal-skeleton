@@ -4,16 +4,9 @@
  * @author Lea Verou
  */
 
-@font-face {
-  font-family: 'Inconsolata';
-  src: url('./inconsolata-regular.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-
 .highlighter code[class*="language-"],
 pre[class*="language-"].highlighter {
-  font-family: "Inconsolata", "Courier New", monospace;
+  font-family: "Courier New", monospace;
   color: inherit;
   text-shadow: none;
   text-align: left;

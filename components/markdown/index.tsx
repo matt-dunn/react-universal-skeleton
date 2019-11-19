@@ -14,9 +14,9 @@ type MarkdownProps = {
 }
 
 const Markdown = ({content, id}: MarkdownProps) => {
-    const [parsedContent] = useAsync(id,() => {
-        console.log("############MARKED")
-        return marked(content, {
+    const [parsedContent] = useAsync(
+        id,
+        () => marked(content, {
             gfm: true,
             breaks: false,
             pedantic: false,
@@ -25,10 +25,9 @@ const Markdown = ({content, id}: MarkdownProps) => {
             smartypants: true,
             highlightRaw: (process as any).browser,
             highlight
-        })
-    }, true);
-
-    console.log("@@@@",parsedContent && parsedContent.substring(0, 20))
+        }),
+        true
+    );
 
     return ((parsedContent && <Container dangerouslySetInnerHTML={{__html: sanitize(parsedContent, ALLOWED_CONTENT)}}/>) || null);
 };

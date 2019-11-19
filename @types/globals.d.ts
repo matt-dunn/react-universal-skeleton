@@ -12,3 +12,7 @@ declare module "*.jpg" {
     const value: any;
     export = value;
 }
+
+declare module '*.ttf';
+declare module '*.woff';
+declare module '*.woff2';

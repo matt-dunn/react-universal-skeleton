@@ -1,6 +1,15 @@
 import styled from "@emotion/styled";
 
+import inconsolata from './fonts/inconsolata-regular.ttf';
+
 export const Container = styled.article`
+    @font-face {
+      font-family: 'Inconsolata';
+      src: url(${inconsolata}) format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
     font-family: inherit;
     line-height: inherit;
     font-size: inherit;
@@ -61,7 +70,7 @@ export const Container = styled.article`
     pre,
     code {
       color: #555;
-      font-family: "Inconsolata", "Courier New", monospace;
+      font-family: "Inconsolata", "Courier New", monospace !important;
     }
     
     pre {
