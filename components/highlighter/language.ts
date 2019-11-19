@@ -16,7 +16,7 @@ type Language = {
 }
 
 type Languages = {
-    [key: string]: Language
+    [key: string]: Language;
 }
 
 const languages: Languages = components.languages;
@@ -59,7 +59,7 @@ const loadLang = (lang: string): Promise<string> => {
                 return promise.then(() => {
                     if (!Prism.languages[dep]) {
                         const lang = /* #__LOADABLE__ */ () => import("prismjs/components/prism-" + dep)
-                        return lang.requireAsync();
+                        return (lang as any).requireAsync();
                     }
                 });
             }, Promise.resolve())
