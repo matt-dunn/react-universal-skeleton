@@ -30,7 +30,6 @@ const ALIAS_LANGUAGE = Object.assign(
         }, {} as ALIAS),
     DEFAULT_ALIAS
 );
-console.log(ALIAS_LANGUAGE)
 
 const getLangDeps = (deps: string | string[] = ""): string[] => {
     let requires: string[] = [];
@@ -45,9 +44,6 @@ const getLangDeps = (deps: string | string[] = ""): string[] => {
 
     return requires;
 };
-
-// const loadOther = /* #__LOADABLE__ */ () => import('../../README.md')
-// console.log(">>loadOther3", loadOther.requireAsync().then(x => console.log(x)))
 
 const loadLang = (lang: string): Promise<string> => {
     const highlightLang = ALIAS_LANGUAGE[lang] || lang;

@@ -59,17 +59,6 @@ Quote break.
 3. [x] Task 3
 
 
-## Images
-
-Inline-style:
-![alt text](mocks/api-dev/needle/v1/assets/Hong-Kong-Foei.png "Logo Title Text 1")
-
-Reference-style:
-![alt text][logo]
-
-[logo]: mocks/api-dev/needle/v1/assets/Hong-Kong-Foei.png "Logo Title Text 2"
-
-
 ## Links
 
 [I'm an inline-style link](https://www.google.com)

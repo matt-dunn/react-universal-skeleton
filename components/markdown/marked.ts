@@ -76,19 +76,14 @@ marked.Renderer.prototype.code = function(code, lang, escaped) {
 
 const asyncMarked: MarkedAsync = (src, options) => {
     return new Promise((resolve, reject) => {
-        // marked.setOptions(options);
         marked(src, options,(error, content) => {
-            setTimeout(() => {
-
             if (error) {
                 reject(error);
             } else {
                 resolve(content);
             }
-
-            }, 200)
         })
-    })
-}
+    });
+};
 
 export default asyncMarked as MarkedAsync;
