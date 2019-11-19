@@ -51,7 +51,7 @@ export const useSafePromise = <T, D = any>(id: string): [SafePromise<T>, () => D
     ]
 };
 
-export const useAsync = <T>(id: string, getPayload: () => Promise<T>) => {
+export const useAsync = <T>(id: string, getPayload: () => Promise<T>, processOnClient: boolean = false) => {
     const [safePromise, getData] = useSafePromise<T>(id);
     const [payload, setPayload] = useState<T>(getData());
 
@@ -60,7 +60,7 @@ export const useAsync = <T>(id: string, getPayload: () => Promise<T>) => {
     }
 
     useEffect(() => {
-        if (!payload) {
+        if (!payload || processOnClient) {
             getPayload().then(payload => setPayload(payload));
         }
     }, [getPayload, payload, setPayload]);

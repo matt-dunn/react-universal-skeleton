@@ -23,10 +23,10 @@ const Markdown = ({content, id}: MarkdownProps) => {
             sanitize: false,
             smartLists: true,
             smartypants: true,
-            highlightRaw: true,
+            highlightRaw: (process as any).browser,
             highlight
         })
-    });
+    }, true);
 
     console.log("@@@@",parsedContent && parsedContent.substring(0, 20))
 

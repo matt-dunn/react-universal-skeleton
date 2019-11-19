@@ -38,9 +38,9 @@ const highlightCodeBlock = (Prism: PrismJS, code: string, lang: string, options:
 };
 
 const highlightCode = (code: string, lang: string, options: Options = {}): Promise<string> => {
-    // if (!(window as any).Prism) {
-    //     (window as any).Prism = {manual: true};
-    // }
+    if (!(window as any).Prism) {
+        (window as any).Prism = {manual: true};
+    }
 
     return language.loadLang(lang)
         .then((highlightLang) => highlightCodeBlock(Prism, code, highlightLang, options));
