@@ -39,15 +39,7 @@ export const useSafePromise = <T, D = any>(id: string): [SafePromise<T>, () => D
 
             return promise;
         },
-        () => {
-            if (asyncDataContext) {
-                const data = asyncDataContext.data[id]
-                // if (asyncDataContext.counter >= asyncDataContext.data.length) {
-                //     asyncDataContext.counter = 0;
-                // }
-                return data;
-            }
-        }
+        () => asyncDataContext && asyncDataContext.data[id]
     ]
 };
 
@@ -83,7 +75,6 @@ export const useSafePromiseWithEffect = <T>(): SafePromise<T> | undefined => {
 export const AsyncDataContextProvider = AsyncDataContext.Provider;
 
 export class AsyncData implements AsyncDataContext {
-    counter = 0;
     data: any = {};
 
     constructor(data?: any[]) {

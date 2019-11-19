@@ -127,11 +127,6 @@ module.exports = {
                 analyzerMode: 'static',
                 reportFilename: path.resolve(ROOT, "reports", "bundle.html")
             }),
-            new webpack.SourceMapDevToolPlugin({
-                filename: null,
-                exclude: [/node_modules/],
-                test: /\.ts($|\?)/i
-            }),
             new LoadablePlugin(),
             new HtmlWebpackPlugin({
                 inject: environment !== "production",
@@ -149,6 +144,11 @@ module.exports = {
                 ignoreOrder: false, // Enable to remove warnings about conflicting order
             }));
         } else {
+            plugins.push(new webpack.SourceMapDevToolPlugin({
+                filename: null,
+                exclude: [/node_modules/],
+                test: /\.ts($|\?)/i
+            }));
             plugins.push(new HardSourceWebpackPlugin());
         }
 

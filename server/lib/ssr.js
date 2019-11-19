@@ -66,8 +66,6 @@ export default async (req, res) => {
 
         await getDataFromTree(stylesheetServer.collectStyles(app));
 
-        asyncData.counter = 0;
-
         const stream = stylesheetServer.interleaveWithNodeStream(
             renderToNodeStream(stylesheetServer.collectStyles(app))
         );

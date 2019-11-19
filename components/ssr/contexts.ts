@@ -6,7 +6,6 @@ type AsyncDataContentData = {
 
 export type AsyncDataContext = {
     data: AsyncDataContentData;
-    counter: number;
 };
 
 export const AsyncContext = React.createContext<Promise<any>[] | undefined>(undefined);
