@@ -40,6 +40,7 @@ module.exports = {
             'react-dom': '@hot-loader/react-dom',
             "app": path.join(ROOT, "app"),
             "components": path.join(ROOT, "components"),
+            "mocks": path.join(ROOT, "mocks"),
         }
     },
     module :{
@@ -72,7 +73,7 @@ module.exports = {
                 use: 'raw-loader',
             },
             {
-                test: /\.md$/i,
+                test: /mocks\/content\/.*$/i,
                 use: 'raw-loader',
             },
         ]

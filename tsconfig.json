@@ -21,7 +21,8 @@
       "react-in-viewport": ["./@types/react-in-viewport"],
       "simple-deep-freeze": ["/@types/simple-deep-freeze"],
       "app": ["./app/*"],
-      "components": ["./components/*"]
+      "components": ["./components/*"],
+      "mocks": ["./mocks/*"]
     }
   },
   "include": [

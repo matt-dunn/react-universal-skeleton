@@ -51,6 +51,7 @@ module.exports = {
             'react-dom': '@hot-loader/react-dom',
             "app": path.join(ROOT, "app"),
             "components": path.join(ROOT, "components"),
+            "mocks": path.join(ROOT, "mocks"),
         }
     },
     module :{
@@ -97,7 +98,7 @@ module.exports = {
                 })(environment)
             },
             {
-                test: /\.md$/i,
+                test: /mocks\/content\/.*$/i,
                 use: 'raw-loader',
             },
         ]

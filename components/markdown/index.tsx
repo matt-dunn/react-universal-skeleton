@@ -10,19 +10,23 @@ import highlight from "./highlight";
 
 type MarkdownProps = {
     content: string;
+    id: string;
 }
 
-const Markdown = ({content}: MarkdownProps) => {
-    const [parsedContent] = useAsync(() => marked(content, {
-        gfm: true,
-        breaks: false,
-        pedantic: false,
-        sanitize: false,
-        smartLists: true,
-        smartypants: true,
-        highlightRaw: true,
-        highlight
-    }));
+const Markdown = ({content, id}: MarkdownProps) => {
+    const [parsedContent] = useAsync(id,() => {
+        console.log("############MARKED")
+        return marked(content, {
+            gfm: true,
+            breaks: false,
+            pedantic: false,
+            sanitize: false,
+            smartLists: true,
+            smartypants: true,
+            highlightRaw: true,
+            highlight
+        })
+    });
 
     console.log("@@@@",parsedContent && parsedContent.substring(0, 20))
 

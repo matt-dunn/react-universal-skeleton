@@ -23,7 +23,7 @@ export const getDataFromTree = (app: ReactElement) => {
         .catch(ex => console.error(ex)) // Swallow exceptions - they should be handled by the app...
 };
 
-export const useSafePromise = <T, D = any>(): [SafePromise<T>, () => D | undefined] => {
+export const useSafePromise = <T, D = any>(id: string): [SafePromise<T>, () => D | undefined] => {
     const asyncContext = useContext(AsyncContext);
     const asyncDataContext = useContext(AsyncDataContext);
 
@@ -33,7 +33,7 @@ export const useSafePromise = <T, D = any>(): [SafePromise<T>, () => D | undefin
 
             promise.then(payload => {
                 if (asyncDataContext) {
-                    asyncDataContext.data.push(payload);
+                    asyncDataContext.data[id] = (payload);
                 }
             });
 
@@ -41,31 +41,31 @@ export const useSafePromise = <T, D = any>(): [SafePromise<T>, () => D | undefin
         },
         () => {
             if (asyncDataContext) {
-                const data = asyncDataContext.data[asyncDataContext.counter++]
-                if (asyncDataContext.counter >= asyncDataContext.data.length) {
-                    asyncDataContext.counter = 0;
-                }
+                const data = asyncDataContext.data[id]
+                // if (asyncDataContext.counter >= asyncDataContext.data.length) {
+                //     asyncDataContext.counter = 0;
+                // }
                 return data;
             }
         }
     ]
 };
 
-export const useAsync = <T>(getContent: () => Promise<T>) => {
-    const [safePromise, getData] = useSafePromise<T>();
-    const [content, setContent] = useState<T>(getData());
+export const useAsync = <T>(id: string, getPayload: () => Promise<T>) => {
+    const [safePromise, getData] = useSafePromise<T>(id);
+    const [payload, setPayload] = useState<T>(getData());
 
-    if (!(process as any).browser && !content) {
-        safePromise(getContent());
+    if (!(process as any).browser && !payload) {
+        safePromise(getPayload());
     }
 
     useEffect(() => {
-        if (!content) {
-            getContent().then(content => setContent(content));
+        if (!payload) {
+            getPayload().then(payload => setPayload(payload));
         }
-    }, [getContent, content, setContent]);
+    }, [getPayload, payload, setPayload]);
 
-    return [content];
+    return [payload];
 };
 
 export const useSafePromiseWithEffect = <T>(): SafePromise<T> | undefined => {
@@ -84,7 +84,7 @@ export const AsyncDataContextProvider = AsyncDataContext.Provider;
 
 export class AsyncData implements AsyncDataContext {
     counter = 0;
-    data: any[] = [];
+    data: any = {};
 
     constructor(data?: any[]) {
         if (data) {
