@@ -67,7 +67,7 @@ module.exports = {
                 ]
             },
             {
-                test: /\.css$/,
+                test: /\.(css|scss)$/,
                 include: [path.resolve(ROOT, 'app'), path.resolve(ROOT, 'components'), path.resolve(ROOT, 'server')],
                 use: (function(environment) {
                     const rules = [];
@@ -94,6 +94,10 @@ module.exports = {
                         }
                     });
 
+                    rules.push({
+                        loader: "sass-loader"
+                    });
+
                     return rules;
                 })(environment)
             },
@@ -101,6 +105,18 @@ module.exports = {
                 test: /mocks\/content\/.*$/i,
                 use: 'raw-loader',
             },
+            {
+                test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: '[name].[ext]',
+                            outputPath: 'fonts/'
+                        }
+                    }
+                ]
+            }
         ]
     },
     plugins: (function(environment, optimise) {

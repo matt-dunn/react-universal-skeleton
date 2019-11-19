@@ -1,7 +1,7 @@
 import Prism, {highlightElement} from "prismjs";
 import * as language from "./language";
 
-// import "./sass/_theme.scss";
+import "./sass/_theme.scss";
 
 export type PrismJS = {
     highlightElement: typeof highlightElement;
