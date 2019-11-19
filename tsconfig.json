@@ -1,6 +1,7 @@
 {
   "transpileOnly": true,
   "compilerOptions": {
+    "resolveJsonModule": true,
     "experimentalDecorators": true,
     "esModuleInterop": true,
     "outDir": "./dist/",

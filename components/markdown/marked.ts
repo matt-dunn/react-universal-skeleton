@@ -86,7 +86,7 @@ const asyncMarked: MarkedAsync = (src, options) => {
                 resolve(content);
             }
 
-            }, 2000)
+            }, 200)
         })
     })
 }
