@@ -45,7 +45,7 @@ const getLangDeps = (deps: string | string[] = ""): string[] => {
     return requires;
 };
 
-const loadLang = (lang: string): Promise<string> => {
+export const loadLang = (lang: string): Promise<string> => {
     const highlightLang = ALIAS_LANGUAGE[lang] || lang;
     const language = languages[highlightLang];
 
@@ -54,8 +54,7 @@ const loadLang = (lang: string): Promise<string> => {
             .reduce((promise, dep) => {
                 return promise.then(() => {
                     if (!Prism.languages[dep]) {
-                        const lang = /* #__LOADABLE__ */ () => import("prismjs/components/prism-" + dep)
-                        return (lang as any).requireAsync();
+                        return import("prismjs/components/prism-" + dep);
                     }
                 });
             }, Promise.resolve())
@@ -64,5 +63,3 @@ const loadLang = (lang: string): Promise<string> => {
 
     return Promise.resolve((language && highlightLang) || "");
 };
-
-export {loadLang};

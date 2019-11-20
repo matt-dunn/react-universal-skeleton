@@ -78,6 +78,7 @@ export const Container = styled.article`
       text-decoration: underline;
     }
     
+    pre > [class*="language-"],
     pre,
     code {
       color: #555;
@@ -90,6 +91,7 @@ export const Container = styled.article`
       word-break: break-word;
       white-space: pre-wrap;
     
+      > [class*="language-"],
       code {
         font-size: inherit;
         background-color: #f6f8fa;

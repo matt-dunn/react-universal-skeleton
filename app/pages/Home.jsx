@@ -39,8 +39,8 @@ const Home = () => {
     // console.log(">>loadOther3", loadOther.requireAsync().then(x => console.log(x)))
 
     // const content = "README.md"
-    const Content = loadable.lib(() => import(`../../README.md`));
-    const Content2 = loadable.lib(() => import(`../../test.md`));
+    const Content = loadable.lib(() => import(`mocks/content/test1.md`));
+    const Content2 = loadable.lib(() => import(`mocks/content/test3.md`));
     // console.log(">>Content", Content)
     return (
         <Page>
@@ -79,12 +79,12 @@ const Home = () => {
 
 
             <Content2>
-                {(content) => <Markdown content={content.default || content}/>}
+                {(content) => <Markdown id="md-1" content={content.default || content}/>}
             </Content2>
 
-            <Content>
-                {(content) => <Markdown content={content.default || content}/>}
-            </Content>
+            {/*<Content>*/}
+            {/*    {(content) => <Markdown id="md-2" content={content.default || content}/>}*/}
+            {/*</Content>*/}
         </Page>
     )
 };

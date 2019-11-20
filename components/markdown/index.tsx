@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useMemo} from "react";
 import sanitize from "sanitize-html";
 
 import {useAsync} from "components/ssr/safePromise";
@@ -16,16 +16,16 @@ type MarkdownProps = {
 const Markdown = ({content, id}: MarkdownProps) => {
     const [parsedContent] = useAsync(
         id,
-        () => marked(content, {
+        useMemo(() => () => marked(content, {
             gfm: true,
             breaks: false,
             pedantic: false,
             sanitize: false,
             smartLists: true,
             smartypants: true,
-            highlightRaw: (process as any).browser,
+            highlightRaw: true,
             highlight
-        }),
+        }), [content]),
         true
     );
 

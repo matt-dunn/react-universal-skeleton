@@ -4,12 +4,13 @@
  * @author Lea Verou
  */
 
-.highlighter code[class*="language-"],
 pre[class*="language-"].highlighter {
   font-family: "Courier New", monospace;
   color: inherit;
   text-shadow: none;
   text-align: left;
+  word-break: break-word;
+  white-space: pre-wrap;
 
   -moz-tab-size: 2;
   -o-tab-size: 2;
@@ -22,19 +23,19 @@ pre[class*="language-"].highlighter {
 }
 
 pre[class*="language-"].highlighter::-moz-selection, pre[class*="language-"].highlighter ::-moz-selection,
-.highlighter code[class*="language-"]::-moz-selection, .highlighter code[class*="language-"] ::-moz-selection {
+.highlighter > [class*="language-"]::-moz-selection, .highlighter [class*="language-"] ::-moz-selection {
   text-shadow: none;
   background: #b3d4fc;
 }
 
 pre[class*="language-"].highlighter::selection, pre[class*="language-"].highlighter ::selection,
-.highlighter code[class*="language-"]::selection, .highlighter code[class*="language-"] ::selection {
+.highlighter > [class*="language-"]::selection, .highlighter [class*="language-"] ::selection {
   text-shadow: none;
   background: #b3d4fc;
 }
 
 @media print {
-  .highlighter code[class*="language-"],
+  .highlighter > [class*="language-"],
   pre[class*="language-"].highlighter {
     text-shadow: none;
   }
@@ -47,16 +48,14 @@ pre[class*="language-"].highlighter::selection, pre[class*="language-"].highligh
 //  overflow: auto;
 //}
 //
-//:not(pre) > code[class*="language-"],
+//:not(pre) > [class*="language-"],
 //pre[class*="language-"] {
 //  background: #f5f2f0;
 //}
 
 /* Inline code */
-:not(pre) > code[class*="language-"] {
-  padding: .1em;
-  border-radius: .3em;
-  white-space: normal;
+:not(pre) > [class*="language-"] {
+  padding: 0;
 }
 
 .highlighter {

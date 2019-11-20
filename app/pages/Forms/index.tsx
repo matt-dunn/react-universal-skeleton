@@ -15,6 +15,7 @@ import ComplexLayout from "./layouts/Complex";
 import {FormContainer} from "components/Form"
 import {FormOptions} from "components/Form/FormOptions";
 import {ValidationError} from "yup";
+import loadable from "@loadable/component";
 
 // import {useFormikContext} from "formik";
 // import {formStyles} from "../../../components/Form/styles";
@@ -80,6 +81,8 @@ const MyFormContainer = styled(FormContainer)`
   border-radius: 15px;
 `;
 
+const Markdown = loadable(() => import('components/markdown'));
+
 const Forms = () => {
     const handleSubmit: MapDataToAction<Yup.InferType<typeof schemaComplex>, MyFormResponse, typeof formState> = values => dummyApiCall(values.flavour.favourite, values.email);
     const handleSubmit2: MapDataToAction<Yup.InferType<typeof simpleSchema>, MySimpleFormResponse, typeof formState2> = values => {
@@ -90,6 +93,9 @@ const Forms = () => {
         }
         return Promise.resolve({newUsername: values.username});
     };
+
+    const test2 = "test2.md";
+    const Content = loadable.lib(() => import(`mocks/content/${test2}`));
 
     return (
         <Page>
@@ -103,6 +109,10 @@ const Forms = () => {
             </Title>
 
             <div style={{maxWidth: "800px", margin: "20px auto"}}>
+                <Content>
+                    {(content: any) => <Markdown id="md-3" content={content.default || content}/>}
+                </Content>
+
                 <Form
                     id="my-form"
                     as={MyFormContainer}

@@ -82,7 +82,8 @@ export const ALLOWED_CONTENT = {
     allowedAttributes: {
         "*": [
             "class",
-            "style"
+            "style",
+            "id"
         ],
         "a": [
             "title",

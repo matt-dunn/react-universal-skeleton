@@ -1,11 +1,5 @@
-import Prism, {highlightElement} from "prismjs";
+import Prism from "prismjs";
 import * as language from "./language";
-
-import "./sass/_theme.scss";
-
-export type PrismJS = {
-    highlightElement: typeof highlightElement;
-}
 
 Prism.languages.css.selector = {
     pattern: /[^{}\s][^{}]*(?=\s*\{)/,
@@ -35,7 +29,5 @@ Prism.hooks.add("wrap", env => {
     }
 });
 
-const x: PrismJS = Prism;
-
-export {x as Prism, language}
+export {Prism, language}
 export * from "prismjs";
