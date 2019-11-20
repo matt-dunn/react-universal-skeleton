@@ -45,13 +45,14 @@ export const useSafePromise = <T, D = any>(id: string): [SafePromise<T>, () => D
 
 export const useAsync = <T>(id: string, getPayload: () => Promise<T>, processOnClient = true) => {
     const [safePromise, getData] = useSafePromise<T>(id);
-    const [payload, setPayload] = useState<T>(getData());
+    const data = getData();
+    const [payload, setPayload] = useState<T>(data);
 
     if (!(process as any).browser && !payload) {
         safePromise(getPayload());
     }
 
-    const callGetPayload = payload !== undefined;
+    const callGetPayload = data === undefined;
 
     useEffect(() => {
         if (callGetPayload || processOnClient) {

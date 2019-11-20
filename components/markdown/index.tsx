@@ -26,7 +26,7 @@ const Markdown = ({content, id}: MarkdownProps) => {
             highlightRaw: true,
             highlight
         }), [content]),
-        true
+        false
     );
 
     return ((parsedContent && <Container dangerouslySetInnerHTML={{__html: sanitize(parsedContent, ALLOWED_CONTENT)}}/>) || null);
