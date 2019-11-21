@@ -1,12 +1,13 @@
 import marked, {MarkedOptions} from "marked";
 import {wrap} from "lodash";
+import isPromise from "is-promise";
 
 type AdditionOptions = {
     highlightRaw?: boolean;
 }
 
 type MarkedAsync = {
-    (src: string, options?: MarkedOptions & AdditionOptions): Promise<string>;
+    (src: Promise<string> | string, options?: MarkedOptions & AdditionOptions): Promise<string>;
 };
 
 const escape = (html: string, encode: boolean) => {
@@ -74,14 +75,28 @@ marked.Renderer.prototype.code = function(code, lang, escaped) {
         + "\n</code></pre>\n";
 };
 
-const asyncMarked: MarkedAsync = (src, options) => {
+type Module = {
+    default?: string;
+}
+
+function isModule(arg: any): arg is Module {
+    return Boolean(arg.default);
+}
+
+const getContentValue = (content: string | Module): string => {
+    return (isModule(content) ? content.default : content) || "";
+};
+
+const asyncMarked: MarkedAsync = (content, options) => {
     return new Promise((resolve, reject) => {
-        marked(src, options,(error, content) => {
-            if (error) {
-                reject(error);
-            } else {
-                resolve(content);
-            }
+        ((isPromise(content) ? content : Promise.resolve(content)) as Promise<Module | string>).then(resolvedContent => {
+            marked(getContentValue(resolvedContent), options,(error, content) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(content);
+                }
+            });
         });
     });
 };

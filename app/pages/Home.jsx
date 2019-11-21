@@ -34,14 +34,12 @@ const MenuLink = styled.li`
 
 const Markdown = loadable(() => import("components/markdown"));
 
-const Home = () => {
-    // const loadOther = /* #__LOADABLE__ */ () => import('../../README.md')
-    // console.log(">>loadOther3", loadOther.requireAsync().then(x => console.log(x)))
+// import Markdown from "../../components/markdown";
+// import content from "mocks/content/test3.md";
 
-    // const content = "README.md"
-    // const Content = loadable.lib(() => import(`mocks/content/test1.md`));
-    const Content2 = loadable.lib(() => import("mocks/content/test3.md"));
-    // console.log(">>Content", Content)
+const Home = () => {
+    const content = import("mocks/content/test3.md");
+
     return (
         <Page>
             <Helmet>
@@ -77,10 +75,7 @@ const Home = () => {
                 </MenuLink>
             </Menu>
 
-
-            <Content2>
-                {(content) => <Markdown id="md-1" content={content.default || content}/>}
-            </Content2>
+            <Markdown content={content} id={"md-1"} bum={354}/>
 
             {/*<Content>*/}
             {/*    {(content) => <Markdown id="md-2" content={content.default || content}/>}*/}
