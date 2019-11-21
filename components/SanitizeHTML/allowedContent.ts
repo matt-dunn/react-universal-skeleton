@@ -10,9 +10,9 @@
  * @module Rendition
  */
 
-import sanitize from "sanitize-html";
+import sanitize, {IOptions} from "sanitize-html";
 
-export const ALLOWED_CONTENT = {
+export const DEFAULT_ALLOWED_CONTENT: IOptions = {
     allowedTags: [
         "h1",
         "h2",

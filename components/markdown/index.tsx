@@ -1,11 +1,10 @@
 import React, {useMemo} from "react";
-import sanitize from "sanitize-html";
 
 import {useAsync} from "components/ssr/safePromise";
+import SanitizeHHTML from "components/SanitizeHTML";
 
-import {Container} from "./style";
-import {ALLOWED_CONTENT} from "./allowedContent";
 import highlight from "./highlight";
+import {Container} from "./style";
 
 type MarkdownProps = {
     content: string;
@@ -30,7 +29,7 @@ const Markdown = ({content, id}: MarkdownProps) => {
         false
     );
 
-    return ((parsedContent && <Container dangerouslySetInnerHTML={{__html: sanitize(parsedContent, ALLOWED_CONTENT)}}/>) || null);
+    return <SanitizeHHTML html={parsedContent} as={Container}/>;
 };
 
 export default Markdown;
