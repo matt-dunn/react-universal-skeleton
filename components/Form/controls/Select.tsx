@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "@emotion/styled";
 
 import {typedMemo} from "../types";
 
@@ -18,13 +19,15 @@ type SelectProps = {
     className?: string;
 }
 
+const SelectContainer = styled.select``;
+
 function Select({options, onChange, onBlur, ...props}: SelectProps) {
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => onChange(e.currentTarget.name, e.currentTarget.value);
 
     const handleBlur = (e: React.FocusEvent<HTMLSelectElement>) => onBlur(e.currentTarget.name, true);
 
     return (
-        <select
+        <SelectContainer
             onChange={handleChange}
             onBlur={handleBlur}
             {...props}
@@ -39,7 +42,7 @@ function Select({options, onChange, onBlur, ...props}: SelectProps) {
                     </option>
                 );
             })}
-        </select>
+        </SelectContainer>
     );
 }
 
