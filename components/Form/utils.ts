@@ -1,5 +1,5 @@
 import React, {ComponentType, useContext} from "react";
-import * as Yup from 'yup';
+import * as Yup from "yup";
 import {Schema} from "yup";
 import immutable from "object-path-immutable";
 import {sortBy, isFunction} from "lodash";
@@ -46,18 +46,18 @@ function iterateSchema<T>(schema: Field<T>, path = ""): any {
             return Array.from(Array(Math.min(min, max || 0)).keys()).map(() => ({...item}));
         }
 
-        return schema.getDefault()
+        return schema.getDefault();
     } else if (schema._type === "object") {
         const fields = schema.fields;
 
         return Object.keys(fields).reduce((o, key) => {
             o[key] = iterateSchema(fields[key], [path, key].filter(part => part).join("."));
             return o;
-        }, {} as {[key: string]: any})
+        }, {} as {[key: string]: any});
     } else {
         const defaultValue = schema.getDefault();
         if (defaultValue !== undefined) {
-            return defaultValue
+            return defaultValue;
         }
         return schema._type === "boolean" ? false : "";
     }
@@ -139,7 +139,7 @@ export const getTypeProps = (schema: Field, additionalProps: any = {}): {Compone
                 ...props,
                 ...additionalProps
             }
-        }
+        };
     }
 
     const {min, max} = getFieldMeta(schema);
@@ -151,7 +151,7 @@ export const getTypeProps = (schema: Field, additionalProps: any = {}): {Compone
                 ...props,
                 ...additionalProps
             }
-        }
+        };
     } else if (Component === "radio") {
         return {
             Component: Radio,
@@ -159,7 +159,7 @@ export const getTypeProps = (schema: Field, additionalProps: any = {}): {Compone
                 ...props,
                 ...additionalProps
             }
-        }
+        };
     } else if (Component === "autoselect") {
         return {
             Component: (props.options && props.options.length > 4 && Select) || Radio,
@@ -167,7 +167,7 @@ export const getTypeProps = (schema: Field, additionalProps: any = {}): {Compone
                 ...props,
                 ...additionalProps
             }
-        }
+        };
     } else if (type === "number") {
         const typeProps: React.InputHTMLAttributes<HTMLInputElement> = {
             type: "number",
@@ -178,7 +178,7 @@ export const getTypeProps = (schema: Field, additionalProps: any = {}): {Compone
         return {
             Component: "input",
             props: typeProps
-        }
+        };
     } else if (type === "boolean") {
         return {
             Component: Checkbox,
@@ -186,7 +186,7 @@ export const getTypeProps = (schema: Field, additionalProps: any = {}): {Compone
                 ...props,
                 ...additionalProps
             }
-        }
+        };
     }
 
     const typeProps: React.InputHTMLAttributes<HTMLInputElement> = {
@@ -197,5 +197,5 @@ export const getTypeProps = (schema: Field, additionalProps: any = {}): {Compone
     return {
         Component: Component || "input",
         props: typeProps
-    }
+    };
 };

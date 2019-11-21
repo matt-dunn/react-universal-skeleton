@@ -1,14 +1,14 @@
 import path from "path";
-import log from 'llog'
-import through from 'through'
+import log from "llog";
+import through from "through";
 
-import React from 'react'
-import { renderToNodeStream } from 'react-dom/server'
-import { HelmetProvider } from 'react-helmet-async'
-import { StaticRouter } from 'react-router-dom'
-import { ChunkExtractor } from '@loadable/server'
+import React from "react";
+import { renderToNodeStream } from "react-dom/server";
+import { HelmetProvider } from "react-helmet-async";
+import { StaticRouter } from "react-router-dom";
+import { ChunkExtractor } from "@loadable/server";
 import {set} from "lodash";
-import { Provider } from 'react-redux';
+import { Provider } from "react-redux";
 
 import {serialize} from "components/state-mutate-with-status/utils";
 import {FormDataProvider, parseFormData} from "components/actions/form";
@@ -18,11 +18,11 @@ import {errorLike} from "components/error";
 import StylesheetServer from "components/myStyled/server";
 
 import getStore from "app/store";
-import App from 'app/App';
+import App from "app/App";
 
-import {getHTMLFragments, parseHelmetTemplate} from './client';
+import {getHTMLFragments, parseHelmetTemplate} from "./client";
 
-const statsFile = path.resolve('dist/client/loadable-stats.json');
+const statsFile = path.resolve("dist/client/loadable-stats.json");
 
 export default async (req, res) => {
     try {
@@ -86,7 +86,7 @@ export default async (req, res) => {
 
             const {helmet} = helmetContext;
 
-            res.setHeader('Content-Type', 'text/html; charset=utf-8');
+            res.setHeader("Content-Type", "text/html; charset=utf-8");
             res.status(200);
 
             res.write(`
@@ -111,21 +111,21 @@ export default async (req, res) => {
                                 `<script>
                                     window.__PRELOADED_STATE__ = ${serialize(store.getState()).replace(
                                     /</g,
-                                    '\\u003c')}
+                                    "\\u003c")}
                                     window.__PRELOADED_FORM_STATE__ = ${formData && JSON.stringify(formData).replace(
                                     /</g,
-                                    '\\u003c')}
+                                    "\\u003c")}
                                     window.__PRERENDERED_SSR__ = true;
                                     window.__ERROR_STATE__ = ${JSON.stringify(errorContext && errorContext.error && errorLike(errorContext.error))}
                                     window.__ASYNC_DATA_STATE__ = ${asyncData && JSON.stringify(asyncData.data).replace(
                                     /</g,
-                                    '\\u003c')}
+                                    "\\u003c")}
                                 </script>`
                             );
                             this.queue(scriptTags);
                             this.queue(endingHTMLFragment);
                             this.queue(null);
-                            console.log("----DONE", Date.now() - t1)
+                            console.log("----DONE", Date.now() - t1);
                         }
                     )
                 )
@@ -136,4 +136,4 @@ export default async (req, res) => {
         res.status(500);
         res.end();
     }
-}
+};

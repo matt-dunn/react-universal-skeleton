@@ -1,5 +1,5 @@
-import React, {useEffect, useContext, useRef} from "react";
-import isPromise from 'is-promise';
+import {useEffect, useContext, useRef} from "react";
+import isPromise from "is-promise";
 
 import {ErrorHandlerContext, FoldContext} from "../contexts";
 
@@ -22,7 +22,7 @@ const usePerformAction = (action, test) => {
                         }
 
                         throw ex;
-                    })
+                    });
             }
         }
 

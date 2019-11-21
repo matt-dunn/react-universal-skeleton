@@ -10,8 +10,8 @@ const AboveTheFold = ({children}) => {
         <FoldContext.Provider value={value}>
             {children}
         </FoldContext.Provider>
-    )
-}
+    );
+};
 
 AboveTheFold.propTypes = {
     children: PropTypes.oneOfType([

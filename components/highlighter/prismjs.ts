@@ -29,5 +29,5 @@ Prism.hooks.add("wrap", env => {
     }
 });
 
-export {Prism, language}
+export {Prism, language};
 export * from "prismjs";

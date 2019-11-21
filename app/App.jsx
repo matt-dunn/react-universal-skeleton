@@ -1,41 +1,41 @@
-import 'babel-polyfill';
+import "babel-polyfill";
 
-import { hot } from 'react-hot-loader';
-import React from 'react'
-import {Helmet} from 'react-helmet-async';
-import {Switch, Route, generatePath} from 'react-router-dom'
-import loadable from '@loadable/component'
-import { Global, css } from '@emotion/core'
+// import { hot } from 'react-hot-loader';
+import React from "react";
+import {Helmet} from "react-helmet-async";
+import {Switch, Route, generatePath} from "react-router-dom";
+import loadable from "@loadable/component";
+import { Global } from "@emotion/core";
 
-import Header from './components/Header'
+import Header from "./components/Header";
 
-import Error403 from './pages/403';
-import Error404 from './pages/404';
+import Error403 from "./pages/403";
+import Error404 from "./pages/404";
 
-import Home from './pages/Home';
+import Home from "./pages/Home";
 
-import { GlobalStyles } from './styles'
-import { ToastifyStyles } from './styles/toasify'
+import { GlobalStyles } from "./styles";
+import { ToastifyStyles } from "./styles/toasify";
 
 import ErrorHandler from "components/actions/ErrorHandler";
 
-const handler = ({code, status}, location, history, props) => {
-    console.log("HANDLE ERROR", code, status, location, history)
+import AuthProvider from "./components/auth";
+import {ToastContainer} from "react-toastify";
+
+import "./styles/react-responsive-ui.css";
+
+const handler = ({code, status}, location, history) => {
+    console.log("HANDLE ERROR", code, status, location, history);
 
     if (status === 401) {
-        history.push(generatePath("/login/:from?", {from: location}))
+        history.push(generatePath("/login/:from?", {from: location}));
         return true;
     } else if (status === 403) {
         return <Error403/>;
     } else if (status === 404) {
         return <Error404/>;
     }
-}
-
-import AuthProvider from "./components/auth"
-import {ToastContainer} from "react-toastify";
-
-import './styles/react-responsive-ui.css';
+};
 
 const App = () => {
     return (
@@ -59,17 +59,17 @@ const App = () => {
             <ErrorHandler handler={handler}>
                 <Switch>
                     <Route exact path="/" component={Home} />
-                    <Route exact path="/data/:page?" component={loadable(() => import(/* webpackPrefetch: true */ './pages/Data'))} />
-                    <Route exact path="/forms" component={loadable(() => import(/* webpackPrefetch: true */ './pages/Forms'))} />
-                    <Route exact path="/mystyled" component={loadable(() => import(/* webpackPrefetch: true */ './pages/MyStyled'))} />
-                    <Route path="/login/:from?" component={loadable(() => import(/* webpackPrefetch: true */ './pages/Login'))} />
+                    <Route exact path="/data/:page?" component={loadable(() => import(/* webpackPrefetch: true */ "./pages/Data"))} />
+                    <Route exact path="/forms" component={loadable(() => import(/* webpackPrefetch: true */ "./pages/Forms"))} />
+                    <Route exact path="/mystyled" component={loadable(() => import(/* webpackPrefetch: true */ "./pages/MyStyled"))} />
+                    <Route path="/login/:from?" component={loadable(() => import(/* webpackPrefetch: true */ "./pages/Login"))} />
                     <Route component={Error404} />
                     {/*<Redirect to="/" />*/}
                 </Switch>
             </ErrorHandler>
         </AuthProvider>
     );
-}
+};
 
 // export default hot(module)(App);
 export default App;

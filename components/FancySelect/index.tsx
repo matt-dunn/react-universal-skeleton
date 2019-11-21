@@ -1,6 +1,6 @@
-import React, {useState, useEffect, ReactElement} from 'react'
-import styled from '@emotion/styled'
-import {css, CSSObject} from '@emotion/core'
+import React, {useState, useEffect, ReactElement} from "react";
+import styled from "@emotion/styled";
+import {css} from "@emotion/core";
 import classnames from "classnames";
 
 import ReactSelect from "react-select";
@@ -55,14 +55,14 @@ const FancySelect = ({id, disabled, isValid, options, name, value, onChange, onB
     const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
-        setIsClient(true)
-    }, [])
+        setIsClient(true);
+    }, []);
 
     const handleChange = ({value}: {value: string}) => onChange(name, value);
 
     const handleBlur = () => onBlur(name, true);
 
-    const handleSelectChange = () => {}
+    const handleSelectChange = () => {};
 
     if (isClient) {
         const defaultValue = (value && options.filter(option => option.value ===value)[0]) || options[0];
@@ -80,7 +80,7 @@ const FancySelect = ({id, disabled, isValid, options, name, value, onChange, onB
                 formElementStyles={formStyles}
                 {...props}
             />
-        )
+        );
     } else {
         return (
             <BasicSelect
@@ -97,7 +97,7 @@ const FancySelect = ({id, disabled, isValid, options, name, value, onChange, onB
                     <option key={index} value={option.value}>{option.label}</option>
                 ))}
             </BasicSelect>
-        )
+        );
     }
 };
 

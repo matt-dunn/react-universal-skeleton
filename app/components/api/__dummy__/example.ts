@@ -1,36 +1,36 @@
-import {APIError, APPError} from "components/api";
-import {IExampleItemState} from "../../../reducers/__dummy__/example";
+// import {APIError, APPError} from "components/api";
+import {ExampleItemState} from "../../../reducers/__dummy__/example";
 
-export interface IExampleResponse {
+export interface ExampleResponse {
     id: string;
     name: string;
 }
 
-interface IExampleListResponse {
-    [index: number]: IExampleResponse;
+interface ExampleListResponse {
+    [index: number]: ExampleResponse;
 }
 
-export interface IExampleGetList {
-    (page?: number, count?: number): Promise<IExampleListResponse>;
+export interface ExampleGetList {
+    (page?: number, count?: number): Promise<ExampleListResponse>;
 }
 
-export interface IExampleGetItem {
-    (): Promise<IExampleResponse>;
+export interface ExampleGetItem {
+    (): Promise<ExampleResponse>;
 }
 
 export interface ExampleEditItem {
-    (item: IExampleItemState): Promise<IExampleResponse>;
+    (item: ExampleItemState): Promise<ExampleResponse>;
 }
 
-export interface IExampleApi {
-    exampleGetList: IExampleGetList;
-    exampleGetItem: IExampleGetItem;
+export interface ExampleApi {
+    exampleGetList: ExampleGetList;
+    exampleGetItem: ExampleGetItem;
     exampleEditItem: ExampleEditItem;
 }
 
-const exampleApi: IExampleApi = {
-    exampleGetList:(page = 0, count = 3) => new Promise<IExampleListResponse>((resolve, reject) => {
-        console.log("API CALL: exampleGetList")
+const exampleApi: ExampleApi = {
+    exampleGetList:(page = 0, count = 3) => new Promise<ExampleListResponse>((resolve/*, reject*/) => {
+        console.log("API CALL: exampleGetList");
         // throw new Error("Error in exampleGetList")
         // throw new APIError("Authentication Failed", "auth", 401)
         setTimeout(() => {
@@ -42,36 +42,36 @@ const exampleApi: IExampleApi = {
                 return {
                     id: `item-${i}`,
                     name: `Item ${i + 1}`
-                }
+                };
             }));
-        }, (process as any).browser ? 2000 : 0)
+        }, (process as any).browser ? 2000 : 0);
     }),
-    exampleGetItem:() => new Promise<IExampleResponse>((resolve, reject) => {
-        console.log("API CALL: exampleGetItem")
+    exampleGetItem:() => new Promise<ExampleResponse>((resolve/*, reject*/) => {
+        console.log("API CALL: exampleGetItem");
         // throw new Error("Error in exampleGetItem")
         // if (typeof window === 'undefined' || !(window as any).authenticated) {
         //     throw new APIError("Authentication Failed", "auth", 401)
         // }
         setTimeout(() => {
             // reject(new Error("Error in exampleGetItem"))
-            console.log("API CALL COMPLETE: exampleGetItem")
+            console.log("API CALL COMPLETE: exampleGetItem");
             resolve({
-                id: '4',
-                name: 'Item 4',
-            })
-        }, 3000)
+                id: "4",
+                name: "Item 4",
+            });
+        }, 3000);
     }),
-    exampleEditItem:(item: IExampleItemState) => new Promise<IExampleResponse>((resolve, reject) => {
-        console.log("API CALL: exampleEditItem", item.name)
+    exampleEditItem:(item: ExampleItemState) => new Promise<ExampleResponse>((resolve/*, reject*/) => {
+        console.log("API CALL: exampleEditItem", item.name);
         // throw new Error("Error in exampleEditItem")
 
         setTimeout(() => {
-            console.log("API CALL COMPLETE: exampleEditItem")
+            console.log("API CALL COMPLETE: exampleEditItem");
             // reject(new Error("Error in exampleEditItem"))
             // reject(new APIError("Authentication Failed", "auth", 403))
-            resolve(item)
-        }, 3000)
+            resolve(item);
+        }, 3000);
     })
-}
+};
 
 export default exampleApi;

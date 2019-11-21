@@ -3989,6 +3989,14 @@ escodegen@~1.9.0:
   optionalDependencies:
     source-map "~0.6.1"
 
+eslint-plugin-jam3@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-jam3/-/eslint-plugin-jam3-0.2.2.tgz#0c2429a54af2704cacdbe048bbc974a8712ae459"
+  dependencies:
+    doctrine "^2.1.0"
+    has "^1.0.3"
+    requireindex "~1.1.0"
+
 eslint-plugin-react-hooks@^2.1.2:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-2.3.0.tgz#53e073961f1f5ccf8dd19558036c1fac8c29d99a"
@@ -9513,6 +9521,10 @@ require-main-filename@^2.0.0:
 require-package-name@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/require-package-name/-/require-package-name-2.0.1.tgz#c11e97276b65b8e2923f75dabf5fb2ef0c3841b9"
+
+requireindex@~1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/requireindex/-/requireindex-1.1.0.tgz#e5404b81557ef75db6e49c5a72004893fe03e162"
 
 requires-port@^1.0.0:
   version "1.0.0"

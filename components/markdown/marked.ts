@@ -82,7 +82,7 @@ const asyncMarked: MarkedAsync = (src, options) => {
             } else {
                 resolve(content);
             }
-        })
+        });
     });
 };
 

@@ -35,12 +35,12 @@ function useAutosave<T = any>(action?: Action<T>, options?: Options): Action<T> 
                             action(...args)
                                 .then(payload => {
                                     if (pending.current) {
-                                        exec(...pending.current)
+                                        exec(...pending.current);
                                         pending.current = undefined;
                                     } else {
                                         isActive.current = false;
                                         onComplete && onComplete(...args);
-                                        resolve(payload)
+                                        resolve(payload);
                                     }
                                 })
                                 .catch(reason => {
@@ -52,14 +52,14 @@ function useAutosave<T = any>(action?: Action<T>, options?: Options): Action<T> 
                         };
 
                         exec(...args);
-                    }, delay)
+                    }, delay);
                 } else {
                     pending.current = args;
                 }
-            })
+            });
         },
         [action, delay, onComplete, onSaving]
-    )
+    );
 }
 
 export default useAutosave;

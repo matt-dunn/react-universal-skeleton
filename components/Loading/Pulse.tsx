@@ -1,4 +1,4 @@
-import styled from '@emotion/styled'
+import styled from "@emotion/styled";
 
 const Pulse = styled.div<{height: number}>`
   @-webkit-keyframes sk-scaleout {

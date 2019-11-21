@@ -3,7 +3,7 @@ const charsLength = 52;
 const getAlphabeticChar = (code: number): string => String.fromCharCode(code + (code > 25 ? 39 : 97));
 
 const generateAlphabeticName = (code: number): string => {
-    let name = '', x;
+    let name = "", x;
 
     /* get a char and divide by alphabet-length */
     for (x = code; x > charsLength; x = Math.floor(x / charsLength)) {

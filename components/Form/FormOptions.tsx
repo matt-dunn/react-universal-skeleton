@@ -24,7 +24,7 @@ function FormOptions<T>() {
                 Submit {(isValid && isInitialValid) && "✔"}
             </button>
         </aside>
-    )
+    );
 }
 
 const MemoFormOptions = typedMemo(FormOptions);

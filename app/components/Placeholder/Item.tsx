@@ -1,5 +1,5 @@
 import {ComponentType} from "react";
-import styled from '@emotion/styled'
+import styled from "@emotion/styled";
 
 const PlaceHolderItem = (Component: ComponentType<any>) => styled(Component)`
   position: relative;

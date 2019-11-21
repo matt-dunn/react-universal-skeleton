@@ -11,7 +11,7 @@ class ErrorProvider extends React.PureComponent {
             <ErrorContext.Provider value={value}>
                 {children}
             </ErrorContext.Provider>
-        )
+        );
     }
 }
 

@@ -1,32 +1,32 @@
 import React, {ReactElement, useCallback} from "react";
-import styled from '@emotion/styled'
-import {css} from '@emotion/core'
-import { Link } from 'react-router-dom';
+import styled from "@emotion/styled";
+import {css} from "@emotion/core";
+import { Link } from "react-router-dom";
 
 import Status, {IStatus} from "components/state-mutate-with-status/status";
 import Loading from "components/Loading";
 import {usePerformAction} from "components/actions";
 import {ResponsiveGrid} from "components/Grid";
 
-import {IExampleItemState} from "../../reducers/__dummy__/example";
-import {ExampleEditItem, IExampleGetList} from "../api/__dummy__/example";
+import {ExampleItemState} from "../../reducers/__dummy__/example";
+import {ExampleEditItem, ExampleGetList} from "../api/__dummy__/example";
 import PlaceHolderItem from "app/components/Placeholder/Item";
 
 import Item from "../EditItem";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
-interface IExampleItemStateList<T> extends Array<T> {
+interface ExampleItemStateList<T> extends Array<T> {
     $status?: IStatus;
 }
 export type ListProps = {
-    items: IExampleItemStateList<IExampleItemState>;
-    onExampleGetList: IExampleGetList;
+    items: ExampleItemStateList<ExampleItemState>;
+    onExampleGetList: ExampleGetList;
     onExampleEditItem: ExampleEditItem;
     $status?: IStatus;
     isShown?: boolean;
     activePage?: number;
-    children?: ({item, disabled}: {item: IExampleItemState; disabled: boolean}) => ReactElement<any>;
+    children?: ({item, disabled}: {item: ExampleItemState; disabled: boolean}) => ReactElement<any>;
 };
 
 const ListContainer = styled.div`
@@ -87,19 +87,19 @@ const PageLink = styled(Link)`
 const MAX_ITEMS = 4;
 
 const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditItem, activePage, children, ...props}: ListProps) => {
-    const {complete, isActive, processing, hasError, error, outstandingTransactionCount} = Status(items.$status);
+    const {processing, hasError, error, outstandingTransactionCount} = Status(items.$status);
 
     usePerformAction(
         useCallback(() => {
             return onExampleGetList(activePage, MAX_ITEMS)
                 .then(e => {
-                    console.log("DONE", e)
+                    console.log("DONE", e);
                     return e;
                 })
                 .catch(ex => {
-                    console.log("ERROR", ex.message)
+                    console.log("ERROR", ex.message);
                     throw ex;
-                })
+                });
         }, [onExampleGetList, activePage]),
         useCallback(() => isShown, [isShown])
     );
@@ -151,7 +151,7 @@ const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditIt
                 ))}
             </Pagination>
         </ListContainer>
-    )
-}
+    );
+};
 
 export default React.memo<ListProps>((List));

@@ -10,8 +10,8 @@ const ClientOnly = ({children}) => {
         <FoldContext.Provider value={value}>
             {children}
         </FoldContext.Provider>
-    )
-}
+    );
+};
 
 ClientOnly.propTypes = {
     children: PropTypes.oneOfType([

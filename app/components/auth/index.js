@@ -1,18 +1,18 @@
 import React, {useContext} from "react";
 import PropTypes from "prop-types";
-import { useSelector } from 'react-redux'
+import { useSelector } from "react-redux";
 
 const AuthContext = React.createContext(undefined);
 
 const AuthProvider = ({children}) => {
-    const auth = useSelector(state => state.auth)
+    const auth = useSelector(state => state.auth);
 
     return (
         <AuthContext.Provider value={auth}>
             {children}
         </AuthContext.Provider>
     );
-}
+};
 
 AuthProvider.propTypes = {
     children: PropTypes.oneOfType([
@@ -25,9 +25,9 @@ export const useAuthenticatedUser = () => {
     const {authenticatedUser} = useContext(AuthContext);
 
     if ((authenticatedUser && authenticatedUser.$status && authenticatedUser.$status.complete && authenticatedUser)) {
-        const {$status, ...rest} = authenticatedUser;
-        return {...rest}
+        const {$status, ...rest} = authenticatedUser; // eslint-disable-line no-unused-vars
+        return {...rest};
     }
-}
+};
 
 export default AuthProvider;

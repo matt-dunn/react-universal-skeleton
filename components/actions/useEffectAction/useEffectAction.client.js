@@ -1,5 +1,5 @@
-import React, {useEffect, useContext} from "react";
-import isPromise from 'is-promise';
+import {useEffect, useContext} from "react";
+import isPromise from "is-promise";
 
 import {ErrorHandlerContext} from "../contexts";
 
@@ -19,7 +19,7 @@ const useEffectAction = (action, test) => {
                         }
 
                         throw ex;
-                    })
+                    });
             }
         }
     }, [action, test, handleError]);

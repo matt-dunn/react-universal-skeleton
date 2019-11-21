@@ -6,7 +6,7 @@ import {errorLike, ErrorLike} from "components/error";
 import {useSafePromiseWithEffect} from "components/ssr/safePromise";
 
 if (!(global as any).atob) {
-    (global as any).atob = (str: string) => Buffer.from(str, 'base64').toString('binary');
+    (global as any).atob = (str: string) => Buffer.from(str, "base64").toString("binary");
 }
 
 if (!(global as any).btoa) {
@@ -16,11 +16,11 @@ if (!(global as any).btoa) {
         if (str instanceof Buffer) {
             buffer = str;
         } else {
-            buffer = Buffer.from(str.toString(), 'binary');
+            buffer = Buffer.from(str.toString(), "binary");
         }
 
-        return buffer.toString('base64');
-    }
+        return buffer.toString("base64");
+    };
 }
 
 export enum ActionType {
@@ -85,25 +85,25 @@ export const FormDataState = <T extends Record<string, any> = any, Payload = any
         action,
         error: error && errorLike(error),
         state: new FormState(state)
-    }
+    };
 };
 
 export const parseFormData = (payload: any) => {
     const {data, action, state} = payload && Object.keys(payload).reduce((o, key) => {
         if (key === "@@FORMSTATE") {
-            o.state = FormState.fromString(payload[key])
+            o.state = FormState.fromString(payload[key]);
         } else if (key === "@@ADD_ITEM" || key === "@@REMOVE_ITEM" || key === "@@INSERT_ITEM" || key === "@@SUBMIT") {
             o.action = {
                 type: ActionType[key],
                 value: payload[key]
-            }
+            };
         } else {
             o.data[key] = payload[key];
         }
         return o;
     }, {data: {}, action: undefined, state: undefined} as { data: {[key: string]: string}; action?: Action; state?: State<any> });
 
-    return FormDataState({data, action, state} as FormDataState)
+    return FormDataState({data, action, state} as FormDataState);
 };
 
 const FormDataContext = React.createContext<FormDataState | undefined>(undefined);

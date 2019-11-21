@@ -7,7 +7,7 @@ export default (code: string, lang: string, callback?: (error: any | undefined, 
                         .then((markup: string) => {
                             callback(null, markup);
                         });
-                })
+                });
         } else {
             callback(null, code);
         }

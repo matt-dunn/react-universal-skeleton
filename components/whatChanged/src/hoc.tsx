@@ -12,18 +12,18 @@
 
 /* eslint no-underscore-dangle: "off" */
 /* eslint no-console: "off" */
-import React, {ComponentType, PureComponent, ReactElement} from 'react';
+import React, {ComponentType, PureComponent, ReactElement} from "react";
 
-import { outputPathParts, deepDiff, getIdentifier, IOptions } from './utils';
+import { outputPathParts, deepDiff, getIdentifier, Options } from "./utils";
 
 export default (
-    options?: IOptions,
+    options?: Options,
 ): <P extends {}>(WrappedComponent: ComponentType<P>) => ComponentType<P> => {
   return <P extends {}>(WrappedComponent: ComponentType<P>) =>
       class WhatChanged extends PureComponent<P> {
         componentDidUpdate = (prevProps: P, prevState: P): void => {
             outputPathParts(
-                `${(WrappedComponent.displayName || WrappedComponent.name || 'Unknown')}${(options && getIdentifier(options.idProp, this.props)) || ""}`,
+                `${(WrappedComponent.displayName || WrappedComponent.name || "Unknown")}${(options && getIdentifier(options.idProp, this.props)) || ""}`,
                 deepDiff(
                     {props: prevProps, state: prevState},
                     {props: this.props, state: this.state},

@@ -1,31 +1,31 @@
-import React, {useCallback} from 'react'
-import {Helmet} from 'react-helmet-async'
-import styled from '@emotion/styled'
-import {css} from '@emotion/core'
-import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
-import TrackVisibility from 'react-on-screen';
+import React, {useCallback} from "react";
+import {Helmet} from "react-helmet-async";
+import styled from "@emotion/styled";
+import {css} from "@emotion/core";
+import { connect } from "react-redux";
+import { Dispatch } from "redux";
+import TrackVisibility from "react-on-screen";
 import { useParams} from "react-router";
 
-import { IStatus } from 'components/state-mutate-with-status/status';
+import { IStatus } from "components/state-mutate-with-status/status";
 import {AboveTheFold, ClientOnly} from "components/actions";
 import List from "app/components/List";
 import Item from "app/components/Item";
 import EditItem from "app/components/EditItem";
 
-import Page from '../styles/Page'
-import * as actions from '../actions';
-import {IAppState} from '../reducers';
-import {IExampleItemState} from '../reducers/__dummy__/example';
-import {IExampleGetList, IExampleGetItem, ExampleEditItem} from "../components/api/__dummy__/example";
+import Page from "../styles/Page";
+import * as actions from "../actions";
+import {AppState} from "../reducers";
+import {ExampleItemState} from "../reducers/__dummy__/example";
+import {ExampleGetList, ExampleGetItem, ExampleEditItem} from "../components/api/__dummy__/example";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
 export type DataProps = {
-    items: IExampleItemState[];
-    item?: IExampleItemState;
-    onExampleGetList: IExampleGetList;
-    onExampleGetItem: IExampleGetItem;
+    items: ExampleItemState[];
+    item?: ExampleItemState;
+    onExampleGetList: ExampleGetList;
+    onExampleGetItem: ExampleGetItem;
     onExampleEditItem: ExampleEditItem;
     $status?: IStatus;
 };
@@ -37,23 +37,23 @@ const Title = styled.h2`
 const DataItem = styled(EditItem)`
   margin: 50px auto;
   max-width: 300px;
-`
+`;
 
 const DataListItem = styled(EditItem)<{isImportant?: boolean}>`
   ${({isImportant}) => isImportant && css`background-color: rgba(230, 230, 230, 0.5);`}
-`
+`;
 
-const importantIds = ["item-1", "item-2"]
+const importantIds = ["item-1", "item-2"];
 
 const Data = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditItem, $status}: DataProps) => {
     const { page } = useParams();
 
     const renderListItem = useCallback(({item, disabled}) => {
         // return <div>ITEM - {item.name}</div>
-        return <DataListItem item={item} disabled={disabled} onChange={onExampleEditItem} type="primary" isImportant={importantIds.indexOf(item.id) !== -1}/>
-    }, [onExampleEditItem])
+        return <DataListItem item={item} disabled={disabled} onChange={onExampleEditItem} type="primary" isImportant={importantIds.indexOf(item.id) !== -1}/>;
+    }, [onExampleEditItem]);
 
-    const renderItem = useCallback(({ isVisible }) => <Item isShown={isVisible} item={item} onExampleGetItem={onExampleGetItem}/>, [item, onExampleGetItem])
+    const renderItem = useCallback(({ isVisible }) => <Item isShown={isVisible} item={item} onExampleGetItem={onExampleGetItem}/>, [item, onExampleGetItem]);
 
     useWhatChanged(Data, { items, item, onExampleGetList, onExampleGetItem, onExampleEditItem, $status, renderListItem, page});
 
@@ -70,7 +70,7 @@ const Data = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIte
 
             <AboveTheFold>
                 {/*<List items={items} onExampleGetList={onExampleGetList} onExampleEditItem={onExampleEditItem} activePage={parseInt(page || "0", 10)}>*/}
-                {/*    /!*{(item: IExampleItemState) => {*!/*/}
+                {/*    /!*{(item: ExampleItemState) => {*!/*/}
                 {/*    /!*    return <div>ITEM - {item.name}</div>*!/*/}
                 {/*    /!*}}*!/*/}
                 {/*</List>*/}
@@ -108,27 +108,27 @@ const Data = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIte
 
             <p>END.</p>
         </Page>
-    )
-}
+    );
+};
 
-const mapStateToProps = (state: IAppState) => {
+const mapStateToProps = (state: AppState) => {
     const item = state.example.item;
     const items = state.example.items;
     const $status = state.example.$status;
-    return { item, items, $status }
+    return { item, items, $status };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<actions.RootActions>) => {
 
-    const onExampleGetList: IExampleGetList = (page, count): any => dispatch(actions.exampleActions.exampleGetList({page, count}));
-    const onExampleGetItem: IExampleGetItem = (): any => dispatch(actions.exampleActions.exampleGetItem());
-    const onExampleEditItem: ExampleEditItem = (item: IExampleItemState): any => dispatch(actions.exampleActions.exampleEditItem(item));
+    const onExampleGetList: ExampleGetList = (page, count): any => dispatch(actions.exampleActions.exampleGetList({page, count}));
+    const onExampleGetItem: ExampleGetItem = (): any => dispatch(actions.exampleActions.exampleGetItem());
+    const onExampleEditItem: ExampleEditItem = (item: ExampleItemState): any => dispatch(actions.exampleActions.exampleEditItem(item));
 
     return {
         onExampleGetList,
         onExampleGetItem,
         onExampleEditItem
-    }
+    };
 };
 
 const container = connect(
@@ -136,4 +136,4 @@ const container = connect(
     mapDispatchToProps
 )(Data);
 
-export default container
+export default container;

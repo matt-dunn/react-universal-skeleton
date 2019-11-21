@@ -1,4 +1,4 @@
-import {APPError, IAPPError} from "./APPError";
-import {APIError, IAPIError} from "./APIError";
+import {APPError} from "./APPError";
+import {APIError} from "./APIError";
 
-export {APPError, IAPPError, APIError, IAPIError}
+export {APPError, APIError};

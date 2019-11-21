@@ -13,6 +13,11 @@ declare module "*.jpg" {
     export = value;
 }
 
-declare module '*.ttf';
-declare module '*.woff';
-declare module '*.woff2';
+declare module "*.ttf";
+declare module "*.woff";
+declare module "*.woff2";
+
+declare module "react-responsive-ui/modules/TextInput" {
+    const value: any;
+    export = value;
+}

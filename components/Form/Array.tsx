@@ -67,7 +67,7 @@ function Array<T, P, S>({field, path, children, className}: ArrayProps<T, P, S>)
                                     type="submit"
                                     onClick={e => {
                                         e.preventDefault();
-                                        arrayHelpers.remove(index)
+                                        arrayHelpers.remove(index);
                                     }}
                                 >
                                     Remove {itemLabel || label}
@@ -82,7 +82,7 @@ function Array<T, P, S>({field, path, children, className}: ArrayProps<T, P, S>)
                                     type="submit"
                                     onClick={e => {
                                         e.preventDefault();
-                                        arrayHelpers.insert(index, getDefault(schema, `${path}.0`))
+                                        arrayHelpers.insert(index, getDefault(schema, `${path}.0`));
                                     }}
                                 >
                                     Insert {itemLabel || label}
@@ -112,7 +112,7 @@ function Array<T, P, S>({field, path, children, className}: ArrayProps<T, P, S>)
                             {AddOption}
                         </aside>}
                     </fieldset>
-                )}}
+                );}}
         />
     ) || null;
 }

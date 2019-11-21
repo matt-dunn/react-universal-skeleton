@@ -1,5 +1,5 @@
 import React from "react";
-import styled from '@emotion/styled'
+import styled from "@emotion/styled";
 
 import {ResponsiveGrid} from "components/Grid";
 import {FieldSet, FieldSetChildrenProps} from "components/Form";
@@ -11,7 +11,7 @@ const GridItem = styled.div`
     padding: 0 10px 0 0;
 `;
 
-function ComplexLayout<T, P, S>({fieldsetMap: {children, extra, otherLeft, otherRight}}: Pick<FieldSetChildrenProps<T, P, S>, 'fieldsetMap'>) {
+function ComplexLayout<T, P, S>({fieldsetMap: {children, extra, otherLeft, otherRight}}: Pick<FieldSetChildrenProps<T, P, S>, "fieldsetMap">) {
     return (
         <>
             <div style={{borderBottom: "1px solid #dfdfdf", margin: "0 0 20px 0", padding: "0 0 10px 0", display: "flex"}}>
@@ -54,7 +54,7 @@ function ComplexLayout<T, P, S>({fieldsetMap: {children, extra, otherLeft, other
                                         fields={children}
                                     />
                                 </>
-                            )
+                            );
                         }}
                     </FieldSet>
                 </GridItem>
@@ -67,7 +67,7 @@ function ComplexLayout<T, P, S>({fieldsetMap: {children, extra, otherLeft, other
             </GridItems>
             <FormOptions/>
         </>
-    )
+    );
 }
 
 export default ComplexLayout;

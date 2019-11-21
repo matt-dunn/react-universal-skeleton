@@ -1,4 +1,4 @@
-import React, {ReactNode, useEffect, useRef, useState} from 'react'
+import React, {ReactNode, useEffect, useRef, useState} from "react";
 
 import myStyled from "components/myStyled";
 // import myStyled from "styled-components";
@@ -11,7 +11,7 @@ const Fancy = ({children, className}: {children?: ReactNode; className?: string;
             <p className="yes">Hello!!!</p>
         </div>
     );
-}
+};
 
 const Styled = myStyled<{color: string; index: number; xxz?: string}>(Fancy)`
     :global(body) {background:${({color}) => (color === "green" && "red") || "#ececec"}}
@@ -46,18 +46,18 @@ const Styled = myStyled<{color: string; index: number; xxz?: string}>(Fancy)`
     }
 `;
 
-const Styled2 = myStyled("address")`
-    border: 1px solid violet;
-    padding: 10px;
+// const Styled2 = myStyled("address")`
+//     border: 1px solid violet;
+//     padding: 10px;
+//
+//     &:hover {
+//         background-color: red;
+//     }
+// `;
 
-    &:hover {
-        background-color: red;
-    }
-`;
-
-const Styled3 = myStyled(Styled2)`
-    font-size: 20px;
-`;
+// const Styled3 = myStyled(Styled2)`
+//     font-size: 20px;
+// `;
 
 const Styled4 = myStyled("address")`
     @font-face {
@@ -112,35 +112,35 @@ const Button = myStyled("button")`
     border-radius: 4px;
     color: #333;
     padding: 3px 6px;
-`
+`;
 
 const PrimaryButton = myStyled(Button)`
     color: white;
     background-color: red;
-`
+`;
 
 const TestMyStyled = () => {
     const [color, setColor] = useState("green");
     const [index, setIndex] = useState(0);
-    const t1 = useRef<number>()
-    const t2 = useRef<number>()
+    const t1 = useRef<number>();
+    const t2 = useRef<number>();
 
     useEffect(() => {
         console.log("READY");
 
         t1.current = setTimeout(() => {
-            setColor("blue")
+            setColor("blue");
         }, 2000);
 
         t2.current = setTimeout(() => {
-            setColor("violet")
-            setIndex(index => index + 1)
-        }, 4000)
+            setColor("violet");
+            setIndex(index => index + 1);
+        }, 4000);
 
         return () => {
-            clearTimeout(t1.current)
-            clearTimeout(t2.current)
-        }
+            clearTimeout(t1.current);
+            clearTimeout(t2.current);
+        };
     }, []);
 
     return (
@@ -190,31 +190,31 @@ const TestMyStyled = () => {
 export default TestMyStyled;
 
 
-type Fancy2Props = {
-    moose: string;
-    hole: boolean;
-    bum: boolean;
-}
-const Fancy2 = ({}: Fancy2Props) => {
-    return null;
-}
+// type Fancy2Props = {
+//     moose: string;
+//     hole: boolean;
+//     bum: boolean;
+// }
+// const Fancy2 = ({}: Fancy2Props) => {
+//     return null;
+// }
 
 
-const Styled5 = myStyled<Fancy2Props>("div")`
-    border: 1px solid red;
-    padding: 10px;
-    ${props => props.moose && "2"}
+// const Styled5 = myStyled<Fancy2Props>("div")`
+//     border: 1px solid red;
+//     padding: 10px;
+//     ${props => props.moose && "2"}
+//
+//     &:hover {
+//         background-color: red;
+//     }
+// `;
 
-    &:hover {
-        background-color: red;
-    }
-`;
-
-const Styled6 = myStyled
-
-// const x = myStyled().
-const X = () => {
-    return (
-        <Styled5 value={3} className={""} moose="2" hole={true} bum={true}/>
-    )
-}
+// const Styled6 = myStyled
+//
+// // const x = myStyled().
+// const X = () => {
+//     return (
+//         <Styled5 value={3} className={""} moose="2" hole={true} bum={true}/>
+//     )
+// }

@@ -1,5 +1,5 @@
 import React, {ReactElement, useContext, useEffect, useState} from "react";
-import { renderToStaticMarkup } from 'react-dom/server'
+import { renderToStaticMarkup } from "react-dom/server";
 
 import {AsyncContext, AsyncDataContext} from "./contexts";
 
@@ -20,7 +20,7 @@ export const getDataFromTree = (app: ReactElement) => {
 
     return Promise.all(asyncContext)
         .then(() => html)
-        .catch(ex => console.error(ex)) // Swallow exceptions - they should be handled by the app...
+        .catch(ex => console.error(ex)); // Swallow exceptions - they should be handled by the app...
 };
 
 export const useSafePromise = <T, D = any>(id: string): [SafePromise<T>, () => D | undefined] => {
@@ -40,7 +40,7 @@ export const useSafePromise = <T, D = any>(id: string): [SafePromise<T>, () => D
             return promise;
         },
         () => asyncDataContext && asyncDataContext.data[id]
-    ]
+    ];
 };
 
 export const useAsync = <T>(id: string, getPayload: () => Promise<T>, processOnClient = true) => {
@@ -71,7 +71,7 @@ export const useSafePromiseWithEffect = <T>(): SafePromise<T> | undefined => {
             asyncContext.push(promise);
 
             return promise;
-        }
+        };
     }
 };
 

@@ -1,14 +1,14 @@
-import { FluxStandardAction } from 'flux-standard-action';
+import { FluxStandardAction } from "flux-standard-action";
 import { Dispatch } from "redux";
 
-import { IOptions } from "./index";
+import { Options } from "./index";
 
 const exec = (
     next: Dispatch<FluxStandardAction<string, any, any>>,
     transactionId: string,
     originalPayload: any,
     action: FluxStandardAction<string, any, any>,
-    dispatchOptions: IOptions,
+    dispatchOptions: Options,
     { resolve , reject }: any = {}
 ) => {
   const { meta: { retryCount = 1, $status: { isActive = true } = {} } = {} } = action;

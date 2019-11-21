@@ -1,5 +1,5 @@
 import React, {ReactElement, ReactNode, useEffect, useRef, useState} from "react";
-import styled from '@emotion/styled'
+import styled from "@emotion/styled";
 
 import Spinner from "./Spinner";
 
@@ -27,14 +27,14 @@ const Loading = ({children, loading = true, loader, timeout = 500, height = 50}:
     useEffect(() => {
         if (loading) {
             t.current = setTimeout(() => {
-                setShow(true)
-            }, timeout)
+                setShow(true);
+            }, timeout);
         } else {
-            setShow(false)
-            clearTimeout(t.current)
+            setShow(false);
+            clearTimeout(t.current);
         }
 
-        return () => clearTimeout(t.current)
+        return () => clearTimeout(t.current);
     }, [loading, timeout]);
 
     const LoadingLoader = loader ? loader({height}) : <Spinner height={height}/>;

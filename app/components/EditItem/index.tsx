@@ -1,21 +1,20 @@
 import React, {useCallback, useState, useRef, useEffect} from "react";
-import styled from '@emotion/styled'
-import {css} from '@emotion/core'
+import styled from "@emotion/styled";
+import {css} from "@emotion/core";
 
-// @ts-ignore
-import TextInput from 'react-responsive-ui/modules/TextInput'
+import TextInput from "react-responsive-ui/modules/TextInput";
 
-import Status from "components/state-mutate-with-status/status";
+// import Status from "components/state-mutate-with-status/status";
 import useAutosave from "components/hooks/useAutosave";
 
-import {IExampleItemState} from "../../reducers/__dummy__/example";
-import {IExampleResponse} from "../api/__dummy__/example";
+import {ExampleItemState} from "../../reducers/__dummy__/example";
+import {ExampleResponse} from "../api/__dummy__/example";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
 export type ItemProps = {
-    item: IExampleItemState;
-    onChange?: (item: IExampleItemState) => Promise<IExampleResponse>;
+    item: ExampleItemState;
+    onChange?: (item: ExampleItemState) => Promise<ExampleResponse>;
     type?: "primary" | "secondary";
     className?: string;
     disabled?: boolean;
@@ -42,15 +41,15 @@ const Saving = styled.div`
 `;
 
 const Item = ({item, onChange, type, className, disabled}: ItemProps) => {
-    const {id, name, $status} = item;
-    const {complete, isActive, processing, hasError, error, lastUpdated} = Status($status);
+    const {name/*, $status*/} = item;
+    // const {complete, isActive, processing, hasError, error, lastUpdated} = Status($status);
 
     const [value, setValue] = useState(name);
     const [saving, setSaving] = useState(false);
 
     useEffect(() => {
-        setValue(name)
-    }, [name])
+        setValue(name);
+    }, [name]);
 
     const inputEl = useRef<HTMLInputElement>(null);
 
@@ -90,8 +89,8 @@ const Item = ({item, onChange, type, className, disabled}: ItemProps) => {
                 </Saving>
             }
         </div>
-    )
-}
+    );
+};
 
 Item.displayName = "Items.Item";
 

@@ -1,12 +1,12 @@
-import path from 'path'
-import express from 'express'
+import path from "path";
+import express from "express";
 import https from "https";
 import expressStaticGzip from "express-static-gzip";
-import trailingSlash from "express-trailing-slash"
-import log from 'llog'
-import ssr from './lib/ssr'
-import bodyParser from 'body-parser'
-import helmet from 'helmet'
+import trailingSlash from "express-trailing-slash";
+import log from "llog";
+import ssr from "./lib/ssr";
+import bodyParser from "body-parser";
+import helmet from "helmet";
 
 const port = process.env.PORT || 1234;
 const publicPathProd = "/";
@@ -15,14 +15,14 @@ const app = express();
 
 app.use(helmet());
 
-app.use(trailingSlash({slash: true}))
+app.use(trailingSlash({slash: true}));
 
-app.use(publicPathProd, expressStaticGzip(path.resolve(process.cwd(), 'dist', 'client'), {
-    dotfiles : 'allow',
+app.use(publicPathProd, expressStaticGzip(path.resolve(process.cwd(), "dist", "client"), {
+    dotfiles : "allow",
     index: false,
     enableBrotli: true,
-    orderPreference: ['br', 'gz'],
-    setHeaders: function (res, path) {
+    orderPreference: ["br", "gz"],
+    setHeaders: function (res/*, path*/) {
         res.setHeader("Cache-Control", "public, max-age=31536000");
     }
 }));
@@ -31,8 +31,8 @@ app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.get('/*', ssr);
-app.post('/*', ssr);
+app.get("/*", ssr);
+app.post("/*", ssr);
 
 import key from "./ssl/private.key";
 import cert from "./ssl/private.crt";

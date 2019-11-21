@@ -10,4 +10,4 @@
  * @module Lib
  */
 
-export default () => {}
+export default () => {};

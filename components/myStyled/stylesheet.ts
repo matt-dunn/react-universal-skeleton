@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 export type CSSRule = {
     cssText: string;
@@ -34,7 +34,7 @@ const AnyRule = (cssText: string): AnyRule => {
         return {
             cssText,
             cssRules: match && match.groups && match.groups.selectorText.slice(0, -1).split("}").map(rule => rule && AnyRule(rule + "}")).filter(rule => rule)
-        } as OtherRule
+        } as OtherRule;
     } else {
         const match = cssText.match(/(?<selectorText>.*?)\{/);
 
@@ -89,7 +89,7 @@ const ClientStylesheet = (sheet: StylesheetPartial<CSSRuleList>, hashes: string[
 };
 
 export const createStylesheet = (): ClientServerStylesheet<CSSRuleList> | undefined => {
-    if (typeof document !== 'undefined') {
+    if (typeof document !== "undefined") {
         const myStyles = document.querySelectorAll<HTMLStyleElement>("style[data-my-styled]");
 
         if (myStyles.length > 0) {
@@ -97,7 +97,7 @@ export const createStylesheet = (): ClientServerStylesheet<CSSRuleList> | undefi
 
             myStyles.forEach(style => {
                 if (!style.parentElement || style.parentElement.tagName.toUpperCase() !== "HEAD") {
-                    document.getElementsByTagName("head")[0].appendChild(style)
+                    document.getElementsByTagName("head")[0].appendChild(style);
                 }
                 const styleHashes = style.getAttribute("data-my-styled");
                 styleHashes && (hashes = hashes.concat(styleHashes.split(" ")));

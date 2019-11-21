@@ -1,10 +1,10 @@
-import immutable from 'object-path-immutable';
-import { get } from 'lodash';
-import { FluxStandardAction } from 'flux-standard-action';
+import immutable from "object-path-immutable";
+import { get } from "lodash";
+import { FluxStandardAction } from "flux-standard-action";
 
-import { IStatusTransaction } from './status';
+import { IStatusTransaction } from "./status";
 import {setPendingState} from "./pendingTransactionState";
-import {decorateStatus, getPayload, getUpdatedState} from './utils';
+import {decorateStatus, getPayload, getUpdatedState} from "./utils";
 
 export type Path = ReadonlyArray<string>;
 
@@ -37,7 +37,7 @@ const updateState = <S, P>(state: S, { meta, error, payload }: FluxStandardActio
     } as unknown as IStatusTransaction,
   } = meta || {} as ActionMeta;
 
-  const $status = get(state, [...path, '$status']);
+  const $status = get(state, [...path, "$status"]);
 
   const {updatedState , originalState, isCurrent} = getUpdatedState(
       state,
@@ -52,7 +52,7 @@ const updateState = <S, P>(state: S, { meta, error, payload }: FluxStandardActio
 
   return immutable.set(
       updatedState,
-      [...path, '$status'],
+      [...path, "$status"],
       decorateStatus(status, $status, isCurrent === true)
   ) as any;
 };

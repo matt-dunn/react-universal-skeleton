@@ -1,48 +1,48 @@
 // import Immutable, { List, Record } from 'immutable';
-import { FluxStandardAction } from 'flux-standard-action';
-import { getType } from 'typesafe-actions';
+import { FluxStandardAction } from "flux-standard-action";
+import { getType } from "typesafe-actions";
 
-import { ActionMeta } from 'components/state-mutate-with-status';
+import { ActionMeta } from "components/state-mutate-with-status";
 // import nextState from 'components/state-mutate-with-status/immutable';
-import nextState from 'components/state-mutate-with-status/frozen';
-import { IStatus } from 'components/state-mutate-with-status/status';
+import nextState from "components/state-mutate-with-status/frozen";
+import { IStatus } from "components/state-mutate-with-status/status";
 
-import {createReducer} from "components/redux/utils"
+import {createReducer} from "components/redux/utils";
 
-import {exampleActions as actions} from '../../actions';
+import {exampleActions as actions} from "../../actions";
 
-// export interface IExampleItemState extends Record<{
-export interface IExampleItemState {
+// export interface ExampleItemState extends Record<{
+export interface ExampleItemState {
     id: string;
     name: string;
     $status: IStatus;
 }
 
-// export interface IExampleListState extends List<IExampleItemState>{}
+// export interface ExampleListState extends List<ExampleItemState>{}
 
-// export interface IExampleState extends Record<{
-export interface IExampleState {
-    items: IExampleItemState[];
-    item?: IExampleItemState;
+// export interface ExampleState extends Record<{
+export interface ExampleState {
+    items: ExampleItemState[];
+    item?: ExampleItemState;
     $status?: IStatus;
 }
 
-const exampleGetList = (state: IExampleState, action: FluxStandardAction<string, any, ActionMeta>): IExampleState => nextState(state, action, {
-    path: ['items'],
+const exampleGetList = (state: ExampleState, action: FluxStandardAction<string, any, ActionMeta>): ExampleState => nextState(state, action, {
+    path: ["items"],
 });
 
-const exampleGetItem = (state: IExampleState, action: FluxStandardAction<string, any, ActionMeta>): IExampleState => nextState(state, action, {
-    path: ['item'],
+const exampleGetItem = (state: ExampleState, action: FluxStandardAction<string, any, ActionMeta>): ExampleState => nextState(state, action, {
+    path: ["item"],
 });
 
-const exampleEditItem = (state: IExampleState, action: FluxStandardAction<string, any, ActionMeta>): IExampleState => nextState(state, action, {
-    path: ['items'],
+const exampleEditItem = (state: ExampleState, action: FluxStandardAction<string, any, ActionMeta>): ExampleState => nextState(state, action, {
+    path: ["items"],
 });
 
 const initialState = {
     item: undefined,
-    items: [] as Array<IExampleItemState>,
-} as IExampleState;
+    items: [] as Array<ExampleItemState>,
+} as ExampleState;
 
 const exampleActions = {
     [getType(actions.exampleGetList)]: exampleGetList,

@@ -1,6 +1,6 @@
-import {IOptions} from "./src/utils";
+import {Options} from "./src/utils";
 import {ComponentType} from "react";
 
-declare function useWhatChanged<T>(Component: ComponentType<any>, value: T, options?: IOptions): object;
+declare function useWhatChanged<T>(Component: ComponentType<any>, value: T, options?: Options): object;
 export = useWhatChanged;
 

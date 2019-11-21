@@ -1,6 +1,6 @@
-import React from 'react';
-import styled from '@emotion/styled'
-import { NavLink } from 'react-router-dom';
+import React from "react";
+import styled from "@emotion/styled";
+import { NavLink } from "react-router-dom";
 import {useAuthenticatedUser} from "./auth";
 
 const Container = styled.header`
@@ -11,23 +11,23 @@ const Container = styled.header`
   align-items: center;
   border-bottom: 3px solid #eee;
   background-color: #f5f5f5;
-`
+`;
 
 const Brand = styled.h1`
   font-size: var(--step-up-1);
-`
+`;
 
 const Menu = styled.ul`
   display: flex;
   justify-content: flex-end;
   align-items: center;
   width: 50vw;
-`
+`;
 
 const MenuLink = styled.li`
   margin-left: 2em;
   text-decoration: none;
-`
+`;
 
 const Header = () => {
     const authenticatedUser = useAuthenticatedUser();
@@ -56,7 +56,7 @@ const Header = () => {
                 </MenuLink>
             </Menu>
         </Container>
-    )
-}
+    );
+};
 
 export default React.memo(Header);

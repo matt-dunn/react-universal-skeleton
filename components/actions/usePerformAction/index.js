@@ -1,4 +1,4 @@
 module.exports =
     process.browser
-        ? require('./usePerformAction.client')
-        : require('./usePerformAction.server');
+        ? require("./usePerformAction.client")
+        : require("./usePerformAction.server");

@@ -1,111 +1,111 @@
-import { FluxStandardAction } from 'flux-standard-action';
+import { FluxStandardAction } from "flux-standard-action";
 
-import nextState from './index';
+import nextState from "./index";
 
-describe('next state', () => {
-    describe('Object state', () => {
+describe("next state", () => {
+    describe("Object state", () => {
         let state: any;
 
         beforeEach(() => {
             state = {
                 item: {
                     id: 1,
-                    text: 'item 1'
+                    text: "item 1"
                 },
                 nested: {
                     deep: {
                         item: {
                             id: 1,
-                            text: 'item 1'
+                            text: "item 1"
                         }
                     }
                 }
-            }
+            };
         });
 
-        it('should not update payload when not complete', () => {
+        it("should not update payload when not complete", () => {
             const actionProcessing: FluxStandardAction<string, any, any> = {
                 type: "TEST",
-                payload: { text: 'item 1 updated'},
+                payload: { text: "item 1 updated"},
                 meta: {
                     $status: {
                         complete: false,
                         processing: true
                     }
                 }
-            }
+            };
 
             expect(nextState(state, actionProcessing, {
-                path: ['item']
+                path: ["item"]
             })).toMatchObject({
                 item: {
-                    text: 'item 1',
+                    text: "item 1",
                     $status: {
                         complete: false,
                         processing: true
                     }
                 }
-            })
+            });
         });
 
-        it('should update payload when complete', () => {
+        it("should update payload when complete", () => {
             const actionComplete: FluxStandardAction<string, any, any> = {
                 type: "TEST",
-                payload: { text: 'item 1 updated'},
+                payload: { text: "item 1 updated"},
                 meta: {
                     $status: {
                         complete: true,
                         processing: false
                     }
                 }
-            }
+            };
 
             expect(nextState(state, actionComplete, {
-                path: ['item']
+                path: ["item"]
             })).toMatchObject({
                 item: {
-                    text: 'item 1 updated',
+                    text: "item 1 updated",
                     $status: {
                         complete: true,
                         processing: false
                     }
                 }
-            })
+            });
         });
 
-        it('should update payload when using default status', () => {
+        it("should update payload when using default status", () => {
             const actionWithDefaultStatus: FluxStandardAction<string, any, any> = {
                 type: "TEST",
-                payload: { text: 'item 1 updated'}
-            }
+                payload: { text: "item 1 updated"}
+            };
 
             expect(nextState(state, actionWithDefaultStatus, {
-                path: ['item']
+                path: ["item"]
             })).toMatchObject({
                 item: {
-                    text: 'item 1 updated',
+                    text: "item 1 updated",
                     $status: {
                         complete: true,
                         processing: false
                     }
                 }
-            })
+            });
         });
 
-        it('should not update nested payload when not complete', () => {
+        it("should not update nested payload when not complete", () => {
             const actionNestedState: FluxStandardAction<string, any, any> = {
                 type: "TEST",
-                payload: { text: 'item 1 updated'},
+                payload: { text: "item 1 updated"},
                 meta: {
                     $status: {
                         complete: false,
                         processing: true
                     }
                 }
-            }
+            };
 
             expect(nextState(state, actionNestedState, {
-                path: ['nested', 'deep', 'item']
+                path: ["nested", "deep", "item"]
             })).toMatchObject({
                 nested: {
                     deep: {
@@ -118,28 +118,28 @@ describe('next state', () => {
                         }
                     }
                 }
-            })
+            });
         });
 
-        it('should update nested payload when complete', () => {
+        it("should update nested payload when complete", () => {
             const actionNestedStateComplete: FluxStandardAction<string, any, any> = {
                 type: "TEST",
-                payload: { text: 'item 1 updated'},
+                payload: { text: "item 1 updated"},
                 meta: {
                     $status: {
                         complete: true,
                         processing: false
                     }
                 }
-            }
+            };
 
             expect(nextState(state, actionNestedStateComplete, {
-                path: ['nested', 'deep', 'item']
+                path: ["nested", "deep", "item"]
             })).toMatchObject({
                 nested: {
                     deep: {
                         item: {
-                            text: 'item 1 updated',
+                            text: "item 1 updated",
                             $status: {
                                 complete: true,
                                 processing: false
@@ -147,11 +147,11 @@ describe('next state', () => {
                         }
                     }
                 }
-            })
+            });
         });
     });
 
-    describe('Array state', () => {
+    describe("Array state", () => {
         let state: any;
 
         beforeEach(() => {
@@ -159,16 +159,16 @@ describe('next state', () => {
                 items: [
                     {
                         id: 1,
-                        text: 'item 1'
+                        text: "item 1"
                     }
                 ]
-            }
+            };
         });
 
-        it('should not update payload when not complete', () => {
+        it("should not update payload when not complete", () => {
             const actionProcessing: FluxStandardAction<string, any, any> = {
                 type: "TEST",
-                payload: { text: 'item 1 updated'},
+                payload: { text: "item 1 updated"},
                 meta: {
                     id: 1,
                     $status: {
@@ -176,21 +176,21 @@ describe('next state', () => {
                         processing: true
                     }
                 }
-            }
+            };
 
             expect([...nextState(state, actionProcessing, {
-                path: ['items']
+                path: ["items"]
             }).items]).toMatchObject([
                 {
-                    text: 'item 1',
+                    text: "item 1",
                 }
             ]);
         });
 
-        it('should update payload when complete', () => {
+        it("should update payload when complete", () => {
             const actionComplete: FluxStandardAction<string, any, any> = {
                 type: "TEST",
-                payload: { text: 'item 1 updated'},
+                payload: { text: "item 1 updated"},
                 meta: {
                     id: 1,
                     $status: {
@@ -198,50 +198,25 @@ describe('next state', () => {
                         processing: false
                     }
                 }
-            }
+            };
 
             expect([...nextState(state, actionComplete, {
-                path: ['items']
+                path: ["items"]
             }).items]).toMatchObject([
                 {
-                    text: 'item 1 updated',
+                    text: "item 1 updated",
                     $status: {
                         complete: true,
                         processing: false
                     }
-                }
-            ])
-        });
-
-        it('should add a new item to the end of the array by default when complete ', () => {
-            const actionCompleteNewItem: FluxStandardAction<string, any, any> = {
-                type: "TEST",
-                payload: { text: 'item 2'},
-                meta: {
-                    id: 2,
-                    $status: {
-                        complete: true,
-                        processing: false
-                    }
-                }
-            }
-
-            expect([...nextState(state, actionCompleteNewItem, {
-                path: ['items']
-            }).items]).toMatchObject([
-                {
-                    text: 'item 1'
-                },
-                {
-                    text: 'item 2'
                 }
             ]);
         });
 
-        it('should add a new item to the specified index in the array when complete ', () => {
-            const actionCompleteNewItemFirst: FluxStandardAction<string, any, any> = {
+        it("should add a new item to the end of the array by default when complete ", () => {
+            const actionCompleteNewItem: FluxStandardAction<string, any, any> = {
                 type: "TEST",
-                payload: { text: 'item 2 updated'},
+                payload: { text: "item 2"},
                 meta: {
                     id: 2,
                     $status: {
@@ -249,74 +224,99 @@ describe('next state', () => {
                         processing: false
                     }
                 }
-            }
+            };
+
+            expect([...nextState(state, actionCompleteNewItem, {
+                path: ["items"]
+            }).items]).toMatchObject([
+                {
+                    text: "item 1"
+                },
+                {
+                    text: "item 2"
+                }
+            ]);
+        });
+
+        it("should add a new item to the specified index in the array when complete ", () => {
+            const actionCompleteNewItemFirst: FluxStandardAction<string, any, any> = {
+                type: "TEST",
+                payload: { text: "item 2 updated"},
+                meta: {
+                    id: 2,
+                    $status: {
+                        complete: true,
+                        processing: false
+                    }
+                }
+            };
 
             expect([...nextState(state, actionCompleteNewItemFirst, {
-                path: ['items'],
+                path: ["items"],
                 getNewItemIndex: (/*items, item*/) => 0,
             }).items]).toMatchObject([
                 {
-                    text: 'item 2 updated'
+                    text: "item 2 updated"
                 },
                 {
-                    text: 'item 1'
+                    text: "item 1"
                 }
             ]);
         });
     });
 
-    describe('Multiple transactions', () => {
-        it('should handle multiple transactions', () => {
+    describe("Multiple transactions", () => {
+        it("should handle multiple transactions", () => {
             const state = {
                 items: [
                     {
                         id: 1,
-                        text: 'item 1'
+                        text: "item 1"
                     }
                 ]
-            }
+            };
 
             const actionProcessingFirst: FluxStandardAction<string, any, any> = {
                 type: "TEST",
-                payload: { text: 'item 1 updated'},
+                payload: { text: "item 1 updated"},
                 meta: {
                     id: 1,
                     $status: {
-                        transactionId: '1',
+                        transactionId: "1",
                         complete: false,
                         processing: true
                     }
                 }
-            }
+            };
 
             const updatedState = nextState(state, actionProcessingFirst, {
-                path: ['items']
+                path: ["items"]
             });
 
             expect([...updatedState.items]).toMatchObject([
                 {
-                    text: 'item 1',
+                    text: "item 1",
                 }
             ]);
 
             const actionProcessingSecond: FluxStandardAction<string, any, any> = {
                 type: "TEST",
-                payload: { text: 'item 1 updated'},
+                payload: { text: "item 1 updated"},
                 meta: {
                     id: 1,
                     $status: {
-                        transactionId: '2',
+                        transactionId: "2",
                         complete: false,
                         processing: true
                     }
                 }
-            }
+            };
 
             expect([...nextState(updatedState, actionProcessingSecond, {
-                path: ['items']
+                path: ["items"]
             }).items]).toMatchObject([
                 {
-                    text: 'item 1',
+                    text: "item 1",
                 }
             ]);
         });

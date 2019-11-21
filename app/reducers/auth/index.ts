@@ -1,13 +1,13 @@
-import { FluxStandardAction } from 'flux-standard-action';
-import { getType } from 'typesafe-actions';
+import { FluxStandardAction } from "flux-standard-action";
+import { getType } from "typesafe-actions";
 
-import { ActionMeta } from 'components/state-mutate-with-status/index';
+import { ActionMeta } from "components/state-mutate-with-status/index";
 
-import nextState from 'components/state-mutate-with-status/index';
+import nextState from "components/state-mutate-with-status/index";
 
-import {createReducer} from "components/redux/utils"
+import {createReducer} from "components/redux/utils";
 
-import {authActions as actions} from '../../actions';
+import {authActions as actions} from "../../actions";
 import {IStatus} from "components/state-mutate-with-status/status";
 
 export interface AuthenticatedUser {
@@ -22,7 +22,7 @@ export interface AuthState {
 }
 
 const login = (state: AuthState, action: FluxStandardAction<string, any, ActionMeta>): AuthState => nextState(state, action, {
-    path: ['authenticatedUser'],
+    path: ["authenticatedUser"],
 });
 
 

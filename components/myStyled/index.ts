@@ -1,4 +1,4 @@
-import React, {ComponentType, ReactNode, useContext, useRef} from 'react'
+import React, {ComponentType, ReactNode, useContext, useRef} from "react";
 
 import {createHash} from "./hash";
 import {parseRule, generateClassName, updateSheetRule} from "./utils";

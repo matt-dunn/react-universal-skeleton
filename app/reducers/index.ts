@@ -1,14 +1,14 @@
-import { combineReducers } from 'redux';
+import { combineReducers } from "redux";
 
-import example, {IExampleState} from "./__dummy__/example";
+import example, {ExampleState} from "./__dummy__/example";
 import auth, {AuthState} from "./auth";
 
-export interface IAppState {
-    example: IExampleState;
+export interface AppState {
+    example: ExampleState;
     auth: AuthState;
 }
 
-export default combineReducers<IAppState>({
+export default combineReducers<AppState>({
     example,
     auth
 });

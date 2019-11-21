@@ -1,5 +1,5 @@
-import React, {useContext} from "react";
-import isPromise from 'is-promise';
+import {useContext} from "react";
+import isPromise from "is-promise";
 
 import {useSafePromiseWithEffect} from "components/ssr/safePromise";
 

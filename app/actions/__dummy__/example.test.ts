@@ -1,8 +1,8 @@
-import { exampleGetItem, exampleGetList } from './example';
+// import { exampleGetItem, exampleGetList } from "./example";
 
-describe('Example actions', () => {
-    describe('exampleGetItem', () => {
-        it('should return FSA', () => {
+describe("Example actions", () => {
+    describe("exampleGetItem", () => {
+        it("should return FSA", () => {
             // const action = exampleGetItem(/*{ id: '2', name: '3' }*/);
 
             expect(true).toEqual(true);
@@ -10,8 +10,8 @@ describe('Example actions', () => {
         });
     });
 
-    describe('exampleGetList', () => {
-        it('should return FSA', () => {
+    describe("exampleGetList", () => {
+        it("should return FSA", () => {
             // const action = exampleGetList(0);
 
             // expect(action.payload({services: { exampleGetList: () => [12] }})).toEqual([12]);

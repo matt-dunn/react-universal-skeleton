@@ -51,7 +51,7 @@ export const updateSheetRule = (sheet: StylesheetPartial<CSSRuleList | AnyRules>
 
     stylis(selectorText, rule);
 
-    console.log(`UPDATE(${sheet.rules.length} rules)\n `,DEBUG.join('\n  '))
+    console.log(`UPDATE(${sheet.rules.length} rules)\n `,DEBUG.join("\n  "));
 
     return className;
 };

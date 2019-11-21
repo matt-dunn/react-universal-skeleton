@@ -1,5 +1,5 @@
-import React, {ReactElement} from 'react'
-import stream from 'stream';
+import React, {ReactElement} from "react";
+import stream from "stream";
 
 import {ServerStylesheet, StyleContext} from "./stylesheet";
 
@@ -30,9 +30,9 @@ export default () => {
         //     console.error("END!!!!")
         // });
 
-        readableStream.on('error', err => {
+        readableStream.on("error", err => {
             // forward the error to the transform stream
-            transformer.emit('error', err);
+            transformer.emit("error", err);
         });
 
         return readableStream.pipe(transformer);
@@ -44,4 +44,4 @@ export default () => {
         getStyles,
         interleaveWithNodeStream
     };
-}
+};

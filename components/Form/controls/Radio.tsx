@@ -2,7 +2,7 @@ import React from "react";
 
 import {FormStyles, typedMemo} from "../types";
 import {Checkbox} from "./Checkbox";
-import styled from '@emotion/styled'
+import styled from "@emotion/styled";
 
 type Option = {
     value: string;
@@ -66,10 +66,10 @@ function Radio({options, name, value, onChange, onBlur, formStyles, isValid, id,
                             {option.label || option.value}
                         </Label>
                     </div>
-                )
+                );
             })}
         </fieldset>
-    )
+    );
 }
 
 const MemoRadio = typedMemo(Radio);

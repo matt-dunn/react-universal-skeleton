@@ -1,12 +1,12 @@
 import {
   Dispatch, Middleware,
-} from 'redux';
+} from "redux";
 
 import {ErrorLike} from "components/error";
 
-export interface INotify { error: ErrorLike; type: string; cancel: Function; retry: Function }
+export interface Notify { error: ErrorLike; type: string; cancel: Function; retry: Function }
 
-export type TNotify = (notification: INotify) => boolean;
+export type TNotify = (notification: Notify) => boolean;
 
 const notification = ({ notify }: { notify: TNotify }) => () => (next: Dispatch): Middleware => (action: any) => {
   const ret = next(action);

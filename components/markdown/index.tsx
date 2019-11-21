@@ -3,7 +3,6 @@ import sanitize from "sanitize-html";
 
 import {useAsync} from "components/ssr/safePromise";
 
-import marked from "./marked";
 import {Container} from "./style";
 import {ALLOWED_CONTENT} from "./allowedContent";
 import highlight from "./highlight";
@@ -13,10 +12,12 @@ type MarkdownProps = {
     id: string;
 }
 
+import "../highlighter/sass/_theme.scss";
+
 const Markdown = ({content, id}: MarkdownProps) => {
     const [parsedContent] = useAsync(
         id,
-        useMemo(() => () => marked(content, {
+        useMemo(() => () => import("./marked").then(marked => (marked.default || marked)(content, {
             gfm: true,
             breaks: false,
             pedantic: false,
@@ -25,11 +26,11 @@ const Markdown = ({content, id}: MarkdownProps) => {
             smartypants: true,
             highlightRaw: true,
             highlight
-        }), [content]),
+        })), [content]),
         false
     );
 
     return ((parsedContent && <Container dangerouslySetInnerHTML={{__html: sanitize(parsedContent, ALLOWED_CONTENT)}}/>) || null);
 };
 
-export default Markdown
+export default Markdown;

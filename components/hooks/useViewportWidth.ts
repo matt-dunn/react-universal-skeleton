@@ -9,18 +9,18 @@ const useViewportWidth = (ref: MutableRefObject<Element | undefined>): ViewportD
 
     useEffect(() => {
         if (!ref.current) {
-            return
+            return;
         }
 
-        const rect = ref.current.getBoundingClientRect()
-        setDimensions({width: rect.width, height: rect.height})
+        const rect = ref.current.getBoundingClientRect();
+        setDimensions({width: rect.width, height: rect.height});
 
         resizeSensor.current = new ResizeSensor(ref.current, d => setDimensions(d));
 
         return () => {
             resizeSensor.current && resizeSensor.current.detach();
-        }
-    }, [ref])
+        };
+    }, [ref]);
 
     return dimensions;
 };

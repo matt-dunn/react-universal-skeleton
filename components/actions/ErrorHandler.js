@@ -18,14 +18,14 @@ const callHandler = (ex, handler, location, history, props) => {
 const getInitialComponent = (ex, handler, location, history, props) => {
     const ret = callHandler(ex, handler, location, history, props);
 
-    return (ret !== false && ret !== true && ret && ret)
+    return (ret !== false && ret !== true && ret && ret);
 };
 
 const ErrorHandler = ({handler, children, ...props}) => {
     const history = useHistory();
     const location = useLocation();
     const unlisten = useRef(null);
-    const errorContext = useContext(ErrorContext)
+    const errorContext = useContext(ErrorContext);
     const [component, setComponent] = useState(errorContext && errorContext.error && getInitialComponent(errorContext.error, handler, location, history, props));
 
     useEffect(() => {
@@ -36,7 +36,7 @@ const ErrorHandler = ({handler, children, ...props}) => {
 
         return () => {
             unlisten.current();
-        }
+        };
     }, [errorContext.error, history]);
 
     const handleError = useRef({
@@ -55,7 +55,7 @@ const ErrorHandler = ({handler, children, ...props}) => {
         <ErrorHandlerContext.Provider value={handleError.current}>
             {component || children}
         </ErrorHandlerContext.Provider>
-    )
+    );
 };
 
 ErrorHandler.propTypes = {

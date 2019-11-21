@@ -1,5 +1,5 @@
-import styled from '@emotion/styled'
-import {css} from '@emotion/core'
+import styled from "@emotion/styled";
+import {css} from "@emotion/core";
 import React, {useCallback} from "react";
 
 import Loading from "components/Loading";
@@ -7,14 +7,14 @@ import {usePerformAction} from "components/actions";
 import Status, {IStatus} from "components/state-mutate-with-status/status";
 import PlaceHolderItem from "app/components/Placeholder/Item";
 
-import {IExampleItemState} from "../../reducers/__dummy__/example";
-import {IExampleGetItem} from "../api/__dummy__/example";
+import {ExampleItemState} from "../../reducers/__dummy__/example";
+import {ExampleGetItem} from "../api/__dummy__/example";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
 export type ItemProps = {
-    item?: IExampleItemState;
-    onExampleGetItem: IExampleGetItem;
+    item?: ExampleItemState;
+    onExampleGetItem: ExampleGetItem;
     className?: string;
     isShown?: boolean;
 };
@@ -36,7 +36,7 @@ const PlaceHolderListItem = PlaceHolderItem(styled.div`color:#ddd`);
 
 
 const Item = ({className, isShown = true, item, onExampleGetItem, ...props}: ItemProps) => {
-    const {complete, isActive, processing, hasError, error} = (item && Status(item.$status)) || {} as IStatus;
+    const {complete, processing, hasError, error} = (item && Status(item.$status)) || {} as IStatus;
 
     useWhatChanged(Item, { className, isShown, item, onExampleGetItem, ...props });
 
@@ -61,7 +61,7 @@ const Item = ({className, isShown = true, item, onExampleGetItem, ...props}: Ite
                 }
             </Loading>
         </ItemContainer>
-    )
-}
+    );
+};
 
 export default React.memo<ItemProps>(Item);

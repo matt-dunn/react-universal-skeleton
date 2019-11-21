@@ -1,12 +1,12 @@
-import React from 'react'
+import React from "react";
 
 import { useParams, useHistory } from "react-router-dom";
 import {Dispatch} from "redux";
 import {connect} from "react-redux";
 
-import {IAppState} from "../reducers";
+import {AppState} from "../reducers";
 import * as actions from "../actions";
-import Page from '../styles/Page'
+import Page from "../styles/Page";
 import {AuthState} from "../reducers/auth";
 import Status from "components/state-mutate-with-status/status";
 
@@ -17,7 +17,7 @@ export type LoginProps = { auth: AuthState; onLogin: (username: string, password
 const Login = ({auth, onLogin}: LoginProps, ...props: any[]) => {
     const {from} = useParams() || "/";
     const history = useHistory();
-    const {complete, isActive, processing, hasError, error} = Status(auth.authenticatedUser && auth.authenticatedUser.$status);
+    const {processing} = Status(auth.authenticatedUser && auth.authenticatedUser.$status);
 
     useWhatChanged(Login, { auth, onLogin, ...props });
 
@@ -30,20 +30,20 @@ const Login = ({auth, onLogin}: LoginProps, ...props: any[]) => {
                 onClick={() => {
                     onLogin("clem@demo.com", "xxx")
                         .then(() => {
-                            from && history.replace(decodeURIComponent(from))
-                        })
+                            from && history.replace(decodeURIComponent(from));
+                        });
                 }}
             >
                 LOGIN
             </button>
         </Page>
-    )
-}
+    );
+};
 
-const mapStateToProps = (state: IAppState) => {
+const mapStateToProps = (state: AppState) => {
     const auth = state.auth;
 
-    return { auth }
+    return { auth };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<actions.RootActions>) => {
@@ -52,7 +52,7 @@ const mapDispatchToProps = (dispatch: Dispatch<actions.RootActions>) => {
 
     return {
         onLogin
-    }
+    };
 };
 
 const container = connect(
@@ -60,4 +60,4 @@ const container = connect(
     mapDispatchToProps
 )(Login);
 
-export default container
+export default container;

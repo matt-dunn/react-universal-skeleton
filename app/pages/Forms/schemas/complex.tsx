@@ -1,10 +1,9 @@
-import React from "react";
 import * as Yup from "yup";
 import {ValidationError} from "yup";
 
-import loadable from '@loadable/component'
+import loadable from "@loadable/component";
 
-const FancySelect = loadable(() => import('components/FancySelect'));
+const FancySelect = loadable(() => import("components/FancySelect"));
 
 import {validateEmailApi} from "../utils";
 
@@ -22,19 +21,19 @@ const schema = Yup.object().shape({
                 type: "text"
             }
         })
-        .required('Email is required')
+        .required("Email is required")
         .email()
         .test("email", "Email ${value} is unavailable", function(value: string) {
             if (!value || !Yup.string().email().isValidSync(value)) {
                 return true;
             } else {
                 return validateEmailApi(value)
-                    .catch(reason => new ValidationError(reason.message, value, this.path))
+                    .catch(reason => new ValidationError(reason.message, value, this.path));
             }
         }),
     numberTest: Yup.number()
         .label("Number Type")
-        .typeError('Please provide a number')
+        .typeError("Please provide a number")
         .min(2)
         .max(10)
         .nullable()
@@ -52,7 +51,7 @@ const schema = Yup.object().shape({
         })
         // .default(true)
         .required()
-        .oneOf([true], '${label} must be checked'),
+        .oneOf([true], "${label} must be checked"),
     simpleSelect: Yup.string()
         .label("Simple Select")
         .meta({
@@ -61,17 +60,17 @@ const schema = Yup.object().shape({
             Component: "select",
             props: {
                 options: [
-                    { value: '', label: 'Select value...' },
-                    { value: 'value1', label: 'Value 1' },
-                    { value: 'value2', label: 'Value 2' },
-                    { value: 'value3', label: 'Value 3' },
-                    { value: 'value4', label: 'Value 4' },
-                    { value: 'value5', label: 'Value 5' },
-                    { value: 'value6', label: 'Value 6' },
+                    { value: "", label: "Select value..." },
+                    { value: "value1", label: "Value 1" },
+                    { value: "value2", label: "Value 2" },
+                    { value: "value3", label: "Value 3" },
+                    { value: "value4", label: "Value 4" },
+                    { value: "value5", label: "Value 5" },
+                    { value: "value6", label: "Value 6" },
                 ]
             }
         })
-        .required('Simple Select is required'),
+        .required("Simple Select is required"),
     simpleRadio: Yup.string()
         .label("Simple Radio")
         // .default("value1")
@@ -81,10 +80,10 @@ const schema = Yup.object().shape({
             Component: "autoselect",
             props: {
                 options: [
-                    { value: '', label: 'None' },
-                    { value: 'value1', label: 'Value 1' },
-                    { value: 'value2', label: 'Value 2' },
-                    { value: 'value3', label: 'Value 3' },
+                    { value: "", label: "None" },
+                    { value: "value1", label: "Value 1" },
+                    { value: "value2", label: "Value 2" },
+                    { value: "value3", label: "Value 3" },
                     // { value: 'value4', label: 'Value 4' },
                 ]
             }
@@ -115,17 +114,17 @@ const schema = Yup.object().shape({
                     // }),
                     props: {
                         options: [
-                            { value: '', label: 'Select your flavour...' },
-                            { value: 'chocolate', label: 'Chocolate' },
-                            { value: 'strawberry', label: 'Strawberry' },
-                            { value: 'vanilla', label: 'Vanilla' },
+                            { value: "", label: "Select your flavour..." },
+                            { value: "chocolate", label: "Chocolate" },
+                            { value: "strawberry", label: "Strawberry" },
+                            { value: "vanilla", label: "Vanilla" },
                         ]
                     }
                 })
-                .required('Flavour is required')
+                .required("Flavour is required")
         }),
     notes: Yup.string()
-        .required('Notes is required')
+        .required("Notes is required")
         .label("Notes")
         .max(100)
         .meta({

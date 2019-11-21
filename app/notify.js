@@ -1,6 +1,6 @@
 import React from "react";
 import {toast} from "react-toastify";
-import styled from '@emotion/styled'
+import styled from "@emotion/styled";
 
 const Button = styled.button`
   padding: 5px 10px;
@@ -8,12 +8,12 @@ const Button = styled.button`
   color: #fff;
   border: none;
   font-size: 14px;
-`
+`;
 
 const PrimaryButton = styled(Button)`
     background-color: #3498DB;
     text-transform: uppercase;
-`
+`;
 
 export const notify = ({error: { message, code, status }, type, cancel, retry}) => {
     if (process.browser && (!status || status >= 500)) {
@@ -43,7 +43,7 @@ export const notify = ({error: { message, code, status }, type, cancel, retry}) 
                             Retry
                         </PrimaryButton>
                     )}
-                    {' '}
+                    {" "}
                     {cancel
                     && (
                         <Button
@@ -55,7 +55,7 @@ export const notify = ({error: { message, code, status }, type, cancel, retry}) 
             </>,
             {
                 autoClose: !(cancel || retry),
-                type: 'error',
+                type: "error",
                 onClose: () => {
                     if (!retrying && cancel) {
                         cancel();
@@ -70,4 +70,4 @@ export const notify = ({error: { message, code, status }, type, cancel, retry}) 
     }
 
     return false;
-}
+};

@@ -1,4 +1,4 @@
-import { css } from '@emotion/core'
+import { css } from "@emotion/core";
 
 export const ToastifyStyles = css`
 .Toastify__toast-container {
@@ -560,4 +560,4 @@ export const ToastifyStyles = css`
 .Toastify__slide-exit--bottom-center {
   animation-name: Toastify__slideOutDown;
 }
-`
+`;

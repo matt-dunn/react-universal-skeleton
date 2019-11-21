@@ -1,9 +1,9 @@
-import React, {useMemo, useRef} from 'react'
-import {Formik, setIn} from 'formik';
-import * as Yup from 'yup';
+import React, {useMemo, useRef} from "react";
+import {Formik, setIn} from "formik";
+import * as Yup from "yup";
 import {Schema} from "yup";
 import classnames from "classnames";
-import styled from '@emotion/styled'
+import styled from "@emotion/styled";
 
 import {MapDataToAction, useForm} from "components/actions/form";
 
@@ -82,7 +82,7 @@ function Form<S, Payload, Context>({id, schema, onSubmit, children, className, c
                             >
                                 {complete({values: schema.cast(values), metadata})}
                             </section>
-                        )
+                        );
                     }
 
                     return extendedSchema.fields && (
@@ -122,7 +122,7 @@ function Form<S, Payload, Context>({id, schema, onSubmit, children, className, c
 
             <pre style={{whiteSpace: "normal"}}>{JSON.stringify(formData.state)}</pre>
         </FormContext.Provider>
-    )
+    );
 }
 
 const MemoForm = typedMemo(Form);

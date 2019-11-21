@@ -14,8 +14,8 @@
 /* eslint no-console: "off" */
 
 import {
-  merge, isFunction, isString, isObject, union, keys as _keys, isEmpty, get, set
-} from 'lodash';
+  isFunction, isString, isObject, union, keys as _keys, isEmpty, get, set
+} from "lodash";
 
 const keys = (o: any): any => (Object.getOwnPropertySymbols(o) as (symbol|string)[]).concat(_keys(o));
 
@@ -29,7 +29,7 @@ const getObjectProp = (o: any, name: string) => {
 
 const getObject = (o: any) => {
   if (isFunction(o)) {
-    return 'Function ' + (o.name || "");
+    return "Function " + (o.name || "");
   } else if (isObject(o)) {
     const seenObjects: any[] = [];
 
@@ -55,7 +55,7 @@ const getType = (o: any): string => {
   const parts: string[] = [];
 
   if(o.type && o.type.type) {
-      parts.push(getType(o.type))
+      parts.push(getType(o.type));
   }
 
   if (o.type && (o.type.displayName || o.type.name)) {
@@ -70,7 +70,7 @@ const getType = (o: any): string => {
     parts.push(o.$$typeof.toString());
   }
 
-  return parts.join(' ') + (o.key ? `[${o.key}]` : '');
+  return parts.join(" ") + (o.key ? `[${o.key}]` : "");
 };
 
 type BaseDiffObject = {
@@ -102,25 +102,25 @@ export const deepDiff = (o1: BaseDiffObject, o2: BaseDiffObject, p: string, path
         changes = deepDiff(
             (o1.state && { props: o1.props, state: o1.state }) || o1.props,
             (o1.state && { props: o2.props, state: o2.state }) || o2.props,
-            getType(o1).replace(/\./g, '__@@__'),
-            (path ? `${path}.` : '') + p.toString(),
+            getType(o1).replace(/\./g, "__@@__"),
+            (path ? `${path}.` : "") + p.toString(),
         );
       } else {
         unionKeys.forEach((key: string) => {
           const o1normalised = getObjectProp(o1, key);
           const o2normalised = getObjectProp(o2, key);
-          const propertyChanges = deepDiff(o1normalised, o2normalised, key, (path ? `${path}.` : '') + p.toString(), (path && o1normalised !== o2normalised) || false);
+          const propertyChanges = deepDiff(o1normalised, o2normalised, key, (path ? `${path}.` : "") + p.toString(), (path && o1normalised !== o2normalised) || false);
 
           if (!changesInBranch && isEmpty(propertyChanges) && o1normalised !== o2normalised) {
-            set(propertyChanges, `${(path ? `${path}.` : '') + p.toString()}.${key.toString()}`, {
-              warning: 'AVOIDABLE',
+            set(propertyChanges, `${(path ? `${path}.` : "") + p.toString()}.${key.toString()}`, {
+              warning: "AVOIDABLE",
               avoidable: true,
               __VALUE__: true,
               before: getObject(o1normalised && o1normalised.toJS ? o1normalised.toJS() : o1normalised),
               after: getObject(o2normalised && o2normalised.toJS ? o2normalised.toJS() : o2normalised),
             });
           } else if (!isEmpty(propertyChanges)) {
-            set(changes, `${(path ? `${path}.` : '') + p.toString()}.${key.toString()}`, get(propertyChanges, `${(path ? `${path}.` : '') + p.toString()}.${key.toString()}`));
+            set(changes, `${(path ? `${path}.` : "") + p.toString()}.${key.toString()}`, get(propertyChanges, `${(path ? `${path}.` : "") + p.toString()}.${key.toString()}`));
           }
         });
       }
@@ -166,38 +166,38 @@ const countAvoidable = (o: any) => {
 
 export const outputPathParts = (id: string, o: any, parent?: any) => {
   keys(o).sort().forEach((key: string) => {
-    let groupStyle = (parent && 'background-color:#999;color:#000;border-radius:1em;padding:2px 5px;') || 'background-color:#ccc;color:#000;border-radius:1em;padding:2px 5px;';
-    let groupTitleSubText = '';
+    let groupStyle = (parent && "background-color:#999;color:#000;border-radius:1em;padding:2px 5px;") || "background-color:#ccc;color:#000;border-radius:1em;padding:2px 5px;";
+    let groupTitleSubText = "";
 
     if (o[key]) {
       const counts = countAvoidable(o[key]);
 
       if (counts) {
         if (counts.valueCount === counts.avoidableCount) {
-          groupStyle = 'background-color:red;color:white;border-radius:1em;padding:2px 5px;';
-          groupTitleSubText = ' (ALL POTENTIALLY AVOIDABLE)';
+          groupStyle = "background-color:red;color:white;border-radius:1em;padding:2px 5px;";
+          groupTitleSubText = " (ALL POTENTIALLY AVOIDABLE)";
         } else if (counts.avoidableCount > 0) {
-          groupStyle = 'background-color:yellow;color:black;border-radius:1em;padding:2px 5px;';
-          groupTitleSubText = ' (SOME POTENTIALLY AVOIDABLE)';
+          groupStyle = "background-color:yellow;color:black;border-radius:1em;padding:2px 5px;";
+          groupTitleSubText = " (SOME POTENTIALLY AVOIDABLE)";
         }
       }
 
       if (parent) {
-        console.group(`%c${key.replace(/__@@__/g, '.')}${groupTitleSubText}`, groupStyle);
+        console.group(`%c${key.replace(/__@@__/g, ".")}${groupTitleSubText}`, groupStyle);
       } else {
-        console.groupCollapsed(`%c${key.replace(/__@@__/g, '.')}${(id && (": " + id)) || ""}${groupTitleSubText}`, groupStyle);
+        console.groupCollapsed(`%c${key.replace(/__@@__/g, ".")}${(id && (": " + id)) || ""}${groupTitleSubText}`, groupStyle);
       }
 
       if (isObject(o[key]) && !o[key].__VALUE__) {
         outputPathParts(id, o[key], o);
       } else if (o[key].warning) {
-        console.group(`%c${o[key].warning}`, 'background-color:red;color:white;border-radius:1em;padding:2px 5px;');
-        console.log('%cbefore', 'font-weight: bold;', o[key].before);
-        console.log('%cafter', 'font-weight: bold;', o[key].after);
+        console.group(`%c${o[key].warning}`, "background-color:red;color:white;border-radius:1em;padding:2px 5px;");
+        console.log("%cbefore", "font-weight: bold;", o[key].before);
+        console.log("%cafter", "font-weight: bold;", o[key].after);
         console.groupEnd();
       } else {
-        console.log('%cbefore', 'font-weight: bold;', o[key].before);
-        console.log('%cafter', 'font-weight: bold;', o[key].after);
+        console.log("%cbefore", "font-weight: bold;", o[key].before);
+        console.log("%cafter", "font-weight: bold;", o[key].after);
       }
 
       console.groupEnd();
@@ -207,12 +207,12 @@ export const outputPathParts = (id: string, o: any, parent?: any) => {
 
 const parseObject = (o: any) => {
   if (isFunction(o)) {
-    return 'Function';
+    return "Function";
   } else if (isObject(o)) {
     return keys(o).reduce((acc: any, key: string) => {
-      acc.push(`${key}=${(o as {[index: string]: any})[key]}`)
+      acc.push(`${key}=${(o as {[index: string]: any})[key]}`);
       return acc;
-    }, []).join(", ")
+    }, []).join(", ");
   }
   return o;
 };
@@ -221,9 +221,9 @@ export const getIdentifier = (idProp: Function | string, props: any) => {
   const identifier = (isFunction(idProp) && idProp(props)) || get(props, idProp as string);
   // if (isObject(identifier))
   return ` - (${parseObject(identifier)})`;
-}
+};
 
-export interface IOptions {
+export interface Options {
   idProp: Function | string;
 }
 

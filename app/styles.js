@@ -1,4 +1,4 @@
-import { css } from '@emotion/core'
+import { css } from "@emotion/core";
 
 export const GlobalStyles = css`
 /* Base 10 typography scale courtesty of @wesbos 1.6rem === 16px */
@@ -52,4 +52,4 @@ a {
   color: inherit;&.active {
     text-decoration: none;
   }
-}`
+}`;

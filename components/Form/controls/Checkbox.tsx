@@ -1,7 +1,7 @@
 import React from "react";
 
 import {FormStyles, typedMemo} from "../types";
-import styled from '@emotion/styled'
+import styled from "@emotion/styled";
 
 type CheckboxProps = {
     id: string;
@@ -13,7 +13,7 @@ type CheckboxProps = {
     onBlur: (name: string | any, touched?: boolean, shouldValidate?: boolean) => void;
     formStyles: FormStyles;
     className?: string;
-    type: 'radio' | 'checkbox';
+    type: "radio" | "checkbox";
     option?: string;
 }
 
@@ -92,7 +92,7 @@ function Checkbox({type = "checkbox", value, onChange, onBlur, formStyles, isVal
             />
             <span className="checkbox-custom"/>
         </Container>
-    )
+    );
 }
 
 const MemoCheckbox = typedMemo(Checkbox);

@@ -1,18 +1,18 @@
-import React from 'react'
-import {Helmet} from 'react-helmet-async'
-import styled from '@emotion/styled'
+import React from "react";
+import {Helmet} from "react-helmet-async";
+import styled from "@emotion/styled";
 import * as Yup from "yup";
 
 import {Collections, Form} from "components/Form/index";
 import {MapDataToAction} from "components/actions/form";
 
-import Page from '../../styles/Page'
+import Page from "../../styles/Page";
 
 import {dummyApiCall, MyFormResponse} from "./utils";
 import schemaComplex from "./schemas/complex";
 import ComplexLayout from "./layouts/Complex";
 
-import {FormContainer} from "components/Form"
+import {FormContainer} from "components/Form";
 import {FormOptions} from "components/Form/FormOptions";
 import {ValidationError} from "yup";
 import loadable from "@loadable/component";
@@ -34,12 +34,12 @@ const SubmissionFeedback = styled.section`
     background-color: #eee;
     padding: 5px;
   }
-`
+`;
 
 const formState = {
     firstName: "pat",
     lastName: "mustard"
-}
+};
 
 type X = {
     age: number;
@@ -50,7 +50,7 @@ type X = {
 const formState2: X = {
     age: 34,
     address: "somewhere..."
-}
+};
 
 const simpleSchema = Yup.object().shape({
     username: Yup.string()
@@ -81,7 +81,7 @@ const MyFormContainer = styled(FormContainer)`
   border-radius: 15px;
 `;
 
-const Markdown = loadable(() => import('components/markdown'));
+const Markdown = loadable(() => import("components/markdown"));
 
 const Forms = () => {
     const handleSubmit: MapDataToAction<Yup.InferType<typeof schemaComplex>, MyFormResponse, typeof formState> = values => dummyApiCall(values.flavour.favourite, values.email);
@@ -149,7 +149,7 @@ const Forms = () => {
                                     <pre style={{whiteSpace: "normal", overflowWrap: "break-word"}}>values: {JSON.stringify(values)}</pre>
                                     <pre style={{whiteSpace: "normal", overflowWrap: "break-word"}}>metadata: {JSON.stringify(metadata)}</pre>
                                 </SubmissionFeedback>
-                            )
+                            );
                         }
                     }
                 >
@@ -163,7 +163,7 @@ const Forms = () => {
                                 {metadata.payload && <pre style={{whiteSpace: "normal", overflowWrap: "break-word"}}>{JSON.stringify(metadata.payload)}</pre>}
                                 <FormOptions/>
                             </>
-                        )
+                        );
                     }}
                 </Form>
 
@@ -181,13 +181,13 @@ const Forms = () => {
                                     <pre style={{whiteSpace: "normal", overflowWrap: "break-word"}}>values: {JSON.stringify(values)}</pre>
                                     <pre style={{whiteSpace: "normal", overflowWrap: "break-word"}}>metadata: {JSON.stringify(metadata)}</pre>
                                 </SubmissionFeedback>
-                            )
+                            );
                         }
                     }
                 />
             </div>
         </Page>
-    )
+    );
 };
 
-export default Forms
+export default Forms;

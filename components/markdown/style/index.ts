@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 
-import inconsolata from './fonts/inconsolata-regular.ttf';
+import inconsolata from "./fonts/inconsolata-regular.ttf";
 
 import {typography} from "components/typography";
 

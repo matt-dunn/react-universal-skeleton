@@ -1,16 +1,16 @@
-import React from 'react'
-import {Helmet} from 'react-helmet-async'
-import styled from '@emotion/styled'
+import React from "react";
+import {Helmet} from "react-helmet-async";
+import styled from "@emotion/styled";
 import {NavLink} from "react-router-dom";
-import loadable from '@loadable/component'
+import loadable from "@loadable/component";
 
-import Page from '../styles/Page'
+import Page from "../styles/Page";
 
 const Menu = styled.ul`
   margin: 50px auto;
   padding: 0 50px;
   max-width: 500px;
-`
+`;
 
 const MenuLink = styled.li`
   a {
@@ -30,17 +30,17 @@ const MenuLink = styled.li`
       line-height: 1.4;
     }
   }
-`
+`;
 
-const Markdown = loadable(() => import('components/markdown'));
+const Markdown = loadable(() => import("components/markdown"));
 
 const Home = () => {
     // const loadOther = /* #__LOADABLE__ */ () => import('../../README.md')
     // console.log(">>loadOther3", loadOther.requireAsync().then(x => console.log(x)))
 
     // const content = "README.md"
-    const Content = loadable.lib(() => import(`mocks/content/test1.md`));
-    const Content2 = loadable.lib(() => import(`mocks/content/test3.md`));
+    // const Content = loadable.lib(() => import(`mocks/content/test1.md`));
+    const Content2 = loadable.lib(() => import("mocks/content/test3.md"));
     // console.log(">>Content", Content)
     return (
         <Page>
@@ -86,7 +86,7 @@ const Home = () => {
             {/*    {(content) => <Markdown id="md-2" content={content.default || content}/>}*/}
             {/*</Content>*/}
         </Page>
-    )
+    );
 };
 
-export default Home
+export default Home;

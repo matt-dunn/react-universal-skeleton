@@ -1,6 +1,6 @@
 import {errorLike, ErrorLike} from "../error";
 
-const symbolActiveTransactions = Symbol('activeTransactions');
+const symbolActiveTransactions = Symbol("activeTransactions");
 
 export type IActiveTransactions<T = boolean> = {
   [id: string]: T;

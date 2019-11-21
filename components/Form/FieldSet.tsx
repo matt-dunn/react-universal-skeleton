@@ -44,7 +44,7 @@ function FieldSet<T, P, S>({fields, children, className}: FieldSetProps<T, P, S>
                         >
                             {children}
                         </Array>
-                    )
+                    );
                 }
 
                 const {label} = field.describe();
@@ -99,7 +99,7 @@ function FieldSet<T, P, S>({fields, children, className}: FieldSetProps<T, P, S>
                             {message => <label className="feedback" id={fieldIdError} htmlFor={fieldId}><em>{message}</em></label>}
                         </ErrorMessage>
                     </section>
-                )
+                );
             })}
         </>
     );

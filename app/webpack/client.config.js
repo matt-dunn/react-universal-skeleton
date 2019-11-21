@@ -1,21 +1,21 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CompressionPlugin = require('compression-webpack-plugin');
-const BrotliPlugin = require('brotli-webpack-plugin');
-const LoadablePlugin = require('@loadable/webpack-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CompressionPlugin = require("compression-webpack-plugin");
+const BrotliPlugin = require("brotli-webpack-plugin");
+const LoadablePlugin = require("@loadable/webpack-plugin");
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
+const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 
 const ROOT = path.join(__dirname, "../../");
 
 const environment = process.env.NODE_ENV || "production";
-const optimise = process.env.OPTIMISE !== 'false';
+const optimise = process.env.OPTIMISE !== "false";
 
-console.log(`Building client.... environment: ${environment}, optimise: ${optimise}`)
+console.log(`Building client.... environment: ${environment}, optimise: ${optimise}`);
 
 const BUILD = {
     version: "DEV",
@@ -28,7 +28,7 @@ const DEV_HOST = "0.0.0.0";
 const DEV_DOMAIN = DEV_HOST + ":" + DEV_PORT;
 
 module.exports = {
-    entry: './client.js',
+    entry: "./client.js",
     mode: environment,
     devtool: environment === "development" ? "eval-source-map" : "",
     cache: false,
@@ -48,7 +48,7 @@ module.exports = {
         extensions: [".js", ".jsx", ".ts", ".tsx", ".scss", ".css"],
 
         alias: {
-            'react-dom': '@hot-loader/react-dom',
+            "react-dom": "@hot-loader/react-dom",
             "app": path.join(ROOT, "app"),
             "components": path.join(ROOT, "components"),
             "mocks": path.join(ROOT, "mocks"),
@@ -59,7 +59,7 @@ module.exports = {
             {
                 test: /\.(js|jsx|ts|tsx)$/,
                 exclude: /node_modules/,
-                include: [path.resolve(ROOT, 'app'), path.resolve(ROOT, 'components'), path.resolve(ROOT, 'server')],
+                include: [path.resolve(ROOT, "app"), path.resolve(ROOT, "components"), path.resolve(ROOT, "server")],
                 use: [
                     {
                         loader: "babel-loader",
@@ -68,7 +68,7 @@ module.exports = {
             },
             {
                 test: /\.(css|scss)$/,
-                include: [path.resolve(ROOT, 'app'), path.resolve(ROOT, 'components'), path.resolve(ROOT, 'server')],
+                include: [path.resolve(ROOT, "app"), path.resolve(ROOT, "components"), path.resolve(ROOT, "server")],
                 use: (function(environment) {
                     const rules = [];
 
@@ -80,7 +80,7 @@ module.exports = {
                         rules.push({
                             loader: MiniCssExtractPlugin.loader,
                             options: {
-                                hmr: environment === 'development',
+                                hmr: environment === "development",
                                 reloadAll: true,
                             },
                         });
@@ -103,16 +103,16 @@ module.exports = {
             },
             {
                 test: /mocks\/content\/.*$/i,
-                use: 'raw-loader',
+                use: "raw-loader",
             },
             {
                 test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
                 use: [
                     {
-                        loader: 'file-loader',
+                        loader: "file-loader",
                         options: {
-                            name: '[name]-[hash].[ext]',
-                            outputPath: 'fonts/'
+                            name: "[name]-[hash].[ext]",
+                            outputPath: "fonts/"
                         }
                     }
                 ]
@@ -124,7 +124,7 @@ module.exports = {
             new webpack.optimize.ModuleConcatenationPlugin(),
             new BundleAnalyzerPlugin({
                 openAnalyzer: false,
-                analyzerMode: 'static',
+                analyzerMode: "static",
                 reportFilename: path.resolve(ROOT, "reports", "bundle.html")
             }),
             new LoadablePlugin(),
@@ -139,8 +139,8 @@ module.exports = {
 
         if (environment === "production") {
             plugins.push(new MiniCssExtractPlugin({
-                filename: '[name]-[hash].css',
-                chunkFilename: '[id]-[hash].css',
+                filename: "[name]-[hash].css",
+                chunkFilename: "[id]-[hash].css",
                 ignoreOrder: false, // Enable to remove warnings about conflicting order
             }));
         } else {
@@ -154,19 +154,19 @@ module.exports = {
 
         if (environment === "production" && optimise) {
             plugins.push(new CompressionPlugin({
-                filename: '[path].gz[query]',
-                algorithm: 'gzip',
+                filename: "[path].gz[query]",
+                algorithm: "gzip",
                 test: /\.js$|\.css$|\.html$/,
                 threshold: 10240,
                 minRatio: 0.7
             }));
 
             plugins.push(new BrotliPlugin({
-                asset: '[path].br[query]',
+                asset: "[path].br[query]",
                 test: /\.js$|\.css$|\.html$/,
                 threshold: 10240,
                 minRatio: 0.7
-            }))
+            }));
         }
 
         return plugins;

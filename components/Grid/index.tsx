@@ -1,7 +1,7 @@
 import React, {ReactNode, useRef} from "react";
 import useViewportWidth, {ViewportDimensions} from "../hooks/useViewportWidth";
-import styled from '@emotion/styled'
-import {css} from '@emotion/core'
+import styled from "@emotion/styled";
+import {css} from "@emotion/core";
 import classnames from "classnames";
 
 export type ResponsiveGridProps = {
@@ -26,7 +26,7 @@ const calculateChildStyle = (length: number, dimensions?: ViewportDimensions, mi
     const width = `${100 / maxLength}%`;
     return css`
           ${(minItemWidth && `min-width: ${minItemWidth - (totalPaddingWidth || 0)}px`) || ""};
-          ${!dimensions && `flex-grow: 1`};
+          ${!dimensions && "flex-grow: 1"};
           width: ${(totalPaddingWidth && `calc(${width} - ${totalPaddingWidth}px)`) || width};
           ${dimensions && `&:nth-of-type(${maxLength}n) {
             border-right: none;
@@ -61,5 +61,5 @@ export const ResponsiveGrid = (as: keyof JSX.IntrinsicElements | React.Component
             >
                 {children}
             </Container>
-        )
+        );
     };

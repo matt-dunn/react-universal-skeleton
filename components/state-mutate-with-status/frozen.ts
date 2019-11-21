@@ -1,4 +1,4 @@
-import simpleDeepFreeze from 'simple-deep-freeze';
+import simpleDeepFreeze from "simple-deep-freeze";
 import {FluxStandardAction} from "flux-standard-action";
 import {ActionMeta, Options} from "./index";
 

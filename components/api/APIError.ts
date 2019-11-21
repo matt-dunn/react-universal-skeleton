@@ -1,14 +1,14 @@
-import {APPError, IAPPError} from "./APPError";
+import {APPError} from "./APPError";
 
-export interface IAPIError extends IAPPError { readonly status: number }
+export interface APIError extends APPError { status: number }
 
-export class APIError extends APPError implements IAPIError {
+export class APIError extends APPError implements APIError {
   readonly name: string;
 
-  constructor(message: string, code: string, public status: number) {
+  constructor(message: string, code: number, public status: number) {
     super(message, code);
 
-    this.name = 'APIError';
+    this.name = "APIError";
   }
 }
 

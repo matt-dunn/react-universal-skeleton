@@ -1,4 +1,4 @@
-import {IOptions} from "./src/utils";
+import {Options} from "./src/utils";
 import {ComponentType} from "react";
 
-declare function whatChanged (options: IOptions): <P extends {}>(WrappedComponent: ComponentType<P>) => ComponentType<P>
+declare function whatChanged (options: Options): <P extends {}>(WrappedComponent: ComponentType<P>) => ComponentType<P>

@@ -37,6 +37,6 @@ export const typography = (base = 1.6) => {
         lineHeightBase_unit: lineHeightBase,
         lineHeightComputed,
         lineHeightComputed_unit: lineHeightComputed
-    }
+    };
 };
 

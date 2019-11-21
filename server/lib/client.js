@@ -1,13 +1,13 @@
-import fs from 'fs';
-import path from 'path';
+import fs from "fs";
+import path from "path";
 
-export const htmlPath = path.join(process.cwd(), 'dist', 'client', 'index.html');
+export const htmlPath = path.join(process.cwd(), "dist", "client", "index.html");
 
 export const rawHTML = fs.readFileSync(htmlPath).toString();
 
 const headString = "<head>";
-const appString = '<div id="app"\>';
-const splitter = '###SPLIT###';
+const appString = '<div id="app">';
+const splitter = "###SPLIT###";
 
 const [
     startingRawHTMLFragment,
@@ -33,7 +33,7 @@ export const parseHelmetTemplate = helmet => (template, ...vars) => {
     )
         .reduce((acc, item, i) => {
             acc.push(item);
-            vars[i] && acc.push(vars[i])
+            vars[i] && acc.push(vars[i]);
             return acc;
         }, [])
         .join("").trim()) || "";
