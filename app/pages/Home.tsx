@@ -75,7 +75,7 @@ const Home = () => {
                 </MenuLink>
             </Menu>
 
-            <Markdown content={content} id={"md-1"} bum={354}/>
+            <Markdown content={content} id={"md-1"}/>
 
             {/*<Content>*/}
             {/*    {(content) => <Markdown id="md-2" content={content.default || content}/>}*/}
