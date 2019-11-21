@@ -2,6 +2,7 @@ import React, {useMemo} from "react";
 
 import {useAsync} from "components/ssr/safePromise";
 import SanitizeHHTML from "components/SanitizeHTML";
+import Loading from "components/Loading";
 
 import highlight from "./highlight";
 import {Container} from "./style";
@@ -29,7 +30,11 @@ const Markdown = ({content, id}: MarkdownProps) => {
         false
     );
 
-    return <SanitizeHHTML html={parsedContent} as={Container}/>;
+    if (parsedContent === undefined) {
+        return <Loading height={25}/>;
+    } else {
+        return <SanitizeHHTML html={parsedContent} as={Container}/>;
+    }
 };
 
 export default Markdown;
