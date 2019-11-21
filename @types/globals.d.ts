@@ -17,6 +17,8 @@ declare module "*.ttf";
 declare module "*.woff";
 declare module "*.woff2";
 
+declare module "*.md";
+
 declare module "react-responsive-ui/modules/TextInput" {
     const value: any;
     export = value;

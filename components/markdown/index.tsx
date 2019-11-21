@@ -7,7 +7,7 @@ import highlight from "./highlight";
 import {Container} from "./style";
 
 type MarkdownProps = {
-    content: string;
+    content: string | Promise<string>;
     id: string;
 }
 
