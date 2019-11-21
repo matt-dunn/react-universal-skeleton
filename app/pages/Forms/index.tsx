@@ -94,9 +94,6 @@ const Forms = () => {
         return Promise.resolve({newUsername: values.username});
     };
 
-    const test2 = "test2.md";
-    const Content = loadable.lib(() => import(`mocks/content/${test2}`));
-
     return (
         <Page>
             <Helmet>
@@ -109,10 +106,6 @@ const Forms = () => {
             </Title>
 
             <div style={{maxWidth: "800px", margin: "20px auto"}}>
-                <Content>
-                    {(content: any) => <Markdown id="md-3" content={content.default || content}/>}
-                </Content>
-
                 <Form
                     id="my-form"
                     as={MyFormContainer}
@@ -134,6 +127,8 @@ const Forms = () => {
                 >
                     {ComplexLayout}
                 </Form>
+
+                <Markdown content={import("mocks/content/test2.md")} id={"md-2"}/>
 
                 <Form
                     id="my-form2"

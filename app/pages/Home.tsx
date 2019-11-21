@@ -38,8 +38,6 @@ const Markdown = loadable(() => import("components/markdown"));
 // import content from "mocks/content/test3.md";
 
 const Home = () => {
-    const content = import("mocks/content/test3.md");
-
     return (
         <Page>
             <Helmet>
@@ -75,7 +73,9 @@ const Home = () => {
                 </MenuLink>
             </Menu>
 
-            <Markdown content={content} id={"md-1"}/>
+            <Markdown content={import("mocks/content/test1.md")} id={"md-1"}/>
+            <Markdown content={import("mocks/content/test2.md")} id={"md-2"}/>
+            <Markdown content={import("mocks/content/test3.md")} id={"md-3"}/>
 
             {/*<Content>*/}
             {/*    {(content) => <Markdown id="md-2" content={content.default || content}/>}*/}

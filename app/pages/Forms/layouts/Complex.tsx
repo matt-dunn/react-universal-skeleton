@@ -5,6 +5,9 @@ import {ResponsiveGrid} from "components/Grid";
 import {FieldSet, FieldSetChildrenProps} from "components/Form";
 import {FormOptions} from "components/Form/FormOptions";
 
+import loadable from "@loadable/component";
+const Markdown = loadable(() => import("components/markdown"));
+
 const GridItems = styled(ResponsiveGrid("div"))``;
 
 const GridItem = styled.div`
@@ -22,6 +25,7 @@ function ComplexLayout<T, P, S>({fieldsetMap: {children, extra, otherLeft, other
                         />
                     </GridItem>
                     <GridItem>
+                        <Markdown content={import("mocks/content/test2.md")} id={"md-2"}/>
                         <FieldSet
                             fields={otherRight}
                         />
@@ -30,6 +34,7 @@ function ComplexLayout<T, P, S>({fieldsetMap: {children, extra, otherLeft, other
                     </GridItem>
                 </GridItems>
             </div>
+            <Markdown content={import("mocks/content/test2.md")} id={"md-2"}/>
             <GridItems minItemWidth={250}>
                 <GridItem>
                     <FieldSet

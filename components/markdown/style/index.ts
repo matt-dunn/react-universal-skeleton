@@ -39,8 +39,12 @@ export const Container = styled.article`
     h1,
     h2,
     h3 {
-      margin-top: ${lineHeightComputed}rem;
       margin-bottom: ${lineHeightComputed / 2}rem;
+    }
+    
+    h2,
+    h3 {
+      margin-top: ${lineHeightComputed}rem;
     }
     
     h4,
