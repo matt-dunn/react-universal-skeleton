@@ -17,6 +17,7 @@ export const formStyles: FormStyles = {
       outline: none;
       border-color: #4086f7 !important;
       box-shadow: 0 0 0 1px #4086f7 !important;
+      transition: border-color 100ms, box-shadow 100ms;
     `
 };
 
