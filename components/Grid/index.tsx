@@ -27,6 +27,9 @@ const calculateChildStyle = (length: number, dimensions?: ViewportDimensions, mi
           ${(minItemWidth && `min-width: ${minItemWidth - (totalPaddingWidth || 0)}px`) || ""};
           ${!dimensions && "flex-grow: 1"};
           width: ${(totalPaddingWidth && `calc(${width} - ${totalPaddingWidth}px)`) || width};
+          ${dimensions && `&:nth-of-type(${maxLength}n) {
+            border-right: none;`
+          }
       `;
 };
 
