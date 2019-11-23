@@ -6,7 +6,7 @@ import {sortBy, isFunction} from "lodash";
 
 import {Field, FieldMeta, Fields, FieldSetMap, FormComponent, FormContextType} from "./types";
 import {ActionType} from "../actions/form";
-import Select from "components/FancySelect/BasicSelect";
+import Select from "components/UniversalSelect/BasicSelect";
 import {Checkbox} from "./controls/Checkbox";
 import {Radio} from "./controls/Radio";
 

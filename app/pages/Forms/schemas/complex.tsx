@@ -3,7 +3,7 @@ import {ValidationError} from "yup";
 
 import loadable from "@loadable/component";
 
-const FancySelect = loadable(() => import("components/FancySelect"));
+const UniversalSelect = loadable(() => import("components/UniversalSelect"));
 
 import {validateEmailApi} from "../utils";
 
@@ -96,15 +96,15 @@ const schema = Yup.object().shape({
                 .meta({
                     order: 1,
                     category: "otherRight",
-                    Component: FancySelect,
-                    // Component: importComponent(() => import("components/FancySelect"), {
+                    Component: UniversalSelect,
+                    // Component: importComponent(() => import("components/UniversalSelect"), {
                     //     LoadingComponent: () => <Loading height={25} loader={({height}) => <Pulse height={height}/>}/>,
                     //     ErrorComponent
                     // }),
                     // Component: importComponent(() => {
                     //     return new Promise(resolve => {
                     //         setTimeout(() => {
-                    //             import("components/FancySelect")
+                    //             import("components/UniversalSelect")
                     //                 .then(resolve)
                     //         }, 1000)
                     //     }) as Promise<DefaultComponent<any>>
