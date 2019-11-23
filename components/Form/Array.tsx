@@ -112,7 +112,8 @@ function Array<T, P, S>({field, path, children, className}: ArrayProps<T, P, S>)
                             {AddOption}
                         </aside>}
                     </fieldset>
-                );}}
+                );
+            }}
         />
     ) || null;
 }

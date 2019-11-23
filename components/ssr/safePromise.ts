@@ -33,7 +33,7 @@ export const useSafePromise = <T, D = any>(id: string): [SafePromise<T>, () => D
 
             promise.then(payload => {
                 if (asyncDataContext) {
-                    asyncDataContext.data[id] = (payload);
+                    asyncDataContext.data[id] = payload;
                 }
             });
 

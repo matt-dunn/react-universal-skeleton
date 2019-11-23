@@ -4,11 +4,11 @@ import {
 
 import {ErrorLike} from "components/error";
 
-export interface Notify { error: ErrorLike; type: string; cancel: Function; retry: Function }
+export interface Notification { error: ErrorLike; type: string; cancel: Function; retry: Function }
 
-export type TNotify = (notification: Notify) => boolean;
+export type Notify = (notification: Notification) => boolean;
 
-const notification = ({ notify }: { notify: TNotify }) => () => (next: Dispatch): Middleware => (action: any) => {
+const notification = ({ notify }: { notify: Notify }) => () => (next: Dispatch): Middleware => (action: any) => {
   const ret = next(action);
 
   if (action.error && notify) {
