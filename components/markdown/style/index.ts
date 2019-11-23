@@ -86,7 +86,7 @@ export const Container = styled.article`
     pre,
     code {
       color: #555;
-      font-family: "Inconsolata", "Courier New", monospace !important;
+      //font-family: "Inconsolata", "Courier New", monospace !important;
     }
     
     pre {

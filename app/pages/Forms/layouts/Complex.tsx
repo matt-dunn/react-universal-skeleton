@@ -11,7 +11,15 @@ const Markdown = loadable(() => import("components/markdown"));
 const GridItems = styled(ResponsiveGrid("div"))``;
 
 const GridItem = styled.div`
-    padding: 0 10px 0 0;
+    padding: 0 10px;
+    
+    &:first-of-type {
+      padding-left: 0;
+    }
+    
+    &:nth-of-type(2) {
+      padding-right: 0;
+    }
 `;
 
 function ComplexLayout<T, P, S>({fieldsetMap: {children, extra, otherLeft, otherRight}}: Pick<FieldSetChildrenProps<T, P, S>, "fieldsetMap">) {

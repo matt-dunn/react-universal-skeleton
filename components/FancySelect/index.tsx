@@ -1,7 +1,6 @@
 import React, {useState, useEffect, ReactElement} from "react";
 import styled from "@emotion/styled";
 import {css} from "@emotion/core";
-import classnames from "classnames";
 
 import ReactSelect from "react-select";
 import {FormStyles} from "components/Form/types";
@@ -51,6 +50,12 @@ type FancySelectProps = {
     className?: string;
 }
 
+const customStyles = {
+    indicatorSeparator: () => ({
+        display: "none"
+    }),
+};
+
 const FancySelect = ({id, disabled, isValid, options, name, value, onChange, onBlur, formStyles, className, ...props}: FancySelectProps): ReactElement<any> => {
     const [isClient, setIsClient] = useState(false);
 
@@ -78,6 +83,7 @@ const FancySelect = ({id, disabled, isValid, options, name, value, onChange, onB
                 isDisabled={disabled}
                 isValid={isValid}
                 formElementStyles={formStyles}
+                styles={customStyles}
                 {...props}
             />
         );
@@ -85,7 +91,7 @@ const FancySelect = ({id, disabled, isValid, options, name, value, onChange, onB
         return (
             <BasicSelect
                 id={id}
-                className={classnames("no-js", className)}
+                className={className}
                 name={name}
                 value={value}
                 onChange={handleSelectChange}
