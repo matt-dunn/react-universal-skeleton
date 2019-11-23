@@ -95,9 +95,6 @@ export const FormContainer = styled.form`
     }
   }
 
-  select {
-  }
-  
   fieldset {
     margin: 20px 0 10px 0;
     padding: 10px;
