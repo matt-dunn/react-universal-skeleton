@@ -12,9 +12,9 @@ type SanitiseHTMLProps = {
     as?: keyof JSX.IntrinsicElements | React.ComponentType<any>;
 }
 
-const SanitizeHHTML = ({html, as, options = DEFAULT_ALLOWED_CONTENT}: SanitiseHTMLProps) => {
+const SanitizeHTML = ({html, as, options = DEFAULT_ALLOWED_CONTENT}: SanitiseHTMLProps) => {
     return (html && <Container as={as} dangerouslySetInnerHTML={{__html: sanitize(html, options)}}/>) || null;
 };
 
-export default SanitizeHHTML;
+export default SanitizeHTML;
 
