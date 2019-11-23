@@ -1,32 +1,11 @@
 import React, {useState, useEffect, ReactElement} from "react";
 import styled from "@emotion/styled";
-import {css} from "@emotion/core";
 
 import ReactSelect from "react-select";
 import {FormStyles} from "components/Form/types";
+import BasicSelect from "./BasicSelect";
+import {SelectStyle} from "./styles";
 
-const SelectStyle = ({isValid, formElementStyles}: {isValid?: boolean; formElementStyles: FormStyles}) => css`
-  font-size: inherit;
-  background-color: transparent;
-  flex-grow: 1;
-  > span:first-of-type ~ div:first-of-type {
-    ${formElementStyles.controlFocus};
-  }
-  > div:first-of-type {
-    ${formElementStyles.control};
-    &, &:hover {
-      ${!isValid && formElementStyles.controlInvalid};
-    }
-  }
-`;
-
-const BasicSelect = styled.select<{isValid?: boolean; formElementStyles: FormStyles}>`
-  ${props => SelectStyle(props)};
-  height: 38px;
-  width: 100%;
-  ${({formElementStyles}) => formElementStyles.control}
-  ${({isValid, formElementStyles}) => !isValid && formElementStyles.controlInvalid}
-`;
 
 const Select = styled(ReactSelect)<{isValid?: boolean; formElementStyles: FormStyles}>`
   ${props => SelectStyle(props)};
@@ -67,8 +46,6 @@ const FancySelect = ({id, disabled, isValid, options, name, value, onChange, onB
 
     const handleBlur = () => onBlur(name, true);
 
-    const handleSelectChange = () => {};
-
     if (isClient) {
         const defaultValue = (value && options.filter(option => option.value ===value)[0]) || options[0];
         return (
@@ -94,15 +71,13 @@ const FancySelect = ({id, disabled, isValid, options, name, value, onChange, onB
                 className={className}
                 name={name}
                 value={value}
-                onChange={handleSelectChange}
+                onChange={onChange}
+                onBlur={onBlur}
                 disabled={disabled}
                 isValid={isValid}
-                formElementStyles={formStyles}
-            >
-                {options.map((option, index) => (
-                    <option key={index} value={option.value}>{option.label}</option>
-                ))}
-            </BasicSelect>
+                formStyles={formStyles}
+                options={options}
+            />
         );
     }
 };
