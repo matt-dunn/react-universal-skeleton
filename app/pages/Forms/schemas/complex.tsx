@@ -7,10 +7,6 @@ const UniversalSelect = loadable(() => import("components/UniversalSelect"));
 
 import {validateEmailApi} from "../utils";
 
-// import ErrorComponent from '../../../components/Error';
-// import Loading from "components/Loading";
-// import Pulse from "components/Loading/Pulse";
-
 const schema = Yup.object().shape({
     email: Yup.string()
         .label("Email")
@@ -57,7 +53,6 @@ const schema = Yup.object().shape({
         .meta({
             order: 0,
             category: "otherLeft",
-            Component: "select",
             props: {
                 options: [
                     { value: "", label: "Select value..." },
@@ -97,21 +92,6 @@ const schema = Yup.object().shape({
                     order: 1,
                     category: "otherRight",
                     Component: UniversalSelect,
-                    // Component: importComponent(() => import("components/UniversalSelect"), {
-                    //     LoadingComponent: () => <Loading height={25} loader={({height}) => <Pulse height={height}/>}/>,
-                    //     ErrorComponent
-                    // }),
-                    // Component: importComponent(() => {
-                    //     return new Promise(resolve => {
-                    //         setTimeout(() => {
-                    //             import("components/UniversalSelect")
-                    //                 .then(resolve)
-                    //         }, 1000)
-                    //     }) as Promise<DefaultComponent<any>>
-                    // }, {
-                    //     LoadingComponent: function LoadingComponent(){ return <Loading height={25}/>},
-                    //     ErrorComponent
-                    // }),
                     props: {
                         options: [
                             { value: "", label: "Select your flavour..." },

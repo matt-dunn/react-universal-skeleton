@@ -144,7 +144,7 @@ export const getTypeProps = (schema: Field, additionalProps: any = {}): {Compone
 
     const {min, max} = getFieldMeta(schema);
 
-    if (Component === "select") {
+    if (Component === "select" || (!Component && props.options)) {
         return {
             Component: Select,
             props: {
