@@ -16,7 +16,7 @@ type Option = {
     label: string;
 }
 
-type FancySelectProps = {
+type UniversalSelectProps = {
     id: string;
     disabled?: boolean;
     isValid?: boolean;
@@ -35,7 +35,7 @@ const customStyles = {
     }),
 };
 
-const FancySelect = ({id, disabled, isValid, options, name, value, onChange, onBlur, formStyles, className, ...props}: FancySelectProps): ReactElement<any> => {
+const UniversalSelect = ({id, disabled, isValid, options, name, value, onChange, onBlur, formStyles, className, ...props}: UniversalSelectProps): ReactElement<any> => {
     const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
@@ -82,4 +82,4 @@ const FancySelect = ({id, disabled, isValid, options, name, value, onChange, onB
     }
 };
 
-export default FancySelect;
+export default UniversalSelect;

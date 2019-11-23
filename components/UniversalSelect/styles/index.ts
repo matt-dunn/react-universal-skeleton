@@ -1,4 +1,4 @@
-import {FormStyles} from "../../Form";
+import {FormStyles} from "components/Form";
 import {css} from "@emotion/core";
 
 export const SelectStyle = ({isValid, formElementStyles}: {isValid?: boolean; formElementStyles?: FormStyles}) => css`
