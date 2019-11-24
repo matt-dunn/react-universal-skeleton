@@ -47,7 +47,6 @@
     "@babel/core": "^7.7.2",
     "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@babel/plugin-proposal-decorators": "^7.6.0",
-    "@babel/polyfill": "^7.6.0",
     "@babel/preset-env": "^7.7.1",
     "@babel/preset-react": "^7.7.0",
     "@babel/preset-typescript": "^7.7.2",
@@ -132,7 +131,7 @@
   },
   "scripts": {
     "client": "cross-env NODE_ENV=development cross-env OPTIMISE=false webpack-dev-server --config ./app/webpack/client.config.js --progress",
-    "server": "cross-env NODE_ENV=production cross-env OPTIMISE=false nodemon -e js,jsx,html,ts,tsx,css,scss --ignore dist/ --ignore reports/ --exec 'yarn build && yarn server:run'",
+    "server": "cross-env NODE_ENV=development cross-env OPTIMISE=false nodemon -e js,jsx,html,ts,tsx,css,scss --ignore dist/ --ignore reports/ --exec 'yarn build && yarn server:run'",
     "server:run": "node dist/server/main.js",
     "prod": "rimraf reports && yarn lint && yarn type-check && yarn coverage && yarn build",
     "build:client": "webpack --config ./app/webpack/client.config.js",

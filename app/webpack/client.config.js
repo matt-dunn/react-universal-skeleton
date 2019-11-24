@@ -70,33 +70,32 @@ module.exports = {
                 test: /\.(css|scss)$/,
                 include: [path.resolve(ROOT, "app"), path.resolve(ROOT, "components"), path.resolve(ROOT, "server")],
                 use: (function(environment) {
-                    const rules = [];
-
-                    if (environment === "development") {
-                        rules.push({
+                    const rules = [
+                        {
                             loader: "style-loader"
-                        });
-                    } else {
-                        rules.push({
+                        },
+                        {
                             loader: MiniCssExtractPlugin.loader,
                             options: {
                                 hmr: environment === "development",
                                 reloadAll: true,
                             },
-                        });
-                    }
-
-                    rules.push({
-                        loader: "css-loader",
-                        options: {
-                            sourceMap: true,
-                            importLoaders: 2
+                        },
+                        {
+                            loader: "css-loader",
+                            options: {
+                                sourceMap: true,
+                                importLoaders: 2
+                            }
+                        },
+                        {
+                            loader: "sass-loader"
                         }
-                    });
+                    ];
 
-                    rules.push({
-                        loader: "sass-loader"
-                    });
+                    // if (environment === "development") {
+                    // } else {
+                    // }
 
                     return rules;
                 })(environment)
@@ -134,16 +133,15 @@ module.exports = {
                 chunksSortMode: "none",
                 //favicon: path.resolve(__dirname, "../favicon.ico")
                 build: BUILD
-            })
-        ];
-
-        if (environment === "production") {
-            plugins.push(new MiniCssExtractPlugin({
+            }),
+            new MiniCssExtractPlugin({
                 filename: "[name]-[hash].css",
                 chunkFilename: "[id]-[hash].css",
                 ignoreOrder: false, // Enable to remove warnings about conflicting order
-            }));
-        } else {
+            })
+        ];
+
+        if (environment === "development") {
             plugins.push(new webpack.SourceMapDevToolPlugin({
                 filename: null,
                 exclude: [/node_modules/],
