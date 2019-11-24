@@ -78,27 +78,26 @@ export default async (req, res) => {
             const linkTags = extractor.getLinkTags();
             const styleTags = extractor.getStyleTags();
 
-            const [
-                openHead,
-                closeHead,
-                endingHTMLFragment
-            ] = getHTMLFragments();
+            const {
+                open,
+                openApp,
+                closeApp,
+                close
+            } = getHTMLFragments();
 
             const {helmet} = helmetContext;
 
             res.setHeader("Content-Type", "text/html; charset=utf-8");
             res.status(200);
 
-            res.write(`
-                ${openHead}
+            res.write(`${open}
                 ${parseHelmetTemplate(helmet)`
                     {title}{meta}
                     <link rel="canonical" href="${req.protocol}://${req.hostname}${req.originalUrl}" />
                 `}
                 ${linkTags}
                 ${styleTags}
-                ${closeHead}
-            `);
+                ${openApp}`);
 
             stream
                 .pipe(
@@ -107,6 +106,7 @@ export default async (req, res) => {
                             this.queue(data);
                         },
                         function end() {
+                            this.queue(closeApp);
                             this.queue(
                                 `<script>
                                     window.__PRELOADED_STATE__ = ${serialize(store.getState()).replace(
@@ -123,7 +123,7 @@ export default async (req, res) => {
                                 </script>`
                             );
                             this.queue(scriptTags);
-                            this.queue(endingHTMLFragment);
+                            this.queue(close);
                             this.queue(null);
                             console.log("----DONE", Date.now() - t1);
                         }

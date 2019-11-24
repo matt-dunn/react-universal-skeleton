@@ -128,7 +128,7 @@ module.exports = {
             }),
             new LoadablePlugin(),
             new HtmlWebpackPlugin({
-                inject: environment !== "production",
+                inject: false,
                 template: path.resolve(__dirname, "../index.html"),
                 chunksSortMode: "none",
                 //favicon: path.resolve(__dirname, "../favicon.ico")
