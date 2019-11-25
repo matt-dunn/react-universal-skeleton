@@ -35,13 +35,13 @@ module.exports = {
     output: {
         path: path.resolve(ROOT, "dist/client"),
 
-        filename: "[name]-[hash].js",
+        filename: "client.js",
 
         sourceMapFilename: "[name]-[hash].map",
 
         chunkFilename: "[id]-[chunkhash].js",
 
-        publicPath: "/"
+        publicPath: "https://0.0.0.0:1234/"
     },
     context: path.resolve(__dirname, ".."),
     resolve: {
@@ -125,7 +125,9 @@ module.exports = {
                 analyzerMode: "static",
                 reportFilename: path.resolve(ROOT, "reports", "bundle.html")
             }),
-            new LoadablePlugin(),
+            new LoadablePlugin({
+                writeToDisk: true
+            }),
             new HtmlWebpackPlugin({
                 inject: target === "development",
                 template: path.resolve(__dirname, "../index.html"),
@@ -173,15 +175,18 @@ module.exports = {
     },
     devServer: {
         headers: {
-            "Access-Control-Allow-Origin": DEV_PROTOCOL + "://" + DEV_DOMAIN
+            "Access-Control-Allow-Origin": "*"
         },
         hot: true,
+        lazy: false,
+        writeToDisk: true,
         contentBase: path.resolve(__dirname, ".."),
         stats: "errors-only",
-        host: DEV_HOST,
-        port: DEV_PORT,
+        // host: DEV_HOST,
+        // port: DEV_PORT,
+        sockPort: DEV_PORT,
         open: false,
-        public: "0.0.0.0" + ":" + DEV_PORT,
+        // public: "0.0.0.0" + ":" + DEV_PORT,
         historyApiFallback: true,
         watchOptions: {
             aggregateTimeout: 300,

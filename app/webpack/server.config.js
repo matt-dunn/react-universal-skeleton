@@ -21,7 +21,7 @@ module.exports = {
     output: {
         path: path.resolve(ROOT, "dist/server"),
 
-        filename: "[name].js",
+        filename: "server.js",
 
         sourceMapFilename: "[name].map",
 

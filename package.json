@@ -45,6 +45,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.7.2",
+    "@babel/node": "^7.7.4",
     "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@babel/plugin-proposal-decorators": "^7.6.0",
     "@babel/preset-env": "^7.7.1",
@@ -130,6 +131,7 @@
     "webpack-node-externals": "^1.7.2"
   },
   "scripts": {
+    "hot": "cross-env NODE_ENV=development cross-env TARGET=development babel-node --presets @babel/env app/webpack/index.js",
     "client": "cross-env NODE_ENV=development cross-env TARGET=development webpack-dev-server --config ./app/webpack/client.config.js --progress",
     "server": "cross-env NODE_ENV=development cross-env TARGET=production nodemon -e js,jsx,html,ts,tsx,css,scss,md --ignore dist/ --ignore reports/ --exec 'yarn build && yarn server:run'",
     "server:run": "node dist/server/main.js",
