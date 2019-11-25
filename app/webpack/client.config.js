@@ -13,9 +13,9 @@ const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 const ROOT = path.join(__dirname, "../../");
 
 const environment = process.env.NODE_ENV || "production";
-const optimise = process.env.OPTIMISE !== "false";
+const target = process.env.TARGET || "production";
 
-console.log(`Building client.... environment: ${environment}, optimise: ${optimise}`);
+console.log(`Building client.... environment: ${environment}, target: ${target}`);
 
 const BUILD = {
     version: "DEV",
@@ -118,9 +118,8 @@ module.exports = {
             }
         ]
     },
-    plugins: (function(environment, optimise) {
+    plugins: (function(environment, target) {
         const plugins = [
-            new webpack.optimize.ModuleConcatenationPlugin(),
             new BundleAnalyzerPlugin({
                 openAnalyzer: false,
                 analyzerMode: "static",
@@ -128,7 +127,7 @@ module.exports = {
             }),
             new LoadablePlugin(),
             new HtmlWebpackPlugin({
-                inject: false,
+                inject: target === "development",
                 template: path.resolve(__dirname, "../index.html"),
                 chunksSortMode: "none",
                 //favicon: path.resolve(__dirname, "../favicon.ico")
@@ -150,7 +149,7 @@ module.exports = {
             plugins.push(new HardSourceWebpackPlugin());
         }
 
-        if (environment === "production" && optimise) {
+        if (environment === "production" && target === "production") {
             plugins.push(new CompressionPlugin({
                 filename: "[path].gz[query]",
                 algorithm: "gzip",
@@ -168,7 +167,7 @@ module.exports = {
         }
 
         return plugins;
-    })(environment, optimise),
+    })(environment, target),
     optimization: {
         minimize: environment === "production"
     },

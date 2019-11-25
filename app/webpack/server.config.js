@@ -7,9 +7,9 @@ const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 const ROOT = path.join(__dirname, "../../");
 
 const environment = process.env.NODE_ENV || "production";
-const optimise = process.env.OPTIMISE !== "false";
+const target = process.env.TARGET || "production";
 
-console.log(`Building server.... environment: ${environment}`);
+console.log(`Building server.... environment: ${environment}, target: ${target}`);
 
 module.exports = {
     entry: "../server/index.js",
@@ -94,7 +94,7 @@ module.exports = {
             }
         ]
     },
-    plugins: (function(environment/*, optimise */) {
+    plugins: (function(environment/*, target */) {
         const plugins = [
             new webpack.BannerPlugin({
                 banner: 'require("source-map-support").install();',
@@ -108,7 +108,7 @@ module.exports = {
         }
 
         return plugins;
-    })(environment, optimise),
+    })(environment, target),
     optimization: {
         minimize: environment === "production"
     },
