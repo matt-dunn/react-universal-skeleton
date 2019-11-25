@@ -8,7 +8,7 @@ const CompressionPlugin = require("compression-webpack-plugin");
 const BrotliPlugin = require("brotli-webpack-plugin");
 const LoadablePlugin = require("@loadable/webpack-plugin");
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
-const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
+// const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 
 const ROOT = path.join(__dirname, "../../");
 
@@ -148,7 +148,7 @@ module.exports = {
                 exclude: [/node_modules/],
                 test: /\.ts($|\?)/i
             }));
-            plugins.push(new HardSourceWebpackPlugin());
+            // plugins.push(new HardSourceWebpackPlugin());
         }
 
         if (environment === "production" && target === "production") {
@@ -179,19 +179,19 @@ module.exports = {
         },
         hot: true,
         lazy: false,
-        writeToDisk: true,
-        contentBase: path.resolve(__dirname, ".."),
+        // writeToDisk: true,
+        // contentBase: path.resolve(__dirname, ".."),
         stats: "errors-only",
         // host: DEV_HOST,
-        // port: DEV_PORT,
+        port: DEV_PORT,
         sockPort: DEV_PORT,
         open: false,
         // public: "0.0.0.0" + ":" + DEV_PORT,
         historyApiFallback: true,
-        watchOptions: {
-            aggregateTimeout: 300,
-            poll: 1000
-        },
+        // watchOptions: {
+        //     aggregateTimeout: 300,
+        //     poll: 1000
+        // },
         // https: DEV_PROTOCOL === "https",
         https: {
             key: fs.readFileSync(path.resolve(ROOT, "server/ssl/private.key")),

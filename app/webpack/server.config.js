@@ -2,7 +2,7 @@ const path = require("path");
 
 const webpack = require("webpack");
 const nodeExternals = require("webpack-node-externals");
-const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
+// const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 
 const ROOT = path.join(__dirname, "../../");
 
@@ -103,9 +103,9 @@ module.exports = {
             }),
         ];
 
-        if (environment === "development") {
-            plugins.push(new HardSourceWebpackPlugin());
-        }
+        // if (environment === "development") {
+        //     plugins.push(new HardSourceWebpackPlugin());
+        // }
 
         return plugins;
     })(environment, target),

@@ -23,7 +23,8 @@ app.use(publicPathProd, expressStaticGzip(path.resolve(process.cwd(), "dist", "c
     enableBrotli: true,
     orderPreference: ["br", "gz"],
     setHeaders: function (res/*, path*/) {
-        res.setHeader("Cache-Control", "public, max-age=31536000");
+        // res.setHeader("Cache-Control", "public, max-age=31536000");
+        res.setHeader("Cache-Control", "no-cache");
     }
 }));
 
