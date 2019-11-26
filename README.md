@@ -59,6 +59,16 @@ yarn coverage
 
 ### TODO:
 
+#### Hot SSR
+
+[ ] sass-loader (Error: Module did not self-register) when updating SASS with HR
+[ ] Refactor to remove hard-coded public protocol / host / port in configs and universal-hot-reload
+[ ] Review package scripts to optimise for:
+    - Dev client only with HR
+    - Dev client/server with HR
+    - Server without HR
+    - Prod with br/gzip assets and static server
+
 #### Webpack
 - [ ] Source maps
     [ ] Server
