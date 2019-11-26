@@ -3,7 +3,7 @@ import express from "express";
 import https from "https";
 import expressStaticGzip from "express-static-gzip";
 import trailingSlash from "express-trailing-slash";
-import log from "llog";
+// import log from "llog";
 import ssr from "./lib/ssr";
 import bodyParser from "body-parser";
 // import helmet from "helmet";
@@ -13,40 +13,44 @@ import cert from "./ssl/private.crt";
 import ca from "./ssl/private.pem";
 import url from "url";
 
+const publicPath = process.env.PUBLIC_PATH;
+if (!publicPath) {
+    throw new Error("Missing 'process.env.PUBLIC_PATH'. e.g. https://0.0.0.0:1234/");
+}
+
+const port = process.env.SERVER_PORT || 12345;
+const {hostname, pathname} = url.parse(publicPath);
+
 const app = express();
 
 // app.use(helmet());
 
-export const createServer = publicPath => {
-    const {hostname, pathname, port = process.env.SERVER_PORT || 12345} = url.parse(publicPath);
+app.use(trailingSlash({slash: true}));
 
-    app.use(trailingSlash({slash: true}));
+app.use(pathname, expressStaticGzip(path.resolve(process.cwd(), "dist", "client"), {
+    dotfiles: "allow",
+    index: false,
+    enableBrotli: true,
+    orderPreference: ["br", "gz"],
+    setHeaders: function (res/*, path*/) {
+        // res.setHeader("Cache-Control", "public, max-age=31536000");
+        res.setHeader("Cache-Control", "no-cache");
+    }
+}));
 
-    app.use(pathname, expressStaticGzip(path.resolve(process.cwd(), "dist", "client"), {
-        dotfiles: "allow",
-        index: false,
-        enableBrotli: true,
-        orderPreference: ["br", "gz"],
-        setHeaders: function (res/*, path*/) {
-            // res.setHeader("Cache-Control", "public, max-age=31536000");
-            res.setHeader("Cache-Control", "no-cache");
-        }
-    }));
+app.use(bodyParser.json());
 
-    app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
 
-    app.use(bodyParser.urlencoded({extended: false}));
+app.get("/*", ssr);
+app.post("/*", ssr);
 
-    app.get("/*", ssr);
-    app.post("/*", ssr);
-
-    return https
-        .createServer({
-            key,
-            cert,
-            ca
-        }, app)
-        .listen(port, hostname, () => {
-            log.info(`PRODUCTION app listening on port ${port}. Go to https://${hostname}:${port}${pathname}`);
-        });
-};
+export default https
+    .createServer({
+        key,
+        cert,
+        ca
+    }, app)
+    .listen(port, hostname, () => {
+        console.log(`SSR app listening on port ${port}. Go to https://${hostname}:${port}${pathname}`);
+    });

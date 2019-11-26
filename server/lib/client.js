@@ -1,8 +1,9 @@
 import fs from "fs";
 import path from "path";
 
-const target = process.env.TARGET || "production";
-export const htmlPath = target === "server" ?
+const environment = process.env.NODE_ENV || "production";
+
+export const htmlPath = environment === "development" ?
     path.join(process.cwd(), "app", "index.html")
     :
     path.join(process.cwd(), "dist", "client", "index.html");

@@ -13,7 +13,6 @@ const watchServerChanges = serverConfig => {
 
   const bundlePath = join(serverConfig.output.path, serverConfig.output.filename);
   const serverCompiler = webpack(serverConfig);
-  const { publicPath } = serverConfig.devServer || {};
 
   // use this to debug
   // const serverCompiler = webpack(serverConfig, (err, stats) => {
@@ -52,7 +51,7 @@ const watchServerChanges = serverConfig => {
 
     if (!initialLoad) {
       httpServerInitObject.httpServer.close(() => {
-        httpServerInitObject = initHttpServer(bundlePath, publicPath);
+        httpServerInitObject = initHttpServer(bundlePath);
 
         if (httpServerInitObject) {
           initialLoad = false;
@@ -69,7 +68,7 @@ const watchServerChanges = serverConfig => {
         socket.destroy();
       }
     } else {
-      httpServerInitObject = initHttpServer(bundlePath, publicPath);
+      httpServerInitObject = initHttpServer(bundlePath);
 
       if (httpServerInitObject) {
         initialLoad = false;

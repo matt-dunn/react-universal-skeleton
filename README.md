@@ -81,8 +81,8 @@ Server development. Use the app HTML from the application without being processe
 #### Hot SSR
 
 [ ] sass-loader (Error: Module did not self-register) when updating SASS with HR
-[ ] Refactor to remove hard-coded public protocol / host / port in configs and universal-hot-reload
-[ ] Review package scripts to optimise for:
+[X] Refactor to remove hard-coded public protocol / host / port in configs and universal-hot-reload
+[X] Review package scripts to optimise for:
     - Dev client only with HR
     - Dev client/server with HR
     - Server without HR

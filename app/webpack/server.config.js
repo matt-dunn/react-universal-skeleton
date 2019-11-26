@@ -6,12 +6,13 @@ const nodeExternals = require("webpack-node-externals");
 const ROOT = path.join(__dirname, "../../");
 
 const environment = process.env.NODE_ENV || "production";
-const target = process.env.TARGET || "production";
 
-console.log(`Building server.... environment: ${environment}, target: ${target}`);
+console.log(`Building server.... environment: ${environment}`);
 
-const publicPath = "https://0.0.0.0:1234/";
-const serverPublicPath = "https://0.0.0.0:12345/";
+const publicPath = process.env.PUBLIC_PATH;
+if (!publicPath) {
+    throw new Error("Missing 'process.env.PUBLIC_PATH'. e.g. https://0.0.0.0:1234/");
+}
 
 module.exports = {
     entry: "../server/index.js",
@@ -85,7 +86,7 @@ module.exports = {
             }
         ]
     },
-    plugins: (function(/*environment, target */) {
+    plugins: (function(/*environment*/) {
         const plugins = [
             // new webpack.BannerPlugin({
             //     banner: 'require("source-map-support").install();',
@@ -99,11 +100,8 @@ module.exports = {
         // }
 
         return plugins;
-    })(environment, target),
+    })(environment),
     optimization: {
         minimize: environment === "production"
-    },
-    devServer: {
-        publicPath: serverPublicPath
     }
 };

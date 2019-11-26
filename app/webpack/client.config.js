@@ -1,5 +1,4 @@
-import url from "url";
-
+const url = require("url");
 const fs = require("fs");
 const path = require("path");
 
@@ -15,16 +14,18 @@ const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPl
 const ROOT = path.join(__dirname, "../../");
 
 const environment = process.env.NODE_ENV || "production";
-const target = process.env.TARGET || "production";
 
-console.log(`Building client.... environment: ${environment}, target: ${target}`);
+console.log(`Building client.... environment: ${environment}`);
 
 const BUILD = {
     version: "DEV",
     number: "0.0.0"
 };
 
-const publicPath = "https://0.0.0.0:1234/";
+const publicPath = process.env.PUBLIC_PATH;
+if (!publicPath) {
+    throw new Error("Missing 'process.env.PUBLIC_PATH'. e.g. https://0.0.0.0:1234/");
+}
 
 const {port, host} = url.parse(publicPath);
 
@@ -119,7 +120,7 @@ module.exports = {
             }
         ]
     },
-    plugins: (function(environment, target) {
+    plugins: (function(environment) {
         const plugins = [
             new BundleAnalyzerPlugin({
                 openAnalyzer: false,
@@ -130,7 +131,7 @@ module.exports = {
                 writeToDisk: true
             }),
             new HtmlWebpackPlugin({
-                inject: target === "development",
+                inject: environment === "development",
                 template: path.resolve(__dirname, "../index.html"),
                 chunksSortMode: "none",
                 //favicon: path.resolve(__dirname, "../favicon.ico")
@@ -152,7 +153,7 @@ module.exports = {
             // plugins.push(new HardSourceWebpackPlugin());
         }
 
-        if (environment === "production" && target === "production") {
+        if (environment === "production") {
             plugins.push(new CompressionPlugin({
                 filename: "[path].gz[query]",
                 algorithm: "gzip",
@@ -170,7 +171,7 @@ module.exports = {
         }
 
         return plugins;
-    })(environment, target),
+    })(environment),
     optimization: {
         minimize: environment === "production"
     },
