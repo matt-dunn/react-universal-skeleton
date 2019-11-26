@@ -68,6 +68,14 @@ yarn coverage
     - Dev client/server with HR
     - Server without HR
     - Prod with br/gzip assets and static server
+[ ] HardSourceWebpackPlugin - can this also be used and is it worth it?
+[ ] Use has for output when prod
+[ ] devServer config - watch options?
+[ ] Use dist/client/index.html for prod (as it's processed fully) OR can I use the dist version as before if the HTML loader
+    can always write to disk? (https://github.com/jantimon/html-webpack-harddisk-plugin)
+[ ] Can use helmet in server/index.js?
+
+
 
 #### Webpack
 - [ ] Source maps
