@@ -17,7 +17,7 @@ module.exports = {
     target: "node",
     externals: [nodeExternals()],
     devtool: "source-map",
-    cache: false,
+    cache: true,
     output: {
         path: path.resolve(ROOT, "dist/server"),
 

@@ -31,7 +31,7 @@ module.exports = {
     entry: "./client.js",
     mode: environment,
     devtool: environment === "development" ? "eval-source-map" : "",
-    cache: false,
+    cache: true,
     output: {
         path: path.resolve(ROOT, "dist/client"),
 

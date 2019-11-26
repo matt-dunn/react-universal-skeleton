@@ -7,10 +7,11 @@ const clearRequireCache = serverBundlePath => {
 
   // eslint-disable-next-line no-restricted-syntax
   for (const id of cacheIds) {
-    if (id === serverBundlePath) {
-      delete require.cache[id];
-      return;
-    }
+    // if (id === serverBundlePath || id.indexOf("/dist/") !== -1) {
+    //   delete require.cache[id];
+    //   // return;
+    // }
+    delete require.cache[id];
   }
 };
 
