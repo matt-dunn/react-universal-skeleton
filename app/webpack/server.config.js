@@ -1,6 +1,5 @@
 const path = require("path");
 
-const webpack = require("webpack");
 const nodeExternals = require("webpack-node-externals");
 // const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 
@@ -10,6 +9,9 @@ const environment = process.env.NODE_ENV || "production";
 const target = process.env.TARGET || "production";
 
 console.log(`Building server.... environment: ${environment}, target: ${target}`);
+
+const publicPath = "https://0.0.0.0:1234/";
+const serverPublicPath = "https://0.0.0.0:12345/";
 
 module.exports = {
     entry: "../server/index.js",
@@ -27,7 +29,7 @@ module.exports = {
 
         chunkFilename: "[name].js",
 
-        publicPath: "https://0.0.0.0:1234/",
+        publicPath,
 
         library: "app",
         libraryTarget: "commonjs2"
@@ -101,4 +103,7 @@ module.exports = {
     optimization: {
         minimize: environment === "production"
     },
+    devServer: {
+        publicPath: serverPublicPath
+    }
 };

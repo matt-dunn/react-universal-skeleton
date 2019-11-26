@@ -1,3 +1,5 @@
+import url from "url";
+
 const fs = require("fs");
 const path = require("path");
 
@@ -22,10 +24,9 @@ const BUILD = {
     number: "0.0.0"
 };
 
-const DEV_PROTOCOL = "https";
-const DEV_PORT = 1234;
-const DEV_HOST = "0.0.0.0";
-const DEV_DOMAIN = DEV_HOST + ":" + DEV_PORT;
+const publicPath = "https://0.0.0.0:1234/";
+
+const {port, host} = url.parse(publicPath);
 
 module.exports = {
     entry: "./client.js",
@@ -41,7 +42,7 @@ module.exports = {
 
         chunkFilename: "[id]-[chunkhash].js",
 
-        publicPath: "https://0.0.0.0:1234/"
+        publicPath
     },
     context: path.resolve(__dirname, ".."),
     resolve: {
@@ -183,10 +184,10 @@ module.exports = {
         // contentBase: path.resolve(__dirname, ".."),
         stats: "errors-only",
         // host: DEV_HOST,
-        port: DEV_PORT,
-        sockPort: DEV_PORT,
+        port: port,
+        sockPort: port,
         open: false,
-        public: "0.0.0.0" + ":" + DEV_PORT,
+        public: host,
         historyApiFallback: true,
         // watchOptions: {
         //     aggregateTimeout: 300,

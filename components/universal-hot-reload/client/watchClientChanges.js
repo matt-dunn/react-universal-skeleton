@@ -6,8 +6,8 @@ import webpackDevServer from "webpack-dev-server";
  * Start webpack dev server for hmr
  */
 const watchClientChanges = clientConfig => {
-  const { publicPath } = {publicPath: "https://0.0.0.0:1234/"};//clientConfig.output;
-  const { protocol, host, port } = url.parse(publicPath);
+  const { publicPath } = clientConfig.output;
+  const { protocol, host, port, hostname } = url.parse(publicPath);
   const webpackDevServerUrl = `${protocol}//${host}`;
 
   const { entry, plugins } = clientConfig;
@@ -43,7 +43,7 @@ const watchClientChanges = clientConfig => {
   };
 
   const server = new webpackDevServer(compiler, devServerOptions);
-  server.listen(port, "0.0.0.0", () => {
+  server.listen(port, hostname, () => {
     console.log(`Starting webpack-dev-server on ${webpackDevServerUrl}`);
   });
 };
