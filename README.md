@@ -56,6 +56,25 @@ Run all tests with coverage
 yarn coverage
 ```
 
+## Variables
+
+```
+TARGET=production
+```
+
+Production build + compress assets.
+
+```
+TARGET=development
+```
+
+Client development. Inject the main bundle JS/CSS into the HTML template.
+
+```
+TARGET=server
+```
+
+Server development. Use the app HTML from the application without being processed by webpack.
 
 ### TODO:
 
