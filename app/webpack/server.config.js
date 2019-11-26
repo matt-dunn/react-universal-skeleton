@@ -85,7 +85,7 @@ module.exports = {
             }
         ]
     },
-    plugins: (function(environment/*, target */) {
+    plugins: (function(/*environment, target */) {
         const plugins = [
             // new webpack.BannerPlugin({
             //     banner: 'require("source-map-support").install();',

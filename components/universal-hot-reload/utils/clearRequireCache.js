@@ -2,7 +2,7 @@
  * Clear bundled server cache
  * @param serverBundlePath Path to the server bundle file.
  */
-const clearRequireCache = serverBundlePath => {
+const clearRequireCache = (/*serverBundlePath*/) => {
   const cacheIds = Object.keys(require.cache);
 
   // eslint-disable-next-line no-restricted-syntax

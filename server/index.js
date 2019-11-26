@@ -18,7 +18,6 @@ const app = express();
 // app.use(helmet());
 
 export const createServer = publicPath => {
-    console.log(">>>>>",publicPath)
     const {hostname, pathname, port = process.env.SERVER_PORT || 12345} = url.parse(publicPath);
 
     app.use(trailingSlash({slash: true}));
