@@ -56,19 +56,8 @@ module.exports = {
                 ]
             },
             {
-                test: /\.(css|scss)$/,
-                include: [path.resolve(ROOT, "app"), path.resolve(ROOT, "components"), path.resolve(ROOT, "server")],
-                use: [
-                    {
-                        loader: "css-loader",
-                        options: {
-                            onlyLocals: true,
-                        }
-                    },
-                    {
-                        loader: "sass-loader"
-                    }
-                ]
+                test: /\.(scss|css)$/,
+                loader: "ignore-loader"
             },
             {
                 test: /ssl\/.*$/i,
