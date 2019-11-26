@@ -9,7 +9,6 @@ const BrotliPlugin = require("brotli-webpack-plugin");
 const LoadablePlugin = require("@loadable/webpack-plugin");
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 // const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
-const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 
 const ROOT = path.join(__dirname, "../../");
 
@@ -134,10 +133,8 @@ module.exports = {
                 template: path.resolve(__dirname, "../index.html"),
                 chunksSortMode: "none",
                 //favicon: path.resolve(__dirname, "../favicon.ico")
-                build: BUILD,
-                alwaysWriteToDisk: true
+                build: BUILD
             }),
-            new HtmlWebpackHarddiskPlugin(),
             new MiniCssExtractPlugin({
                 filename: "[name]-[hash].css",
                 chunkFilename: "[id]-[hash].css",
