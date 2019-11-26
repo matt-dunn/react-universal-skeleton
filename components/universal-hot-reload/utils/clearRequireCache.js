@@ -11,7 +11,9 @@ const clearRequireCache = serverBundlePath => {
     //   delete require.cache[id];
     //   // return;
     // }
-    delete require.cache[id];
+    if (id.indexOf("/node_nodules/") === -1) {
+      delete require.cache[id];
+    }
   }
 };
 
