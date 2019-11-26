@@ -1,6 +1,6 @@
-import watchClientChanges from './client/watchClientChanges';
-import watchServerChanges, { watchServerChangesWithDefaultConfig } from './server/watchServerChanges';
-import getDevServerUrl from './utils/getDevServerBundleUrl';
+import watchClientChanges from "./client/watchClientChanges";
+import watchServerChanges, { watchServerChangesWithDefaultConfig } from "./server/watchServerChanges";
+import getDevServerUrl from "./utils/getDevServerBundleUrl";
 
 export const getDevServerBundleUrl = getDevServerUrl;
 

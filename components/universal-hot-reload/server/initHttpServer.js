@@ -20,11 +20,11 @@ const initHttpServer = serverBundlePath => {
 
   // Inspired by Golo Roden's answer in:
   // http://stackoverflow.com/questions/14626636/how-do-i-shutdown-a-node-js-https-server-immediately
-  httpServer.on('connection', socket => {
+  httpServer.on("connection", socket => {
     const socketId = nextSocketId++;
     sockets.set(socketId, socket);
 
-    socket.on('close', () => {
+    socket.on("close", () => {
       sockets.delete(socketId);
     });
   });

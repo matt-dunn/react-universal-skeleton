@@ -1,6 +1,6 @@
-import url from 'url';
-import webpack from 'webpack';
-import webpackDevServer from 'webpack-dev-server';
+import url from "url";
+import webpack from "webpack";
+import webpackDevServer from "webpack-dev-server";
 
 /**
  * Start webpack dev server for hmr
@@ -12,8 +12,8 @@ const watchClientChanges = clientConfig => {
 
   const { entry, plugins } = clientConfig;
   const hmrEntries = [
-    `${require.resolve('webpack-dev-server/client/')}?${webpackDevServerUrl}`,
-    require.resolve('webpack/hot/dev-server'),
+    `${require.resolve("webpack-dev-server/client/")}?${webpackDevServerUrl}`,
+    require.resolve("webpack/hot/dev-server"),
   ];
   if (entry.push) {
     clientConfig.entry = entry.concat(hmrEntries); // eslint-disable-line
@@ -34,16 +34,16 @@ const watchClientChanges = clientConfig => {
     noInfo: false, // suppress boring information
     lazy: false, // no watching, compiles on request
     publicPath,
-    stats: 'errors-only',
+    stats: "errors-only",
     headers: {
-      'Access-Control-Allow-Origin': '*',
+      "Access-Control-Allow-Origin": "*",
     },
     hot: true,
     sockPort: port,
   };
 
   const server = new webpackDevServer(compiler, devServerOptions);
-  server.listen(port, '0.0.0.0', () => {
+  server.listen(port, "0.0.0.0", () => {
     console.log(`Starting webpack-dev-server on ${webpackDevServerUrl}`);
   });
 };

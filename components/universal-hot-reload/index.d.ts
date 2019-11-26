@@ -4,7 +4,7 @@
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 // TypeScript Version: 3.2.2
 
-import { Configuration } from 'webpack';
+import { Configuration } from "webpack";
 
 /**
  * Gets the full webpack dev server url from the supplied client webpack config.

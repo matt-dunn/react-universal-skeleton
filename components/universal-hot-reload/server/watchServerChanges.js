@@ -1,8 +1,8 @@
-import { join } from 'path';
-import webpack from 'webpack';
-import clearRequireCache from '../utils/clearRequireCache';
-import initHttpServer from './initHttpServer';
-import generateDefaultConfig from './generateDefaultConfig';
+import { join } from "path";
+import webpack from "webpack";
+import clearRequireCache from "../utils/clearRequireCache";
+import initHttpServer from "./initHttpServer";
+import generateDefaultConfig from "./generateDefaultConfig";
 
 /**
  * Watches server for changes, recompile and restart express
@@ -72,7 +72,7 @@ const watchServerChanges = serverConfig => {
 
       if (httpServerInitObject) {
         initialLoad = false;
-        console.log('Server bundled successfully');
+        console.log("Server bundled successfully");
       } else {
         // server bundling error has occurred
         initialLoad = true;
