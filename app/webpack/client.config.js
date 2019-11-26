@@ -186,7 +186,7 @@ module.exports = {
         port: DEV_PORT,
         sockPort: DEV_PORT,
         open: false,
-        // public: "0.0.0.0" + ":" + DEV_PORT,
+        public: "0.0.0.0" + ":" + DEV_PORT,
         historyApiFallback: true,
         // watchOptions: {
         //     aggregateTimeout: 300,

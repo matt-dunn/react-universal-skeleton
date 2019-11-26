@@ -27,7 +27,7 @@ module.exports = {
 
         chunkFilename: "[name].js",
 
-        publicPath: "/",
+        publicPath: "https://0.0.0.0:1234/",
 
         library: "app",
         libraryTarget: "commonjs2"
@@ -85,11 +85,11 @@ module.exports = {
     },
     plugins: (function(environment/*, target */) {
         const plugins = [
-            new webpack.BannerPlugin({
-                banner: 'require("source-map-support").install();',
-                raw: true,
-                entryOnly: false
-            }),
+            // new webpack.BannerPlugin({
+            //     banner: 'require("source-map-support").install();',
+            //     raw: true,
+            //     entryOnly: false
+            // }),
         ];
 
         // if (environment === "development") {
