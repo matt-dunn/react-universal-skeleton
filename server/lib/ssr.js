@@ -22,7 +22,7 @@ import App from "app/App";
 
 import {getHTMLFragments, parseHelmetTemplate} from "./client";
 
-const statsFile = path.resolve("dist/client/loadable-stats.json");
+const statsFile = path.join(process.cwd(), "dist", "client", "loadable-stats.json");
 
 export default async (req, res) => {
     try {

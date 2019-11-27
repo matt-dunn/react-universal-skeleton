@@ -11,7 +11,7 @@ const LoadablePlugin = require("@loadable/webpack-plugin");
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 // const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 
-const ROOT = path.join(__dirname, "../../");
+const ROOT = path.join(__dirname, "..", "..");
 
 const environment = process.env.NODE_ENV || "production";
 
@@ -32,7 +32,7 @@ module.exports = {
     devtool: environment === "development" ? "eval-source-map" : "",
     cache: true,
     output: {
-        path: path.resolve(ROOT, "dist/client"),
+        path: path.resolve(ROOT, "dist", "client"),
 
         filename: environment === "development" ? "client.js" : "[name]-[hash].js",
 
@@ -129,7 +129,7 @@ module.exports = {
             }),
             new HtmlWebpackPlugin({
                 inject: environment === "development",
-                template: path.resolve(__dirname, "../index.html"),
+                template: path.resolve(__dirname, "..", "index.html"),
                 chunksSortMode: "none",
                 //favicon: path.resolve(__dirname, "../favicon.ico")
                 build: BUILD
@@ -193,9 +193,9 @@ module.exports = {
         // },
         // https: DEV_PROTOCOL === "https",
         https: {
-            key: fs.readFileSync(path.resolve(ROOT, "server/ssl/private.key")),
-            cert: fs.readFileSync(path.resolve(ROOT, "server/ssl/private.crt")),
-            ca: fs.readFileSync(path.resolve(ROOT, "server/ssl/private.pem")),
+            key: fs.readFileSync(path.resolve(ROOT, "server", "ssl", "private.key")),
+            cert: fs.readFileSync(path.resolve(ROOT, "server", "ssl", "private.crt")),
+            ca: fs.readFileSync(path.resolve(ROOT, "server", "ssl", "private.pem")),
         },
     }
 };
