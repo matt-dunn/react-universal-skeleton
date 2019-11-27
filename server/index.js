@@ -6,12 +6,14 @@ import trailingSlash from "express-trailing-slash";
 // import log from "llog";
 import ssr from "./lib/ssr";
 import bodyParser from "body-parser";
-// import helmet from "helmet";
+import helmet from "helmet";
 
 import key from "./ssl/private.key";
 import cert from "./ssl/private.crt";
 import ca from "./ssl/private.pem";
 import url from "url";
+
+const environment = process.env.NODE_ENV || "production";
 
 const publicPath = process.env.PUBLIC_PATH;
 if (!publicPath) {
@@ -23,7 +25,9 @@ const {hostname, pathname} = url.parse(publicPath);
 
 const app = express();
 
-// app.use(helmet());
+if (environment === "production") {
+    app.use(helmet());
+}
 
 app.use(trailingSlash({slash: true}));
 
