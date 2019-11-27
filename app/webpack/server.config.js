@@ -4,6 +4,7 @@ const nodeExternals = require("webpack-node-externals");
 // const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 
 const ROOT = path.join(__dirname, "..", "..");
+const DIST = path.resolve(ROOT, "dist");
 
 const environment = process.env.NODE_ENV || "production";
 
@@ -19,7 +20,7 @@ module.exports = {
     devtool: "source-map",
     cache: true,
     output: {
-        path: path.resolve(ROOT, "dist", "server"),
+        path: path.resolve(DIST, "server"),
 
         filename: "server.js",
 
