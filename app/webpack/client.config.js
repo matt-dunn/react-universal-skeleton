@@ -37,7 +37,7 @@ module.exports = {
     output: {
         path: path.resolve(ROOT, "dist/client"),
 
-        filename: "client.js",
+        filename: environment === "development" ? "client.js" : "[name]-[hash].js",
 
         sourceMapFilename: "[name]-[hash].map",
 
