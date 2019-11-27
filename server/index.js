@@ -15,10 +15,10 @@ import url from "url";
 
 const publicPath = process.env.PUBLIC_PATH;
 if (!publicPath) {
-    throw new Error("Missing 'process.env.PUBLIC_PATH'. e.g. https://0.0.0.0:1234/");
+    throw new Error("Missing 'process.env.PUBLIC_PATH=https://0.0.0.0:1234/'");
 }
 
-const port = process.env.SERVER_PORT || 12345;
+const port = process.env.SSR_PORT || 12345;
 const {hostname, pathname} = url.parse(publicPath);
 
 const app = express();
@@ -33,8 +33,7 @@ app.use(pathname, expressStaticGzip(path.resolve(process.cwd(), "dist", "client"
     enableBrotli: true,
     orderPreference: ["br", "gz"],
     setHeaders: function (res/*, path*/) {
-        // res.setHeader("Cache-Control", "public, max-age=31536000");
-        res.setHeader("Cache-Control", "no-cache");
+        res.setHeader("Cache-Control", "public, max-age=31536000");
     }
 }));
 
@@ -52,5 +51,5 @@ export default https
         ca
     }, app)
     .listen(port, hostname, () => {
-        console.log(`SSR app listening on port ${port}. Go to https://${hostname}:${port}${pathname}`);
+        console.log(`SSR app listening on port ${port}. Go to https://${hostname}:${port}${pathname} ${(!process.env.SSR_PORT && "(default port)") || ""}`);
     });

@@ -7,6 +7,11 @@ import webpackDevServer from "webpack-dev-server";
  */
 const watchClientChanges = clientConfig => {
   const { publicPath } = clientConfig.output;
+
+  if (!publicPath) {
+    throw new Error("Missing publicPath config, e.g. 'process.env.PUBLIC_PATH=https://0.0.0.0:1234/'");
+  }
+
   const { protocol, host, port, hostname } = url.parse(publicPath);
   const webpackDevServerUrl = `${protocol}//${host}`;
 

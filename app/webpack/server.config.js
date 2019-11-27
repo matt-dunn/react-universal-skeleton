@@ -10,9 +10,6 @@ const environment = process.env.NODE_ENV || "production";
 console.log(`Building server.... environment: ${environment}`);
 
 const publicPath = process.env.PUBLIC_PATH;
-if (!publicPath) {
-    throw new Error("Missing 'process.env.PUBLIC_PATH'. e.g. https://0.0.0.0:1234/");
-}
 
 module.exports = {
     entry: "../server/index.js",
@@ -30,7 +27,7 @@ module.exports = {
 
         chunkFilename: "[name].js",
 
-        publicPath,
+        publicPath: publicPath || "/",
 
         library: "app",
         libraryTarget: "commonjs2"

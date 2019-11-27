@@ -23,11 +23,8 @@ const BUILD = {
 };
 
 const publicPath = process.env.PUBLIC_PATH;
-if (!publicPath) {
-    throw new Error("Missing 'process.env.PUBLIC_PATH'. e.g. https://0.0.0.0:1234/");
-}
 
-const {port, host} = url.parse(publicPath);
+const {port, host} = (publicPath && url.parse(publicPath)) || {};
 
 module.exports = {
     entry: "./client.js",
@@ -43,7 +40,7 @@ module.exports = {
 
         chunkFilename: "[id]-[chunkhash].js",
 
-        publicPath
+        publicPath: publicPath || "/"
     },
     context: path.resolve(__dirname, ".."),
     resolve: {
@@ -185,7 +182,7 @@ module.exports = {
         // contentBase: path.resolve(__dirname, ".."),
         stats: "errors-only",
         // host: DEV_HOST,
-        port: port,
+        port,
         sockPort: port,
         open: false,
         public: host,
