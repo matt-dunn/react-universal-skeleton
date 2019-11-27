@@ -93,6 +93,8 @@ Server development. Use the app HTML from the application without being processe
 [ ] Use dist/client/index.html for prod (as it's processed fully) OR can I use the dist version as before if the HTML loader
     can always write to disk? (https://github.com/jantimon/html-webpack-harddisk-plugin)
 [ ] Can use helmet in server/index.js?
+[ ] Optimise build / webpack config to increase performance
+[ ] Look into HMR again... issue previously with lazy loaded components?
 
 
 
