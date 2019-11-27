@@ -134,7 +134,7 @@
   "scripts": {
     "client": "cross-env PUBLIC_PATH=https://0.0.0.0:1234/ cross-env cross-env NODE_ENV=development cross-env webpack-dev-server --config ./app/webpack/client.config.js --progress",
     "server": "cross-env PUBLIC_PATH=https://0.0.0.0:1234/ cross-env SSR_PORT=12345 cross-env NODE_ENV=development cross-env babel-node --presets @babel/env app/webpack/index.js",
-    "prod": "rimraf reports && yarn build",
+    "prod": "rimraf reports && yarn lint && yarn type-check && yarn coverage && yarn build",
     "prod:run": "yarn prod && yarn server:run",
     "server:run": "cross-env PUBLIC_PATH=https://0.0.0.0:1234/ cross-env SSR_PORT=12345 node dist/server/server.js",
     "build:client": "webpack --config ./app/webpack/client.config.js",
