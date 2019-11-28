@@ -15,13 +15,10 @@ import url from "url";
 
 const environment = process.env.NODE_ENV || "production";
 
-const publicPath = process.env.PUBLIC_PATH;
-if (!publicPath) {
-    throw new Error("Missing 'process.env.PUBLIC_PATH=https://0.0.0.0:1234/'");
-}
+const publicPath = process.env.PUBLIC_PATH || "/";
 
-const port = process.env.SSR_PORT || 12345;
-const {hostname, pathname} = url.parse(publicPath);
+const {hostname, pathname, port} = url.parse(publicPath);
+const appPort = process.env.SSR_PORT || port || 12345;
 
 const app = express();
 
@@ -54,6 +51,6 @@ export default https
         cert,
         ca
     }, app)
-    .listen(port, hostname, () => {
-        console.log(`SSR app listening on port ${port}. Go to https://${hostname}:${port}${pathname} ${(!process.env.SSR_PORT && "(default port)") || ""}`);
+    .listen(appPort, hostname, () => {
+        console.log(`SSR app listening on port ${appPort}. Go to https://${hostname}:${appPort}${pathname}`);
     });
