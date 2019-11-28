@@ -2,79 +2,89 @@
 
 Example using Parcel to bundle app with SSR and server side API calls.
 
-## Commands
+## Scripts
 
-Run *client* with hot re-loading
+Run development *client* with hot re-loading
 
-```
+```bash
 yarn client
 ```
 
-Run with SSR and reloading with full re-load without compressed assets (gzip/br)
-```
+
+Run development *SSR* and reloading with hot re-load without compressed assets (gzip/br)
+
+```bash
 yarn server
 ```
 
-Just run the SSR server without build
-```
-yarn server:run
-```
 
 Full production build, running all production tasks with compressed assets (gzip/br)
 
-```
+```bash
 yarn prod
 ```
 
+
+Run production build without re-build
+
+```bash
+yarn prod:run
+```
+
+
+Build and run production build
+
+```bash
+yarn prod && yarn prod:run
+```
+
+
+Alias for prod:run with pre install dependencies
+
+```bash
+yarn bundle:run
+```
+
+
 Lint CSS/JS
 
-```
+```bash
 yarn lint
 ```
 
+
 Typescript
 
-```
+```bash
 yarn type-check
 ```
 
+
 Run all tests
 
-```
+```bash
 yarn test
 ```
 
+
 Run single/specific tests
 
-```
+```bash
 yarn test -t '<match>'
 ```
 
+
 Run all tests with coverage
 
-```
+```bash
 yarn coverage
 ```
 
-## Variables
 
-```
-TARGET=production
-```
 
-Production build + compress assets.
 
-```
-TARGET=development
-```
 
-Client development. Inject the main bundle JS/CSS into the HTML template.
 
-```
-TARGET=server
-```
-
-Server development. Use the app HTML from the application without being processed by webpack.
 
 ### TODO:
 
