@@ -50,7 +50,7 @@ marked.Renderer.prototype.code = function(code, lang, escaped) {
     const options: MarkedOptions & AdditionOptions = this.options as MarkedOptions & AdditionOptions;
 
     if (options.highlight) {
-        const out = options.highlight(code, lang);
+        const out = options.highlight(code, lang || "");
         if (out != null && out !== code) {
             escaped = true;
             code = out;

@@ -155,7 +155,7 @@
     "react-dom": "@hot-loader/react-dom"
   },
   "engines": {
-    "node" : ">=10"
+    "node": ">=10"
   },
-  "engineStrict" : true
+  "engineStrict": true
 }
