@@ -1,13 +1,11 @@
 // import Immutable, { List, Record } from 'immutable';
 import { FluxStandardAction } from "flux-standard-action";
-import { getType } from "typesafe-actions";
+import {getType, createReducer} from "typesafe-actions";
 
 import { ActionMeta } from "components/state-mutate-with-status";
 // import nextState from 'components/state-mutate-with-status/immutable';
 import nextState from "components/state-mutate-with-status/frozen";
 import { IStatus } from "components/state-mutate-with-status/status";
-
-import {createReducer} from "components/redux/utils";
 
 import {exampleActions as actions} from "../../actions";
 
@@ -44,10 +42,8 @@ const initialState = {
     items: [] as Array<ExampleItemState>,
 } as ExampleState;
 
-const exampleActions = {
+export default createReducer(initialState, {
     [getType(actions.exampleGetList)]: exampleGetList,
     [getType(actions.exampleGetItem)]: exampleGetItem,
     [getType(actions.exampleEditItem)]: exampleEditItem,
-};
-
-export default createReducer(initialState, exampleActions);
+});

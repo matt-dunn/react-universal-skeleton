@@ -1,11 +1,9 @@
 import { FluxStandardAction } from "flux-standard-action";
-import { getType } from "typesafe-actions";
+import { getType, createReducer } from "typesafe-actions";
 
 import { ActionMeta } from "components/state-mutate-with-status/index";
 
 import nextState from "components/state-mutate-with-status/index";
-
-import {createReducer} from "components/redux/utils";
 
 import {authActions as actions} from "../../actions";
 import {IStatus} from "components/state-mutate-with-status/status";
@@ -25,13 +23,10 @@ const login = (state: AuthState, action: FluxStandardAction<string, any, ActionM
     path: ["authenticatedUser"],
 });
 
-
 const initialState = {
     authenticatedUser: undefined
 } as AuthState;
 
-const authActions = {
+export default createReducer(initialState, {
     [getType(actions.login)]: login
-};
-
-export default createReducer(initialState, authActions);
+});

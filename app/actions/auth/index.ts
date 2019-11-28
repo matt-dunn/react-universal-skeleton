@@ -1,4 +1,4 @@
-import { createStandardAction } from "typesafe-actions";
+import { createAction } from "typesafe-actions";
 
 import {AuthApi} from "../../components/api/auth";
 
@@ -7,9 +7,9 @@ export interface Login {
     password: string;
 }
 
-const login = createStandardAction("@auth/LOGIN")
-    .map(({username, password}: Login) => ({
-        payload: ({ services }: {services: AuthApi}) => services.login(username, password)
-    }));
+const login = createAction(
+    "@auth/LOGIN",
+    ({username, password}: Login) => ({ services }: {services: AuthApi}) => services.login(username, password)
+)();
 
 export { login };
