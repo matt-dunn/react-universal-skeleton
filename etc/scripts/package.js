@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const archiver = require("archiver");
+const hp = require("handpipe");
 
 const ROOT = process.cwd();
 
@@ -13,11 +14,11 @@ const archive = archiver("tar", {
     gzip: true
 });
 
-output.on("close", function () {
+output.on("close", () => {
     console.log(`Package archive created '${outputFilename}'. ${archive.pointer()} total bytes`);
 });
 
-archive.on("error", function(err){
+archive.on("error", (err) => {
     throw err;
 });
 
@@ -28,6 +29,11 @@ archive.directory(path.resolve(ROOT, "dist", "server"), "dist/server");
 
 archive.file(path.resolve(ROOT, "package.json"), { name: "package.json" });
 archive.file(path.resolve(ROOT, "yarn.lock"), { name: "yarn.lock" });
-archive.file(path.resolve(__dirname, "package.README.md"), { name: "README.md" });
+
+const compiler = hp({
+    package
+});
+
+archive.append(fs.createReadStream(path.resolve(__dirname, "package.README.md")).pipe(compiler), { name: 'README.md' });
 
 archive.finalize();
