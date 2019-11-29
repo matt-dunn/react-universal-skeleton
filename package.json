@@ -92,6 +92,7 @@
     "compression-webpack-plugin": "^3.0.0",
     "concurrently": "^5.0.0",
     "css-loader": "^3.2.0",
+    "current-git-branch": "^1.1.0",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
     "enzyme-to-json": "^3.4.0",
@@ -117,6 +118,7 @@
     "require-from-string": "^2.0.2",
     "rimraf": "^3.0.0",
     "sass-loader": "^8.0.0",
+    "semver": "^6.3.0",
     "source-map-support": "^0.5.16",
     "style-loader": "^1.0.0",
     "stylelint": "^12.0.0",
@@ -134,14 +136,12 @@
   "scripts": {
     "dev:client": "cross-env PUBLIC_PATH=https://0.0.0.0:1234/ cross-env cross-env NODE_ENV=development cross-env webpack-dev-server --config ./app/webpack/client.config.js --progress",
     "dev:server": "cross-env PUBLIC_PATH=https://0.0.0.0:1234/ cross-env PORT=12345 cross-env NODE_ENV=development cross-env babel-node --presets @babel/env app/webpack/index.js",
-
     "build:client": "webpack --config ./app/webpack/client.config.js",
     "build:server": "webpack --config ./app/webpack/server.config.js",
     "build:all": "rimraf dist && concurrently \"yarn build:client\" \"yarn build:server\"",
     "package": "node etc/scripts/package.js",
     "build": "rimraf reports && yarn lint && yarn type-check && yarn coverage && yarn build:all && yarn package",
     "build:run": "cross-env PORT=12345 node dist/server/server.js",
-
     "lint:css": "stylelint './app/**/*.(js|jsx|ts|tsx)'",
     "lint:js": "./node_modules/eslint/bin/eslint.js ./ --fix --ext .jsx,.js,.ts,.tsx",
     "lint:jsonly": "./node_modules/eslint/bin/eslint.js ./ --fix --ext .jsx,.js",
@@ -149,7 +149,6 @@
     "type-check": "tsc --noEmit --skipLibCheck",
     "test": "jest",
     "coverage": "jest --collectCoverage",
-
     "prestart": "yarn install --production",
     "start": "yarn build:run"
   },
