@@ -136,8 +136,8 @@
     "server": "cross-env PUBLIC_PATH=https://0.0.0.0:1234/ cross-env SSR_PORT=12345 cross-env NODE_ENV=development cross-env babel-node --presets @babel/env app/webpack/index.js",
     "prod": "rimraf reports && yarn lint && yarn type-check && yarn coverage && yarn build && yarn package",
     "prod:run": "cross-env PUBLIC_PATH=https://0.0.0.0:12345/ node dist/server/server.js",
-    "prebundle:run": "yarn install --production",
-    "bundle:run": "yarn prod:run",
+    "prestart": "yarn install --production",
+    "start": "yarn prod:run",
     "build:client": "webpack --config ./app/webpack/client.config.js",
     "build:server": "webpack --config ./app/webpack/server.config.js",
     "build": "rimraf dist && concurrently \"yarn build:client\" \"yarn build:server\"",
@@ -154,7 +154,8 @@
     "react-dom": "@hot-loader/react-dom"
   },
   "engines": {
-    "node": ">=10"
+    "node": ">=10",
+    "yarn": "1.9.x"
   },
   "engineStrict": true
 }

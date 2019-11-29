@@ -1,5 +1,5 @@
 # Production build
 
 ```bash
-yarn bundle:run
+yarn start
 ```
