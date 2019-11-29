@@ -77,6 +77,7 @@ const UniversalSelect = ({id, disabled, isValid, options, name, value, onChange,
                 isValid={isValid}
                 formStyles={formStyles}
                 options={options}
+                {...props}
             />
         );
     }

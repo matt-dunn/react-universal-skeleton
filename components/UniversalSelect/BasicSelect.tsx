@@ -43,7 +43,7 @@ const Select = styled.select<{isValid?: boolean; formElementStyles?: FormStyles}
     }
 `;
 
-const BasicSelect = ({id, disabled, isValid, options, name, value, onChange, onBlur, formStyles, className}: BasicSelectProps): ReactElement<any> => {
+const BasicSelect = ({id, disabled, isValid, options, name, value, onChange, onBlur, formStyles, className, ...props}: BasicSelectProps): ReactElement<any> => {
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => onChange(e.currentTarget.name, e.currentTarget.value);
 
     const handleBlur = (e: React.FocusEvent<HTMLSelectElement>) => onBlur(e.currentTarget.name, true);
@@ -59,6 +59,7 @@ const BasicSelect = ({id, disabled, isValid, options, name, value, onChange, onB
             disabled={disabled}
             isValid={isValid}
             formElementStyles={formStyles}
+            {...props}
         >
             {options.map((option, index) => (
                 <option key={index} value={option.value}>{option.label || option.value}</option>
