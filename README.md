@@ -4,77 +4,79 @@ Example using Parcel to bundle app with SSR and server side API calls.
 
 ## Scripts
 
-Run development *client* with hot re-loading
+### Run development _client_ with hot re-loading
 
 ```bash
-yarn client
+yarn dev:client
 ```
 
 
-Run development *SSR* and reloading with hot re-load without compressed assets (gzip/br)
+### Run development _SSR_ with with hot re-load and without compressed assets (gzip/br)
 
 ```bash
-yarn server
+yarn dev:server
 ```
 
 
-Full production build, running all production tasks with compressed assets (gzip/br)
+### Full production build, running all production tasks with compressed assets (gzip/br)
 
 ```bash
-yarn prod
+yarn build
 ```
 
 
-Run production build without re-build
+### Run production build without re-build
+
+NOTE: ```yarn build``` must be run first to create the production bundle.
 
 ```bash
-yarn prod:run
+yarn build:run
+```
+
+You can also build and run:
+
+```bash
+yarn build && yarn build:run
 ```
 
 
-Build and run production build
+### Install production dependencies and start production build
+
+NOTE: ```yarn build``` must be run first to create the production bundle.
 
 ```bash
-yarn prod && yarn prod:run
+yarn start
 ```
 
 
-Alias for prod:run with pre install dependencies
-
-```bash
-yarn bundle:run
-```
-
-
-Lint CSS/JS
+### Lint CSS/JS
 
 ```bash
 yarn lint
 ```
 
 
-Typescript
+### Typescript
 
 ```bash
 yarn type-check
 ```
 
 
-Run all tests
+### Run all tests
 
 ```bash
 yarn test
 ```
 
-
-Run single/specific tests
+#### Run single/specific tests
 
 ```bash
 yarn test -t '<match>'
 ```
 
 
-Run all tests with coverage
+### Run all tests with coverage
 
 ```bash
 yarn coverage

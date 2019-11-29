@@ -132,23 +132,26 @@
     "webpack-node-externals": "^1.7.2"
   },
   "scripts": {
-    "client": "cross-env PUBLIC_PATH=https://0.0.0.0:1234/ cross-env cross-env NODE_ENV=development cross-env webpack-dev-server --config ./app/webpack/client.config.js --progress",
-    "server": "cross-env PUBLIC_PATH=https://0.0.0.0:1234/ cross-env SSR_PORT=12345 cross-env NODE_ENV=development cross-env babel-node --presets @babel/env app/webpack/index.js",
-    "prod": "rimraf reports && yarn lint && yarn type-check && yarn coverage && yarn build && yarn package",
-    "prod:run": "cross-env PUBLIC_PATH=https://0.0.0.0:12345/ node dist/server/server.js",
-    "prestart": "yarn install --production",
-    "start": "yarn prod:run",
+    "dev:client": "cross-env PUBLIC_PATH=https://0.0.0.0:1234/ cross-env cross-env NODE_ENV=development cross-env webpack-dev-server --config ./app/webpack/client.config.js --progress",
+    "dev:server": "cross-env PUBLIC_PATH=https://0.0.0.0:1234/ cross-env PORT=12345 cross-env NODE_ENV=development cross-env babel-node --presets @babel/env app/webpack/index.js",
+
     "build:client": "webpack --config ./app/webpack/client.config.js",
     "build:server": "webpack --config ./app/webpack/server.config.js",
-    "build": "rimraf dist && concurrently \"yarn build:client\" \"yarn build:server\"",
+    "build:all": "rimraf dist && concurrently \"yarn build:client\" \"yarn build:server\"",
     "package": "node etc/scripts/package.js",
+    "build": "rimraf reports && yarn lint && yarn type-check && yarn coverage && yarn build:all && yarn package",
+    "build:run": "cross-env PORT=12345 node dist/server/server.js",
+
     "lint:css": "stylelint './app/**/*.(js|jsx|ts|tsx)'",
     "lint:js": "./node_modules/eslint/bin/eslint.js ./ --fix --ext .jsx,.js,.ts,.tsx",
     "lint:jsonly": "./node_modules/eslint/bin/eslint.js ./ --fix --ext .jsx,.js",
     "lint": "yarn lint:css && yarn lint:js",
     "type-check": "tsc --noEmit --skipLibCheck",
     "test": "jest",
-    "coverage": "jest --collectCoverage"
+    "coverage": "jest --collectCoverage",
+
+    "prestart": "yarn install --production",
+    "start": "yarn build:run"
   },
   "alias": {
     "react-dom": "@hot-loader/react-dom"

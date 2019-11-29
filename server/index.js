@@ -18,7 +18,8 @@ const environment = process.env.NODE_ENV || "production";
 const publicPath = process.env.PUBLIC_PATH || "/";
 
 const {hostname, pathname, port} = url.parse(publicPath);
-const appPort = process.env.SSR_PORT || port || 12345;
+const appPort = process.env.PORT || port || 12345;
+const appHostname = hostname || "localhost";
 
 const app = express();
 
@@ -51,6 +52,6 @@ export default https
         cert,
         ca
     }, app)
-    .listen(appPort, hostname, () => {
-        console.log(`SSR app listening on port ${appPort}. Go to https://${hostname}:${appPort}${pathname}`);
+    .listen(appPort, appHostname, () => {
+        console.log(`SSR app listening on port ${appPort}. Go to https://${appHostname}:${appPort}${pathname}`);
     });
