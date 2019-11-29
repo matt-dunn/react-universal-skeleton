@@ -6,13 +6,15 @@ const ROOT = process.cwd();
 
 const package = require(path.resolve(ROOT, "package.json"));
 
-const outputZipFilename = path.resolve(ROOT, "dist", `dist.${package.version}.zip`);
+const outputFilename = path.resolve(ROOT, "dist", `dist.${package.version}.tar.gz`);
 
-const output = fs.createWriteStream(outputZipFilename);
-const archive = archiver("zip");
+const output = fs.createWriteStream(outputFilename);
+const archive = archiver("tar", {
+    gzip: true
+});
 
 output.on("close", function () {
-    console.log(`Package archive created '${outputZipFilename}'. ${archive.pointer()} total bytes`);
+    console.log(`Package archive created '${outputFilename}'. ${archive.pointer()} total bytes`);
 });
 
 archive.on("error", function(err){
@@ -21,7 +23,8 @@ archive.on("error", function(err){
 
 archive.pipe(output);
 
-archive.directory(path.resolve(ROOT, "dist"), "dist");
+archive.directory(path.resolve(ROOT, "dist", "client"), "dist/client");
+archive.directory(path.resolve(ROOT, "dist", "server"), "dist/server");
 
 archive.file(path.resolve(ROOT, "package.json"), { name: "package.json" });
 archive.file(path.resolve(ROOT, "yarn.lock"), { name: "yarn.lock" });
