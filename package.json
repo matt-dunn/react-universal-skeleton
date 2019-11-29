@@ -1,6 +1,6 @@
 {
   "name": "parcel",
-  "version": "1.0.1",
+  "version": "1.0.16-dev.0",
   "main": "app/index.html",
   "private": true,
   "dependencies": {
@@ -92,7 +92,6 @@
     "compression-webpack-plugin": "^3.0.0",
     "concurrently": "^5.0.0",
     "css-loader": "^3.2.0",
-    "current-git-branch": "^1.1.0",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
     "enzyme-to-json": "^3.4.0",
@@ -118,7 +117,6 @@
     "require-from-string": "^2.0.2",
     "rimraf": "^3.0.0",
     "sass-loader": "^8.0.0",
-    "semver": "^6.3.0",
     "source-map-support": "^0.5.16",
     "style-loader": "^1.0.0",
     "stylelint": "^12.0.0",
@@ -150,14 +148,17 @@
     "test": "jest",
     "coverage": "jest --collectCoverage",
     "prestart": "yarn install --production",
-    "start": "yarn build:run"
+    "start": "yarn build:run",
+    "version": "echo \"versioning $npm_package_version\"",
+    "release": "yarn version --patch --no-git-tag-version --preid dev",
+    "postrelease": "yarn version --prerelease --no-git-tag-version --preid dev"
   },
   "alias": {
     "react-dom": "@hot-loader/react-dom"
   },
   "engines": {
     "node": ">=10",
-    "yarn": "1.9.x"
+    "yarn": "1.19.x"
   },
   "engineStrict": true
 }
