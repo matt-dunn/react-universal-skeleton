@@ -1,16 +1,23 @@
 const path = require("path");
 
+const webpack = require("webpack");
 const nodeExternals = require("webpack-node-externals");
 // const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 
 const ROOT = path.join(__dirname, "..", "..");
 const DIST = path.resolve(ROOT, "dist");
 
+const packageJSON = require(path.resolve(ROOT, "package.json"));
+
 const environment = process.env.NODE_ENV || "production";
 
 console.log(`Building server.... environment: ${environment}`);
 
 const publicPath = process.env.PUBLIC_PATH;
+
+const BUILD = {
+    version: packageJSON.version
+};
 
 module.exports = {
     entry: "../server/index.js",
@@ -86,12 +93,15 @@ module.exports = {
     },
     plugins: (function(/*environment*/) {
         const plugins = [
-            // new webpack.BannerPlugin({
-            //     banner: 'require("source-map-support").install();',
-            //     raw: true,
-            //     entryOnly: false
-            // }),
         ];
+
+        if (environment === "production") {
+            plugins.push(new webpack.BannerPlugin({
+                banner: `Version: ${BUILD.version}`,
+                raw: false,
+                entryOnly: false
+            }));
+        }
 
         // if (environment === "development") {
         //     plugins.push(new HardSourceWebpackPlugin());

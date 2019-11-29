@@ -5,9 +5,9 @@ const hp = require("handpipe");
 
 const ROOT = process.cwd();
 
-const package = require(path.resolve(ROOT, "package.json"));
+const packageJSON = require(path.resolve(ROOT, "package.json"));
 
-const outputFilename = path.resolve(ROOT, "dist", `dist.${package.version}.tar.gz`);
+const outputFilename = path.resolve(ROOT, "dist", `${packageJSON.name}.${packageJSON.version}.tar.gz`);
 
 const output = fs.createWriteStream(outputFilename);
 const archive = archiver("tar", {
@@ -31,9 +31,9 @@ archive.file(path.resolve(ROOT, "package.json"), { name: "package.json" });
 archive.file(path.resolve(ROOT, "yarn.lock"), { name: "yarn.lock" });
 
 const compiler = hp({
-    package
+    package: packageJSON
 });
 
-archive.append(fs.createReadStream(path.resolve(__dirname, "package.README.md")).pipe(compiler), { name: 'README.md' });
+archive.append(fs.createReadStream(path.resolve(__dirname, "package.README.md")).pipe(compiler), { name: "README.md" });
 
 archive.finalize();

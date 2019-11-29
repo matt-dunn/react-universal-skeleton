@@ -13,13 +13,14 @@ const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPl
 
 const ROOT = path.join(__dirname, "..", "..");
 
+const packageJSON = require(path.resolve(ROOT, "package.json"));
+
 const environment = process.env.NODE_ENV || "production";
 
 console.log(`Building client.... environment: ${environment}`);
 
 const BUILD = {
-    version: "DEV",
-    number: "0.0.0"
+    version: packageJSON.version
 };
 
 const publicPath = process.env.PUBLIC_PATH;
@@ -164,6 +165,12 @@ module.exports = {
                 test: /\.js$|\.css$|\.html$/,
                 threshold: 10240,
                 minRatio: 0.7
+            }));
+
+            plugins.push(new webpack.BannerPlugin({
+                banner: `Version: ${BUILD.version}`,
+                raw: false,
+                entryOnly: false
             }));
         }
 

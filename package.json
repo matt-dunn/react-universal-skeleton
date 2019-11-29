@@ -1,6 +1,6 @@
 {
   "name": "parcel",
-  "version": "1.0.16-dev.0",
+  "version": "1.0.25-dev.0",
   "main": "app/index.html",
   "private": true,
   "dependencies": {
@@ -139,7 +139,9 @@
     "build:server": "webpack --config ./app/webpack/server.config.js",
     "build:all": "rimraf dist && concurrently \"yarn build:client\" \"yarn build:server\"",
     "package": "node etc/scripts/package.js",
+    "prebuild": "yarn version --patch --no-git-tag-version --preid dev",
     "build": "rimraf reports && yarn lint && yarn type-check && yarn coverage && yarn build:all && yarn package",
+    "postbuild": "yarn version --prerelease --no-git-tag-version --preid dev",
     "build:run": "cross-env PORT=12345 node dist/server/server.js",
     "lint:css": "stylelint './app/**/*.(js|jsx|ts|tsx)'",
     "lint:js": "./node_modules/eslint/bin/eslint.js ./ --fix --ext .jsx,.js,.ts,.tsx",
@@ -150,9 +152,7 @@
     "coverage": "jest --collectCoverage",
     "prestart": "yarn install --production",
     "start": "yarn build:run",
-    "version": "echo \"versioning $npm_package_version\"",
-    "release": "yarn version --patch --no-git-tag-version --preid dev",
-    "postrelease": "yarn version --prerelease --no-git-tag-version --preid dev"
+    "version": "echo \"versioning $npm_package_version\""
   },
   "alias": {
     "react-dom": "@hot-loader/react-dom"
