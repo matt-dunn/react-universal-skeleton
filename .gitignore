@@ -6,3 +6,4 @@ dist
 .imported.js
 reports
 .DS_Store
+.env
