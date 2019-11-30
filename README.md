@@ -18,10 +18,17 @@ yarn dev:server
 ```
 
 
-### Full production build, running all production tasks with compressed assets (gzip/br)
+### Full production build, running all production tasks
 
 ```bash
 yarn build
+```
+
+
+### Full production build, running all production tasks with compressed assets (gzip/br), manage versioning and create archive
+
+```bash
+yarn build:prod
 ```
 
 
