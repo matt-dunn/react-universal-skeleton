@@ -20,11 +20,11 @@ const environment = process.env.NODE_ENV || "production";
 
 console.log(`Building client.... environment: ${environment}`);
 
+const publicPath = process.env.PUBLIC_PATH;
+
 const BUILD = {
     version: packageJSON.version
 };
-
-const publicPath = process.env.PUBLIC_PATH;
 
 const {port, host} = (publicPath && url.parse(publicPath)) || {};
 
