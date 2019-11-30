@@ -1,7 +1,21 @@
 import React from "react";
 
-export const FoldContext = React.createContext(undefined);
+import {ErrorLike} from "components/error";
 
-export const ErrorHandlerContext = React.createContext(undefined);
+export type FoldContext = {
+    processOnServer: boolean;
+}
 
-export const ErrorContext = React.createContext(undefined);
+export type ErrorContext = {
+    error?: ErrorLike;
+}
+
+export type ErrorHandlerContext = {
+    handleError: (error: ErrorLike) => any;
+}
+
+export const FoldContext = React.createContext<FoldContext | undefined>(undefined);
+
+export const ErrorHandlerContext = React.createContext<ErrorHandlerContext | undefined>(undefined);
+
+export const ErrorContext = React.createContext<ErrorContext | undefined>(undefined);
