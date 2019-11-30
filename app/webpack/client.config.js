@@ -129,7 +129,7 @@ module.exports = {
                 writeToDisk: true
             }),
             new HtmlWebpackPlugin({
-                inject: environment === "development",
+                inject: true,
                 template: path.resolve(__dirname, "..", "index.html"),
                 chunksSortMode: "none",
                 //favicon: path.resolve(__dirname, "../favicon.ico")

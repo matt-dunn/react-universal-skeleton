@@ -2,6 +2,7 @@ const path = require("path");
 
 const webpack = require("webpack");
 const nodeExternals = require("webpack-node-externals");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 // const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 
 const ROOT = path.join(__dirname, "..", "..");
@@ -93,6 +94,13 @@ module.exports = {
     },
     plugins: (function(/*environment*/) {
         const plugins = [
+            new HtmlWebpackPlugin({
+                inject: false,
+                template: path.resolve(__dirname, "..", "index.html"),
+                chunksSortMode: "none",
+                //favicon: path.resolve(__dirname, "../favicon.ico")
+                build: BUILD
+            }),
         ];
 
         if (environment === "production") {
