@@ -1,10 +1,21 @@
-import React, {useContext, useEffect, useRef, useState} from "react";
-import PropTypes from "prop-types";
+import React, {ReactElement, ReactNode, useContext, useEffect, useRef, useState} from "react";
 import {useHistory, useLocation} from "react-router";
+import {History, Location, LocationState} from "history";
+
+import {ErrorLike} from "components/error";
 
 import {ErrorHandlerContext, ErrorContext} from "./contexts";
 
-const callHandler = (ex, handler, location, history, props) => {
+type CallHandler = {
+    (error: ErrorLike, location: string, history: History, props: any): boolean | ReactElement;
+}
+
+type ErrorHandlerProps = {
+    handler: CallHandler;
+    children: ReactNode;
+}
+
+const callHandler = (ex: ErrorLike, handler: CallHandler, location: Location, history: History, props: any) => {
     const {pathname, search, hash} = location;
 
     return handler(
@@ -15,31 +26,31 @@ const callHandler = (ex, handler, location, history, props) => {
     );
 };
 
-const getInitialComponent = (ex, handler, location, history, props) => {
+const getInitialComponent = (ex: ErrorLike, handler: CallHandler, location: Location, history: History, props: any) => {
     const ret = callHandler(ex, handler, location, history, props);
 
     return (ret !== false && ret !== true && ret && ret);
 };
 
-const ErrorHandler = ({handler, children, ...props}) => {
+const ErrorHandler = ({handler, children, ...props}: ErrorHandlerProps) => {
     const history = useHistory();
     const location = useLocation();
-    const unlisten = useRef(null);
+    const unlisten = useRef<LocationState>(null);
     const errorContext = useContext(ErrorContext);
     const [component, setComponent] = useState(errorContext && errorContext.error && getInitialComponent(errorContext.error, handler, location, history, props));
 
     useEffect(() => {
         unlisten.current = history.listen(() => {
             setComponent(undefined);
-            errorContext.error = undefined;
+            errorContext && (errorContext.error = undefined);
         });
 
         return () => {
             unlisten.current();
         };
-    }, [errorContext.error, history]);
+    }, [errorContext, history]);
 
-    const handleError = useRef({
+    const handleError = useRef<ErrorHandlerContext>({
         handleError: ex => {
             const ret = callHandler(ex, handler, location, history, props);
 
@@ -56,15 +67,6 @@ const ErrorHandler = ({handler, children, ...props}) => {
             {component || children}
         </ErrorHandlerContext.Provider>
     );
-};
-
-ErrorHandler.propTypes = {
-    children: PropTypes.oneOfType([
-        PropTypes.arrayOf(PropTypes.node),
-        PropTypes.node
-    ]),
-
-    handler: PropTypes.func.isRequired
 };
 
 export default React.memo(ErrorHandler);

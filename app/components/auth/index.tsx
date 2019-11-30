@@ -1,11 +1,17 @@
-import React, {useContext} from "react";
-import PropTypes from "prop-types";
+import React, {ReactNode, useContext} from "react";
 import { useSelector } from "react-redux";
 
-const AuthContext = React.createContext(undefined);
+import {AuthState} from "../../reducers/auth";
+import {AppState} from "../../reducers";
 
-const AuthProvider = ({children}) => {
-    const auth = useSelector(state => state.auth);
+const AuthContext = React.createContext<AuthState | undefined>(undefined);
+
+type AboutProviderProps = {
+    children: ReactNode;
+}
+
+const AuthProvider = ({children}: AboutProviderProps) => {
+    const auth = useSelector<AppState, any>(state => state && state.auth);
 
     return (
         <AuthContext.Provider value={auth}>
@@ -14,18 +20,11 @@ const AuthProvider = ({children}) => {
     );
 };
 
-AuthProvider.propTypes = {
-    children: PropTypes.oneOfType([
-        PropTypes.arrayOf(PropTypes.node),
-        PropTypes.node
-    ])
-};
-
 export const useAuthenticatedUser = () => {
-    const {authenticatedUser} = useContext(AuthContext);
+    const {authenticatedUser} = useContext(AuthContext) || {};
 
     if ((authenticatedUser && authenticatedUser.$status && authenticatedUser.$status.complete && authenticatedUser)) {
-        const {$status, ...rest} = authenticatedUser; // eslint-disable-line no-unused-vars
+        const {$status, ...rest} = authenticatedUser; // eslint-disable-line @typescript-eslint/no-unused-vars
         return {...rest};
     }
 };

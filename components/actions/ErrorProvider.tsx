@@ -1,27 +1,18 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, {ReactNode} from "react";
 
 import {ErrorContext} from "./contexts";
 
-class ErrorProvider extends React.PureComponent {
-    render() {
-        const {value, children} = this.props;
-
-        return (
-            <ErrorContext.Provider value={value}>
-                {children}
-            </ErrorContext.Provider>
-        );
-    }
+type ErrorProviderProps = {
+    value: ErrorContext;
+    children: ReactNode;
 }
 
-ErrorProvider.propTypes = {
-    children: PropTypes.oneOfType([
-        PropTypes.arrayOf(PropTypes.node),
-        PropTypes.node
-    ]),
-
-    value: PropTypes.object.isRequired,
+const ErrorProvider = ({value, children}: ErrorProviderProps) => {
+    return (
+        <ErrorContext.Provider value={value}>
+            {children}
+        </ErrorContext.Provider>
+    );
 };
 
 export default ErrorProvider;
