@@ -12,6 +12,7 @@ const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPl
 // const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 
 const ROOT = path.join(__dirname, "..", "..");
+const TARGET = "dist";
 
 const packageJSON = require(path.resolve(ROOT, "package.json"));
 
@@ -33,7 +34,7 @@ module.exports = {
     devtool: environment === "development" ? "eval-source-map" : "",
     cache: true,
     output: {
-        path: path.resolve(ROOT, "dist", "client"),
+        path: path.resolve(ROOT, TARGET, "client"),
 
         filename: environment === "development" ? "client.js" : "[name]-[hash].js",
 
@@ -120,6 +121,9 @@ module.exports = {
     },
     plugins: (function(environment) {
         const plugins = [
+            new webpack.DefinePlugin({
+                "process.env.TARGET": JSON.stringify(TARGET)
+            }),
             new BundleAnalyzerPlugin({
                 openAnalyzer: false,
                 analyzerMode: "static",

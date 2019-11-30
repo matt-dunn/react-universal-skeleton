@@ -6,7 +6,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 // const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 
 const ROOT = path.join(__dirname, "..", "..");
-const DIST = path.resolve(ROOT, "dist");
+const TARGET = "dist";
 
 const packageJSON = require(path.resolve(ROOT, "package.json"));
 
@@ -28,7 +28,7 @@ module.exports = {
     devtool: "source-map",
     cache: true,
     output: {
-        path: path.resolve(DIST, "server"),
+        path: path.resolve(ROOT, TARGET, "server"),
 
         filename: "server.js",
 
@@ -94,6 +94,9 @@ module.exports = {
     },
     plugins: (function(/*environment*/) {
         const plugins = [
+            new webpack.DefinePlugin({
+                "process.env.TARGET": JSON.stringify(TARGET)
+            }),
             new HtmlWebpackPlugin({
                 inject: false,
                 template: path.resolve(__dirname, "..", "index.html"),

@@ -1,6 +1,6 @@
 {
   "name": "parcel",
-  "version": "1.0.28-dev.0",
+  "version": "1.0.42-dev.0",
   "main": "app/index.html",
   "private": true,
   "dependencies": {
@@ -134,7 +134,7 @@
     "build:client": "webpack --config ./app/webpack/client.config.js",
     "build:server": "webpack --config ./app/webpack/server.config.js",
     "build:all": "rimraf dist && concurrently \"yarn build:client\" \"yarn build:server\"",
-    "package": "node etc/scripts/package.js",
+    "package": "cross-env TARGET=dist node etc/scripts/package.js",
     "build": "rimraf reports && yarn lint && yarn type-check && yarn coverage && yarn build:all",
     "build:run": "cross-env PORT=12345 node dist/server/server.js",
     "prebuild:prod": "yarn version --patch --no-git-tag-version --preid dev",

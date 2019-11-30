@@ -4,10 +4,15 @@ const archiver = require("archiver");
 const hp = require("handpipe");
 
 const ROOT = process.cwd();
+const TARGET = process.env.TARGET;
+
+if (!TARGET) {
+    throw new Error("Missing env TARGET. Must match webpack distribution target");
+}
 
 const packageJSON = require(path.resolve(ROOT, "package.json"));
 
-const outputFilename = path.resolve(ROOT, "dist", `${packageJSON.name}.${packageJSON.version}.tar.gz`);
+const outputFilename = path.resolve(ROOT, TARGET, `${packageJSON.name}.${packageJSON.version}.tar.gz`);
 
 const output = fs.createWriteStream(outputFilename);
 const archive = archiver("tar", {
@@ -24,8 +29,8 @@ archive.on("error", (err) => {
 
 archive.pipe(output);
 
-archive.directory(path.resolve(ROOT, "dist", "client"), "dist/client");
-archive.directory(path.resolve(ROOT, "dist", "server"), "dist/server");
+archive.directory(path.resolve(ROOT, TARGET, "client"), `${TARGET}/client`);
+archive.directory(path.resolve(ROOT, TARGET, "server"), `${TARGET}/server`);
 
 archive.file(path.resolve(ROOT, "package.json"), { name: "package.json" });
 archive.file(path.resolve(ROOT, "yarn.lock"), { name: "yarn.lock" });
