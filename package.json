@@ -130,8 +130,8 @@
     "webpack-node-externals": "^1.7.2"
   },
   "scripts": {
-    "dev:client": "cross-env PUBLIC_PATH=https://0.0.0.0:1234/ cross-env cross-env NODE_ENV=development cross-env webpack-dev-server --config ./app/webpack/client.config.js --progress",
-    "dev:server": "cross-env PUBLIC_PATH=https://0.0.0.0:1234/ cross-env PORT=12345 cross-env NODE_ENV=development cross-env babel-node --presets @babel/env app/webpack/index.js",
+    "dev:client": "cross-env PUBLIC_PATH=https://0.0.0.0:1234/ cross-env NODE_ENV=development webpack-dev-server --config ./app/webpack/client.config.js --progress",
+    "dev:server": "cross-env PUBLIC_PATH=https://0.0.0.0:1234/ cross-env PORT=12345 cross-env NODE_ENV=development babel-node --presets @babel/env app/webpack/index.js",
     "build:client": "webpack --config ./app/webpack/client.config.js",
     "build:server": "webpack --config ./app/webpack/server.config.js",
     "build:all": "rimraf dist && concurrently \"yarn build:client\" \"yarn build:server\"",
