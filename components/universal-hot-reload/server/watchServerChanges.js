@@ -1,8 +1,11 @@
+import chalk from "chalk";
 import { join } from "path";
 import webpack from "webpack";
 import clearRequireCache from "../utils/clearRequireCache";
 import initHttpServer from "./initHttpServer";
 import generateDefaultConfig from "./generateDefaultConfig";
+
+const {log, error} = console;
 
 /**
  * Watches server for changes, recompile and restart express
@@ -18,19 +21,19 @@ const watchServerChanges = serverConfig => {
   // const serverCompiler = webpack(serverConfig, (err, stats) => {
   //   if (err || stats.hasErrors()) {
   //     if (err) {
-  //       console.error(err.stack || err);
+  //       error(err.stack || err);
   //       if (err.details) {
-  //         console.error(err.details);
+  //         error(err.details);
   //       }
   //       return;
   //     }
   //     const info = stats.toJson();
   //     if (stats.hasErrors()) {
-  //       console.error(info.errors);
+  //       error(info.errors);
   //     }
   //
   //     if (stats.hasWarnings()) {
-  //       console.warn(info.warnings);
+  //       warn(info.warnings);
   //     }
   //   }
   // });
@@ -43,7 +46,7 @@ const watchServerChanges = serverConfig => {
   // compile server side code
   serverCompiler.watch(compilerOptions, err => {
     if (err) {
-      console.log(`Server bundling error: ${JSON.stringify(err)}`);
+      error(chalk.red(`Server bundling error: ${JSON.stringify(err)}`));
       return;
     }
 
@@ -55,7 +58,7 @@ const watchServerChanges = serverConfig => {
 
         if (httpServerInitObject) {
           initialLoad = false;
-          console.log(`Server bundled & restarted ${new Date()}`);
+          log(chalk.yellow(`📦 Server bundled & restarted ${new Date()}`));
         } else {
           // server bundling error has occurred
           initialLoad = true;
@@ -72,7 +75,7 @@ const watchServerChanges = serverConfig => {
 
       if (httpServerInitObject) {
         initialLoad = false;
-        console.log("Server bundled successfully");
+        log(chalk.yellow("📦 Server bundled successfully"));
       } else {
         // server bundling error has occurred
         initialLoad = true;

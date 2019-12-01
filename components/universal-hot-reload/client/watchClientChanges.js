@@ -1,6 +1,9 @@
+import chalk from "chalk";
 import url from "url";
 import webpack from "webpack";
 import webpackDevServer from "webpack-dev-server";
+
+const {log} = console;
 
 /**
  * Start webpack dev server for hmr
@@ -49,7 +52,7 @@ const watchClientChanges = clientConfig => {
 
   const server = new webpackDevServer(compiler, devServerOptions);
   server.listen(port, hostname, () => {
-    console.log(`Starting webpack-dev-server on ${webpackDevServerUrl}`);
+    log(chalk`🔥 Starting webpack-dev-server on {yellow ${webpackDevServerUrl}}`);
   });
 };
 

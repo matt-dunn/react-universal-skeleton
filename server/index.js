@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import url from "url";
 import path from "path";
 import express from "express";
@@ -12,6 +13,8 @@ import helmet from "helmet";
 import key from "./ssl/private.key";
 import cert from "./ssl/private.crt";
 import ca from "./ssl/private.pem";
+
+const {log} = console;
 
 const environment = process.env.NODE_ENV || "production";
 
@@ -53,5 +56,5 @@ export default https
         ca
     }, app)
     .listen(appPort, appHostname, () => {
-        console.log(`SSR app listening on port ${appPort}. Go to https://${appHostname}:${appPort}${pathname}`);
+        log(chalk`🔥 Server app listening on port {yellow ${appPort}}. Go to {yellow https://${appHostname}:${appPort}${pathname}}`);
     });
