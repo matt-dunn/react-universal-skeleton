@@ -43,8 +43,6 @@ module.exports = merge(
 
             chunkFilename: "[name].js",
 
-            publicPath,
-
             library: "app",
             libraryTarget: "commonjs2"
         },

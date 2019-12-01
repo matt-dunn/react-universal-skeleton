@@ -1,10 +1,13 @@
 const webpack = require("webpack");
 const path = require("path");
 
-module.exports = ({environment, root, context, target}) => ( {
+module.exports = ({environment, root, context, target, publicPath}) => ( {
     mode: environment,
     cache: true,
     context,
+    output: {
+        publicPath
+    },
     resolve: {
         extensions: [".js", ".jsx", ".ts", ".tsx", ".scss", ".css"],
 

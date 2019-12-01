@@ -47,8 +47,6 @@ module.exports = merge(
             sourceMapFilename: "[name]-[hash].map",
 
             chunkFilename: "[id]-[chunkhash].js",
-
-            publicPath
         },
         module :{
             rules: [
