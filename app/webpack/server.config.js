@@ -1,3 +1,4 @@
+const chalk = require("chalk");
 const path = require("path");
 
 const webpack = require("webpack");
@@ -5,20 +6,18 @@ const nodeExternals = require("webpack-node-externals");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 // const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 
-const ROOT = path.join(__dirname, "..", "..");
-const TARGET = "dist";
+const {log} = console;
 
-const packageJSON = require(path.resolve(ROOT, "package.json"));
+const {environment, version, root, target, publicPath} = require("./metadata");
 
-const environment = process.env.NODE_ENV || "production";
-
-console.log(`Building server.... environment: ${environment}`);
-
-const publicPath = process.env.PUBLIC_PATH;
-
-const BUILD = {
-    version: packageJSON.version
-};
+log(chalk`🔨 Building {white.bold server}...`);
+log(chalk`
+  Environment: {yellow ${environment}}
+  Version: {yellow ${version}}
+  Root: {yellow ${root}}
+  Target: {yellow ${target}}
+  Public Path: {yellow ${publicPath}}
+`);
 
 module.exports = {
     entry: "../server/index.js",
@@ -28,7 +27,7 @@ module.exports = {
     devtool: "source-map",
     cache: true,
     output: {
-        path: path.resolve(ROOT, TARGET, "server"),
+        path: path.resolve(root, target, "server"),
 
         filename: "server.js",
 
@@ -47,9 +46,9 @@ module.exports = {
 
         alias: {
             "react-dom": "@hot-loader/react-dom",
-            "app": path.join(ROOT, "app"),
-            "components": path.join(ROOT, "components"),
-            "mocks": path.join(ROOT, "mocks"),
+            "app": path.join(root, "app"),
+            "components": path.join(root, "components"),
+            "mocks": path.join(root, "mocks"),
         }
     },
     module :{
@@ -57,7 +56,7 @@ module.exports = {
             {
                 test: /\.(js|jsx|ts|tsx)$/,
                 exclude: /node_modules/,
-                include: [path.resolve(ROOT, "app"), path.resolve(ROOT, "components"), path.resolve(ROOT, "server")],
+                include: [path.resolve(root, "app"), path.resolve(root, "components"), path.resolve(root, "server")],
                 use: [
                     {
                         loader: "babel-loader",
@@ -70,7 +69,7 @@ module.exports = {
             },
             {
                 test: /ssl\/.*$/i,
-                include: [path.resolve(ROOT, "app"), path.resolve(ROOT, "components"), path.resolve(ROOT, "server")],
+                include: [path.resolve(root, "app"), path.resolve(root, "components"), path.resolve(root, "server")],
                 use: "raw-loader",
             },
             {
@@ -95,20 +94,20 @@ module.exports = {
     plugins: (function(/*environment*/) {
         const plugins = [
             new webpack.DefinePlugin({
-                "process.env.TARGET": JSON.stringify(TARGET)
+                "process.env.TARGET": JSON.stringify(target)
             }),
             new HtmlWebpackPlugin({
                 inject: false,
                 template: path.resolve(__dirname, "..", "index.html"),
                 chunksSortMode: "none",
                 //favicon: path.resolve(__dirname, "../favicon.ico")
-                build: BUILD
+                build: {version}
             }),
         ];
 
         if (environment === "production") {
             plugins.push(new webpack.BannerPlugin({
-                banner: `Version: ${BUILD.version}`,
+                banner: `Version: ${version}`,
                 raw: false,
                 entryOnly: false
             }));

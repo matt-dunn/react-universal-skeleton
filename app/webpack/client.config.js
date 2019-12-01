@@ -1,4 +1,4 @@
-const url = require("url");
+const chalk = require("chalk");
 const fs = require("fs");
 const path = require("path");
 
@@ -11,22 +11,20 @@ const LoadablePlugin = require("@loadable/webpack-plugin");
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 // const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 
-const ROOT = path.join(__dirname, "..", "..");
-const TARGET = "dist";
+const {log} = console;
 
-const packageJSON = require(path.resolve(ROOT, "package.json"));
+const {environment, version, root, target, publicPath, port, host} = require("./metadata");
 
-const environment = process.env.NODE_ENV || "production";
-
-console.log(`Building client.... environment: ${environment}`);
-
-const publicPath = process.env.PUBLIC_PATH;
-
-const BUILD = {
-    version: packageJSON.version
-};
-
-const {port, host} = (publicPath && url.parse(publicPath)) || {};
+log(chalk`🔨 Building {white.bold client}...`);
+log(chalk`
+  Environment: {yellow ${environment}}
+  Version: {yellow ${version}}
+  Root: {yellow ${root}}
+  Target: {yellow ${target}}
+  Public Path: {yellow ${publicPath}}
+  Host: {yellow ${host}}
+  Port: {yellow ${port}}
+`);
 
 module.exports = {
     entry: "./client.js",
@@ -34,7 +32,7 @@ module.exports = {
     devtool: environment === "development" ? "eval-source-map" : "",
     cache: true,
     output: {
-        path: path.resolve(ROOT, TARGET, "client"),
+        path: path.resolve(root, target, "client"),
 
         filename: environment === "development" ? "client.js" : "[name]-[hash].js",
 
@@ -50,9 +48,9 @@ module.exports = {
 
         alias: {
             "react-dom": "@hot-loader/react-dom",
-            "app": path.join(ROOT, "app"),
-            "components": path.join(ROOT, "components"),
-            "mocks": path.join(ROOT, "mocks"),
+            "app": path.join(root, "app"),
+            "components": path.join(root, "components"),
+            "mocks": path.join(root, "mocks"),
         }
     },
     module :{
@@ -60,7 +58,7 @@ module.exports = {
             {
                 test: /\.(js|jsx|ts|tsx)$/,
                 exclude: /node_modules/,
-                include: [path.resolve(ROOT, "app"), path.resolve(ROOT, "components"), path.resolve(ROOT, "server")],
+                include: [path.resolve(root, "app"), path.resolve(root, "components"), path.resolve(root, "server")],
                 use: [
                     {
                         loader: "babel-loader",
@@ -69,7 +67,7 @@ module.exports = {
             },
             {
                 test: /\.(css|scss)$/,
-                include: [path.resolve(ROOT, "app"), path.resolve(ROOT, "components"), path.resolve(ROOT, "server")],
+                include: [path.resolve(root, "app"), path.resolve(root, "components"), path.resolve(root, "server")],
                 use: (function(environment) {
                     const rules = [
                         {
@@ -122,12 +120,12 @@ module.exports = {
     plugins: (function(environment) {
         const plugins = [
             new webpack.DefinePlugin({
-                "process.env.TARGET": JSON.stringify(TARGET)
+                "process.env.TARGET": JSON.stringify(target)
             }),
             new BundleAnalyzerPlugin({
                 openAnalyzer: false,
                 analyzerMode: "static",
-                reportFilename: path.resolve(ROOT, "reports", "bundle.html")
+                reportFilename: path.resolve(root, "reports", "bundle.html")
             }),
             new LoadablePlugin({
                 writeToDisk: true
@@ -137,7 +135,7 @@ module.exports = {
                 template: path.resolve(__dirname, "..", "index.html"),
                 chunksSortMode: "none",
                 //favicon: path.resolve(__dirname, "../favicon.ico")
-                build: BUILD
+                build: {version}
             }),
             new MiniCssExtractPlugin({
                 filename: "[name]-[hash].css",
@@ -172,7 +170,7 @@ module.exports = {
             }));
 
             plugins.push(new webpack.BannerPlugin({
-                banner: `Version: ${BUILD.version}`,
+                banner: `Version: ${version}`,
                 raw: false,
                 entryOnly: false
             }));
@@ -204,9 +202,9 @@ module.exports = {
         // },
         // https: DEV_PROTOCOL === "https",
         https: {
-            key: fs.readFileSync(path.resolve(ROOT, "server", "ssl", "private.key")),
-            cert: fs.readFileSync(path.resolve(ROOT, "server", "ssl", "private.crt")),
-            ca: fs.readFileSync(path.resolve(ROOT, "server", "ssl", "private.pem")),
+            key: fs.readFileSync(path.resolve(root, "server", "ssl", "private.key")),
+            cert: fs.readFileSync(path.resolve(root, "server", "ssl", "private.crt")),
+            ca: fs.readFileSync(path.resolve(root, "server", "ssl", "private.pem")),
         },
     }
 };
