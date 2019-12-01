@@ -15,7 +15,7 @@ module.exports = {
     context: path.resolve(__dirname, ".."),
     root: ROOT,
     environment,
-    publicPath,
+    publicPath: publicPath || "/",
     target: "dist",
     version: packageJSON.version,
     name: packageJSON.name,

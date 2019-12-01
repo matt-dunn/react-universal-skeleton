@@ -48,7 +48,7 @@ module.exports = merge(
 
             chunkFilename: "[id]-[chunkhash].js",
 
-            publicPath: publicPath || "/"
+            publicPath
         },
         module :{
             rules: [
