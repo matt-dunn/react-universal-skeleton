@@ -54,22 +54,14 @@ module.exports = merge(
                 },
             ]
         },
-        plugins: (function(/*environment*/) {
-            const plugins = [
-                new HtmlWebpackPlugin({
-                    inject: false,
-                    template: path.resolve(__dirname, "..", "index.html"),
-                    chunksSortMode: "none",
-                    //favicon: path.resolve(__dirname, "../favicon.ico")
-                    build: {version}
-                }),
-            ];
-
-            // if (environment === "development") {
-            //     plugins.push(new HardSourceWebpackPlugin());
-            // }
-
-            return plugins;
-        })(environment),
+        plugins: [
+            new HtmlWebpackPlugin({
+                inject: false,
+                template: path.resolve(__dirname, "..", "index.html"),
+                chunksSortMode: "none",
+                //favicon: path.resolve(__dirname, "../favicon.ico")
+                build: {version}
+            }),
+        ],
     }
 );

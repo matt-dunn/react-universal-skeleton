@@ -48,42 +48,34 @@ module.exports = merge(
 
             chunkFilename: "[id]-[chunkhash].js",
         },
-        module :{
+        module: {
             rules: [
                 {
                     test: /\.(css|scss)$/,
                     exclude: /node_modules/,
                     include: [path.resolve(root, "app"), path.resolve(root, "components"), path.resolve(root, "server")],
-                    use: (function(environment) {
-                        const rules = [
-                            {
-                                loader: "style-loader"
+                    use: [
+                        {
+                            loader: "style-loader"
+                        },
+                        {
+                            loader: MiniCssExtractPlugin.loader,
+                            options: {
+                                hmr: environment === "development",
+                                reloadAll: true,
                             },
-                            {
-                                loader: MiniCssExtractPlugin.loader,
-                                options: {
-                                    hmr: environment === "development",
-                                    reloadAll: true,
-                                },
-                            },
-                            {
-                                loader: "css-loader",
-                                options: {
-                                    sourceMap: true,
-                                    importLoaders: 2
-                                }
-                            },
-                            {
-                                loader: "sass-loader"
+                        },
+                        {
+                            loader: "css-loader",
+                            options: {
+                                sourceMap: true,
+                                importLoaders: 2
                             }
-                        ];
-
-                        // if (environment === "development") {
-                        // } else {
-                        // }
-
-                        return rules;
-                    })(environment)
+                        },
+                        {
+                            loader: "sass-loader"
+                        }
+                    ]
                 },
             ]
         },
@@ -107,20 +99,19 @@ module.exports = merge(
             ];
 
             if (environment === "development") {
-                plugins.push(new BundleAnalyzerPlugin({
-                    openAnalyzer: false,
-                    analyzerMode: "static",
-                    reportFilename: path.resolve(root, "reports", "bundle.html")
-                }));
                 plugins.push(new webpack.SourceMapDevToolPlugin({
                     filename: null,
                     exclude: [/node_modules/],
                     test: /\.ts($|\?)/i
                 }));
                 // plugins.push(new HardSourceWebpackPlugin());
-            }
+            } else if (environment === "production") {
+                plugins.push(new BundleAnalyzerPlugin({
+                    openAnalyzer: false,
+                    analyzerMode: "static",
+                    reportFilename: path.resolve(root, "reports", "bundle.html")
+                }));
 
-            if (environment === "production") {
                 plugins.push(new CompressionPlugin({
                     filename: "[path].gz[query]",
                     algorithm: "gzip",
