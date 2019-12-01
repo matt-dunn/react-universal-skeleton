@@ -53,7 +53,11 @@ module.exports = merge(
                 {
                     test: /\.(css|scss)$/,
                     exclude: /node_modules/,
-                    include: [path.resolve(root, "app"), path.resolve(root, "components"), path.resolve(root, "server")],
+                    include: [
+                        path.resolve(root, "app"),
+                        path.resolve(root, "components"),
+                        path.resolve(root, "server")
+                    ],
                     use: [
                         {
                             loader: "style-loader"
