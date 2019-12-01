@@ -52,6 +52,7 @@ module.exports = merge(
             rules: [
                 {
                     test: /\.(css|scss)$/,
+                    exclude: /node_modules/,
                     include: [path.resolve(root, "app"), path.resolve(root, "components"), path.resolve(root, "server")],
                     use: (function(environment) {
                         const rules = [
@@ -88,11 +89,6 @@ module.exports = merge(
         },
         plugins: (function(environment) {
             const plugins = [
-                new BundleAnalyzerPlugin({
-                    openAnalyzer: false,
-                    analyzerMode: "static",
-                    reportFilename: path.resolve(root, "reports", "bundle.html")
-                }),
                 new LoadablePlugin({
                     writeToDisk: true
                 }),
@@ -111,6 +107,11 @@ module.exports = merge(
             ];
 
             if (environment === "development") {
+                plugins.push(new BundleAnalyzerPlugin({
+                    openAnalyzer: false,
+                    analyzerMode: "static",
+                    reportFilename: path.resolve(root, "reports", "bundle.html")
+                }));
                 plugins.push(new webpack.SourceMapDevToolPlugin({
                     filename: null,
                     exclude: [/node_modules/],
@@ -134,12 +135,6 @@ module.exports = merge(
                     threshold: 10240,
                     minRatio: 0.7
                 }));
-
-                plugins.push(new webpack.BannerPlugin({
-                    banner: `Version: ${version}`,
-                    raw: false,
-                    entryOnly: false
-                }));
             }
 
             return plugins;
@@ -150,20 +145,12 @@ module.exports = merge(
             },
             hot: true,
             lazy: false,
-            // writeToDisk: true,
-            // contentBase: path.resolve(__dirname, ".."),
             stats: "errors-only",
-            // host: DEV_HOST,
             port,
             sockPort: port,
             open: false,
             public: host,
             historyApiFallback: true,
-            // watchOptions: {
-            //     aggregateTimeout: 300,
-            //     poll: 1000
-            // },
-            // https: DEV_PROTOCOL === "https",
             https: {
                 key: fs.readFileSync(path.resolve(root, "server", "ssl", "private.key")),
                 cert: fs.readFileSync(path.resolve(root, "server", "ssl", "private.crt")),

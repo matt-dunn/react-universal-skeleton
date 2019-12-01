@@ -1,7 +1,7 @@
 const webpack = require("webpack");
 const path = require("path");
 
-module.exports = ({environment, root, context, target, publicPath}) => ( {
+module.exports = ({environment, root, context, target, publicPath, version}) => ( {
     mode: environment,
     cache: true,
     context,
@@ -18,11 +18,23 @@ module.exports = ({environment, root, context, target, publicPath}) => ( {
             "mocks": path.join(root, "mocks"),
         }
     },
-    plugins: [
-        new webpack.DefinePlugin({
-            "process.env.TARGET": JSON.stringify(target)
-        })
-    ],
+    plugins: (function(){
+        const plugins = [
+            new webpack.DefinePlugin({
+                "process.env.TARGET": JSON.stringify(target)
+            })
+        ];
+
+        if (environment === "production") {
+            plugins.push(new webpack.BannerPlugin({
+                banner: `Version: ${version}`,
+                raw: false,
+                entryOnly: false
+            }));
+        }
+
+        return plugins;
+    })(environment),
     optimization: {
         minimize: environment === "production"
     }

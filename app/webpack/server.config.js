@@ -1,7 +1,6 @@
 const chalk = require("chalk");
 const path = require("path");
 
-const webpack = require("webpack");
 const nodeExternals = require("webpack-node-externals");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 // const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
@@ -50,6 +49,7 @@ module.exports = merge(
             rules: [
                 {
                     test: /\.(scss|css)$/,
+                    exclude: /node_modules/,
                     loader: "ignore-loader"
                 },
             ]
@@ -64,14 +64,6 @@ module.exports = merge(
                     build: {version}
                 }),
             ];
-
-            if (environment === "production") {
-                plugins.push(new webpack.BannerPlugin({
-                    banner: `Version: ${version}`,
-                    raw: false,
-                    entryOnly: false
-                }));
-            }
 
             // if (environment === "development") {
             //     plugins.push(new HardSourceWebpackPlugin());
