@@ -12,6 +12,7 @@ const publicPath = process.env.PUBLIC_PATH;
 const {port, host} = (publicPath && url.parse(publicPath)) || {};
 
 module.exports = {
+    context: path.resolve(__dirname, ".."),
     root: ROOT,
     environment,
     publicPath,
