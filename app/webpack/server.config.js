@@ -11,6 +11,7 @@ const {log} = console;
 
 const partialCommon = require("./partials/common");
 const partialCode = require("./partials/code");
+const partialAssets = require("./partials/assets");
 
 const metadata = require("./metadata");
 const {environment, version, root, target, publicPath} = metadata;
@@ -26,6 +27,7 @@ log(chalk`
 
 module.exports = merge(
     partialCommon(metadata),
+    partialAssets(metadata),
     partialCode(metadata),
     {
         entry: "../server/index.js",
@@ -52,35 +54,10 @@ module.exports = merge(
                     test: /\.(scss|css)$/,
                     loader: "ignore-loader"
                 },
-                {
-                    test: /ssl\/.*$/i,
-                    include: [path.resolve(root, "app"), path.resolve(root, "components"), path.resolve(root, "server")],
-                    use: "raw-loader",
-                },
-                {
-                    test: /mocks\/content\/.*$/i,
-                    use: "raw-loader",
-                },
-                {
-                    test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
-                    use: [
-                        {
-                            loader: "file-loader",
-                            options: {
-                                emitFile: false,
-                                name: "[name]-[hash].[ext]",
-                                outputPath: "fonts/"
-                            }
-                        }
-                    ]
-                }
             ]
         },
         plugins: (function(/*environment*/) {
             const plugins = [
-                new webpack.DefinePlugin({
-                    "process.env.TARGET": JSON.stringify(target)
-                }),
                 new HtmlWebpackPlugin({
                     inject: false,
                     template: path.resolve(__dirname, "..", "index.html"),
@@ -104,8 +81,5 @@ module.exports = merge(
 
             return plugins;
         })(environment),
-        optimization: {
-            minimize: environment === "production"
-        }
     }
 );

@@ -1,6 +1,7 @@
+const webpack = require("webpack");
 const path = require("path");
 
-module.exports = ({environment, root, context}) => ( {
+module.exports = ({environment, root, context, target}) => ( {
     mode: environment,
     cache: true,
     context,
@@ -14,4 +15,12 @@ module.exports = ({environment, root, context}) => ( {
             "mocks": path.join(root, "mocks"),
         }
     },
+    plugins: [
+        new webpack.DefinePlugin({
+            "process.env.TARGET": JSON.stringify(target)
+        })
+    ],
+    optimization: {
+        minimize: environment === "production"
+    }
 });

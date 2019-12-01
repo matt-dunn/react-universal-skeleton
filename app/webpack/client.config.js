@@ -16,6 +16,7 @@ const {log} = console;
 
 const partialCommon = require("./partials/common");
 const partialCode = require("./partials/code");
+const partialAssets = require("./partials/assets");
 
 const metadata = require("./metadata");
 const {environment, version, root, target, publicPath, port, host} = metadata;
@@ -33,6 +34,7 @@ log(chalk`
 
 module.exports = merge(
     partialCommon(metadata),
+    partialAssets(metadata),
     partialCode(metadata),
     {
         entry: "./client.js",
@@ -84,29 +86,10 @@ module.exports = merge(
                         return rules;
                     })(environment)
                 },
-                {
-                    test: /mocks\/content\/.*$/i,
-                    use: "raw-loader",
-                },
-                {
-                    test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
-                    use: [
-                        {
-                            loader: "file-loader",
-                            options: {
-                                name: "[name]-[hash].[ext]",
-                                outputPath: "fonts/"
-                            }
-                        }
-                    ]
-                }
             ]
         },
         plugins: (function(environment) {
             const plugins = [
-                new webpack.DefinePlugin({
-                    "process.env.TARGET": JSON.stringify(target)
-                }),
                 new BundleAnalyzerPlugin({
                     openAnalyzer: false,
                     analyzerMode: "static",
@@ -163,9 +146,6 @@ module.exports = merge(
 
             return plugins;
         })(environment),
-        optimization: {
-            minimize: environment === "production"
-        },
         devServer: {
             headers: {
                 "Access-Control-Allow-Origin": "*"
