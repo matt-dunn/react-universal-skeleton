@@ -147,9 +147,9 @@ module.exports = merge(
             public: host,
             historyApiFallback: true,
             https: {
-                key: fs.readFileSync(path.resolve(root, "server", "ssl", "private.key")),
-                cert: fs.readFileSync(path.resolve(root, "server", "ssl", "private.crt")),
-                ca: fs.readFileSync(path.resolve(root, "server", "ssl", "private.pem")),
+                key: fs.readFileSync(path.resolve(context, "server", "ssl", "private.key")),
+                cert: fs.readFileSync(path.resolve(context, "server", "ssl", "private.crt")),
+                ca: fs.readFileSync(path.resolve(context, "server", "ssl", "private.pem")),
             },
         }
     }

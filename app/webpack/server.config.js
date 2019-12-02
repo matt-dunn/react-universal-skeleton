@@ -29,7 +29,7 @@ module.exports = merge(
     partialAssets(metadata),
     partialCode(metadata),
     {
-        entry: "../server/index.js",
+        entry: "./server/index.js",
         target: "node",
         externals: [nodeExternals()],
         devtool: "source-map",
