@@ -107,7 +107,8 @@ yarn coverage
     - look at create-react-app and other bootstraps
     - redux
     - ducks
-[ ] Look into full HMR again... issue previously with lazy loaded components?
+[ ] Look into full HMR again...
+    - issue previously with lazy loaded components? or using hashes in dev?
 [ ] Optimise build / webpack config to increase performance
 [ ] devServer config - watch options?
 [ ] Source maps
@@ -126,14 +127,14 @@ yarn coverage
 
 #### Hot SSR
 
-[ ] sass-loader (Error: Module did not self-register) when updating SASS with HR
+[X] sass-loader (Error: Module did not self-register) when updating SASS with HR - fixed by explicitly setting the 'implementation' options on sass-loader
 [X] Refactor to remove hard-coded public protocol / host / port in configs and universal-hot-reload
 [X] Review package scripts to optimise for:
     - Dev client only with HR
     - Dev client/server with HR
     - Server without HR
     - Prod with br/gzip assets and static server
-[ ] Use has for output when prod
+[X] Use hash for output when prod
 [X] Use dist/client/index.html for prod (as it's processed fully) OR can I use the dist version as before if the HTML loader
     can always write to disk? (https://github.com/jantimon/html-webpack-harddisk-plugin) - outputed index.html for both client _and_ server
 [X] Can use helmet in server/index.js? - in production build

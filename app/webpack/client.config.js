@@ -44,9 +44,9 @@ module.exports = merge(
 
             filename: environment === "development" ? "client.js" : "[name]-[hash].js",
 
-            sourceMapFilename: "[name]-[hash].map",
+            sourceMapFilename: environment === "development" ? "[name].map" : "[name]-[hash].map",
 
-            chunkFilename: "[id]-[chunkhash].js",
+            chunkFilename: environment === "development" ? "[name].js" : "[id]-[chunkhash].js",
         },
         module: {
             rules: [
@@ -80,7 +80,11 @@ module.exports = merge(
                             loader: "postcss-loader"
                         },
                         {
-                            loader: "sass-loader"
+                            loader: "sass-loader",
+                            options: {
+                                sourceMap: true,
+                                implementation: require('node-sass'),
+                            },
                         }
                     ]
                 },
@@ -100,7 +104,7 @@ module.exports = merge(
                 }),
                 new MiniCssExtractPlugin({
                     filename: environment === "development" ? "[name].css" : "[name]-[hash].css",
-                    chunkFilename: "[id]-[hash].css",
+                    chunkFilename: environment === "development" ? "[name].css" : "[id]-[hash].css",
                     // ignoreOrder: false, // Enable to remove warnings about conflicting order
                 })
             ];
