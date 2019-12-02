@@ -7,6 +7,9 @@ const packageJSON = require(path.resolve(ROOT, "package.json"));
 
 const environment = process.env.NODE_ENV || "production";
 
+// Ensure NODE_ENV defaults to production if not set
+process.env.NODE_ENV = environment;
+
 const publicPath = process.env.PUBLIC_PATH;
 
 const {port, host} = (publicPath && url.parse(publicPath)) || {};

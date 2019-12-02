@@ -12,7 +12,7 @@ module.exports = ({environment, root, context, target, publicPath, version}) => 
         extensions: [".js", ".jsx", ".ts", ".tsx", ".scss", ".css"],
 
         alias: {
-            "react-dom": "@hot-loader/react-dom",
+            "react-dom": environment === "development" ? "@hot-loader/react-dom" : "react-dom",
             "app": path.join(root, "app"),
             "components": path.join(root, "components"),
             "mocks": path.join(root, "mocks"),
@@ -34,8 +34,5 @@ module.exports = ({environment, root, context, target, publicPath, version}) => 
         }
 
         return plugins;
-    })(environment),
-    optimization: {
-        minimize: environment === "production"
-    }
+    })(environment)
 });

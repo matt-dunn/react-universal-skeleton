@@ -1,4 +1,3 @@
-import { hot } from "react-hot-loader";
 import React from "react";
 import {Helmet} from "react-helmet-async";
 import {Switch, Route, generatePath} from "react-router-dom";
@@ -71,4 +70,4 @@ const App = () => {
     );
 };
 
-export default hot(module)(App);
+export default process.env.NODE_ENV === "production" ? App : require("react-hot-loader").hot(module)(App);
