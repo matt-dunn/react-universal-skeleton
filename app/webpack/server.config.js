@@ -32,7 +32,6 @@ module.exports = merge(
         entry: "./server/index.js",
         target: "node",
         externals: [nodeExternals()],
-        devtool: "source-map",
         output: {
             path: path.resolve(root, target, "server"),
 

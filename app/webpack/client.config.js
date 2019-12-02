@@ -2,7 +2,6 @@ const chalk = require("chalk");
 const fs = require("fs");
 const path = require("path");
 
-const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CompressionPlugin = require("compression-webpack-plugin");
@@ -38,7 +37,6 @@ module.exports = merge(
     partialCode(metadata),
     {
         entry: "./index.js",
-        devtool: environment === "development" ? "eval-source-map" : "",
         output: {
             path: path.resolve(root, target, "client"),
 
@@ -110,11 +108,11 @@ module.exports = merge(
             ];
 
             if (environment === "development") {
-                plugins.push(new webpack.SourceMapDevToolPlugin({
-                    filename: null,
-                    exclude: [/node_modules/],
-                    test: /\.ts($|\?)/i
-                }));
+                // plugins.push(new webpack.SourceMapDevToolPlugin({
+                //     filename: null,
+                //     exclude: [/node_modules/],
+                //     test: /\.ts($|\?)/i
+                // }));
                 // plugins.push(new HardSourceWebpackPlugin());
             } else if (environment === "production") {
                 plugins.push(new BundleAnalyzerPlugin({

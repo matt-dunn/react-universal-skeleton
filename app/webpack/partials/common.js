@@ -8,6 +8,7 @@ module.exports = ({environment, root, context, target, publicPath, version}) => 
     output: {
         publicPath
     },
+    devtool: environment === "development" ? "cheap-module-eval-source-map" : "",
     resolve: {
         extensions: [".js", ".jsx", ".ts", ".tsx", ".scss", ".css"],
 
