@@ -77,6 +77,9 @@ module.exports = merge(
                             }
                         },
                         {
+                            loader: "postcss-loader"
+                        },
+                        {
                             loader: "sass-loader"
                         }
                     ]
