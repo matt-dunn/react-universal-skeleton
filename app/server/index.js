@@ -58,6 +58,10 @@ export default https
         cert,
         ca
     }, app)
-    .listen(appPort, appHostname, () => {
-        log(chalk`🔥 Server app listening on port {yellow ${appPort}}. Go to {yellow https://${appHostname}:${appPort}${pathname}}`);
+    .listen(appPort, appHostname, err => {
+        if (err) {
+            log(chalk`Could not start server app on port {yellow ${appPort}} - {red ${JSON.stringify(err)}}`);
+        } else {
+            log(chalk`🔥 Server app listening on port {yellow ${appPort}}. Go to {yellow https://${appHostname}:${appPort}${pathname}}`);
+        }
     });
