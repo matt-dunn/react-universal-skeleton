@@ -97,6 +97,29 @@ yarn coverage
 
 ### TODO:
 
+
+
+[ ] Globalization - i18n + l10n
+    - best practices
+    - l18next?
+    - runtime replacement vs build time
+[ ] Look into full HMR again... issue previously with lazy loaded components?
+[ ] Optimise build / webpack config to increase performance
+[ ] devServer config - watch options?
+[ ] Source maps
+    [ ] Server
+    [X] Client
+    [ ] Debugging and getting the correct line for styles server + client fot JS (e.g. errors) and CSS
+[ ] HardSourceWebpackPlugin
+    - can this also be used and is it worth it?
+    - is it still properly supported and/or are there alternatives
+[ ] How efficient is express + react render?
+    - Would a more robust / scalable solution need to be used in a mid/high traffic env? e.g https://github.com/airbnb/hypernova
+    - Scalable server rendering
+
+
+
+
 #### Hot SSR
 
 [ ] sass-loader (Error: Module did not self-register) when updating SASS with HR
@@ -106,25 +129,18 @@ yarn coverage
     - Dev client/server with HR
     - Server without HR
     - Prod with br/gzip assets and static server
-[ ] HardSourceWebpackPlugin - can this also be used and is it worth it?
 [ ] Use has for output when prod
-[ ] devServer config - watch options?
-[ ] Use dist/client/index.html for prod (as it's processed fully) OR can I use the dist version as before if the HTML loader
-    can always write to disk? (https://github.com/jantimon/html-webpack-harddisk-plugin)
-[ ] Can use helmet in server/index.js?
-[ ] Optimise build / webpack config to increase performance
-[ ] Look into HMR again... issue previously with lazy loaded components?
+[X] Use dist/client/index.html for prod (as it's processed fully) OR can I use the dist version as before if the HTML loader
+    can always write to disk? (https://github.com/jantimon/html-webpack-harddisk-plugin) - outputed index.html for both client _and_ server
+[X] Can use helmet in server/index.js? - in production build
 
 
 
 #### Webpack
 [ ] Manifest
 [ ] Include bundle manifest in tarball?
-[ ] Source maps
-    [ ] Server
-    [X] Client
-[ ] Optimising webpack config shared across dev/prod + client/server
-[ ] remove hardcoded 'dist'
+[X] Optimising webpack config shared across dev/prod + client/server
+[X] remove hardcoded 'dist'
 [X] lazy loading
     - components
     - show loading/error
@@ -135,41 +151,39 @@ yarn coverage
     - just use babel to transform TS instead of ts-loader
 
 #### Styled components
-[ ] Integration with CSS frameworks
-[ ] vs SASS
-[ ] Extracting into external CSS files (at least for global styles) and is this desirable?
+[X] Integration with CSS frameworks
+[X] vs SASS
+[X] Extracting into external CSS files (at least for global styles) and is this desirable?
 [ ] Performance
     * production build has pre-compiled CSS?
     * how much JS is needed in production and what impact will it have if other styling libraries have also been used?
-[ ] Debugging and getting the correct line for styles
-[ ] Style reuse / sharing
+[X] Style reuse / sharing
 
 #### Parcel
 [ ] Comparison to other bundlers
-[*] Configure aliases which work client and server
+[X] Configure aliases which work client and server
     - use babel-plugin-module-resolver
     - how to get it to work with IDE...?
-[ ] maps and debug lines
-[ ] babelrc config issues
+[=] maps and debug lines
+[=] babelrc config issues
     * Does not pick up the correct env config from BABEL_ENV in dev??
-[ ] Hot-reloading
+[=] Hot-reloading
     * Does not seem to work correctly with TS files?
     * When running in server mode?
 
 #### SSR
-[ ] API calls on server options
-[ ] https://github.com/ctrlplusb/react-tree-walker instead of a render?
-[ ] Use https://github.com/smooth-code/loadable-components instead
-[ ] How efficient is express + react render? Would a more robust / scalable solution need to be used in a mid/high traffic env? e.g https://github.com/airbnb/hypernova
+[X] API calls on server options
+[X] https://github.com/ctrlplusb/react-tree-walker instead of a render?
+[X] Use https://github.com/smooth-code/loadable-components instead
 
 #### Build
-[ ] Setup linting
-[ ] Run tests with coverage as part of production build
+[X] Setup linting
+[X] Run tests with coverage as part of production build
 
 #### Routing with react-router
-[ ] 404
-[ ] Handle redirects to login when auth fails
-[ ] 403
+[X] 404
+[X] Handle redirects to login when auth fails
+[X] 403
 
 #### Features
 [ ] Suspense
@@ -181,14 +195,13 @@ yarn coverage
 
 ##### Priority:
 
-1. Understand the magic of useEffect
+[ ] Understand the magic of useEffect
     - it seems to call the cb every time until the promise has fullfilled?
-2. Error boundaries
+[ ] Error boundaries
     - use for authentication and for handing server errors and redirects (e.g. 401)?
-3. Suspense
+    - SSR?
+[ ] Suspense
     - Use cases and does it _really_ expect promises to be thrown instead of errors??
-4. Hot-reloading (above)
-5. Scalable server rendering (above)
   
     
     
