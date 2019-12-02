@@ -1,6 +1,6 @@
 {
   "name": "universal-app",
-  "version": "1.0.89-dev.0",
+  "version": "1.0.93-dev.0",
   "main": "app/index.js",
   "private": true,
   "dependencies": {
@@ -103,7 +103,7 @@
     "html-webpack-plugin": "^3.2.0",
     "ignore-loader": "^0.1.2",
     "jest": "^24.9.0",
-    "jest-junit": "^9.0.0",
+    "jest-junit": "^10.0.0",
     "memory-fs": "^0.5.0",
     "mini-css-extract-plugin": "^0.8.0",
     "node-sass": "^4.13.0",
