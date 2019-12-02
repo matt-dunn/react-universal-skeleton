@@ -59,9 +59,9 @@ module.exports = merge(
                         path.resolve(root, "server")
                     ],
                     use: [
-                        {
-                            loader: "style-loader"
-                        },
+                        // {
+                        //     loader: "style-loader"
+                        // },
                         {
                             loader: MiniCssExtractPlugin.loader,
                             options: {
@@ -99,9 +99,9 @@ module.exports = merge(
                     build: {version}
                 }),
                 new MiniCssExtractPlugin({
-                    filename: "[name]-[hash].css",
+                    filename: environment === "development" ? "[name].css" : "[name]-[hash].css",
                     chunkFilename: "[id]-[hash].css",
-                    ignoreOrder: false, // Enable to remove warnings about conflicting order
+                    // ignoreOrder: false, // Enable to remove warnings about conflicting order
                 })
             ];
 
