@@ -107,8 +107,9 @@ yarn coverage
     - look at create-react-app and other bootstraps
     - redux
     - ducks
-[ ] Look into full HMR again...
+[X] Look into full HMR again...
     - issue previously with lazy loaded components? or using hashes in dev?
+        - FIXED - the loadable factory was returning a new version each HR which caused infinite loop - hoisted into constants in App.jsx
 [ ] Optimise build / webpack config to increase performance
 [ ] devServer config - watch options?
 [ ] Source maps

@@ -1,4 +1,4 @@
-// import { hot } from 'react-hot-loader';
+import { hot } from 'react-hot-loader';
 import React from "react";
 import {Helmet} from "react-helmet-async";
 import {Switch, Route, generatePath} from "react-router-dom";
@@ -7,11 +7,6 @@ import { Global } from "@emotion/core";
 
 import Header from "./components/Header";
 
-import Error403 from "./containers/403";
-import Error404 from "./containers/404";
-
-import Home from "./containers/Home";
-
 import { GlobalStyles } from "./styles";
 import { ToastifyStyles } from "./styles/toasify";
 
@@ -19,6 +14,14 @@ import ErrorHandler from "components/actions/ErrorHandler";
 
 import AuthProvider from "./components/auth";
 import {ToastContainer} from "react-toastify";
+
+import Error403 from "./containers/403";
+import Error404 from "./containers/404";
+import Home from "./containers/Home";
+const Data = loadable(() => import(/* webpackPrefetch: true */ "./containers/Data"));
+const Forms = loadable(() => import(/* webpackPrefetch: true */ "./containers/Forms"));
+const MyStyled = loadable(() => import(/* webpackPrefetch: true */ "./containers/MyStyled"));
+const Login = loadable(() => import(/* webpackPrefetch: true */ "./containers/Login"));
 
 import "./styles/react-responsive-ui.css";
 
@@ -57,10 +60,10 @@ const App = () => {
             <ErrorHandler handler={handler}>
                 <Switch>
                     <Route exact path="/" component={Home} />
-                    <Route exact path="/data/:page?" component={loadable(() => import(/* webpackPrefetch: true */ "./containers/Data"))} />
-                    <Route exact path="/forms" component={loadable(() => import(/* webpackPrefetch: true */ "./containers/Forms"))} />
-                    <Route exact path="/mystyled" component={loadable(() => import(/* webpackPrefetch: true */ "./containers/MyStyled"))} />
-                    <Route path="/login/:from?" component={loadable(() => import(/* webpackPrefetch: true */ "./containers/Login"))} />
+                    <Route exact path="/data/:page?" component={Data} />
+                    <Route exact path="/forms" component={Forms} />
+                    <Route exact path="/mystyled" component={MyStyled} />
+                    <Route path="/login/:from?" component={Login} />
                     <Route component={Error404} />
                     {/*<Redirect to="/" />*/}
                 </Switch>
@@ -69,5 +72,4 @@ const App = () => {
     );
 };
 
-// export default hot(module)(App);
-export default App;
+export default hot(module)(App);
