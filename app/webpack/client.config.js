@@ -37,7 +37,7 @@ module.exports = merge(
     partialAssets(metadata),
     partialCode(metadata),
     {
-        entry: "./client.js",
+        entry: "./index.js",
         devtool: environment === "development" ? "eval-source-map" : "",
         output: {
             path: path.resolve(root, target, "client"),
