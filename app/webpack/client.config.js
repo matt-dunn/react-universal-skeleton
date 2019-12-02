@@ -8,7 +8,6 @@ const CompressionPlugin = require("compression-webpack-plugin");
 const BrotliPlugin = require("brotli-webpack-plugin");
 const LoadablePlugin = require("@loadable/webpack-plugin");
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
-// const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 const merge = require("webpack-merge");
 
 const {log} = console;
@@ -107,14 +106,7 @@ module.exports = merge(
                 })
             ];
 
-            if (environment === "development") {
-                // plugins.push(new webpack.SourceMapDevToolPlugin({
-                //     filename: null,
-                //     exclude: [/node_modules/],
-                //     test: /\.ts($|\?)/i
-                // }));
-                // plugins.push(new HardSourceWebpackPlugin());
-            } else if (environment === "production") {
+            if (environment === "production") {
                 plugins.push(new BundleAnalyzerPlugin({
                     openAnalyzer: false,
                     analyzerMode: "static",

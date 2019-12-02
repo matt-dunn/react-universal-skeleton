@@ -1,6 +1,8 @@
 const webpack = require("webpack");
 const path = require("path");
 
+// const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
+
 module.exports = ({environment, root, context, target, publicPath, version}) => ( {
     mode: environment,
     cache: true,
@@ -26,7 +28,14 @@ module.exports = ({environment, root, context, target, publicPath, version}) => 
             })
         ];
 
-        if (environment === "production") {
+        if (environment === "development") {
+            // plugins.push(new webpack.SourceMapDevToolPlugin({
+            //     filename: null,
+            //     exclude: [/node_modules/],
+            //     test: /\.ts($|\?)/i
+            // }));
+            // plugins.push(new HardSourceWebpackPlugin());
+        } else if (environment === "production") {
             plugins.push(new webpack.BannerPlugin({
                 banner: `Version: ${version}`,
                 raw: false,
