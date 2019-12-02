@@ -103,6 +103,10 @@ yarn coverage
     - best practices
     - l18next?
     - runtime replacement vs build time
+[ ] Project organisation options
+    - look at create-react-app and other bootstraps
+    - redux
+    - ducks
 [ ] Look into full HMR again... issue previously with lazy loaded components?
 [ ] Optimise build / webpack config to increase performance
 [ ] devServer config - watch options?
