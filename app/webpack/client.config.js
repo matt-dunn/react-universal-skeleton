@@ -83,7 +83,7 @@ module.exports = merge(
                             loader: "sass-loader",
                             options: {
                                 sourceMap: true,
-                                implementation: require('node-sass'),
+                                implementation: require("node-sass"),
                             },
                         }
                     ]
