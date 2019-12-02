@@ -4,6 +4,7 @@ import path from "path";
 import express from "express";
 import https from "https";
 import expressStaticGzip from "express-static-gzip";
+import shrinkRay from "shrink-ray-current";
 import trailingSlash from "express-trailing-slash";
 // import log from "llog";
 import ssr from "./lib/ssr";
@@ -45,6 +46,8 @@ app.use(pathname, expressStaticGzip(path.resolve(process.cwd(), process.env.TARG
 app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({extended: false}));
+
+app.use(shrinkRay({}));
 
 app.get("/*", ssr);
 app.post("/*", ssr);

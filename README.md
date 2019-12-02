@@ -97,8 +97,7 @@ yarn coverage
 
 ### TODO:
 
-
-
+[X] Compress SSR html
 [ ] Globalization - i18n + l10n
     - best practices
     - l18next?
