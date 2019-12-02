@@ -52,7 +52,6 @@ const App = () => {
                 titleTemplate="%s - Universal App Example"
             >
                 <title>Universal App Example</title>
-                <meta name="build.version" content={process.env.npm_package_version + ((process.env.NODE_ENV !== "production" && "-dev") || "")}/>
             </Helmet>
 
             <Header/>
