@@ -7,10 +7,10 @@ import { Global } from "@emotion/core";
 
 import Header from "./components/Header";
 
-import Error403 from "./pages/403";
-import Error404 from "./pages/404";
+import Error403 from "./containers/403";
+import Error404 from "./containers/404";
 
-import Home from "./pages/Home";
+import Home from "./containers/Home";
 
 import { GlobalStyles } from "./styles";
 import { ToastifyStyles } from "./styles/toasify";
@@ -57,10 +57,10 @@ const App = () => {
             <ErrorHandler handler={handler}>
                 <Switch>
                     <Route exact path="/" component={Home} />
-                    <Route exact path="/data/:page?" component={loadable(() => import(/* webpackPrefetch: true */ "./pages/Data"))} />
-                    <Route exact path="/forms" component={loadable(() => import(/* webpackPrefetch: true */ "./pages/Forms"))} />
-                    <Route exact path="/mystyled" component={loadable(() => import(/* webpackPrefetch: true */ "./pages/MyStyled"))} />
-                    <Route path="/login/:from?" component={loadable(() => import(/* webpackPrefetch: true */ "./pages/Login"))} />
+                    <Route exact path="/data/:page?" component={loadable(() => import(/* webpackPrefetch: true */ "./containers/Data"))} />
+                    <Route exact path="/forms" component={loadable(() => import(/* webpackPrefetch: true */ "./containers/Forms"))} />
+                    <Route exact path="/mystyled" component={loadable(() => import(/* webpackPrefetch: true */ "./containers/MyStyled"))} />
+                    <Route path="/login/:from?" component={loadable(() => import(/* webpackPrefetch: true */ "./containers/Login"))} />
                     <Route component={Error404} />
                     {/*<Redirect to="/" />*/}
                 </Switch>
