@@ -675,7 +675,7 @@
     pirates "^4.0.0"
     source-map-support "^0.5.16"
 
-"@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2", "@babel/runtime@^7.3.4", "@babel/runtime@^7.4.0", "@babel/runtime@^7.4.2", "@babel/runtime@^7.4.4", "@babel/runtime@^7.5.5", "@babel/runtime@^7.6.0", "@babel/runtime@^7.6.3", "@babel/runtime@^7.7.2":
+"@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2", "@babel/runtime@^7.3.4", "@babel/runtime@^7.4.0", "@babel/runtime@^7.4.2", "@babel/runtime@^7.4.4", "@babel/runtime@^7.5.5", "@babel/runtime@^7.6.3", "@babel/runtime@^7.7.2", "@babel/runtime@^7.7.4":
   version "7.7.4"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.7.4.tgz#b23a856751e4bf099262f867767889c0e3fe175b"
   dependencies:
@@ -960,15 +960,17 @@
     "@babel/plugin-syntax-dynamic-import" "^7.2.0"
 
 "@loadable/component@^5.10.3":
-  version "5.10.3"
-  resolved "https://registry.yarnpkg.com/@loadable/component/-/component-5.10.3.tgz#e1ad811ac4834a6ed187605d8464351d0c52896f"
+  version "5.11.0"
+  resolved "https://registry.yarnpkg.com/@loadable/component/-/component-5.11.0.tgz#e495834279663d20aabf0e4ca25e5c44bef308eb"
+  integrity sha512-RzXAH419hnC6vF/ZAEv+k1JgbE/4G7veZo3RvwQDRfp2BFrwbJp9qasjccuk6RrQR/nWWgufaW/CGlL6NSBNGw==
   dependencies:
-    "@babel/runtime" "^7.6.0"
-    hoist-non-react-statics "^3.3.0"
+    "@babel/runtime" "^7.7.4"
+    hoist-non-react-statics "^3.3.1"
 
 "@loadable/server@^5.10.3":
-  version "5.10.3"
-  resolved "https://registry.yarnpkg.com/@loadable/server/-/server-5.10.3.tgz#421e1af549d58d67a0a459cd4f2ae7bf20ab4bc6"
+  version "5.11.0"
+  resolved "https://registry.yarnpkg.com/@loadable/server/-/server-5.11.0.tgz#fa4dc835239ed3796f6437b60c0b7322a249dffc"
+  integrity sha512-uHHS0ORAqVHRXTVcnihWlW8hXM7CjJrqBJ5FN2rVp4EC0xmmjsG8oVJogSkpGOFa1uvDypAM9upuc4wPqAK7nw==
   dependencies:
     lodash "^4.17.15"
 
@@ -4605,9 +4607,10 @@ hmac-drbg@^1.0.0:
     minimalistic-assert "^1.0.0"
     minimalistic-crypto-utils "^1.0.1"
 
-hoist-non-react-statics@^3.1.0, hoist-non-react-statics@^3.3.0:
+hoist-non-react-statics@^3.1.0, hoist-non-react-statics@^3.3.0, hoist-non-react-statics@^3.3.1:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-3.3.1.tgz#101685d3aff3b23ea213163f6e8e12f4f111e19f"
+  integrity sha512-wbg3bpgA/ZqWrZuMOeJi8+SKMhr7X9TesL/rXMjTzh0p0JUBo3II8DHboYbuIXWRlttrUFxwcu/5kygrCw8fJw==
   dependencies:
     react-is "^16.7.0"
 
@@ -7770,6 +7773,7 @@ react-input-autosize@^2.2.2:
 react-is@^16.10.2, react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4, react-is@^16.8.6, react-is@^16.9.0:
   version "16.12.0"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.12.0.tgz#2cc0fe0fba742d97fd527c42a13bec4eeb06241c"
+  integrity sha512-rPCkf/mWBtKc97aLL9/txD8DZdemK0vkA3JMLShjlJB3Pj3s+lpf1KaBzMfQrAmhMQB0n1cU/SUGgKKBCe837Q==
 
 react-lifecycles-compat@^3.0.0, react-lifecycles-compat@^3.0.2, react-lifecycles-compat@^3.0.4:
   version "3.0.4"
@@ -8042,6 +8046,7 @@ regenerate@^1.2.1, regenerate@^1.4.0:
 regenerator-runtime@^0.13.2, regenerator-runtime@^0.13.3:
   version "0.13.3"
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.3.tgz#7cf6a77d8f5c6f60eb73c5fc1955b2ceb01e6bf5"
+  integrity sha512-naKIZz2GQ8JWh///G7L3X6LaQUAMp2lvb1rvwwsURe/VXwD6VMfr+/1NuNw3ag8v2kY1aQ/go5SNn79O9JU7yw==
 
 regenerator-transform@^0.14.0:
   version "0.14.1"
