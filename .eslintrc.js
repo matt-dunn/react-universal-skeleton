@@ -1,7 +1,8 @@
 module.exports =  {
     plugins: [
         "react-hooks",
-        "jam3"
+        "jam3",
+        "emotion"
     ],
     env: {
         es6: true,
@@ -62,5 +63,10 @@ module.exports =  {
         "quotes": [2, "double", "avoid-escape"],
         "jsx-quotes": [1, "prefer-double"],
         "quote-props": 0,
+        "emotion/jsx-import": "error",
+        "emotion/no-vanilla": "error",
+        "emotion/import-from-emotion": "error",
+        "emotion/styled-import": "error",
+        "emotion/syntax-preference": [2, "string"]
     }
 };
