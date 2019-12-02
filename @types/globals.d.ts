@@ -23,3 +23,5 @@ declare module "react-responsive-ui/modules/TextInput" {
     const value: any;
     export = value;
 }
+
+declare module "simple-deep-freeze";
