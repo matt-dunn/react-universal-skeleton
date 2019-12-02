@@ -13,7 +13,7 @@ const partialCode = require("./partials/code");
 const partialAssets = require("./partials/assets");
 
 const metadata = require("./metadata");
-const {environment, version, root, target, publicPath} = metadata;
+const {environment, version, context, root, target, publicPath} = metadata;
 
 log(chalk`🔨 Building {white.bold server}...`);
 log(chalk`
@@ -57,9 +57,9 @@ module.exports = merge(
         plugins: [
             new HtmlWebpackPlugin({
                 inject: false,
-                template: path.resolve(__dirname, "..", "index.html"),
+                template: path.resolve(context, "public", "index.html"),
                 chunksSortMode: "none",
-                //favicon: path.resolve(__dirname, "../favicon.ico")
+                //favicon: path.resolve(context, "public" "favicon.ico")
                 build: {version}
             }),
         ],

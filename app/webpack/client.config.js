@@ -19,7 +19,7 @@ const partialCode = require("./partials/code");
 const partialAssets = require("./partials/assets");
 
 const metadata = require("./metadata");
-const {environment, version, root, target, publicPath, port, host} = metadata;
+const {environment, version, context, root, target, publicPath, port, host} = metadata;
 
 log(chalk`🔨 Building {white.bold client}...`);
 log(chalk`
@@ -90,9 +90,9 @@ module.exports = merge(
                 }),
                 new HtmlWebpackPlugin({
                     inject: true,
-                    template: path.resolve(__dirname, "..", "index.html"),
+                    template: path.resolve(context, "public", "index.html"),
                     chunksSortMode: "none",
-                    //favicon: path.resolve(__dirname, "../favicon.ico")
+                    //favicon: path.resolve(context, "public", "favicon.ico")
                     build: {version}
                 }),
                 new MiniCssExtractPlugin({
