@@ -24,7 +24,8 @@ module.exports = ({environment, root, context, target, publicPath, version}) => 
     plugins: (function(){
         const plugins = [
             new webpack.DefinePlugin({
-                "process.env.TARGET": JSON.stringify(target)
+                "process.env.TARGET": JSON.stringify(target),
+                "process.env.PWA": JSON.stringify(process.env.PWA || false)
             })
         ];
 

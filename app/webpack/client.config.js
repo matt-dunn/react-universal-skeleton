@@ -9,6 +9,7 @@ const BrotliPlugin = require("brotli-webpack-plugin");
 const LoadablePlugin = require("@loadable/webpack-plugin");
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const RobotstxtPlugin = require("robotstxt-webpack-plugin");
+const {GenerateSW} = require("workbox-webpack-plugin");
 
 const merge = require("webpack-merge");
 
@@ -17,6 +18,7 @@ const {log} = console;
 const partialCommon = require("./partials/common");
 const partialCode = require("./partials/code");
 const partialAssets = require("./partials/assets");
+const partialManifest = require("./partials/manifest");
 
 const metadata = require("./metadata");
 const {environment, version, context, root, target, publicPath, port, host} = metadata;
@@ -97,7 +99,6 @@ module.exports = merge(
                 new HtmlWebpackPlugin({
                     inject: true,
                     template: path.resolve(context, "public", "index.html"),
-                    chunksSortMode: "none",
                     //favicon: path.resolve(context, "public", "favicon.ico")
                     build: {version}
                 }),
@@ -131,6 +132,12 @@ module.exports = merge(
                     threshold: 10240,
                     minRatio: 0.7
                 }));
+
+                plugins.push(new GenerateSW({
+                    clientsClaim: true,
+                    skipWaiting: false,
+                    navigateFallback: "index.html"
+                }));
             }
 
             return plugins;
@@ -153,5 +160,6 @@ module.exports = merge(
                 ca: fs.readFileSync(path.resolve(context, "server", "ssl", "private.pem")),
             },
         }
-    }
+    },
+    partialManifest(metadata)
 );

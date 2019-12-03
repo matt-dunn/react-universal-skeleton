@@ -1,6 +1,6 @@
 {
   "name": "universal-app",
-  "version": "1.0.102-dev.0",
+  "version": "1.0.144-dev.0",
   "main": "app/index.js",
   "private": true,
   "dependencies": {
@@ -46,6 +46,7 @@
     "through": "^2.3.8",
     "typesafe-actions": "^5.1.0",
     "uuid": "^3.3.3",
+    "workbox-window": "^4.3.1",
     "yup": "^0.27.0"
   },
   "devDependencies": {
@@ -99,6 +100,7 @@
     "eslint-plugin-jam3": "^0.2.2",
     "eslint-plugin-react": "^7.14.3",
     "eslint-plugin-react-hooks": "^2.1.2",
+    "favicons-webpack-plugin": "^1.0.2",
     "file-loader": "^5.0.2",
     "handpipe": "^0.11.2",
     "hard-source-webpack-plugin": "^0.13.1",
@@ -131,12 +133,13 @@
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.9.0",
     "webpack-merge": "^4.2.2",
-    "webpack-node-externals": "^1.7.2"
+    "webpack-node-externals": "^1.7.2",
+    "workbox-webpack-plugin": "^4.3.1"
   },
   "scripts": {
     "dev:client": "cross-env PUBLIC_PATH=https://localhost:1234/ cross-env NODE_ENV=development webpack-dev-server --config ./app/webpack/client.config.js --progress",
     "dev:server": "cross-env PUBLIC_PATH=https://localhost:1234/ cross-env PORT=12345 cross-env NODE_ENV=development babel-node --presets @babel/env app/webpack/index.js",
-    "build:client": "webpack --config ./app/webpack/client.config.js",
+    "build:client": "cross-env PWA=true webpack --config ./app/webpack/client.config.js",
     "build:server": "webpack --config ./app/webpack/server.config.js",
     "build:all": "rimraf dist && concurrently \"yarn build:client\" \"yarn build:server\"",
     "package": "cross-env TARGET=dist node etc/scripts/package.js",

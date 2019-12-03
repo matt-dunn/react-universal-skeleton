@@ -22,6 +22,7 @@ module.exports = {
     target: "dist",
     version: packageJSON.version,
     name: packageJSON.name,
+    description: packageJSON.description,
     port,
     host
 };

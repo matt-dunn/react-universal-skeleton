@@ -10,6 +10,7 @@ const {log} = console;
 const partialCommon = require("./partials/common");
 const partialCode = require("./partials/code");
 const partialAssets = require("./partials/assets");
+const partialManifest = require("./partials/manifest");
 
 const metadata = require("./metadata");
 const {environment, version, context, root, target, publicPath} = metadata;
@@ -56,10 +57,10 @@ module.exports = merge(
             new HtmlWebpackPlugin({
                 inject: false,
                 template: path.resolve(context, "public", "index.html"),
-                chunksSortMode: "none",
                 //favicon: path.resolve(context, "public" "favicon.ico")
                 build: {version}
             }),
         ],
-    }
+    },
+    partialManifest(metadata)
 );

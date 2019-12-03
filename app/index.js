@@ -12,6 +12,7 @@ import {deserialize} from "components/state-mutate-with-status/utils";
 import getStore from "./store";
 import {FormDataState, FormDataProvider} from "components/actions/form";
 import {AsyncData, AsyncDataContextProvider} from "../components/ssr/safePromise";
+import worker from "./worker";
 
 const store = getStore(deserialize(JSON.stringify(window.__PRELOADED_STATE__)));
 const error = window.__ERROR_STATE__;
@@ -61,3 +62,5 @@ if (window.__PRERENDERED_SSR__) {
         window.__PRERENDERED_SSR__ = false;
     });
 }
+
+process.env.PWA === "true" && worker();
