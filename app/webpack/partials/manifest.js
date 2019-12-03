@@ -15,7 +15,7 @@ module.exports = ({environment, name, description, context}) => ({
                     appName: name,
                     appDescription: description,
                     background: "#fff",
-                    theme_color: '#333',
+                    theme_color: "#333",
                     icons: {
                         android: true,
                         appleIcon: true,
