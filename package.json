@@ -1,6 +1,6 @@
 {
   "name": "universal-app",
-  "version": "1.0.96-dev.0",
+  "version": "1.0.99-dev.0",
   "main": "app/index.js",
   "private": true,
   "dependencies": {
@@ -41,6 +41,7 @@
     "sanitize-html": "^1.20.1",
     "shrink-ray-current": "^4.1.2",
     "simple-deep-freeze": "^0.0.2",
+    "spdy": "^4.0.1",
     "stylis": "^3.5.4",
     "through": "^2.3.8",
     "typesafe-actions": "^5.1.0",
@@ -132,8 +133,8 @@
     "webpack-node-externals": "^1.7.2"
   },
   "scripts": {
-    "dev:client": "cross-env PUBLIC_PATH=https://0.0.0.0:1234/ cross-env NODE_ENV=development webpack-dev-server --config ./app/webpack/client.config.js --progress",
-    "dev:server": "cross-env PUBLIC_PATH=https://0.0.0.0:1234/ cross-env PORT=12345 cross-env NODE_ENV=development babel-node --presets @babel/env app/webpack/index.js",
+    "dev:client": "cross-env PUBLIC_PATH=https://localhost:1234/ cross-env NODE_ENV=development webpack-dev-server --config ./app/webpack/client.config.js --progress",
+    "dev:server": "cross-env PUBLIC_PATH=https://localhost:1234/ cross-env PORT=12345 cross-env NODE_ENV=development babel-node --presets @babel/env app/webpack/index.js",
     "build:client": "webpack --config ./app/webpack/client.config.js",
     "build:server": "webpack --config ./app/webpack/server.config.js",
     "build:all": "rimraf dist && concurrently \"yarn build:client\" \"yarn build:server\"",

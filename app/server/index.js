@@ -2,7 +2,8 @@ import chalk from "chalk";
 import url from "url";
 import path from "path";
 import express from "express";
-import https from "https";
+// import https from "https";
+import spdy from "spdy";
 import expressStaticGzip from "express-static-gzip";
 import shrinkRay from "shrink-ray-current";
 import trailingSlash from "express-trailing-slash";
@@ -13,7 +14,6 @@ import helmet from "helmet";
 
 import key from "./ssl/private.key";
 import cert from "./ssl/private.crt";
-import ca from "./ssl/private.pem";
 
 const {log} = console;
 
@@ -52,11 +52,10 @@ app.use(shrinkRay({}));
 app.get("/*", ssr);
 app.post("/*", ssr);
 
-export default https
+export default spdy
     .createServer({
         key,
-        cert,
-        ca
+        cert
     }, app)
     .listen(appPort, appHostname, err => {
         if (err) {
