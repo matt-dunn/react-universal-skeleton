@@ -8,6 +8,8 @@ const CompressionPlugin = require("compression-webpack-plugin");
 const BrotliPlugin = require("brotli-webpack-plugin");
 const LoadablePlugin = require("@loadable/webpack-plugin");
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
+const RobotstxtPlugin = require("robotstxt-webpack-plugin");
+
 const merge = require("webpack-merge");
 
 const {log} = console;
@@ -107,6 +109,8 @@ module.exports = merge(
             ];
 
             if (environment === "production") {
+                plugins.push(new RobotstxtPlugin({}));
+
                 plugins.push(new BundleAnalyzerPlugin({
                     openAnalyzer: false,
                     analyzerMode: "static",
