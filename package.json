@@ -1,6 +1,6 @@
 {
   "name": "universal-app",
-  "version": "1.0.144-dev.0",
+  "version": "1.0.145-dev.0",
   "main": "app/index.js",
   "private": true,
   "dependencies": {
@@ -139,7 +139,7 @@
   "scripts": {
     "dev:client": "cross-env PUBLIC_PATH=https://localhost:1234/ cross-env NODE_ENV=development webpack-dev-server --config ./app/webpack/client.config.js --progress",
     "dev:server": "cross-env PUBLIC_PATH=https://localhost:1234/ cross-env PORT=12345 cross-env NODE_ENV=development babel-node --presets @babel/env app/webpack/index.js",
-    "build:client": "cross-env PWA=true webpack --config ./app/webpack/client.config.js",
+    "build:client": "cross-env PWA=false webpack --config ./app/webpack/client.config.js",
     "build:server": "webpack --config ./app/webpack/server.config.js",
     "build:all": "rimraf dist && concurrently \"yarn build:client\" \"yarn build:server\"",
     "package": "cross-env TARGET=dist node etc/scripts/package.js",
