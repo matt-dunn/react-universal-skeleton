@@ -72,7 +72,8 @@ export const DEFAULT_ALLOWED_CONTENT: IOptions = {
         "var",
         "wbr",
         "hr",
-        "input"
+        "input",
+        "label"
     ],
     allowedSchemes: [
         "data",
@@ -101,7 +102,12 @@ export const DEFAULT_ALLOWED_CONTENT: IOptions = {
         "input": [
             "checked",
             "disabled",
-            "type"
+            "type",
+            "name",
+            "id"
+        ],
+        "label": [
+            "for"
         ],
         "th": [
             "align"

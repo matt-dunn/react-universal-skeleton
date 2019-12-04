@@ -21,7 +21,7 @@ const escape = (html: string, encode: boolean) => {
 // Override for adding classes to task list item
 marked.Renderer.prototype.listitem = function(this: any, text) {
     const isTask = text.indexOf("checkbox") !== -1;
-    return `<li${isTask && ' class="task-list-item"' || ""}>${text}</li>\n`;
+    return `<li${isTask && ' class="task-list-item"' || ""}>${isTask ? `<label>${text}</label>` : text}</li>\n`;
 };
 
 // Override to allow code blocks to be output raw (without wrapping <pre><code/></pre>) when deferred to highlighter
