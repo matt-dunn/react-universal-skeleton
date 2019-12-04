@@ -1,5 +1,4 @@
 import marked, {MarkedOptions} from "marked";
-import {wrap} from "lodash";
 import isPromise from "is-promise";
 
 type AdditionOptions = {
@@ -19,30 +18,10 @@ const escape = (html: string, encode: boolean) => {
         .replace(/'/g, "&#39;");
 };
 
-type Parser = typeof marked.Parser;
-
-// Patch for adding classes to task lists
-marked.Parser.prototype.tok = wrap(marked.Parser.prototype.tok, function(this: any, func) {
-    if (this.token.type === "list_item_start") {
-        this.renderer.isTask = this.token.task;
-    } else if (this.token.type === "list_item_end") {
-        this.renderer.isTask = false;
-    }
-
-    return func.call(this);
-});
-
-// Override for adding classes to task lists container
-marked.Renderer.prototype.list = function(this: any, body, ordered, start) {
-    const type = ordered ? "ol" : "ul";
-    const startatt = (ordered && start !== 1) ? (' start="' + start + '"') : "";
-
-    return `<${type}${startatt}${this.isTask && ' class="contains-task-list"' || ""}>\n${body}</${type}>\n`;
-};
-
 // Override for adding classes to task list item
 marked.Renderer.prototype.listitem = function(this: any, text) {
-    return `<li${this.isTask && ' class="task-list-item"' || ""}>${text}</li>\n`;
+    const isTask = text.indexOf("checkbox") !== -1;
+    return `<li${isTask && ' class="task-list-item"' || ""}>${text}</li>\n`;
 };
 
 // Override to allow code blocks to be output raw (without wrapping <pre><code/></pre>) when deferred to highlighter
