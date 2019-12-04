@@ -128,7 +128,7 @@ module.exports = merge(
                 }));
 
                 plugins.push(new GenerateSW({
-                    clientsClaim: true,
+                    clientsClaim: false,
                     skipWaiting: false,
                     navigateFallback: "index.html"
                 }));
