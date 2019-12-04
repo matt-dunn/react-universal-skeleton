@@ -14,7 +14,7 @@ const publicPath = process.env.PUBLIC_PATH;
 
 const {port, host} = (publicPath && url.parse(publicPath)) || {};
 
-module.exports = ({configType}) => ({
+module.exports = (props) => ({
     context: path.resolve(__dirname, ".."),
     root: ROOT,
     environment,
@@ -25,5 +25,5 @@ module.exports = ({configType}) => ({
     description: packageJSON.description,
     port,
     host,
-    configType
+    ...props
 });
