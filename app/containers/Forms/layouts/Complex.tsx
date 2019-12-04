@@ -48,28 +48,26 @@ function ComplexLayout<T, P, S>({fieldsetMap: {children, extra, otherLeft, other
                     <FieldSet
                         fields={children}
                     >
-                        {({fieldsetMap: {set1, set2, children}}) => {
-                            return (
-                                <>
-                                    <Markdown content={import("mocks/content/test4.md")} id={"md-4"}/>
-                                    <GridItems minItemWidth={150}>
-                                        <GridItem>
-                                            <FieldSet
-                                                fields={set1}
-                                            />
-                                        </GridItem>
-                                        <GridItem>
-                                            <FieldSet
-                                                fields={set2}
-                                            />
-                                        </GridItem>
-                                    </GridItems>
-                                    <FieldSet
-                                        fields={children}
-                                    />
-                                </>
-                            );
-                        }}
+                        {({fieldsetMap: {set1, set2, children}, path}) => (
+                            <>
+                                <Markdown content={import("mocks/content/test4.md")} id={`md-4-${path}`}/>
+                                <GridItems minItemWidth={150}>
+                                    <GridItem>
+                                        <FieldSet
+                                            fields={set1}
+                                        />
+                                    </GridItem>
+                                    <GridItem>
+                                        <FieldSet
+                                            fields={set2}
+                                        />
+                                    </GridItem>
+                                </GridItems>
+                                <FieldSet
+                                    fields={children}
+                                />
+                            </>
+                        )}
                     </FieldSet>
                 </GridItem>
                 <GridItem>

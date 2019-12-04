@@ -75,6 +75,7 @@ export interface FieldSetChildrenProps<T, Payload, Context> {
     fieldsetMap: FieldSetMap<T>;
     metadata: FormMetaData<Context, Payload>;
     isComplete: boolean;
+    path: string;
 }
 
 export type FieldSetChildren<T, Payload, Context> = {

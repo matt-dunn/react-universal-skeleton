@@ -21,7 +21,7 @@ function FieldSetWrapper<T, P, S>({fields, path = "", children}: FieldSetWrapper
         payload: formData.payload
     }), [formData.error, formData.payload, formData.state.data, formData.state.formId]);
 
-    return children ? children({fieldsetMap, metadata, isComplete: formData.isComplete}) : <Collections fieldsetMap={fieldsetMap}/>;
+    return children ? children({fieldsetMap, metadata, isComplete: formData.isComplete, path}) : <Collections fieldsetMap={fieldsetMap}/>;
 }
 
 const MemoFieldSetWrapper = typedMemo(FieldSetWrapper);
