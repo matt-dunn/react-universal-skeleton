@@ -11,6 +11,6 @@
  */
 
 module.exports =
-    process.env.NODE_ENV === "production" && !process.env.DEBUG
+    process.env.NODE_ENV === "production"
         ? require("./src/useWhatChanged.prod")
         : require("./src/useWhatChanged");
