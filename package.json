@@ -160,7 +160,7 @@
     "prestart": "yarn install --production",
     "start": "yarn build:run",
     "version": "echo \"versioning $npm_package_version\"",
-    "stats": "webpack-stats-duplicates ./reports/client-stats.json && webpack-stats-duplicates ./reports/server-stats.json"
+    "stats:dups": "webpack-stats-duplicates ./reports/client-stats.json && webpack-stats-duplicates ./reports/server-stats.json"
   },
   "engines": {
     "node": ">=10",
