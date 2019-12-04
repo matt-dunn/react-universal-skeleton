@@ -73,9 +73,9 @@ const Home = () => {
                 </MenuLink>
             </Menu>
 
-            <Markdown content={import("mocks/content/test1.md")} id={"md-1"}/>
-            <Markdown content={import("mocks/content/test2.md")} id={"md-2"}/>
-            <Markdown content={import("mocks/content/test3.md")} id={"md-3"}/>
+            <Markdown content={import("../../README.md")} id={"md-1"}/>
+            {/*<Markdown content={import("mocks/content/test2.md")} id={"md-2"}/>*/}
+            {/*<Markdown content={import("mocks/content/test3.md")} id={"md-3"}/>*/}
 
             {/*<Content>*/}
             {/*    {(content) => <Markdown id="md-2" content={content.default || content}/>}*/}

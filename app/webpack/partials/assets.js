@@ -15,6 +15,11 @@ module.exports = ({root}) => ( {
                 use: "raw-loader",
             },
             {
+                test: /readme\.md$/i,
+                exclude: /node_modules/,
+                use: "raw-loader",
+            },
+            {
                 test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
                 exclude: /node_modules/,
                 use: [
