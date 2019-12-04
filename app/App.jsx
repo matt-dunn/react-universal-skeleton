@@ -51,6 +51,8 @@ const App = () => {
                 titleTemplate="%s - Universal App Example"
             >
                 <title>Universal App Example</title>
+                <meta name="description" content="Universal App Form Page" />
+                <meta name="keywords" content="forms,..." />
             </Helmet>
 
             <Header/>

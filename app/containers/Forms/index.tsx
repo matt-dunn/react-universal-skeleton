@@ -95,8 +95,6 @@ const Forms = () => {
         <Page>
             <Helmet>
                 <title>Forms</title>
-                <meta name="description" content="Universal App Form Page" />
-                <meta name="keywords" content="forms,..." />
             </Helmet>
             <Title>
                 Forms (Lazy Loaded)
