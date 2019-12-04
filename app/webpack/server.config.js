@@ -11,8 +11,9 @@ const partialCommon = require("./partials/common");
 const partialCode = require("./partials/code");
 const partialAssets = require("./partials/assets");
 const partialManifest = require("./partials/manifest");
+const partialStats = require("./partials/stats");
 
-const metadata = require("./metadata");
+const metadata = require("./metadata")({configType: "server"});
 const {environment, version, context, root, target, publicPath} = metadata;
 
 log(chalk`🔨 Building {white.bold server}...`);
@@ -62,5 +63,6 @@ module.exports = merge(
             }),
         ],
     },
-    partialManifest(metadata)
+    partialManifest(metadata),
+    partialStats(metadata)
 );

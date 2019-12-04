@@ -7,7 +7,6 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CompressionPlugin = require("compression-webpack-plugin");
 const BrotliPlugin = require("brotli-webpack-plugin");
 const LoadablePlugin = require("@loadable/webpack-plugin");
-const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const RobotstxtPlugin = require("robotstxt-webpack-plugin");
 const {GenerateSW} = require("workbox-webpack-plugin");
 
@@ -19,8 +18,9 @@ const partialCommon = require("./partials/common");
 const partialCode = require("./partials/code");
 const partialAssets = require("./partials/assets");
 const partialManifest = require("./partials/manifest");
+const partialStats = require("./partials/stats");
 
-const metadata = require("./metadata");
+const metadata = require("./metadata")({configType: "client"});
 const {environment, version, context, root, target, publicPath, port, host} = metadata;
 
 log(chalk`🔨 Building {white.bold client}...`);
@@ -112,12 +112,6 @@ module.exports = merge(
             if (environment === "production") {
                 plugins.push(new RobotstxtPlugin({}));
 
-                plugins.push(new BundleAnalyzerPlugin({
-                    openAnalyzer: false,
-                    analyzerMode: "static",
-                    reportFilename: path.resolve(root, "reports", "bundle.html")
-                }));
-
                 plugins.push(new CompressionPlugin({
                     filename: "[path].gz[query]",
                     algorithm: "gzip",
@@ -161,5 +155,6 @@ module.exports = merge(
             },
         }
     },
-    partialManifest(metadata)
+    partialManifest(metadata),
+    partialStats(metadata)
 );

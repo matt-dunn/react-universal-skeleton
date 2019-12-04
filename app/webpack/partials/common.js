@@ -3,7 +3,7 @@ const path = require("path");
 
 // const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 
-module.exports = ({environment, root, context, target, publicPath, version}) => ( {
+module.exports = ({environment, root, context, target, publicPath, version}) => ({
     mode: environment,
     cache: true,
     context,

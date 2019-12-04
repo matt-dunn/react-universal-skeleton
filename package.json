@@ -1,6 +1,6 @@
 {
   "name": "universal-app",
-  "version": "1.0.160-dev.0",
+  "version": "1.0.172-dev.0",
   "main": "app/index.js",
   "private": true,
   "dependencies": {
@@ -134,6 +134,7 @@
     "webpack-dev-server": "^3.9.0",
     "webpack-merge": "^4.2.2",
     "webpack-node-externals": "^1.7.2",
+    "webpack-stats-plugin": "^0.3.0",
     "workbox-webpack-plugin": "^4.3.1"
   },
   "scripts": {
