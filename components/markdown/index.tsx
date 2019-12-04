@@ -25,8 +25,9 @@ const Markdown = ({content, id}: MarkdownProps) => {
             smartLists: true,
             smartypants: true,
             highlightRaw: true,
+            headerPrefix: `${id}-`,
             highlight
-        })), [content]),
+        })), [content, id]),
         false
     );
 

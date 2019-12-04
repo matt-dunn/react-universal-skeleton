@@ -1,4 +1,4 @@
-import marked, {MarkedOptions} from "marked";
+import marked, {MarkedOptions, Slugger} from "marked";
 import isPromise from "is-promise";
 
 type AdditionOptions = {
@@ -22,6 +22,16 @@ const escape = (html: string, encode: boolean) => {
 marked.Renderer.prototype.listitem = function(this: any, text) {
     const isTask = text.indexOf("checkbox") !== -1;
     return `<li${isTask && ' class="task-list-item"' || ""}>${isTask ? `<label>${text}</label>` : text}</li>\n`;
+};
+
+// Patch for adding internal links headers
+marked.Renderer.prototype.heading = function(this: any, text: string, level: 1 | 2 | 3 | 4 | 5 | 6, raw: string, slugger: Slugger): string {
+    if (this.options.headerIds) {
+        const id = `${this.options.headerPrefix}${slugger.slug(raw)}`;
+        return `<h${level} id="${id}">${text} <a aria-hidden="true" class="header-link" href="#${id}">🔗</a></h${level}>\n`;
+    }
+    // ignore IDs
+    return `<h${level}>${text}</h${level}>\n`;
 };
 
 // Override to allow code blocks to be output raw (without wrapping <pre><code/></pre>) when deferred to highlighter

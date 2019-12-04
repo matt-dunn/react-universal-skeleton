@@ -200,5 +200,20 @@ export const Container = styled.article`
       float: right;
       margin: 20px 0;
     }
+    
+    .header-link {
+        font-size: initial;
+        text-decoration: none;
+        vertical-align: middle;
+        display: none;
+    }
+    
+    [id] {
+      &:hover {
+        .header-link {
+          display: inline;
+        }
+      }
+    }
 `;
 
