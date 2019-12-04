@@ -1,13 +1,14 @@
+const chalk = require("chalk");
 const fs = require("fs");
 const path = require("path");
 const archiver = require("archiver");
 const hp = require("handpipe");
 
 const ROOT = process.cwd();
-const TARGET = process.env.TARGET;
+const TARGET = process.env.TARGET || "dist";
 
-if (!TARGET) {
-    throw new Error("Missing env TARGET. Must match webpack distribution target");
+if (!process.env.TARGET) {
+    console.warn(chalk.yellow(`Using default target '${TARGET}'`));
 }
 
 const packageJSON = require(path.resolve(ROOT, "package.json"));
@@ -15,15 +16,16 @@ const packageJSON = require(path.resolve(ROOT, "package.json"));
 const outputFilename = path.resolve(ROOT, TARGET, `${packageJSON.name}.${packageJSON.version}.tar.gz`);
 
 const output = fs.createWriteStream(outputFilename);
+
 const archive = archiver("tar", {
     gzip: true
 });
 
 output.on("close", () => {
-    console.log(`Package archive created '${outputFilename}'. ${archive.pointer()} total bytes`);
+    console.log(chalk`📦 Package archive created {yellow '${outputFilename}'} (${archive.pointer()} total bytes)`);
 });
 
-archive.on("error", (err) => {
+archive.on("error", err => {
     throw err;
 });
 

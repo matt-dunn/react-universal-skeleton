@@ -1,6 +1,6 @@
 {
   "name": "universal-app",
-  "version": "1.0.188-dev.0",
+  "version": "1.0.189-dev.0",
   "main": "app/index.js",
   "private": true,
   "dependencies": {
@@ -144,7 +144,7 @@
     "build:client": "cross-env PWA=false webpack --config ./app/webpack/client.config.js",
     "build:server": "webpack --config ./app/webpack/server.config.js",
     "build:all": "rimraf dist && concurrently \"yarn build:client\" \"yarn build:server\"",
-    "package": "cross-env TARGET=dist node etc/scripts/package.js",
+    "package": "node etc/scripts/package.js",
     "build": "rimraf reports && yarn lint && yarn type-check && yarn coverage && yarn build:all",
     "build:run": "cross-env PORT=12345 node dist/server/server.js",
     "prebuild:prod": "yarn version --patch --no-git-tag-version --preid dev",

@@ -19,7 +19,7 @@ module.exports = (props) => ({
     root: ROOT,
     environment,
     publicPath: publicPath || "/",
-    target: "dist",
+    target: process.env.TARGET || "dist",
     version: packageJSON.version,
     name: packageJSON.name,
     description: packageJSON.description,
