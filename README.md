@@ -18,7 +18,7 @@ Example using Parcel to bundle app with SSR and server side API calls.
     * *Helmet* for securing server
     * Routing
     * Async data fetching and processing
-- [X] PWA service worker using *workbox* for offline (configured ```passing env.OFFLINE=true```) with manifest generation using webpack
+- [X] PWA service worker using *workbox* for offline (configured ```passing env.PWA=true```) with manifest generation using webpack
 - [X] Progressive enhanced forms based on *Formik*, processed and validated (using *Yup*) on the client and server
 - [X] *Markdown* component with *PrismJS* for code syntax highlighting
 - [X] Testing with coverage and junit reports using *Jest* and *Enzyme*
