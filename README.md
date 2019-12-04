@@ -121,6 +121,12 @@ yarn coverage
 ```
 
 
+### Find duplicate modules from webpack stats
+
+```bash
+yarn stats:duplicates
+```
+
 
 
 
