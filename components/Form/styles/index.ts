@@ -43,8 +43,8 @@ export const FormContainer = styled.form`
     border-radius: .25rem;
     
     &.primary {
-      background-color: #007bff;
-      border-color: #007bff;
+      background-color: #0054AD;
+      border-color: #0054AD;
       color: #fff;
     }
     
