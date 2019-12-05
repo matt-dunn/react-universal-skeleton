@@ -1,6 +1,5 @@
 import { createStore, applyMiddleware } from "redux";
 
-import {notify} from "./notify";
 import stateDecorator from "components/redux/middleware/stateDecorator";
 import notification from "components/redux/middleware/notification";
 
@@ -15,7 +14,7 @@ const getStore = (initialState = {}) => createStore(
     applyMiddleware(
         // promiseMiddleware,
         stateDecorator({ dependencies: { services: {...servicesExample, ...servicesAuth} } }),
-        notification({notify}),
+        notification({notify: () => import("./notify").then(module => module.notify)}),
         // thunkMiddleware,
         // loggerMiddleware,
     ),

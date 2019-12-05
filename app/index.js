@@ -1,6 +1,5 @@
 import React, {useEffect} from "react";
 import ReactDOM from "react-dom";
-import App from "./App";
 import { HelmetProvider } from "react-helmet-async";
 import { BrowserRouter, withRouter } from "react-router-dom";
 import { Provider } from "react-redux";
@@ -12,6 +11,8 @@ import {deserialize} from "components/state-mutate-with-status/utils";
 import getStore from "./store";
 import {FormDataState, FormDataProvider} from "components/actions/form";
 import {AsyncData, AsyncDataContextProvider} from "../components/ssr/safePromise";
+
+import App from "./App";
 
 const store = getStore(deserialize(JSON.stringify(window.__PRELOADED_STATE__)));
 const error = window.__ERROR_STATE__;

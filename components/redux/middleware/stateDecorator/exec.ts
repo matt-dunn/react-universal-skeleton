@@ -1,5 +1,6 @@
 import { FluxStandardAction } from "flux-standard-action";
 import { Dispatch } from "redux";
+import isPromise from "is-promise";
 
 import { Options } from "./index";
 
@@ -79,7 +80,7 @@ const exec = (
         },
       };
 
-      if (next<any>({
+      const ret = next<any>({
         type: action.type,
         error: true,
         payload: reason,
@@ -98,7 +99,21 @@ const exec = (
             error: reason,
           },
         },
-      }) !== true && reject) {
+      });
+
+      if (isPromise(ret)) {
+        (ret as Promise<any>)
+            .then(ret => {
+              if (ret !== true && reject) {
+                reject(reason);
+              } else if (!reject) {
+                throw reason;
+              }
+            })
+            .catch(reason => {
+              throw reason;
+            });
+      } else if (ret !== true && reject) {
         reject(reason);
       } else if (!reject) {
         throw reason;
