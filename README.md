@@ -35,14 +35,21 @@ Example using Parcel to bundle app with SSR and server side API calls.
 
 ## Scripts
 
-### Run development _client_ with hot re-loading
+### Setup
+
+```bash
+yarn install
+```
+
+
+### Run development *client* with HMR
 
 ```bash
 yarn dev:client
 ```
 
 
-### Run development _SSR_ with with hot re-load and without compressed assets (gzip/br)
+### Run development _SSR_ with with HMR
 
 ```bash
 yarn dev:server
@@ -56,7 +63,7 @@ yarn build
 ```
 
 
-### Full production build, running all production tasks with compressed assets (gzip/br), manage versioning and create archive
+### Full production build, running all production tasks + compressed assets (gzip/br), managed versioning and tarball
 
 ```bash
 yarn build:prod
@@ -78,52 +85,54 @@ yarn build && yarn build:run
 ```
 
 
-### Install production dependencies and start production build
+### Run production build from tarball
 
 NOTE: ```yarn build``` must be run first to create the production bundle.
+
+Installs production dependencies and starts production build from tarball
 
 ```bash
 yarn start
 ```
 
+### Other Tasks
 
-### Lint CSS/JS
+#### Lint CSS/JS
 
 ```bash
 yarn lint
 ```
 
 
-### Typescript
+#### Typescript
 
 ```bash
 yarn type-check
 ```
 
 
-### Run all tests
+#### Run all tests
 
 ```bash
 yarn test
 ```
 
-#### Run single/specific tests
+##### Run single/specific tests
 
 ```bash
 yarn test -t '<match>'
 ```
 
 
-### Run all tests with coverage
+#### Run all tests with coverage
 
 ```bash
 yarn coverage
 ```
 
 
-### Find duplicate modules from webpack stats
+#### Find duplicate modules from webpack stats
 
 ```bash
 yarn stats:duplicates
 ```
-
