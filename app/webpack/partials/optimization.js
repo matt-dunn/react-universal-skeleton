@@ -1,6 +1,13 @@
 module.exports = ({environment}) => ({
     optimization: (function(){
         return {
+            // splitChunks: {
+            //     cacheGroups: {
+            //         commons: { test: /[\\/](lodash|core-js)[\\/]/, name: "common", chunks: "all" },
+            //         commons1: { test: /[\\/](@emotion|react-toastify)[\\/]/, name: "common", chunks: "all" }
+            //         // commons: { test: /[\\/]node_modules[\\/]/, name: "common", chunks: "all" }
+            //     }
+            // }
             // runtimeChunk: 'single',
             // splitChunks: {
             //     chunks: 'all',
