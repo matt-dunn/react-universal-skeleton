@@ -10,6 +10,11 @@ module.exports = ({root}) => ({
                 use: [
                     {
                         loader: "babel-loader",
+                        options: {
+                            "plugins": [
+                                "react-hot-loader/babel"
+                            ]
+                        }
                     },
                 ]
             }
