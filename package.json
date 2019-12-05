@@ -1,6 +1,6 @@
 {
   "name": "universal-app",
-  "version": "1.0.197-dev.0",
+  "version": "1.0.198-dev.0",
   "main": "app/index.js",
   "private": true,
   "dependencies": {
@@ -141,9 +141,9 @@
   "scripts": {
     "dev:client": "cross-env PUBLIC_PATH=https://localhost:1234/ cross-env NODE_ENV=development webpack-dev-server --config ./app/webpack/client.config.js --progress",
     "dev:server": "cross-env PUBLIC_PATH=https://localhost:1234/ cross-env PORT=12345 cross-env NODE_ENV=development babel-node --presets @babel/env app/webpack/index.js",
-    "build:client": "cross-env BABEL_ENV=client cross-env PWA=false webpack --config ./app/webpack/client.config.js",
-    "build:server": "cross-env BABEL_ENV=server webpack --config ./app/webpack/server.config.js",
-    "build:all": "rimraf dist && concurrently \"yarn build:client\" \"yarn build:server\"",
+    "build:client": "rimraf dist/client && cross-env BABEL_ENV=client cross-env PWA=false webpack --config ./app/webpack/client.config.js",
+    "build:server": "rimraf dist/server && cross-env BABEL_ENV=server webpack --config ./app/webpack/server.config.js",
+    "build:all": "concurrently \"yarn build:client\" \"yarn build:server\"",
     "package": "node etc/scripts/package.js",
     "build": "rimraf reports && yarn lint && yarn type-check && yarn coverage && yarn build:all",
     "build:run": "cross-env PORT=12345 node dist/server/server.js",
