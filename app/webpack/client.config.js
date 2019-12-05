@@ -19,6 +19,7 @@ const partialCode = require("./partials/code");
 const partialAssets = require("./partials/assets");
 const partialManifest = require("./partials/manifest");
 const partialStats = require("./partials/stats");
+const optimizationStats = require("./partials/optimization");
 
 const metadata = require("./metadata")({configType: "client"});
 const {environment, version, context, root, target, publicPath, port, host} = metadata;
@@ -156,5 +157,6 @@ module.exports = merge(
         }
     },
     partialManifest(metadata),
-    partialStats(metadata)
+    partialStats(metadata),
+    optimizationStats(metadata)
 );
