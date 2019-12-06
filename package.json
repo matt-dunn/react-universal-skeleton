@@ -1,6 +1,6 @@
 {
   "name": "universal-app",
-  "version": "1.0.204-dev.0",
+  "version": "1.0.207-dev.0",
   "main": "app/index.js",
   "private": true,
   "dependencies": {
@@ -149,7 +149,7 @@
     "build:all": "concurrently \"yarn build:client\" \"yarn build:server\"",
     "package": "node etc/scripts/package.js",
     "build": "rimraf reports && yarn lint && yarn type-check && yarn coverage && yarn build:all",
-    "build:run": "cross-env PORT=12345 node dist/server/server.js",
+    "build:run": "cross-env PORT=12345 node --icu-data-dir=node_modules/full-icu dist/server/server.js",
     "prebuild:prod": "yarn version --patch --no-git-tag-version --preid dev",
     "build:prod": "yarn build && yarn package",
     "postbuild:prod": "yarn version --prerelease --no-git-tag-version --preid dev",

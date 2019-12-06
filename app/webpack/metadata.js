@@ -1,3 +1,4 @@
+const {readdirSync} = require("fs");
 const url = require("url");
 const path = require("path");
 
@@ -14,6 +15,13 @@ const publicPath = process.env.PUBLIC_PATH;
 
 const {port, host} = (publicPath && url.parse(publicPath)) || {};
 
+const getDirectories = source =>
+    readdirSync(source, { withFileTypes: true })
+        .filter(dirent => dirent.isDirectory())
+        .map(dirent => dirent.name);
+
+const availableLocales = getDirectories("app/locale");
+
 module.exports = (props) => ({
     context: path.resolve(__dirname, ".."),
     root: ROOT,
@@ -25,5 +33,6 @@ module.exports = (props) => ({
     description: packageJSON.description,
     port,
     host,
+    availableLocales,
     ...props
 });

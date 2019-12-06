@@ -22,14 +22,7 @@ import {getHTMLFragments, parseHelmetTemplate} from "./client";
 
 const statsFile = path.join(process.cwd(), process.env.TARGET, "client", "loadable-stats.json");
 
-import { readdirSync } from "fs";
-
-const getDirectories = source =>
-    readdirSync(source, { withFileTypes: true })
-        .filter(dirent => dirent.isDirectory())
-        .map(dirent => dirent.name);
-
-const availableLocales = getDirectories("app/locale");
+const availableLocales = process.env.AVAILABLE_LOCALES;
 
 export default async (req, res) => {
     try {
