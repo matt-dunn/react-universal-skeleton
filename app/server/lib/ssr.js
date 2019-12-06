@@ -4,20 +4,18 @@ import through from "through";
 
 import React from "react";
 import { renderToNodeStream } from "react-dom/server";
-import { HelmetProvider } from "react-helmet-async";
 import { StaticRouter } from "react-router-dom";
 import { ChunkExtractor } from "@loadable/server";
 import {set} from "lodash";
-import { Provider } from "react-redux";
 
 import {serialize} from "components/state-mutate-with-status/utils";
-import {FormDataProvider, parseFormData} from "components/actions/form";
-import {getDataFromTree, AsyncDataContextProvider, AsyncData} from "components/ssr/safePromise";
-import ErrorProvider from "components/actions/ErrorProvider";
+import {parseFormData} from "components/actions/form";
+import {getDataFromTree, AsyncData} from "components/ssr/safePromise";
 import {errorLike} from "components/error";
 import StylesheetServer from "components/myStyled/server";
 
 import getStore from "app/store";
+import Bootstrap from "app/bootstrap";
 import App from "app/App";
 
 import {getHTMLFragments, parseHelmetTemplate} from "./client";
@@ -44,22 +42,20 @@ export default async (req, res) => {
         const asyncData = new AsyncData();
 
         const app = extractor.collectChunks(
-            <AsyncDataContextProvider value={asyncData}>
-                <FormDataProvider value={formData}>
-                    <ErrorProvider value={errorContext}>
-                        <HelmetProvider context={helmetContext}>
-                            <Provider store={store}>
-                                <StaticRouter
-                                    location={req.originalUrl}
-                                    context={context}
-                                >
-                                    <App/>
-                                </StaticRouter>
-                            </Provider>
-                        </HelmetProvider>
-                    </ErrorProvider>
-                </FormDataProvider>
-            </AsyncDataContextProvider>
+            <Bootstrap
+                asyncData={asyncData}
+                formData={formData}
+                error={errorContext}
+                store={store}
+                helmetContext={helmetContext}
+            >
+                <StaticRouter
+                    location={req.originalUrl}
+                    context={context}
+                >
+                    <App/>
+                </StaticRouter>
+            </Bootstrap>
         );
 
         const stylesheetServer = StylesheetServer();

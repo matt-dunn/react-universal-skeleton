@@ -1,17 +1,16 @@
 import React, {useEffect} from "react";
 import ReactDOM from "react-dom";
-import { HelmetProvider } from "react-helmet-async";
 import { BrowserRouter, withRouter } from "react-router-dom";
-import { Provider } from "react-redux";
 import { loadableReady } from "@loadable/component";
 
-import ErrorProvider from "components/actions/ErrorProvider";
 import {deserialize} from "components/state-mutate-with-status/utils";
 
-import getStore from "./store";
-import {FormDataState, FormDataProvider} from "components/actions/form";
-import {AsyncData, AsyncDataContextProvider} from "../components/ssr/safePromise";
+import {FormDataState} from "components/actions/form";
+import {AsyncData} from "components/ssr/safePromise";
 
+import getStore from "./store";
+
+import Bootstrap from "./Bootstrap";
 import App from "./App";
 
 const store = getStore(deserialize(JSON.stringify(window.__PRELOADED_STATE__)));
@@ -32,21 +31,18 @@ const ScrollToTop = withRouter(({ children, location: { pathname } }) => {
 window.STORE = store;
 
 const app = (
-    <AsyncDataContextProvider value={asyncData}>
-        <FormDataProvider value={formData}>
-            <ErrorProvider value={{error}}>
-                <HelmetProvider>
-                    <Provider store={store}>
-                        <BrowserRouter>
-                            <ScrollToTop>
-                                <App />
-                            </ScrollToTop>
-                        </BrowserRouter>
-                    </Provider>
-                </HelmetProvider>
-            </ErrorProvider>
-        </FormDataProvider>
-    </AsyncDataContextProvider>
+    <Bootstrap
+        asyncData={asyncData}
+        formData={formData}
+        error={error}
+        store={store}
+    >
+        <BrowserRouter>
+            <ScrollToTop>
+                <App />
+            </ScrollToTop>
+        </BrowserRouter>
+    </Bootstrap>
 );
 
 const element = document.getElementById("app");

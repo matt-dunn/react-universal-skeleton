@@ -24,8 +24,8 @@ const Login = loadable(() => import(/* webpackPrefetch: true */ "./containers/Lo
 
 import "./styles/react-responsive-ui.css";
 
-const handler = ({code, status}, location, history) => {
-    console.log("HANDLE ERROR", code, status, location, history);
+const handler = ({code, status, message}, location, history) => {
+    console.error("HANDLE ERROR", message, code, status, location);
 
     if (status === 401) {
         history.push(generatePath("/login/:from?", {from: location}));
