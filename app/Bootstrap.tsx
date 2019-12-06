@@ -2,6 +2,7 @@ import React, {ReactNode} from "react";
 import { HelmetProvider } from "react-helmet-async";
 import { Provider } from "react-redux";
 import {Store} from "redux";
+import {IntlProvider} from "react-intl";
 
 import ErrorProvider from "components/actions/ErrorProvider";
 import {FormDataProvider, FormDataState} from "components/actions/form";
@@ -20,17 +21,19 @@ type BootstrapProps<T> = {
 
 function Bootstrap<T>({asyncData, formData, error, store, helmetContext, children}: BootstrapProps<T>) {
     return (
-        <AsyncDataContextProvider value={asyncData}>
-            <FormDataProvider value={formData}>
-                <ErrorProvider value={error}>
-                    <HelmetProvider context={helmetContext}>
-                        <Provider store={store}>
-                            {children}
-                        </Provider>
-                    </HelmetProvider>
-                </ErrorProvider>
-            </FormDataProvider>
-        </AsyncDataContextProvider>
+        <IntlProvider locale="en">
+            <AsyncDataContextProvider value={asyncData}>
+                <FormDataProvider value={formData}>
+                    <ErrorProvider value={error}>
+                        <HelmetProvider context={helmetContext}>
+                            <Provider store={store}>
+                                {children}
+                            </Provider>
+                        </HelmetProvider>
+                    </ErrorProvider>
+                </FormDataProvider>
+            </AsyncDataContextProvider>
+        </IntlProvider>
     );
 }
 

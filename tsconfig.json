@@ -14,7 +14,7 @@
     "allowJs": true,
     "strict": true,
     "moduleResolution": "node",
-    "lib": ["es2015", "dom"],
+    "lib": ["es2015", "dom", "esnext.intl", "es2017.intl", "es2018.intl"],
     "strictNullChecks": true,
     "allowSyntheticDefaultImports": true,
     "baseUrl": "./",
