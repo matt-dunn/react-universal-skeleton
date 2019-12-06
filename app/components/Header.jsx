@@ -54,6 +54,12 @@ const Header = () => {
                         exact activeClassName="active"
                     >Schema Forms</NavLink>
                 </MenuLink>
+                <MenuLink>
+                    <NavLink
+                        to="/locale"
+                        exact activeClassName="active"
+                    >Locale Test</NavLink>
+                </MenuLink>
             </Menu>
         </Container>
     );

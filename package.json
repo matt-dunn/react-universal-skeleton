@@ -19,6 +19,7 @@
     "express-trailing-slash": "^1.0.0",
     "flux-standard-action": "^2.1.1",
     "formik": "^2.0.1",
+    "full-icu": "^1.3.0",
     "he": "^1.2.0",
     "helmet": "^3.21.2",
     "is-promise": "^2.1.0",
@@ -142,7 +143,7 @@
   },
   "scripts": {
     "dev:client": "cross-env PUBLIC_PATH=https://localhost:1234/ cross-env NODE_ENV=development webpack-dev-server --config ./app/webpack/client.config.js --progress",
-    "dev:server": "cross-env PUBLIC_PATH=https://localhost:1234/ cross-env PORT=12345 cross-env NODE_ENV=development babel-node --presets @babel/env app/webpack/index.js",
+    "dev:server": "cross-env PUBLIC_PATH=https://localhost:1234/ cross-env PORT=12345 cross-env NODE_ENV=development babel-node --icu-data-dir=node_modules/full-icu --presets @babel/env app/webpack/index.js",
     "build:client": "rimraf dist/client && cross-env BABEL_ENV=client cross-env PWA=false webpack --config ./app/webpack/client.config.js",
     "build:server": "rimraf dist/server && cross-env BABEL_ENV=server webpack --config ./app/webpack/server.config.js",
     "build:all": "concurrently \"yarn build:client\" \"yarn build:server\"",

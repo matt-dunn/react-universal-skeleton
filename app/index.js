@@ -17,6 +17,7 @@ const store = getStore(deserialize(JSON.stringify(window.__PRELOADED_STATE__)));
 const error = window.__ERROR_STATE__;
 const formData = FormDataState(window.__PRELOADED_FORM_STATE__);
 const asyncData = new AsyncData(window.__ASYNC_DATA_STATE__);
+const languagePack = window.__LANGUAGE_PACK__;
 
 console.error(store.getState());
 
@@ -32,6 +33,7 @@ window.STORE = store;
 
 const app = (
     <Bootstrap
+        languagePack={languagePack}
         asyncData={asyncData}
         formData={formData}
         error={error}

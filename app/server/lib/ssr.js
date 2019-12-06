@@ -22,6 +22,15 @@ import {getHTMLFragments, parseHelmetTemplate} from "./client";
 
 const statsFile = path.join(process.cwd(), process.env.TARGET, "client", "loadable-stats.json");
 
+import { readdirSync } from "fs";
+
+const getDirectories = source =>
+    readdirSync(source, { withFileTypes: true })
+        .filter(dirent => dirent.isDirectory())
+        .map(dirent => dirent.name);
+
+const availableLocales = getDirectories("app/locale");
+
 export default async (req, res) => {
     try {
         const t1 = Date.now();
@@ -41,8 +50,16 @@ export default async (req, res) => {
         const extractor = new ChunkExtractor({ statsFile });
         const asyncData = new AsyncData();
 
+        const locale = req.acceptsLanguages("en", ...availableLocales) || "en";
+
+        const languagePack = {
+            locale,
+            messages: (availableLocales.indexOf(locale) === -1 && {}) || await import(`app/locale/${locale}/messages.json`)
+        };
+
         const app = extractor.collectChunks(
             <Bootstrap
+                languagePack={languagePack}
                 asyncData={asyncData}
                 formData={formData}
                 error={errorContext}
@@ -114,6 +131,9 @@ export default async (req, res) => {
                                     window.__PRERENDERED_SSR__ = true;
                                     window.__ERROR_STATE__ = ${JSON.stringify(errorContext && errorContext.error && errorLike(errorContext.error))}
                                     window.__ASYNC_DATA_STATE__ = ${asyncData && JSON.stringify(asyncData.data).replace(
+                                    /</g,
+                                    "\\u003c")}
+                                    window.__LANGUAGE_PACK__ = ${asyncData && JSON.stringify(languagePack).replace(
                                     /</g,
                                     "\\u003c")}
                                 </script>`

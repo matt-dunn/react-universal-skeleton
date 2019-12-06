@@ -21,6 +21,7 @@ const Data = loadable(() => import(/* webpackPrefetch: true */ "./containers/Dat
 const Forms = loadable(() => import(/* webpackPrefetch: true */ "./containers/Forms"));
 const MyStyled = loadable(() => import(/* webpackPrefetch: true */ "./containers/MyStyled"));
 const Login = loadable(() => import(/* webpackPrefetch: true */ "./containers/Login"));
+const Locale = loadable(() => import(/* webpackPrefetch: true */ "./containers/Locale"));
 
 import "./styles/react-responsive-ui.css";
 
@@ -63,6 +64,7 @@ const App = () => {
                     <Route exact path="/data/:page?" component={Data} />
                     <Route exact path="/forms" component={Forms} />
                     <Route exact path="/mystyled" component={MyStyled} />
+                    <Route exact path="/locale" component={Locale} />
                     <Route path="/login/:from?" component={Login} />
                     <Route component={Error404} />
                     {/*<Redirect to="/" />*/}
