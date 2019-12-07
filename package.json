@@ -1,6 +1,6 @@
 {
   "name": "universal-app",
-  "version": "1.0.207-dev.0",
+  "version": "1.0.209-dev.0",
   "main": "app/index.js",
   "private": true,
   "dependencies": {
@@ -119,6 +119,7 @@
     "postcss-modules": "^1.4.1",
     "raw-loader": "^4.0.0",
     "react-hot-loader": "^4.12.13",
+    "react-intl-translations-manager": "^5.0.3",
     "require-from-string": "^2.0.2",
     "rimraf": "^3.0.0",
     "robotstxt-webpack-plugin": "^7.0.0",
@@ -163,7 +164,8 @@
     "prestart": "yarn install --production",
     "start": "yarn build:run",
     "version": "echo \"versioning $npm_package_version\"",
-    "stats:dups": "webpack-stats-duplicates ./reports/client-stats.json && webpack-stats-duplicates ./reports/server-stats.json"
+    "stats:dups": "webpack-stats-duplicates ./reports/client-stats.json && webpack-stats-duplicates ./reports/server-stats.json",
+    "manage:translations": "babel-node --presets @babel/env ./etc/i18n/translationRunner.js"
   },
   "engines": {
     "node": ">=10",

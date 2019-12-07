@@ -1,4 +1,0 @@
-{
-  "welcome": "Welcome {name}. You have {unreadCount, number} {unreadCount, plural, one {message} other {messages}} (en-GB)",
-  "welcome:date": "The date today is {date} (en-GB)"
-}

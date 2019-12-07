@@ -23,7 +23,8 @@ Example using Parcel to bundle app with SSR and server side API calls.
 - [X] *Markdown* component with *PrismJS* for code syntax highlighting
 - [X] Testing with coverage and junit reports using *Jest* and *Enzyme*
 - [X] Typescript / ES6+ linting using *eslint*
-- [ ] i18n / l10n
+- [X] i18n / l10n
+    * *react-intl* with translation workflow using babel plugin
 - [X] Responsive layouts
 - [X] Accessibility including semantic markup and aria
 - [X] Client and server HMR using custom component to watch for changes and optimised build for client and server bundles

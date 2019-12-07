@@ -44,11 +44,18 @@ export default async (req, res) => {
         const asyncData = new AsyncData();
 
         const locale = req.acceptsLanguages("en", ...availableLocales) || "en";
+        let languagePack;
 
-        const languagePack = {
-            locale,
-            messages: (availableLocales.indexOf(locale) === -1 && {}) || await import(`app/locale/${locale}/messages.json`)
-        };
+        try {
+            languagePack = {
+                locale,
+                messages: (availableLocales.indexOf(locale) === -1 && {}) || await import(`app/translations/locales/${locale}.json`)
+            };
+        } catch (reason) {
+            languagePack = {
+                locale
+            };
+        }
 
         const app = extractor.collectChunks(
             <Bootstrap

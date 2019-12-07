@@ -30,7 +30,7 @@ function Bootstrap<T>({languagePack, asyncData, formData, error, store, helmetCo
         if (!lang) {
             const {language} = navigator;
 
-            import(`app/locale/${language}/messages.json`)
+            import(`app/translations/locales/${language}.json`)
                 .then(messages => {
                     setLang({
                         locale: language,

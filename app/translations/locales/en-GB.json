@@ -1,0 +1,4 @@
+{
+  "welcome": "Hello {name}. You have {unreadCount, number} {unreadCount, plural,\n                      one {message}\n                      other {messages}\n                    }",
+  "welcome:date": "The date today is {date}"
+}
