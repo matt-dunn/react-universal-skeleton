@@ -15,6 +15,7 @@ import ComplexLayout from "./layouts/Complex";
 import {FormContainer} from "components/Form";
 import {FormOptions} from "components/Form/FormOptions";
 import {ValidationError} from "yup";
+import {FormattedDate, FormattedMessage} from "react-intl";
 
 // import {useFormikContext} from "formik";
 // import {formStyles} from "../../../components/Form/styles";
@@ -97,7 +98,10 @@ const Forms = () => {
                 <title>Forms</title>
             </Helmet>
             <Title>
-                Forms (Lazy Loaded)
+                <FormattedMessage
+                    id="forms:title"
+                    defaultMessage={"Forms (Lazy Loaded)"}
+                />
             </Title>
 
             <div style={{maxWidth: "800px", margin: "20px auto"}}>

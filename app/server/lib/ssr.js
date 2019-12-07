@@ -43,7 +43,8 @@ export default async (req, res) => {
         const extractor = new ChunkExtractor({ statsFile });
         const asyncData = new AsyncData();
 
-        const locale = req.acceptsLanguages("en", ...availableLocales) || "en";
+        const language = req.acceptsLanguages("en", "en-US", ...availableLocales) || "en";
+        const locale = (language === "en-US" && "en") || language;
         let languagePack;
 
         try {

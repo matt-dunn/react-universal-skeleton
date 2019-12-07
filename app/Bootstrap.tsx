@@ -10,6 +10,8 @@ import {AsyncDataContextProvider} from "components/ssr/safePromise";
 import {AsyncDataContext} from "components/ssr/contexts";
 import {ErrorContext} from "components/actions/contexts";
 
+const availableLocales = process.env.AVAILABLE_LOCALES || [] as string[];
+
 type BootstrapProps<T> = {
     languagePack?: {
         locale: string;
@@ -29,19 +31,26 @@ function Bootstrap<T>({languagePack, asyncData, formData, error, store, helmetCo
     useEffect(() => {
         if (!lang) {
             const {language} = navigator;
+            const locale = (language === "en-US" && "en") || (availableLocales.indexOf(language) !== -1 && language);
 
-            import(`app/translations/locales/${language}.json`)
-                .then(messages => {
-                    setLang({
-                        locale: language,
-                        messages
+            if (locale) {
+                import(`app/translations/locales/${locale}.json`)
+                    .then(messages => {
+                        setLang({
+                            locale: locale,
+                            messages
+                        });
+                    })
+                    .catch(() => {
+                        setLang({
+                            locale: "en"
+                        });
                     });
-                })
-                .catch(() => {
-                    setLang({
-                        locale: "en"
-                    });
+            } else {
+                setLang({
+                    locale: "en"
                 });
+            }
         }
     }, [lang]);
 
