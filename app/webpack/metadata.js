@@ -14,7 +14,7 @@ const publicPath = process.env.PUBLIC_PATH;
 
 const {port, host} = (publicPath && url.parse(publicPath)) || {};
 
-const availableLocales = ["de", "en-GB"];
+const availableLocales = ["en", "en-GB", "de"];
 
 module.exports = (props) => ({
     context: path.resolve(__dirname, ".."),

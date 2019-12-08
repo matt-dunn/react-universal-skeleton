@@ -15,7 +15,7 @@ import ComplexLayout from "./layouts/Complex";
 import {FormContainer} from "components/Form";
 import {FormOptions} from "components/Form/FormOptions";
 import {ValidationError} from "yup";
-import {FormattedDate, FormattedMessage} from "react-intl";
+import {FormattedMessage} from "react-intl";
 
 // import {useFormikContext} from "formik";
 // import {formStyles} from "../../../components/Form/styles";

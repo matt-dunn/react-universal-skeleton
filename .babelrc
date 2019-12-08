@@ -23,7 +23,8 @@
       "react-intl",
       {
         "messagesDir": "./dist/messages/",
-        "extractSourceLocation": false
+        "extractSourceLocation": false,
+        "removeDefaultMessage": true
       }
     ],
     "@loadable/babel-plugin",

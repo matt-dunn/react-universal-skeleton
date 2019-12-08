@@ -31,7 +31,7 @@ function Bootstrap<T>({languagePack, asyncData, formData, error, store, helmetCo
     useEffect(() => {
         if (!lang) {
             const {language} = navigator;
-            const locale = (language === "en-US" && "en") || (availableLocales.indexOf(language) !== -1 && language);
+            const locale = (availableLocales.indexOf(language) !== -1 && language) || "en";
 
             if (locale) {
                 import(`app/translations/locales/${locale}.json`)
@@ -40,16 +40,7 @@ function Bootstrap<T>({languagePack, asyncData, formData, error, store, helmetCo
                             locale: locale,
                             messages
                         });
-                    })
-                    .catch(() => {
-                        setLang({
-                            locale: "en"
-                        });
                     });
-            } else {
-                setLang({
-                    locale: "en"
-                });
             }
         }
     }, [lang]);
