@@ -16,8 +16,7 @@ const partialStats = require("./partials/stats");
 const metadata = require("./metadata")({configType: "server"});
 const {environment, version, context, root, target, publicPath} = metadata;
 
-log(chalk`🔨 Building {white.bold server}...`);
-log(chalk`
+log(chalk`🔨 Building {white.bold server}...
   Environment: {yellow ${environment}}
   Version: {yellow ${version}}
   Root: {yellow ${root}}

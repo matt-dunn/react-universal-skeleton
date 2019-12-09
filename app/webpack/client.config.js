@@ -24,8 +24,7 @@ const optimizationStats = require("./partials/optimization");
 const metadata = require("./metadata")({configType: "client"});
 const {environment, version, context, root, target, publicPath, port, host} = metadata;
 
-log(chalk`🔨 Building {white.bold client}...`);
-log(chalk`
+log(chalk`🔨 Building {white.bold client}...
   Environment: {yellow ${environment}}
   Version: {yellow ${version}}
   Root: {yellow ${root}}
