@@ -1,5 +1,5 @@
 {
-  "containers.1645138363": "(de) Forms (Lazy Loaded)",
-  "containers.2731101254": "Willkommen {name}. Sie haben {unreadCount, number} {unreadCount, plural, one {Nachricht} other {Nachrichten}}",
+  "containers.1645138363": "Willkommen {name}. Sie haben {unreadCount, number} {unreadCount, plural, one {Nachricht} other {Nachrichten}}",
+  "containers.2731101254": "(de) Forms (Lazy Loaded)",
   "containers.Forms.165405603": "Das heutige Datum ist {date}!"
 }
