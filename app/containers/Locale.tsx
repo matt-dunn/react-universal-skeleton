@@ -18,7 +18,6 @@ const Locale = () => {
 
             <Title>
                 <FormattedMessage
-                    id="welcome"
                     defaultMessage={`Hello {name}. You have {unreadCount, number} {unreadCount, plural,
                       one {message}
                       other {messages}
@@ -29,7 +28,6 @@ const Locale = () => {
 
             <p>
                 <FormattedMessage
-                    id="welcome"
                     defaultMessage={`Hello {name}. You have {unreadCount, number} {unreadCount, plural,
                       one {message}
                       other {messages}
@@ -39,7 +37,6 @@ const Locale = () => {
             </p>
             <p>
                 <FormattedMessage
-                    id="welcome:date"
                     defaultMessage={"The date today is {date}"}
                     values={{date: <FormattedDate value={Date.now()}/>}}
                 />

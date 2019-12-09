@@ -16,6 +16,13 @@ module.exports = ({root, target, i18nTargetPath, i18nMessagesPath}) => ({
                     "plugins": [
                         "react-hot-loader/babel",
                         [
+                            "react-intl-auto",
+                            {
+                                "removePrefix": "app/",
+                                "filebase": false
+                            }
+                        ],
+                        [
                             "react-intl", {
                                 messagesDir: path.resolve(target, i18nMessagesPath),
                                 extractSourceLocation: false,
