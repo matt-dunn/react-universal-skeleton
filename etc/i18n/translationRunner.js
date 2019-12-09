@@ -3,10 +3,10 @@ import manageTranslations from "react-intl-translations-manager";
 
 import metadata from "app/webpack/metadata";
 
-const {availableLocales, target, i18nTargetPath} = metadata();
+const {availableLocales, target, i18nMessagesPath} = metadata();
 
 manageTranslations({
-    messagesDirectory: path.resolve(target, i18nTargetPath),
+    messagesDirectory: path.resolve(target, i18nMessagesPath),
     translationsDirectory: "app/translations/locales/",
     languages: availableLocales//.filter(locale => locale !== "en"),
     // overridePrinters: {

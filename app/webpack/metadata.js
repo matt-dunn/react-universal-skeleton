@@ -24,6 +24,7 @@ module.exports = (props) => ({
     publicPath: publicPath || "/",
     target,
     i18nTargetPath: "i18n",
+    i18nMessagesPath: path.join("i18n", "source"),
     version: packageJSON.version,
     name: packageJSON.name,
     description: packageJSON.description,

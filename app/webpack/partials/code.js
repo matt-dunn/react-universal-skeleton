@@ -2,7 +2,7 @@ const path = require("path");
 
 const ReactIntlPlugin=require("react-intl-webpack-plugin");
 
-module.exports = ({root, target, i18nTargetPath}) => ({
+module.exports = ({root, target, i18nTargetPath, i18nMessagesPath}) => ({
     module :{
         rules: [
             {
@@ -11,15 +11,15 @@ module.exports = ({root, target, i18nTargetPath}) => ({
                 include: [path.resolve(root, "app"), path.resolve(root, "components"), path.resolve(root, "server")],
                 loader: "babel-loader",
                 query: {
-                    "cacheDirectory": false,
+                    "cacheDirectory": true,
                     "metadataSubscribers":[ReactIntlPlugin.metadataContextFunctionName],
                     "plugins": [
                         "react-hot-loader/babel",
                         [
                             "react-intl", {
-                                messagesDir: path.resolve(target, i18nTargetPath),
+                                messagesDir: path.resolve(target, i18nMessagesPath),
                                 extractSourceLocation: false,
-                                removeDefaultMessage: false
+                                removeDefaultMessage: true
                             }
                         ]
                     ]
