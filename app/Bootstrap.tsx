@@ -15,6 +15,7 @@ const availableLocales = process.env.AVAILABLE_LOCALES || [] as string[];
 type BootstrapProps<T> = {
     languagePack?: {
         locale: string;
+        messagesLocale: string;
         messages?: any;
     };
     children: ReactNode;
@@ -37,7 +38,8 @@ function Bootstrap<T>({languagePack, asyncData, formData, error, store, helmetCo
                 import(`app/translations/locales/${locale}.json`)
                     .then(messages => {
                         setLang({
-                            locale: locale,
+                            locale: language,
+                            messagesLocale: locale,
                             messages
                         });
                     });

@@ -11,17 +11,19 @@ const environment = process.env.NODE_ENV || "production";
 process.env.NODE_ENV = environment;
 
 const publicPath = process.env.PUBLIC_PATH;
+const target = process.env.TARGET || "dist";
 
 const {port, host} = (publicPath && url.parse(publicPath)) || {};
 
-const availableLocales = ["en", "en-GB", "de"];
+const availableLocales = ["en", "en-GB", "de", "fr"];
 
 module.exports = (props) => ({
     context: path.resolve(__dirname, ".."),
     root: ROOT,
     environment,
     publicPath: publicPath || "/",
-    target: process.env.TARGET || "dist",
+    target,
+    i18nTargetPath: "i18n",
     version: packageJSON.version,
     name: packageJSON.name,
     description: packageJSON.description,

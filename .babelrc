@@ -19,14 +19,6 @@
       "inline": true,
       "sourceMap": true
     }],
-    [
-      "react-intl",
-      {
-        "messagesDir": "./dist/messages/",
-        "extractSourceLocation": false,
-        "removeDefaultMessage": true
-      }
-    ],
     "@loadable/babel-plugin",
     ["module-resolver", {
       "root": ["./"],

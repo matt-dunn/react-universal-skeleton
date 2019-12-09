@@ -1,3 +1,4 @@
+import fs from "fs";
 import path from "path";
 import log from "llog";
 import through from "through";
@@ -44,9 +45,11 @@ export default async (req, res) => {
         const asyncData = new AsyncData();
 
         const locale = req.acceptsLanguages(...availableLocales) || "en";
+        const hasMessages = fs.existsSync(`app/translations/locales/${locale}.json`);
         const languagePack = {
-            locale,
-            messages: await import(`app/translations/locales/${locale}.json`)
+            locale: req.acceptsLanguages()[0],
+            messagesLocale: locale,
+            messages: hasMessages && await import(`app/translations/locales/${locale}.json`)
         };
 
         const app = extractor.collectChunks(

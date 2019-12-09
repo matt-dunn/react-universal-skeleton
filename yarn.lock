@@ -8723,6 +8723,11 @@ react-intl-translations-manager@^5.0.3:
     json-stable-stringify "^1.0.1"
     mkdirp "^0.5.1"
 
+react-intl-webpack-plugin@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/react-intl-webpack-plugin/-/react-intl-webpack-plugin-0.3.0.tgz#b8013da5f693e366d612ce12074b83bf357cd86a"
+  integrity sha512-aNYSKNInJ8qKbC7xzSTw2BCUNI07fRKDN71lu5N6Awv3GdBl2Iz05gLwMmxg6D0DU9yvgpoWk/YEwEZpg13fpA==
+
 react-intl@^3.9.1:
   version "3.9.1"
   resolved "https://registry.yarnpkg.com/react-intl/-/react-intl-3.9.1.tgz#6bbb3492ff1e789bd4bd97d1d9398a75844ac005"

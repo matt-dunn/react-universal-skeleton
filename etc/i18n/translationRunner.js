@@ -1,13 +1,14 @@
+import path from "path"
 import manageTranslations from "react-intl-translations-manager";
 
 import metadata from "app/webpack/metadata";
 
-const {availableLocales} = metadata();
+const {availableLocales, target, i18nTargetPath} = metadata();
 
 manageTranslations({
-    messagesDirectory: "dist/messages/",
+    messagesDirectory: path.resolve(target, i18nTargetPath),
     translationsDirectory: "app/translations/locales/",
-    languages: availableLocales.filter(locale => locale !== "en"),
+    languages: availableLocales//.filter(locale => locale !== "en"),
     // overridePrinters: {
     //     printDuplicateIds: duplicateIds => {
     //         console.log(`You have ${duplicateIds.length} duplicate IDs`);
