@@ -1,6 +1,6 @@
 const path = require("path");
 
-const ReactIntlPlugin=require('react-intl-webpack-plugin');
+const ReactIntlPlugin=require("react-intl-webpack-plugin");
 
 module.exports = ({root, target, i18nTargetPath}) => ({
     module :{

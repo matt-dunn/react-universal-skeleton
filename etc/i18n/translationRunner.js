@@ -1,4 +1,4 @@
-import path from "path"
+import path from "path";
 import manageTranslations from "react-intl-translations-manager";
 
 import metadata from "app/webpack/metadata";
