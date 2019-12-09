@@ -15,7 +15,7 @@ const availableLocales = process.env.AVAILABLE_LOCALES || [] as string[];
 type BootstrapProps<T> = {
     languagePack?: {
         locale: string;
-        messagesLocale: string;
+        messagesLocale?: string;
         messages?: any;
     };
     children: ReactNode;
@@ -41,6 +41,13 @@ function Bootstrap<T>({languagePack, asyncData, formData, error, store, helmetCo
                             locale: language,
                             messagesLocale: locale,
                             messages
+                        });
+                    })
+                    .catch(reason => {
+                        console.error(reason);
+
+                        setLang({
+                            locale: language
                         });
                     });
             }
