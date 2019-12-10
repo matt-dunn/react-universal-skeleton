@@ -26,11 +26,11 @@ const GridItem = styled.div`
 const messages = defineMessages({
     submit: {
         // id: 'ra.action.delete',
-        defaultMessage: 'Submit Form',
+        defaultMessage: "Submit Form",
     },
     reset: {
         // id: 'ra.action.show',
-        defaultMessage: 'Reset Form',
+        defaultMessage: "Reset Form",
     },
 });
 

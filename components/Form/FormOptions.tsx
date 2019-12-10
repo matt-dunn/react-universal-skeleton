@@ -7,7 +7,7 @@ type FormOptionsProps = {
     i18n?: {
         reset: string;
         submit: string;
-    }
+    };
 }
 
 function FormOptions<T>({i18n}: FormOptionsProps) {

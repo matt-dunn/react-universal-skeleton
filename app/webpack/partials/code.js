@@ -1,8 +1,8 @@
 const path = require("path");
 
-const ReactIntlPlugin = require("react-intl-webpack-plugin");
+// const ReactIntlPlugin = require("react-intl-webpack-plugin");
 
-module.exports = ({root, target, i18nTargetPath, i18nMessagesPath}) => ({
+module.exports = ({root, target,/* i18nTargetPath, */i18nMessagesPath}) => ({
     module :{
         rules: [
             {
