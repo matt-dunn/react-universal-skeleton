@@ -1,5 +1,7 @@
 {
   "containers.1645138363": "Hello {name}. You have {unreadCount, number} {unreadCount, plural,\n                      one {message}\n                      other {messages}\n                    }",
   "containers.2731101254": "The date today is {date}",
-  "containers.Forms.165405603": "Forms (Lazy Loaded)"
+  "containers.Forms.165405603": "Forms (Lazy Loaded)",
+  "containers.Forms.layouts.reset": "Reset Form",
+  "containers.Forms.layouts.submit": "Submit Form"
 }

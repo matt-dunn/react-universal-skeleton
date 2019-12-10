@@ -3,7 +3,14 @@ import {useFormikContext} from "formik";
 
 import {typedMemo} from "./types";
 
-function FormOptions<T>() {
+type FormOptionsProps = {
+    i18n?: {
+        reset: string;
+        submit: string;
+    }
+}
+
+function FormOptions<T>({i18n}: FormOptionsProps) {
     const {handleReset, dirty, isSubmitting, isValid, isInitialValid} = useFormikContext<T>();
 
     return (
@@ -13,7 +20,7 @@ function FormOptions<T>() {
                 onClick={handleReset}
                 disabled={!dirty || isSubmitting}
             >
-                Reset
+                {(i18n && i18n.reset) || "Reset"}
             </button>
             <button
                 type="submit"
@@ -21,7 +28,7 @@ function FormOptions<T>() {
                 name="@@SUBMIT"
                 className="primary"
             >
-                Submit {(isValid && isInitialValid) && "✔"}
+                {(i18n && i18n.submit) || "Submit"} {(isValid && isInitialValid) && "✔"}
             </button>
         </aside>
     );

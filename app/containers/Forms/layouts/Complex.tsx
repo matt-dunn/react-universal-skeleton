@@ -1,11 +1,12 @@
 import React from "react";
 import styled from "@emotion/styled";
+import loadable from "@loadable/component";
+import {defineMessages, useIntl} from "react-intl";
 
 import {ResponsiveGrid} from "components/Grid";
 import {FieldSet, FieldSetChildrenProps} from "components/Form";
 import {FormOptions} from "components/Form/FormOptions";
 
-import loadable from "@loadable/component";
 const Markdown = loadable(() => import("components/markdown"));
 
 const GridItems = styled(ResponsiveGrid("div"))``;
@@ -22,7 +23,25 @@ const GridItem = styled.div`
     }
 `;
 
+const messages = defineMessages({
+    submit: {
+        // id: 'ra.action.delete',
+        defaultMessage: 'Submit Form',
+    },
+    reset: {
+        // id: 'ra.action.show',
+        defaultMessage: 'Reset Form',
+    },
+});
+
 function ComplexLayout<T, P, S>({fieldsetMap: {children, extra, otherLeft, otherRight}}: Pick<FieldSetChildrenProps<T, P, S>, "fieldsetMap">) {
+    const intl = useIntl();
+
+    const i18n = {
+        submit: intl.formatMessage(messages.submit),
+        reset: intl.formatMessage(messages.reset)
+    };
+
     return (
         <>
             <div style={{borderBottom: "1px solid #dfdfdf", margin: "0 0 20px 0", padding: "0 0 10px 0", display: "flex"}}>
@@ -38,7 +57,7 @@ function ComplexLayout<T, P, S>({fieldsetMap: {children, extra, otherLeft, other
                             fields={otherRight}
                         />
                         <p style={{fontSize: "14px", backgroundColor: "#eee", padding: "10px", borderRadius: "10px", margin: "0 0 10px 0"}}>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-                        <FormOptions/>
+                        <FormOptions i18n={i18n}/>
                     </GridItem>
                 </GridItems>
             </div>
