@@ -12,6 +12,7 @@ process.env.NODE_ENV = environment;
 
 const publicPath = process.env.PUBLIC_PATH;
 const target = process.env.TARGET || "dist";
+const reports = process.env.REPORTS || "reports";
 
 const {port, host} = (publicPath && url.parse(publicPath)) || {};
 
@@ -23,6 +24,8 @@ module.exports = (props) => ({
     environment,
     publicPath: publicPath || "/",
     target,
+    reportsDir: reports,
+    reportsPath: path.resolve(ROOT, reports),
     i18nTargetPath: "i18n",
     i18nMessagesPath: path.join("i18n", "source"),
     version: packageJSON.version,
