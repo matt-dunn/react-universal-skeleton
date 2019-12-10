@@ -17,7 +17,7 @@ const reportFilename = path.resolve(reportsPath, "i18l-untranslated.json");
 const normalize = o => {
     return o.map(({type, value, options}) => {
         if (type === 0) {
-            return value.replace(/[^0-9a-zA-Z\s]+/ig, "").trim();
+            return value.replace(/[^a-zA-Z\s]+/ig, "").trim();
         } else if (options) {
             return Object.keys(options).map(key => normalize(options[key].value)).join(" ");
         }
