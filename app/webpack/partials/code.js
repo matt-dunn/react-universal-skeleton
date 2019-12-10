@@ -26,7 +26,7 @@ module.exports = ({root, target,/* i18nTargetPath, */i18nMessagesPath}) => ({
                             "react-intl", {
                                 messagesDir: path.resolve(target, i18nMessagesPath),
                                 extractSourceLocation: false,
-                                removeDefaultMessage: false
+                                removeDefaultMessage: true
                             }
                         ]
                     ]

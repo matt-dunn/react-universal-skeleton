@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useMemo} from "react";
 import styled from "@emotion/styled";
 import loadable from "@loadable/component";
 import {defineMessages, useIntl} from "react-intl";
@@ -37,10 +37,10 @@ const messages = defineMessages({
 function ComplexLayout<T, P, S>({fieldsetMap: {children, extra, otherLeft, otherRight}}: Pick<FieldSetChildrenProps<T, P, S>, "fieldsetMap">) {
     const intl = useIntl();
 
-    const i18n = {
+    const i18n = useMemo(() => ({
         submit: intl.formatMessage(messages.submit),
         reset: intl.formatMessage(messages.reset)
-    };
+    }), [intl]);
 
     return (
         <>
