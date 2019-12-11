@@ -11,8 +11,8 @@ import stringify from "json-stable-stringify";
 
 import metadata from "app/webpack/metadata";
 
-const {availableLocales, target, i18nMessagesPath, reportsPath} = metadata();
-const reportFilename = path.resolve(reportsPath, "i18l-untranslated.json");
+const {availableLocales, i18nMessagesPath, reportsPath, i18nLocalePath} = metadata();
+const reportFilename = path.join(reportsPath, "i18l-untranslated.json");
 
 const normalize = o => {
     return o.map(({type, value, options}) => {
@@ -47,8 +47,8 @@ const appendReport = (data) => {
 const formatNumber = num => num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
 
 manageTranslations({
-    messagesDirectory: path.resolve(target, i18nMessagesPath),
-    translationsDirectory: "app/translations/locales/",
+    messagesDirectory: i18nMessagesPath,
+    translationsDirectory: i18nLocalePath,
     languages: availableLocales,
     overrideCoreMethods: {
         beforeReporting: () => {

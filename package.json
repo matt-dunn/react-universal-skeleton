@@ -1,6 +1,6 @@
 {
   "name": "universal-app",
-  "version": "1.0.217-dev.0",
+  "version": "1.0.221-dev.0",
   "main": "app/index.js",
   "private": true,
   "dependencies": {
@@ -155,7 +155,7 @@
     "build:server": "rimraf dist/server && cross-env BABEL_ENV=server webpack --config ./app/webpack/server.config.js",
     "build:all": "concurrently \"yarn build:client\" \"yarn build:server\"",
     "package": "node etc/scripts/package.js",
-    "build": "rimraf reports && yarn lint && yarn type-check && yarn coverage && yarn build:all",
+    "build": "rimraf reports && rimraf dist/i18n && yarn lint && yarn type-check && yarn coverage && yarn build:all",
     "build:run": "cross-env PORT=12345 node --icu-data-dir=node_modules/full-icu dist/server/server.js",
     "prebuild:prod": "yarn version --patch --no-git-tag-version --preid dev",
     "build:prod": "yarn build && yarn package",

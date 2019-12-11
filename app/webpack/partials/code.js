@@ -2,13 +2,17 @@ const path = require("path");
 
 // const ReactIntlPlugin = require("react-intl-webpack-plugin");
 
-module.exports = ({root, target,/* i18nTargetPath, */i18nMessagesPath}) => ({
+module.exports = ({root/*, target*/, i18nMessagesPath/*, i18nLocalePath*/}) => ({
     module :{
         rules: [
             {
                 test: /\.(js|jsx|ts|tsx)$/,
                 exclude: /node_modules/,
-                include: [path.resolve(root, "app"), path.resolve(root, "components"), path.resolve(root, "server")],
+                include: [
+                    path.join(root, "app"),
+                    path.join(root, "components"),
+                    path.join(root, "server")
+                ],
                 loader: "babel-loader",
                 query: {
                     "cacheDirectory": false,
@@ -24,7 +28,7 @@ module.exports = ({root, target,/* i18nTargetPath, */i18nMessagesPath}) => ({
                         ],
                         [
                             "react-intl", {
-                                messagesDir: path.resolve(target, i18nMessagesPath),
+                                messagesDir: i18nMessagesPath,
                                 extractSourceLocation: false,
                                 removeDefaultMessage: true
                             }
@@ -34,9 +38,9 @@ module.exports = ({root, target,/* i18nTargetPath, */i18nMessagesPath}) => ({
             }
         ]
     },
-    // plugins: [
-    //     new ReactIntlPlugin({
-    //         filename: path.join("..", i18nTargetPath, "default.json")
-    //     })
-    // ]
+    plugins: [
+        // new ReactIntlPlugin({
+        //     filename: path.join(path.relative(target, i18nLocalePath), "en.json")
+        // })
+    ]
 });

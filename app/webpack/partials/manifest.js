@@ -9,7 +9,7 @@ module.exports = ({environment, name, description, context}) => ({
 
         if (environment === "production") {
             plugins.push(new FaviconsWebpackPlugin({
-                logo: path.resolve(context, "assets", "favicon.png"),
+                logo: path.join(context, "assets", "favicon.png"),
                 inject: "force",
                 favicons: {
                     appName: name,

@@ -27,7 +27,7 @@ const {environment, version, context, root, target, publicPath, port, host} = me
 log(chalk`🔨 Building {white.bold client}...
   Environment: {yellow ${environment}}
   Version: {yellow ${version}}
-  Root: {yellow ${root}}
+
   Target: {yellow ${target}}
   Public Path: {yellow ${publicPath}}
   Host: {yellow ${host}}
@@ -41,7 +41,7 @@ module.exports = merge(
     {
         entry: "./index.js",
         output: {
-            path: path.resolve(root, target, "client"),
+            path: target,
 
             filename: environment === "development" ? "client.js" : "[name]-[hash].js",
 
@@ -55,9 +55,9 @@ module.exports = merge(
                     test: /\.(css|scss)$/,
                     exclude: /node_modules/,
                     include: [
-                        path.resolve(root, "app"),
-                        path.resolve(root, "components"),
-                        path.resolve(root, "server")
+                        path.join(root, "app"),
+                        path.join(root, "components"),
+                        path.join(root, "server")
                     ],
                     use: [
                         // {
@@ -98,8 +98,8 @@ module.exports = merge(
                 }),
                 new HtmlWebpackPlugin({
                     inject: true,
-                    template: path.resolve(context, "public", "index.html"),
-                    //favicon: path.resolve(context, "public", "favicon.ico")
+                    template: path.join(context, "public", "index.html"),
+                    //favicon: path.join(context, "public", "favicon.ico")
                     build: {version}
                 }),
                 new MiniCssExtractPlugin({
@@ -149,9 +149,9 @@ module.exports = merge(
             public: host,
             historyApiFallback: true,
             https: {
-                key: fs.readFileSync(path.resolve(context, "server", "ssl", "private.key")),
-                cert: fs.readFileSync(path.resolve(context, "server", "ssl", "private.crt")),
-                ca: fs.readFileSync(path.resolve(context, "server", "ssl", "private.pem")),
+                key: fs.readFileSync(path.join(context, "server", "ssl", "private.key")),
+                cert: fs.readFileSync(path.join(context, "server", "ssl", "private.crt")),
+                ca: fs.readFileSync(path.join(context, "server", "ssl", "private.pem")),
             },
         }
     },

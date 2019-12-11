@@ -25,14 +25,14 @@ if (!src) {
 }
 
 const {root} = metadata();
-const srcMessages = path.resolve(process.cwd(), src);
+const srcMessages = path.join(process.cwd(), src);
 
 if (!fs.existsSync(srcMessages)) {
     console.error(`File '${srcMessages}' cannot be found`);
     process.exit(1);
 }
 
-const langTarget = path.resolve(root, "app", "translations", "locales", `${lang}.json`);
+const langTarget = path.join(root, "app", "translations", "locales", `${lang}.json`);
 
 const messages = JSON.parse(fs.readFileSync(srcMessages).toString());
 

@@ -20,7 +20,7 @@ import App from "app/App";
 
 import {getHTMLFragments, parseHelmetTemplate} from "./client";
 
-const statsFile = path.join(process.cwd(), process.env.TARGET, "client", "loadable-stats.json");
+const statsFile = path.join(process.cwd(), process.env.TARGET_CLIENT, "loadable-stats.json");
 
 const availableLocales = process.env.AVAILABLE_LOCALES;
 

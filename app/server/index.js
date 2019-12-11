@@ -33,7 +33,7 @@ if (environment === "production") {
 
 app.use(trailingSlash({slash: true}));
 
-app.use(pathname, expressStaticGzip(path.resolve(process.cwd(), process.env.TARGET, "client"), {
+app.use(pathname, expressStaticGzip(path.resolve(process.cwd(), process.env.TARGET_CLIENT), {
     dotfiles: "allow",
     index: false,
     enableBrotli: true,

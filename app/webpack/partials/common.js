@@ -3,7 +3,7 @@ const path = require("path");
 
 // const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 
-module.exports = ({environment, root, context, target, publicPath, version, availableLocales}) => ({
+module.exports = ({environment, root, context, target, targetRelativeClient, targetRelativeServer, publicPath, version, availableLocales}) => ({
     mode: environment,
     cache: true,
     context,
@@ -25,6 +25,8 @@ module.exports = ({environment, root, context, target, publicPath, version, avai
         const plugins = [
             new webpack.DefinePlugin({
                 "process.env.TARGET": JSON.stringify(target),
+                "process.env.TARGET_CLIENT": JSON.stringify(targetRelativeClient),
+                "process.env.TARGET_SERVER": JSON.stringify(targetRelativeServer),
                 "process.env.PWA": JSON.stringify(process.env.PWA || false),
                 "process.env.AVAILABLE_LOCALES": JSON.stringify(availableLocales)
             })

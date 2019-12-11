@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 
-export const htmlPath = path.join(process.cwd(), process.env.TARGET, "server", "index.html");
+export const htmlPath = path.join(process.cwd(), process.env.TARGET_SERVER, "index.html");
 
 export const rawHTML = fs.readFileSync(htmlPath).toString();
 

@@ -4,16 +4,15 @@ const path = require("path");
 const archiver = require("archiver");
 const hp = require("handpipe");
 
+const metadata = require("../../app/webpack/metadata");
+
+const {target, targetRelativeClient, targetRelativeServer} = metadata();
+
 const ROOT = process.cwd();
-const TARGET = process.env.TARGET || "dist";
 
-if (!process.env.TARGET) {
-    console.warn(chalk.yellow(`Using default target '${TARGET}'`));
-}
+const packageJSON = require(path.join(ROOT, "package.json"));
 
-const packageJSON = require(path.resolve(ROOT, "package.json"));
-
-const outputFilename = path.resolve(ROOT, TARGET, `${packageJSON.name}.${packageJSON.version}.tar.gz`);
+const outputFilename = path.join(target, `${packageJSON.name}.${packageJSON.version}.tar.gz`);
 
 const output = fs.createWriteStream(outputFilename);
 
@@ -31,16 +30,16 @@ archive.on("error", err => {
 
 archive.pipe(output);
 
-archive.directory(path.resolve(ROOT, TARGET, "client"), `${TARGET}/client`);
-archive.directory(path.resolve(ROOT, TARGET, "server"), `${TARGET}/server`);
+archive.directory(path.join(ROOT, targetRelativeClient), targetRelativeClient);
+archive.directory(path.join(ROOT, targetRelativeServer), targetRelativeServer);
 
-archive.file(path.resolve(ROOT, "package.json"), { name: "package.json" });
-archive.file(path.resolve(ROOT, "yarn.lock"), { name: "yarn.lock" });
+archive.file(path.join(ROOT, "package.json"), { name: "package.json" });
+archive.file(path.join(ROOT, "yarn.lock"), { name: "yarn.lock" });
 
 const compiler = hp({
     package: packageJSON
 });
 
-archive.append(fs.createReadStream(path.resolve(__dirname, "package.README.md")).pipe(compiler), { name: "README.md" });
+archive.append(fs.createReadStream(path.join(__dirname, "package.README.md")).pipe(compiler), { name: "README.md" });
 
 archive.finalize();

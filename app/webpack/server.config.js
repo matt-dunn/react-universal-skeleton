@@ -14,12 +14,12 @@ const partialManifest = require("./partials/manifest");
 const partialStats = require("./partials/stats");
 
 const metadata = require("./metadata")({configType: "server"});
-const {environment, version, context, root, target, publicPath} = metadata;
+const {environment, version, context, target, publicPath} = metadata;
 
 log(chalk`🔨 Building {white.bold server}...
   Environment: {yellow ${environment}}
   Version: {yellow ${version}}
-  Root: {yellow ${root}}
+
   Target: {yellow ${target}}
   Public Path: {yellow ${publicPath}}
 `);
@@ -33,7 +33,7 @@ module.exports = merge(
         target: "node",
         externals: [nodeExternals()],
         output: {
-            path: path.resolve(root, target, "server"),
+            path: target,
 
             filename: "server.js",
 
@@ -56,8 +56,8 @@ module.exports = merge(
         plugins: [
             new HtmlWebpackPlugin({
                 inject: false,
-                template: path.resolve(context, "public", "index.html"),
-                //favicon: path.resolve(context, "public" "favicon.ico")
+                template: path.join(context, "public", "index.html"),
+                //favicon: path.join(context, "public" "favicon.ico")
                 build: {version}
             }),
         ],

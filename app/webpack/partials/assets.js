@@ -6,7 +6,11 @@ module.exports = ({root}) => ( {
             {
                 test: /ssl\/.*$/i,
                 exclude: /node_modules/,
-                include: [path.resolve(root, "app"), path.resolve(root, "components"), path.resolve(root, "server")],
+                include: [
+                    path.join(root, "app"),
+                    path.join(root, "components"),
+                    path.join(root, "server")
+                ],
                 use: "raw-loader",
             },
             {

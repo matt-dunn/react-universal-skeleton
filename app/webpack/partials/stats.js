@@ -3,14 +3,14 @@ const path = require("path");
 const { StatsWriterPlugin } = require("webpack-stats-plugin");
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 
-module.exports = ({environment, configType, reportsDir, reportsPath}) => ({
+module.exports = ({environment, configType, target, reportsPath}) => ({
     plugins: (function(){
         const plugins = [
         ];
 
         if (environment === "production") {
             plugins.push(new StatsWriterPlugin({
-                filename: path.join("..", "..", reportsDir, `${configType}-stats.json`),
+                filename: path.join(path.relative(target, reportsPath), `${configType}-stats.json`),
                 stats: {
                     all: true,
                     assets: true
@@ -20,7 +20,7 @@ module.exports = ({environment, configType, reportsDir, reportsPath}) => ({
             plugins.push(new BundleAnalyzerPlugin({
                 openAnalyzer: false,
                 analyzerMode: "static",
-                reportFilename: path.resolve(reportsPath, `${configType}-bundle.html`)
+                reportFilename: path.join(reportsPath, `${configType}-bundle.html`)
             }));
         }
 

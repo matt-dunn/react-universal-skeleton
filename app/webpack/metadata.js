@@ -3,7 +3,7 @@ const path = require("path");
 
 const ROOT = path.join(__dirname, "..", "..");
 
-const packageJSON = require(path.resolve(ROOT, "package.json"));
+const packageJSON = require(path.join(ROOT, "package.json"));
 
 const environment = process.env.NODE_ENV || "production";
 
@@ -19,15 +19,21 @@ const {port, host} = (publicPath && url.parse(publicPath)) || {};
 const availableLocales = ["en", "en-GB", "de", "fr"];
 
 module.exports = (props) => ({
-    context: path.resolve(__dirname, ".."),
+    context: path.join(__dirname, ".."),
     root: ROOT,
     environment,
+
     publicPath: publicPath || "/",
-    target,
-    reportsDir: reports,
-    reportsPath: path.resolve(ROOT, reports),
-    i18nTargetPath: "i18n",
-    i18nMessagesPath: path.join("i18n", "source"),
+
+    target: path.join(ROOT, target, (props && props.configType) || ""),
+    targetRelativeClient: path.join(target, "client"),
+    targetRelativeServer: path.join(target, "server"),
+
+    reportsPath: path.join(ROOT, reports),
+
+    i18nMessagesPath: path.join(target, "i18n", "source"),
+    i18nLocalePath: path.join(__dirname, "..", "translations", "locales"),
+
     version: packageJSON.version,
     name: packageJSON.name,
     description: packageJSON.description,
