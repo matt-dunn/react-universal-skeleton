@@ -17,11 +17,11 @@ const metadata = require("./metadata")({configType: "server"});
 const {environment, version, context, target, publicPath} = metadata;
 
 log(chalk`🔨 Building {white.bold server}...
-  Environment: {yellow ${environment}}
-  Version: {yellow ${version}}
+     Environment: {yellow ${environment}}
+     Version: {yellow ${version}}
 
-  Target: {yellow ${target}}
-  Public Path: {yellow ${publicPath}}
+     Target: {yellow ${target}}
+     Public Path: {yellow ${publicPath}}
 `);
 
 module.exports = merge(

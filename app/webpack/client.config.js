@@ -25,13 +25,13 @@ const metadata = require("./metadata")({configType: "client"});
 const {environment, version, context, root, target, publicPath, port, host} = metadata;
 
 log(chalk`🔨 Building {white.bold client}...
-  Environment: {yellow ${environment}}
-  Version: {yellow ${version}}
+     Environment: {yellow ${environment}}
+     Version: {yellow ${version}}
 
-  Target: {yellow ${target}}
-  Public Path: {yellow ${publicPath}}
-  Host: {yellow ${host}}
-  Port: {yellow ${port}}
+     Target: {yellow ${target}}
+     Public Path: {yellow ${publicPath}}
+     Host: {yellow ${host}}
+     Port: {yellow ${port}}
 `);
 
 module.exports = merge(
