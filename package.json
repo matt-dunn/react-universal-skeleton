@@ -1,6 +1,6 @@
 {
   "name": "universal-app",
-  "version": "1.0.221-dev.0",
+  "version": "1.0.222-dev.0",
   "main": "app/index.js",
   "private": true,
   "dependencies": {
@@ -171,7 +171,7 @@
     "start": "yarn build:run",
     "version": "echo \"versioning $npm_package_version\"",
     "stats:dups": "webpack-stats-duplicates ./reports/client-stats.json && webpack-stats-duplicates ./reports/server-stats.json",
-    "translations:manage": "babel-node --presets @babel/env ./etc/i18n/translationRunner.js",
+    "translations:manage": "babel-node --presets @babel/env ./etc/i18n/manageTranslations.js",
     "translations:update": "babel-node --presets @babel/env ./etc/i18n/updateTranslation.js"
   },
   "engines": {

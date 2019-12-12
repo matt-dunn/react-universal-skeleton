@@ -1,8 +1,8 @@
 const path = require("path");
 
-// const ReactIntlPlugin = require("react-intl-webpack-plugin");
+const ReactIntlPlugin = require("react-intl-webpack-plugin");
 
-module.exports = ({root/*, target*/, i18nMessagesPath/*, i18nLocalePath*/}) => ({
+module.exports = ({root, target, i18nMessagesPath/*, i18nLocalePath*/}) => ({
     module :{
         rules: [
             {
@@ -16,7 +16,7 @@ module.exports = ({root/*, target*/, i18nMessagesPath/*, i18nLocalePath*/}) => (
                 loader: "babel-loader",
                 query: {
                     "cacheDirectory": false,
-                    // "metadataSubscribers":[ReactIntlPlugin.metadataContextFunctionName],
+                    "metadataSubscribers":[ReactIntlPlugin.metadataContextFunctionName],
                     "plugins": [
                         "react-hot-loader/babel",
                         [
@@ -39,8 +39,8 @@ module.exports = ({root/*, target*/, i18nMessagesPath/*, i18nLocalePath*/}) => (
         ]
     },
     plugins: [
-        // new ReactIntlPlugin({
-        //     filename: path.join(path.relative(target, i18nLocalePath), "en.json")
-        // })
+        new ReactIntlPlugin({
+            filename: path.join(path.relative(target, i18nMessagesPath), "defaultMessages.json")
+        })
     ]
 });
