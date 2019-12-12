@@ -10,6 +10,13 @@ export const getLangMessages = (translationsPath, lang = "default") => {
     return (fs.existsSync(filename) && JSON.parse(fs.readFileSync(filename).toString())) || [];
 };
 
+export const getLangWhitelist = (translationsPath, lang) => {
+    const filename = path.join(translationsPath, `${lang}_whitelist.json`);
+    return (fs.existsSync(filename) && JSON.parse(fs.readFileSync(filename).toString())) || {
+        ids: []
+    };
+};
+
 export const saveLangMessages = (translationsPath, messages, lang = "default") => {
     const filename = path.join(translationsPath, `${lang}.json`);
     fs.writeFileSync(filename, stringify(messages, {
@@ -18,7 +25,15 @@ export const saveLangMessages = (translationsPath, messages, lang = "default") =
     }));
 };
 
-const hashMessages = messages => messages.reduce((hash, message) => {
+export const saveWhitelist = (translationsPath, messages, lang) => {
+    const filename = path.join(translationsPath, `${lang}_whitelist.json`);
+    fs.writeFileSync(filename, stringify(messages, {
+        space: 2,
+        trailingNewline: false
+    }));
+};
+
+export const hashMessages = messages => messages.reduce((hash, message) => {
     hash[message.id] = message;
     return hash;
 }, {});
@@ -39,7 +54,8 @@ export const formatNumber = num => num.toString().replace(/(\d)(?=(\d{3})+(?!\d)
 
 export const convertHashToArray = messages => Object.values(messages);
 
-export const getDelta = (sourceDefaultMessages, defaultLangMessages, messages) => {
+export const getDelta = (sourceDefaultMessages, defaultLangMessages, messages, whitelist) => {
+    const {ids: whitelistIds} = whitelist;
     const messagesHash = hashMessages(messages);
     const defaultLangMessagesHash = hashMessages(defaultLangMessages);
     const defaultMessagesHash = hashMessages(sourceDefaultMessages);
@@ -49,10 +65,14 @@ export const getDelta = (sourceDefaultMessages, defaultLangMessages, messages) =
 
         if (!messagesHash[id]) {
             delta.added[id] = message;
-            delta.untranslated[id] = message;
+            if (whitelistIds.indexOf(id) === -1) {
+                delta.untranslated[id] = message;
+            }
         } else if (defaultLangMessagesHash[id] && defaultMessagesHash[id].defaultMessage !== defaultLangMessagesHash[id].defaultMessage) {
             delta.updated[id] = message;
-            delta.untranslated[id] = message;
+            if (whitelistIds.indexOf(id) === -1) {
+                delta.untranslated[id] = message;
+            }
         } else if (messagesHash[id] && !defaultMessagesHash[id]) {
             delta.removed[id] = message;
         }
@@ -68,7 +88,7 @@ export const getDelta = (sourceDefaultMessages, defaultLangMessages, messages) =
     Object.keys(messagesHash).reduce((delta, id) => {
         if (!defaultMessagesHash[id]) {
             delta.removed[id] = messagesHash[id];
-        } else if (messagesHash[id].defaultMessage === defaultMessagesHash[id].defaultMessage) {
+        } else if (messagesHash[id].defaultMessage === defaultMessagesHash[id].defaultMessage && whitelistIds.indexOf(id) === -1) {
             delta.untranslated[id] = messagesHash[id];
         }
 

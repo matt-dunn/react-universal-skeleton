@@ -13,11 +13,85 @@ import {
     getDelta,
     getLangMessages,
     saveLangMessages,
-    formatNumber
+    formatNumber,
+    getLangWhitelist,
+    saveWhitelist,
+    hashMessages
 } from "./utils";
 
 export const translations = ({messagesPath, translationsPath, reportsPath, languages}) => {
     return {
+        apply: (languageFilename) => {
+            try {
+                const report = {
+                    summary: {
+                        updatedCount: 0,
+                        totalTranslationsCount: 0,
+                        whiteListCount: 0
+                    }
+                };
+
+                const sourceDefaultMessages = getDefaultMessages(messagesPath);
+                const sourceDefaultMessagesHash = hashMessages(sourceDefaultMessages);
+
+                const translationCount = sourceDefaultMessages.length;
+
+                report.summary.totalTranslationsCount = translationCount;
+
+                const lang = path.parse(languageFilename).name;
+                const sourceMessages = JSON.parse(fs.readFileSync(languageFilename).toString());
+                const sourceMessagesHash = hashMessages(sourceMessages);
+                const whitelist = getLangWhitelist(translationsPath, lang);
+
+                const updatedMessages = sourceMessages.map((message) => {
+                    const {id} = message;
+
+                    if (sourceMessagesHash[id]) {
+                        report.summary.updatedCount++;
+
+                        if (sourceDefaultMessagesHash[id].defaultMessage === sourceMessagesHash[id].defaultMessage && whitelist.ids.indexOf(id) === -1) {
+                            whitelist.ids.push(id);
+                            report.summary.whiteListCount++;
+                        }
+
+                        return sourceMessagesHash[id];
+                    }
+
+                    return message;
+                });
+
+                saveLangMessages(translationsPath, updatedMessages, lang);
+                saveWhitelist(translationsPath, whitelist, lang);
+
+                const managed = {
+                    getReport: () => report,
+                    printSummary: () => {
+                        const t = new Table({
+                            columns: [
+                                {name: "Language", alignment: "left"},
+                                {name: "Updated Messages", alignment: "right"},
+                                {name: "Translations", alignment: "right"}
+                            ],
+                        });
+
+                        t.addRow({
+                            "Language": lang,
+                            "Updated Messages": report.summary.updatedCount,
+                            "Translations": report.summary.totalTranslationsCount
+                        });
+
+                        t.printTable();
+
+                        return managed;
+                    }
+                };
+
+                return managed;
+            } catch (ex) {
+                console.error(chalk.red(ex.message));
+                process.exit(1);
+            }
+        },
         manage: ({update} = {update: true}) => {
             const report = {
                 updated: false,
@@ -41,7 +115,8 @@ export const translations = ({messagesPath, translationsPath, reportsPath, langu
 
                 languages.forEach(lang => {
                     const messages = getLangMessages(translationsPath, lang);
-                    const delta = getDelta(sourceDefaultMessages, defaultLangMessages, messages);
+                    const whitelist = getLangWhitelist(translationsPath, lang);
+                    const delta = getDelta(sourceDefaultMessages, defaultLangMessages, messages, whitelist);
 
                     const untranslatedCount = Object.keys(delta.untranslated).length;
                     const wordCount = countWords(convertHashToArray(delta.untranslated));
@@ -62,6 +137,7 @@ export const translations = ({messagesPath, translationsPath, reportsPath, langu
                     if (update) {
                         const updatedMessages = applyDelta(messages, delta);
                         saveLangMessages(translationsPath, updatedMessages, lang);
+                        saveWhitelist(translationsPath, whitelist, lang);
                     }
                 });
 

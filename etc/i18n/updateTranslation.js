@@ -1,51 +1,29 @@
-import path from "path";
-import fs from "fs";
-import stringify from "json-stable-stringify";
+import {translations} from "components/translations/manage";
+import chalk from "chalk";
 import commandLineArgs from "command-line-args";
 
 import metadata from "app/webpack/metadata";
 
 const optionDefinitions = [
-    { name: "lang", alias: "l", type: String },
-    { name: "src", type: String}
+    { name: "src", type: String, defaultOption: true}
 ];
 
 const options = commandLineArgs(optionDefinitions);
 
-const {lang, src} = options;
-
-if (!lang) {
-    console.error("Missing --lang");
+if (!options.src) {
+    console.error(chalk.red("Missing --src"));
     process.exit(1);
 }
 
-if (!src) {
-    console.error("Missing --src");
-    process.exit(1);
-}
+const {availableLocales, i18nMessagesPath, i18nLocalePath, reportsPath} = metadata();
 
-const {root} = metadata();
-const srcMessages = path.join(process.cwd(), src);
-
-if (!fs.existsSync(srcMessages)) {
-    console.error(`File '${srcMessages}' cannot be found`);
-    process.exit(1);
-}
-
-const langTarget = path.join(root, "app", "translations", "locales", `${lang}.json`);
-
-const messages = JSON.parse(fs.readFileSync(srcMessages).toString());
-
-const bundle = messages.reduce((messages, message) => {
-    messages[message.id] = message.defaultMessage;
-    return messages;
-}, {});
-
-const targetMessages = stringify(bundle, {
-    space: 2,
-    trailingNewline: false
+const managedTranslations = translations({
+    messagesPath: i18nMessagesPath,
+    translationsPath: i18nLocalePath,
+    languages: availableLocales,
+    reportsPath
 });
 
-fs.writeFileSync(langTarget, targetMessages);
-
-console.log(`Successfully updated language '${lang}' at '${langTarget}'`);
+managedTranslations
+    .apply(options.src)
+    .printSummary();

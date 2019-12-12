@@ -9,11 +9,12 @@ const managedTranslations = translations({
     translationsPath: i18nLocalePath,
     languages: availableLocales,
     reportsPath
-}).manage({
-    update: true
 });
 
 managedTranslations
+    .manage({
+        update: true
+    })
     .printSummary()
     .saveReport()
     .updateSummary();
