@@ -1,7 +1,0 @@
-{
-  "containers.1645138363": "(eb-GB) Hello {name}. You have {unreadCount, number} {unreadCount, plural,\n                      one {message}\n                      other {messages}\n                    }",
-  "containers.2731101254": "(eb-GB) The date today is {date}",
-  "containers.Forms.165405603": "(eb-GB) Forms (Lazy Loaded)",
-  "containers.Forms.layouts.reset": "Reset Form",
-  "containers.Forms.layouts.submit": "Submit Form"
-}

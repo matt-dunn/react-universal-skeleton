@@ -1,7 +1,0 @@
-{
-  "containers.1645138363": "Willkommen {name}. Sie haben {unreadCount, number} {unreadCount, plural, one {Nachricht} other {Nachrichten}}",
-  "containers.2731101254": "Das heutige Datum ist {date}!",
-  "containers.Forms.165405603": "(de) Forms (Lazy Loaded)",
-  "containers.Forms.layouts.reset": "Formular leeren",
-  "containers.Forms.layouts.submit": "Formular abschicken"
-}
