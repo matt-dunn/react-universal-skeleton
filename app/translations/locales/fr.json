@@ -12,11 +12,11 @@
     "id": "containers.Forms.165405603"
   },
   {
-    "defaultMessage": "Reset Form",
+    "defaultMessage": "Réinitialisation",
     "id": "containers.Forms.layouts.reset"
   },
   {
-    "defaultMessage": "Submit Form",
+    "defaultMessage": "Soumettre",
     "id": "containers.Forms.layouts.submit"
   }
 ]

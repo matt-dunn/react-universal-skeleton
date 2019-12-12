@@ -119,6 +119,86 @@
         ]
       },
       "timestamp": "2019-12-12T16:26:41.363Z"
+    },
+    {
+      "summary": {
+        "languages": [
+          {
+            "added": 0,
+            "lang": "en-GB",
+            "removed": 0,
+            "untranslated": 5,
+            "updated": 0,
+            "wordCount": 16
+          },
+          {
+            "added": 0,
+            "lang": "de",
+            "removed": 0,
+            "untranslated": 1,
+            "updated": 0,
+            "wordCount": 3
+          },
+          {
+            "added": 0,
+            "lang": "fr",
+            "removed": 0,
+            "untranslated": 3,
+            "updated": 0,
+            "wordCount": 12
+          }
+        ],
+        "totalLanguagesCount": 3,
+        "totalTranslationsCount": 5,
+        "totalUntranslatedCount": 9,
+        "totalWordCount": 31,
+        "translationLanguages": [
+          "en-GB",
+          "de",
+          "fr"
+        ]
+      },
+      "timestamp": "2019-12-12T16:44:06.902Z"
+    },
+    {
+      "summary": {
+        "languages": [
+          {
+            "added": 0,
+            "lang": "en-GB",
+            "removed": 0,
+            "untranslated": 5,
+            "updated": 0,
+            "wordCount": 16
+          },
+          {
+            "added": 0,
+            "lang": "de",
+            "removed": 0,
+            "untranslated": 0,
+            "updated": 0,
+            "wordCount": 0
+          },
+          {
+            "added": 0,
+            "lang": "fr",
+            "removed": 0,
+            "untranslated": 3,
+            "updated": 0,
+            "wordCount": 12
+          }
+        ],
+        "totalLanguagesCount": 3,
+        "totalTranslationsCount": 5,
+        "totalUntranslatedCount": 8,
+        "totalWordCount": 28,
+        "translationLanguages": [
+          "en-GB",
+          "de",
+          "fr"
+        ]
+      },
+      "timestamp": "2019-12-12T16:45:29.884Z"
     }
   ]
 }

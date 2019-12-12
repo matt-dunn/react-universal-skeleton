@@ -3,7 +3,7 @@ import path from "path";
 import stringify from "json-stable-stringify";
 import { parse } from "intl-messageformat-parser";
 
-export const getDefaultMessages = (messagesPath) => JSON.parse(fs.readFileSync(path.join(process.cwd(), messagesPath, "defaultMessages.json")).toString());
+export const getDefaultMessages = messagesPath => JSON.parse(fs.readFileSync(path.join(process.cwd(), messagesPath, "defaultMessages.json")).toString());
 
 export const getLangMessages = (translationsPath, lang = "default") => {
     const filename = path.join(translationsPath, `${lang}.json`);
@@ -82,6 +82,7 @@ export const applyDelta = (messages, {added, removed, updated}) => {
     return messages
         .map(message => {
             const {id} = message;
+
             if (removed[id]) {
                 return undefined;
             } else if (updated[id]) {
