@@ -19,6 +19,12 @@ module.exports = ({root}) => ( {
                 use: "raw-loader",
             },
             {
+                type: "javascript/auto",
+                test: /locales\/.*?\.json$/i,
+                exclude: /node_modules/,
+                use: "translations/loader",
+            },
+            {
                 test: /readme\.md$/i,
                 exclude: /node_modules/,
                 use: "raw-loader",

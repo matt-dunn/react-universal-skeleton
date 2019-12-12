@@ -1,0 +1,22 @@
+[
+  {
+    "defaultMessage": "Willkommen {name}. Sie haben {unreadCount, number} {unreadCount, plural, one {Nachricht} other {Nachrichten}}",
+    "id": "containers.1645138363"
+  },
+  {
+    "defaultMessage": "Das heutige Datum ist {date}",
+    "id": "containers.2731101254"
+  },
+  {
+    "defaultMessage": "Forms (Lazy Loaded)",
+    "id": "containers.Forms.165405603"
+  },
+  {
+    "defaultMessage": "Formular leeren",
+    "id": "containers.Forms.layouts.reset"
+  },
+  {
+    "defaultMessage": "Formular abschicken",
+    "id": "containers.Forms.layouts.submit"
+  }
+]

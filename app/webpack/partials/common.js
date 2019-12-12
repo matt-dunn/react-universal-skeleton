@@ -21,6 +21,12 @@ module.exports = ({environment, root, context, target, targetRelativeClient, tar
             "mocks": path.join(root, "mocks"),
         }
     },
+    resolveLoader: {
+        modules: [
+            "node_modules",
+            path.join(root, "components")
+        ]
+    },
     plugins: (function(){
         const plugins = [
             new webpack.DefinePlugin({

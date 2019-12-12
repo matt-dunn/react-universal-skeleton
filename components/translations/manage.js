@@ -116,6 +116,7 @@ export const translations = ({messagesPath, translationsPath, reportsPath, langu
                         const t = new Table({
                             columns: [
                                 {name: "Language", alignment: "left"},
+                                {name: "Status", alignment: "left"},
                                 {name: "Translations", alignment: "right"},
                                 {name: "Outstanding", alignment: "right"},
                                 {name: "Added", alignment: "right"},
@@ -127,8 +128,20 @@ export const translations = ({messagesPath, translationsPath, reportsPath, langu
                         });
 
                         report.languages.forEach(({lang, untranslated, wordCount, delta}) => {
+                            let color = "";
+                            let status = "In Progress";
+
+                            if (untranslated === 0) {
+                                color = "green";
+                                status = "Complete";
+                            } else if (untranslated === translationCount) {
+                                color = "yellow";
+                                status = "Not started";
+                            }
+
                             t.addRow({
                                 "Language": lang,
+                                "Status": status,
                                 "Translations": formatNumber(translationCount),
                                 "Outstanding": formatNumber(untranslated),
                                 "Added": formatNumber(Object.keys(delta.added).length),
@@ -136,7 +149,7 @@ export const translations = ({messagesPath, translationsPath, reportsPath, langu
                                 "Updated": formatNumber(Object.keys(delta.updated).length),
                                 "% Complete": `${Math.round((100 - ((untranslated / translationCount) * 100)) * 100) / 100}%`,
                                 "≈ Outstanding Words": formatNumber(wordCount)
-                            }, {color: untranslated === 0 ? "green" : "yellow"});
+                            }, {color});
                         });
 
                         t.printTable();

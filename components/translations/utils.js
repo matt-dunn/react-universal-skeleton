@@ -6,12 +6,12 @@ import { parse } from "intl-messageformat-parser";
 export const getDefaultMessages = (messagesPath) => JSON.parse(fs.readFileSync(path.join(process.cwd(), messagesPath, "defaultMessages.json")).toString());
 
 export const getLangMessages = (translationsPath, lang = "default") => {
-    const filename = path.join(translationsPath, `_${lang}.json`);
+    const filename = path.join(translationsPath, `${lang}.json`);
     return (fs.existsSync(filename) && JSON.parse(fs.readFileSync(filename).toString())) || [];
 };
 
 export const saveLangMessages = (translationsPath, messages, lang = "default") => {
-    const filename = path.join(translationsPath, `_${lang}.json`);
+    const filename = path.join(translationsPath, `${lang}.json`);
     fs.writeFileSync(filename, stringify(messages, {
         space: 2,
         trailingNewline: false
