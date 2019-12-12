@@ -32,7 +32,7 @@ function Bootstrap<T>({languagePack, asyncData, formData, error, store, helmetCo
     useEffect(() => {
         if (!lang) {
             const {language} = navigator;
-            const locale = (availableLocales.indexOf(language) !== -1 && language) || "en";
+            const locale = (availableLocales.indexOf(language) !== -1 && language) || "default";
 
             if (locale) {
                 import(`app/translations/locales/${locale}.json`)
