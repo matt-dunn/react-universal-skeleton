@@ -3,6 +3,13 @@ import path from "path";
 import stringify from "json-stable-stringify";
 import { parse } from "intl-messageformat-parser";
 
+export const stringifyMessages = messages => {
+    return stringify(messages, {
+        space: 2,
+        trailingNewline: false
+    });
+};
+
 export const getDefaultMessages = messagesPath => JSON.parse(fs.readFileSync(path.join(process.cwd(), messagesPath, "defaultMessages.json")).toString());
 
 export const getLangMessages = (translationsPath, lang = "default") => {
@@ -19,18 +26,12 @@ export const getLangWhitelist = (translationsPath, lang) => {
 
 export const saveLangMessages = (translationsPath, messages, lang = "default") => {
     const filename = path.join(translationsPath, `${lang}.json`);
-    fs.writeFileSync(filename, stringify(messages, {
-        space: 2,
-        trailingNewline: false
-    }));
+    fs.writeFileSync(filename, stringifyMessages(messages));
 };
 
 export const saveWhitelist = (translationsPath, messages, lang) => {
     const filename = path.join(translationsPath, `${lang}_whitelist.json`);
-    fs.writeFileSync(filename, stringify(messages, {
-        space: 2,
-        trailingNewline: false
-    }));
+    fs.writeFileSync(filename, stringifyMessages(messages));
 };
 
 export const hashMessages = messages => messages.reduce((hash, message) => {

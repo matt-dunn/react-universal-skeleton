@@ -1,6 +1,5 @@
 import fs from "fs";
 import path from "path";
-import stringify from "json-stable-stringify";
 import chalk from "chalk";
 import {Table} from "console-table-printer";
 import {isEqual} from "lodash";
@@ -16,12 +15,13 @@ import {
     formatNumber,
     getLangWhitelist,
     saveWhitelist,
-    hashMessages
+    hashMessages,
+    stringifyMessages
 } from "./utils";
 
 export const translations = ({messagesPath, translationsPath, reportsPath, languages}) => {
     return {
-        apply: (languageFilename) => {
+        apply: languageFilename => {
             try {
                 const report = {
                     summary: {
@@ -31,25 +31,22 @@ export const translations = ({messagesPath, translationsPath, reportsPath, langu
                     }
                 };
 
-                const sourceDefaultMessages = getDefaultMessages(messagesPath);
-                const sourceDefaultMessagesHash = hashMessages(sourceDefaultMessages);
-
-                const translationCount = sourceDefaultMessages.length;
-
-                report.summary.totalTranslationsCount = translationCount;
-
                 const lang = path.parse(languageFilename).name;
+
+                const messages = getLangMessages(translationsPath, lang);
+
                 const sourceMessages = JSON.parse(fs.readFileSync(languageFilename).toString());
                 const sourceMessagesHash = hashMessages(sourceMessages);
+
                 const whitelist = getLangWhitelist(translationsPath, lang);
 
-                const updatedMessages = sourceMessages.map((message) => {
-                    const {id} = message;
+                const updatedMessages = messages.map(message => {
+                    const {id, defaultMessage} = message;
 
                     if (sourceMessagesHash[id]) {
-                        report.summary.updatedCount++;
-
-                        if (sourceDefaultMessagesHash[id].defaultMessage === sourceMessagesHash[id].defaultMessage && whitelist.ids.indexOf(id) === -1) {
+                        if (sourceMessagesHash[id].defaultMessage !== defaultMessage) {
+                            report.summary.updatedCount++;
+                        } else if (whitelist.ids.indexOf(id) === -1) {
                             whitelist.ids.push(id);
                             report.summary.whiteListCount++;
                         }
@@ -59,6 +56,8 @@ export const translations = ({messagesPath, translationsPath, reportsPath, langu
 
                     return message;
                 });
+
+                report.summary.totalTranslationsCount = messages.length;
 
                 saveLangMessages(translationsPath, updatedMessages, lang);
                 saveWhitelist(translationsPath, whitelist, lang);
@@ -76,8 +75,8 @@ export const translations = ({messagesPath, translationsPath, reportsPath, langu
 
                         t.addRow({
                             "Language": lang,
-                            "Updated Messages": report.summary.updatedCount,
-                            "Translations": report.summary.totalTranslationsCount
+                            "Updated Messages": formatNumber(report.summary.updatedCount),
+                            "Translations": formatNumber(report.summary.totalTranslationsCount)
                         });
 
                         t.printTable();
@@ -149,10 +148,7 @@ export const translations = ({messagesPath, translationsPath, reportsPath, langu
                 const managed = {
                     getReport: () => report,
                     saveReport: () => {
-                        fs.writeFileSync(path.join(reportsPath, "i18l-untranslated.json"), stringify(report, {
-                            space: 2,
-                            trailingNewline: false
-                        }));
+                        fs.writeFileSync(path.join(reportsPath, "i18l-untranslated.json"), stringifyMessages(report));
 
                         return managed;
                     },
@@ -180,10 +176,7 @@ export const translations = ({messagesPath, translationsPath, reportsPath, langu
                         if (!lastSummary || !isEqual(lastSummary.summary, summary)) {
                             summaryReport.languages.push({timestamp, summary});
 
-                            fs.writeFileSync(filename, stringify(summaryReport, {
-                                space: 2,
-                                trailingNewline: false
-                            }));
+                            fs.writeFileSync(filename, stringifyMessages(summaryReport));
                         }
 
                         return managed;
