@@ -34,6 +34,8 @@ const MenuLink = styled.li`
 
 const Markdown = loadable(() => import("components/markdown"));
 
+const StatsI18n = loadable(() => import("app/components/dashboard/stats/i18n"));
+
 // import Markdown from "../../components/markdown";
 // import content from "mocks/content/test3.md";
 
@@ -43,6 +45,8 @@ const Home = () => {
             <Helmet>
                 <title>Home Page</title>
             </Helmet>
+
+            <StatsI18n/>
 
             <Menu>
                 <MenuLink>
