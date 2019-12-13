@@ -34,6 +34,8 @@ export const translations = ({messagesPath, translationsPath, reportsPath, langu
 
                 const lang = path.parse(languageFilename).name;
 
+                const sourceDefaultMessages = getDefaultMessages(messagesPath);
+                const sourceDefaultMessagesHash = hashMessages(sourceDefaultMessages);
                 const messages = getLangMessages(translationsPath, lang);
 
                 const sourceMessages = JSON.parse(fs.readFileSync(languageFilename).toString());
@@ -52,10 +54,16 @@ export const translations = ({messagesPath, translationsPath, reportsPath, langu
                             report.summary.whiteListCount++;
                         }
 
-                        return sourceMessagesHash[id];
+                        return {
+                            ...sourceDefaultMessagesHash[id],
+                            defaultMessage: sourceMessagesHash[id].defaultMessage
+                        };
                     }
 
-                    return message;
+                    return {
+                        ...sourceDefaultMessagesHash[id],
+                        defaultMessage: message.defaultMessage
+                    };
                 });
 
                 report.summary.totalTranslationsCount = messages.length;
