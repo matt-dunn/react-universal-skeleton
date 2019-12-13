@@ -49,7 +49,7 @@ export const translations = ({messagesPath, translationsPath, reportsPath, langu
                     if (sourceMessagesHash[id]) {
                         if (sourceMessagesHash[id].defaultMessage !== defaultMessage) {
                             report.summary.updatedCount++;
-                        } else if (whitelist.ids.indexOf(id) === -1) {
+                        } else if (whitelist.ids.indexOf(id) === -1 && sourceDefaultMessagesHash[id].defaultMessage === defaultMessage) {
                             whitelist.ids.push(id);
                             report.summary.whiteListCount++;
                         }
