@@ -23,6 +23,7 @@ const Locale = () => {
                       other {messages}
                     }`}
                     values={{name: <b>Clem</b>, unreadCount: 1}}
+                    description="Main locale page title"
                 />
             </Title>
 
@@ -33,12 +34,14 @@ const Locale = () => {
                       other {messages}
                     }`}
                     values={{name: <b>Clem</b>, unreadCount: 13}}
+                    description="Main locale page title"
                 />
             </p>
             <p>
                 <FormattedMessage
                     defaultMessage={"The date today is {date}"}
                     values={{date: <FormattedDate value={Date.now()}/>}}
+                    description="The locale date now"
                 />
             </p>
         </Page>

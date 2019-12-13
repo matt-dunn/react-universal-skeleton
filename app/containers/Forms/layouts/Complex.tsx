@@ -27,6 +27,7 @@ const messages = defineMessages({
     submit: {
         // id: 'ra.action.delete',
         defaultMessage: "Submit Form",
+        description: "The submit button"
     },
     reset: {
         // id: 'ra.action.show',

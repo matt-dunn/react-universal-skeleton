@@ -1,10 +1,12 @@
 [
   {
     "defaultMessage": "Willkommen {name}. Sie haben {unreadCount, number} {unreadCount, plural, one {Nachricht} other {Nachrichten}}",
+    "description": "Main locale page title",
     "id": "containers.1645138363"
   },
   {
     "defaultMessage": "Das heutige Datum ist {date}",
+    "description": "The locale date now",
     "id": "containers.2731101254"
   },
   {
@@ -17,6 +19,7 @@
   },
   {
     "defaultMessage": "Formular abschicken",
+    "description": "The submit button",
     "id": "containers.Forms.layouts.submit"
   }
 ]
