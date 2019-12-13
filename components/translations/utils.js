@@ -66,14 +66,10 @@ export const getDelta = (sourceDefaultMessages, defaultLangMessages, messages, w
 
         if (!messagesHash[id]) {
             delta.added[id] = message;
-            if (whitelistIds.indexOf(id) === -1) {
-                delta.untranslated[id] = message;
-            }
+            delta.untranslated[id] = message;
         } else if (defaultLangMessagesHash[id] && defaultMessagesHash[id].defaultMessage !== defaultLangMessagesHash[id].defaultMessage) {
             delta.updated[id] = message;
-            if (whitelistIds.indexOf(id) === -1) {
-                delta.untranslated[id] = message;
-            }
+            delta.untranslated[id] = message;
         } else if (messagesHash[id] && !defaultMessagesHash[id]) {
             delta.removed[id] = message;
         }
