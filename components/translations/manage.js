@@ -154,4 +154,4 @@ export const manage = ({messagesPath, translationsPath, reportsPath, languages})
         console.error(chalk.red(ex.message));
         process.exit(1);
     }
-}
+};

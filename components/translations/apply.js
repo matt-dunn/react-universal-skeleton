@@ -90,4 +90,4 @@ export const apply = ({messagesPath, translationsPath}) => languageFilename => {
         console.error(chalk.red(ex.message));
         process.exit(1);
     }
-}
+};
