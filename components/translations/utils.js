@@ -3,12 +3,10 @@ import path from "path";
 import stringify from "json-stable-stringify";
 import { parse } from "intl-messageformat-parser";
 
-export const stringifyMessages = messages => {
-    return stringify(messages, {
-        space: 2,
-        trailingNewline: false
-    });
-};
+export const stringifyMessages = messages => stringify(messages, {
+    space: 2,
+    trailingNewline: false
+});
 
 export const getDefaultMessages = messagesPath => JSON.parse(fs.readFileSync(path.join(process.cwd(), messagesPath, "defaultMessages.json")).toString());
 
@@ -29,9 +27,10 @@ export const saveLangMessages = (translationsPath, messages, lang = "default") =
     fs.writeFileSync(filename, stringifyMessages(messages));
 };
 
-export const saveWhitelist = (translationsPath, messages, lang) => {
+export const saveWhitelist = (translationsPath, whitelist, lang) => {
     const filename = path.join(translationsPath, `${lang}_whitelist.json`);
-    fs.writeFileSync(filename, stringifyMessages(messages));
+    whitelist.ids.sort();
+    fs.writeFileSync(filename, stringifyMessages(whitelist));
 };
 
 export const hashMessages = messages => messages.reduce((hash, message) => {
@@ -39,15 +38,13 @@ export const hashMessages = messages => messages.reduce((hash, message) => {
     return hash;
 }, {});
 
-const normalize = o => {
-    return o.map(({type, value, options}) => {
-        if (type === 0) {
-            return value.replace(/[^a-zA-Z\s]+/ig, "").trim();
-        } else if (options) {
-            return Object.keys(options).map(key => normalize(options[key].value)).join(" ");
-        }
-    }).filter(w => w && w.trim() !== "").join(" ").split(/\b/).filter(word => word.trim() !== "");
-};
+const normalize = o => o.map(({type, value, options}) => {
+    if (type === 0) {
+        return value.replace(/[^a-zA-Z\s]+/ig, "").trim();
+    } else if (options) {
+        return Object.keys(options).map(key => normalize(options[key].value)).join(" ");
+    }
+}).filter(w => w && w.trim() !== "").join(" ").split(/\b/).filter(word => word.trim() !== "");
 
 export const countWords = messages => messages.reduce((wordCount, {defaultMessage}) => wordCount + normalize(parse(defaultMessage)).length, 0);
 
@@ -120,18 +117,16 @@ export const applyDelta = (sourceMessages, messages, {added, removed, updated}) 
         .concat(Object.keys(added).map(key => added[key]));
 };
 
-export const applyWhitelistDelta = (whitelist, {removed, updated}) => {
-    return {
-        ...whitelist,
-        ids: whitelist.ids
-            .map(id => {
-                if (removed[id] || updated[id]) {
-                    return undefined;
-                }
+export const applyWhitelistDelta = (whitelist, {removed, updated}) => ({
+    ...whitelist,
+    ids: whitelist.ids
+        .map(id => {
+            if (removed[id] || updated[id]) {
+                return undefined;
+            }
 
-                return id;
-            })
-            .filter(message => message)
-    };
-};
+            return id;
+        })
+        .filter(message => message)
+});
 
