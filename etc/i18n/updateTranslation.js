@@ -1,4 +1,4 @@
-import {translations} from "components/translations/manage";
+import {translations} from "components/translations";
 import chalk from "chalk";
 import commandLineArgs from "command-line-args";
 
