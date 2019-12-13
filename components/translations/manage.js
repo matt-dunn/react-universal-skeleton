@@ -16,7 +16,8 @@ import {
     getLangWhitelist,
     saveWhitelist,
     hashMessages,
-    stringifyMessages
+    stringifyMessages,
+    applyWhitelistDelta
 } from "./utils";
 
 export const translations = ({messagesPath, translationsPath, reportsPath, languages}) => {
@@ -134,9 +135,8 @@ export const translations = ({messagesPath, translationsPath, reportsPath, langu
                     });
 
                     if (update) {
-                        const updatedMessages = applyDelta(messages, delta);
-                        saveLangMessages(translationsPath, updatedMessages, lang);
-                        saveWhitelist(translationsPath, whitelist, lang);
+                        saveLangMessages(translationsPath, applyDelta(sourceDefaultMessages, messages, delta), lang);
+                        saveWhitelist(translationsPath, applyWhitelistDelta(whitelist, delta), lang);
                     }
                 });
 

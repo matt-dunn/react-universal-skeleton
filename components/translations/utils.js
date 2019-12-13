@@ -99,7 +99,9 @@ export const getDelta = (sourceDefaultMessages, defaultLangMessages, messages, w
     return delta;
 };
 
-export const applyDelta = (messages, {added, removed, updated}) => {
+export const applyDelta = (sourceMessages, messages, {added, removed, updated}) => {
+    const defaultMessagesHash = hashMessages(sourceMessages);
+
     return messages
         .map(message => {
             const {id} = message;
@@ -107,12 +109,33 @@ export const applyDelta = (messages, {added, removed, updated}) => {
             if (removed[id]) {
                 return undefined;
             } else if (updated[id]) {
-                return updated[id];
-            } else {
-                return message;
+                return {
+                    ...defaultMessagesHash[id],
+                    defaultMessage: updated[id].defaultMessage
+                };
             }
+
+            return {
+                ...defaultMessagesHash[id],
+                defaultMessage: message.defaultMessage
+            };
         })
         .filter(message => message)
         .concat(Object.keys(added).map(key => added[key]));
+};
+
+export const applyWhitelistDelta = (whitelist, {removed, updated}) => {
+    return {
+        ...whitelist,
+        ids: whitelist.ids
+            .map(id => {
+                if (removed[id] || updated[id]) {
+                    return undefined;
+                }
+
+                return id;
+            })
+            .filter(message => message)
+    };
 };
 
