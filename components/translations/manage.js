@@ -4,6 +4,7 @@ import {isEqual} from "lodash";
 import {Table} from "console-table-printer";
 import chalk from "chalk";
 import mkdirp from "mkdirp";
+import rimraf from "rimraf";
 
 import {
     applyDelta, applyWhitelistDelta,
@@ -101,6 +102,7 @@ export const manage = ({messagesPath, translationsPath, reportsPath, languages, 
                 if (!lastSummary || !isEqual(lastSummary.summary, summary)) {
                     summaryReport.languages.push({timestamp, summary});
 
+                    mkdirp(translationsPath);
                     fs.writeFileSync(filename, stringifyMessages(summaryReport));
                 }
 
@@ -164,6 +166,7 @@ export const manage = ({messagesPath, translationsPath, reportsPath, languages, 
                 if (translations.length > 0) {
                     const langPath = path.join(reportsPath, "languages");
                     mkdirp(langPath);
+                    rimraf.sync(path.join(langPath, `${version}-*.json`));
 
                     console.log(chalk`Creating {yellow ${translations.length}} translation files:`);
 

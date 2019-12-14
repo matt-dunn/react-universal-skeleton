@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import stringify from "json-stable-stringify";
 import { parse } from "intl-messageformat-parser";
+import mkdirp from "mkdirp";
 
 export const stringifyMessages = messages => stringify(messages, {
     space: 2,
@@ -24,12 +25,14 @@ export const getLangWhitelist = (translationsPath, lang) => {
 
 export const saveLangMessages = (translationsPath, messages, lang = "default") => {
     const filename = path.join(translationsPath, `${lang}.json`);
+    mkdirp(translationsPath);
     fs.writeFileSync(filename, stringifyMessages(messages));
 };
 
 export const saveWhitelist = (translationsPath, whitelist, lang) => {
     const filename = path.join(translationsPath, `${lang}_whitelist.json`);
     whitelist.ids.sort();
+    mkdirp(translationsPath);
     fs.writeFileSync(filename, stringifyMessages(whitelist));
 };
 
