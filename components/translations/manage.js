@@ -1,3 +1,10 @@
+import fs from "fs";
+import path from "path";
+import {isEqual} from "lodash";
+import {Table} from "console-table-printer";
+import chalk from "chalk";
+import mkdirp from "mkdirp";
+
 import {
     applyDelta, applyWhitelistDelta,
     convertHashToArray,
@@ -8,13 +15,8 @@ import {
     getLangWhitelist,
     saveLangMessages, saveWhitelist, stringifyMessages
 } from "./utils";
-import fs from "fs";
-import path from "path";
-import {isEqual} from "lodash";
-import {Table} from "console-table-printer";
-import chalk from "chalk";
 
-export const manage = ({messagesPath, translationsPath, reportsPath, languages}) => ({update} = {update: true}) => {
+export const manage = ({messagesPath, translationsPath, reportsPath, languages, version}) => ({update} = {update: true}) => {
     const report = {
         updated: false,
         timestamp: undefined,
@@ -70,6 +72,7 @@ export const manage = ({messagesPath, translationsPath, reportsPath, languages})
         const managed = {
             getReport: () => report,
             saveReport: () => {
+                mkdirp(reportsPath);
                 fs.writeFileSync(path.join(reportsPath, "i18l-untranslated.json"), stringifyMessages(report));
 
                 return managed;
@@ -146,6 +149,30 @@ export const manage = ({messagesPath, translationsPath, reportsPath, languages})
                 t.printTable();
 
                 return managed;
+            },
+            generateTranslations: () => {
+                const translations = report.languages.map(({lang, untranslated, delta}) => {
+                    if (untranslated > 0) {
+                        return {
+                            lang,
+                            count: untranslated,
+                            untranslated: delta.untranslated
+                        };
+                    }
+                }).filter(translations => translations);
+
+                if (translations.length > 0) {
+                    const langPath = path.join(reportsPath, "languages");
+                    mkdirp(langPath);
+
+                    console.log(chalk`Creating {yellow ${translations.length}} translation files:`);
+
+                    translations.forEach(({lang, count, untranslated}) => {
+                        const langFilename = path.join(langPath, `${version}-${lang}.json`);
+                        fs.writeFileSync(langFilename, stringifyMessages(untranslated));
+                        console.log(chalk`  {yellow ${lang}} (${count} outstanding translations): '${langFilename}'`);
+                    });
+                }
             }
         };
 
