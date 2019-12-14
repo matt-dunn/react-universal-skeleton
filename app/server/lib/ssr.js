@@ -47,7 +47,7 @@ export default async (req, res) => {
         const languagePack = {
             locale: req.acceptsLanguages()[0],
             messagesLocale: locale,
-            messages: await import(`app/translations/locales/${locale}.json`)
+            messages: await import(`app/i18n/${locale}.json`)
         };
 
         const app = extractor.collectChunks(

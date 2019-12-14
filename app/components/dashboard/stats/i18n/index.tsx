@@ -1,7 +1,7 @@
 import React from "react";
 import {ResponsiveLine, Line, Serie} from "@nivo/line";
 
-import summary from "app/translations/locales/summary.json";
+import summary from "app/i18n/summary.json";
 
 console.log(summary);
 

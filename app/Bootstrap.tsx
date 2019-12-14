@@ -35,7 +35,7 @@ function Bootstrap<T>({languagePack, asyncData, formData, error, store, helmetCo
             const locale = (availableLocales.indexOf(language) !== -1 && language) || "default";
 
             if (locale) {
-                import(`app/translations/locales/${locale}.json`)
+                import(`app/i18n/${locale}.json`)
                     .then(messages => {
                         setLang({
                             locale: language,
