@@ -20,7 +20,7 @@ module.exports = ({root}) => ( {
             },
             {
                 type: "javascript/auto",
-                test: /locales\/.*?\.json$/i,
+                test: /i18n\/.*?\.json$/i,
                 exclude: /node_modules/,
                 use: "translations/loader",
             },
