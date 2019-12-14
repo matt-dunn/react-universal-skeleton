@@ -6,7 +6,8 @@ import metadata from "app/webpack/metadata";
 const {availableLocales, i18nMessagesPath, i18nLocalePath, reportsPath, version} = metadata();
 
 const optionDefinitions = [
-    { name: "gen", type: Boolean, defaultOption: false}
+    { name: "gen", type: Boolean},
+    { name: "status", type: Boolean}
 ];
 
 const options = commandLineArgs(optionDefinitions);
@@ -29,4 +30,8 @@ managedTranslations
 
 if (options.gen) {
     managedTranslations.generateTranslations();
+}
+
+if (options.status) {
+    managedTranslations.checkStatus();
 }

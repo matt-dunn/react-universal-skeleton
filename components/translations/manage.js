@@ -173,6 +173,12 @@ export const manage = ({messagesPath, translationsPath, reportsPath, languages, 
                         console.log(chalk`  {yellow ${lang}} (${count} outstanding translations): '${langFilename}'`);
                     });
                 }
+            },
+            checkStatus: () => {
+                if (report.summary.totalUntranslatedCount > 0) {
+                    console.error(chalk.red(`Build failed because translations have not completed. ${report.summary.totalUntranslatedCount} total translations outstanding.`));
+                    process.exit(3);
+                }
             }
         };
 
