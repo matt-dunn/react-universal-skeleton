@@ -2,6 +2,7 @@ const webpack = require("webpack");
 const path = require("path");
 
 // const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 module.exports = ({environment, root, context, target, targetRelativeClient, targetRelativeServer, publicPath, version, availableLocales}) => ({
     mode: environment,
@@ -29,6 +30,7 @@ module.exports = ({environment, root, context, target, targetRelativeClient, tar
     },
     plugins: (function(){
         const plugins = [
+            new CleanWebpackPlugin(),
             new webpack.DefinePlugin({
                 "process.env.TARGET": JSON.stringify(target),
                 "process.env.TARGET_CLIENT": JSON.stringify(targetRelativeClient),
