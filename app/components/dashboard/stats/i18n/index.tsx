@@ -1,9 +1,45 @@
 import React from "react";
-import { ResponsiveLine, Line } from "@nivo/line";
+import {ResponsiveLine, Line, Serie} from "@nivo/line";
 
+import summary from "app/translations/locales/summary.json";
 
-const data = [
-    {
+console.log(summary);
+
+const {languages} = summary;
+
+const summaryData = Object.values(languages.reduce((data: any, {summary, timestamp}) => {
+    const {totalTranslationsCount} = summary;
+
+    // data["default"] = data["default"] || {
+    //     id: "default",
+    //     data: []
+    // }
+    //
+    // console.log(timestamp, new Date(timestamp))
+    //
+    // data["default"].data.push({
+    //     x: timestamp,
+    //     y: totalTranslationsCount
+    // })
+
+    summary.languages.forEach(language => {
+        data[language.lang] = data[language.lang] || {
+            id: language.lang,
+            data: []
+        };
+        data[language.lang].data.push({
+            x: timestamp,
+            y: language.untranslated
+        });
+    });
+
+    return data;
+}, {})) as Serie[];
+
+console.log("####!!!", summaryData);
+
+languages.map(language => {
+    return {
         "id": "default",
         "color": "hsl(140, 70%, 50%)",
         "data": [
@@ -20,22 +56,27 @@ const data = [
                 "y": 23
             },
         ]
+    };
+});
+
+const data = [
+    {
+        "id": "default",
+        "color": "hsl(140, 70%, 50%)",
+        "data": [
+            {
+                "x": "2019-12-11T16:45:29.498Z",
+                "y": 87
+            },
+        ]
     },
     {
         "id": "de",
         "color": "hsl(154, 70%, 50%)",
         "data": [
             {
-                "x": "2019-12-11T16:45:29",
+                "x": "2019-12-11T16:45:29.498Z",
                 "y": 190
-            },
-            {
-                "x": "2019-12-12T16:45:29",
-                "y": 264
-            },
-            {
-                "x": "2019-12-12T18:45:29",
-                "y": 213
             },
         ]
     },
@@ -49,26 +90,29 @@ const StatsI18n = () => {
                     animate={false}
                     // width={700}
                     // height={400}
-                    data={data}
+                    data={summaryData}
                     margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
                     // xScale={{ type: 'point' }}
                     xScale={{
+                        // type: "linear"
                         type: "time",
-                        format: "%Y-%m-%dT%H:%M:%S",
-                        precision: "hour"
+                        format: "%Y-%m-%dT%H:%M:%S.%f%Z",
+                        precision: "second"
                     }}
-                    yScale={{ type: "linear", stacked: true, min: "auto", max: "auto" }}
+                    curve="linear"
+                    yScale={{ type: "linear", stacked: false, min: "auto", max: "auto" }}
                     axisTop={null}
                     axisRight={null}
-                    xFormat="time:%d %b %Y"
+                    xFormat="time:%d %b %Y %H:%M"
+                    // yFormat={value => parseInt(value, 10)}
                     axisBottom={{
                         orient: "bottom",
                         tickSize: 5,
                         tickPadding: 5,
                         tickRotation: 0,
-                        tickValues: "every 1 days",
+                        // tickValues: "every 1 hours",
                         // tickValues: data.length - 1,
-                        format: "%d %b %Y %H",
+                        format: "%d %b %Y %H:%M",
                         // legend: 'The Transportation',
                         // legendOffset: 40,
                         legendPosition: "middle"
@@ -78,7 +122,7 @@ const StatsI18n = () => {
                         tickSize: 5,
                         tickPadding: 5,
                         tickRotation: 0,
-                        legend: "count",
+                        legend: "Untranslated",
                         legendOffset: -40,
                         legendPosition: "middle"
                     }}
