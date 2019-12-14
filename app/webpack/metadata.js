@@ -32,7 +32,7 @@ module.exports = (props) => ({
     reportsPath: path.join(ROOT, reports),
 
     i18nMessagesPath: path.join(target, "i18n", "source"),
-    i18nLocalePath: path.join(__dirname, "..", "translations", "locales"),
+    i18nLocalePath: path.join(__dirname, "..", "i18n"),
 
     version: packageJSON.version,
     name: packageJSON.name,
