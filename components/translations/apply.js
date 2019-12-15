@@ -14,6 +14,13 @@ import {
 
 export const apply = ({languages, translationsPath}) => (languageFilename, language = undefined) => {
     try {
+        const lang = language || path.parse(languageFilename).name.split("_")[1];
+
+        if (languages.indexOf(lang) === -1) {
+            console.error(chalk.red(`Language not found. Available languages are [${languages}]. Try --lang <lang>`));
+            process.exit(1);
+        }
+
         const report = {
             summary: {
                 updatedCount: 0,
@@ -22,13 +29,6 @@ export const apply = ({languages, translationsPath}) => (languageFilename, langu
             }
         };
 
-        const lang = language || path.parse(languageFilename).name.split("_")[1];
-
-        if (languages.indexOf(lang) === -1) {
-            console.error(chalk.red(`Language not found. Available languages are [${languages}]. Try --lang <lang>`));
-            process.exit(1);
-        }
-
         const sourceMessages = JSON.parse(fs.readFileSync(languageFilename).toString());
         const sourceMessagesHash = hashMessages(sourceMessages);
 
@@ -36,11 +36,12 @@ export const apply = ({languages, translationsPath}) => (languageFilename, langu
         const targetMessagesHash = hashMessages(targetMessages);
 
         const defaultMessages = getLangMessages(translationsPath);
-        const defaultMessagesHash = hashMessages(defaultMessages);
 
         const whitelist = getLangWhitelist(translationsPath, lang);
 
-        const updatedMessages = defaultMessages.map(({id, defaultMessage}) => {
+        const updatedMessages = defaultMessages.map(message => {
+            const {id, defaultMessage} = message;
+
             if (sourceMessagesHash[id]) {
                 if (sourceMessagesHash[id].defaultMessage === defaultMessage) {
                     if (whitelist.ids.indexOf(id) === -1) {
@@ -60,14 +61,14 @@ export const apply = ({languages, translationsPath}) => (languageFilename, langu
                 }
 
                 return {
-                    ...defaultMessagesHash[id],
+                    ...message,
                     defaultMessage: sourceMessagesHash[id].defaultMessage
                 };
             }
 
             return {
-                ...defaultMessagesHash[id],
-                defaultMessage
+                ...message,
+                defaultMessage: (targetMessagesHash[id] && targetMessagesHash[id].defaultMessage) || defaultMessage
             };
         });
 
