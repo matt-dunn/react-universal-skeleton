@@ -187,7 +187,7 @@ export const manage = ({messagesPath, translationsPath, reportsPath, languages, 
                         return {
                             lang,
                             count: untranslated,
-                            untranslated: delta.untranslated
+                            untranslated: Object.values(delta.untranslated)
                         };
                     }
                 }).filter(translations => translations);
