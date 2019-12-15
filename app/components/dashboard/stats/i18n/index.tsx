@@ -9,15 +9,28 @@ console.log(summary);
 
 const {languages} = summary;
 
-const summaryData = languages.map(({summary, timestamp}) => {
-    return summary.languages.reduce((data: any, language) => {
-        data[language.lang] = language.untranslated;
+const summaryData = languages.reduce((data: any, {summary, timestamp}) => {
+    data.set.push(summary.languages.reduce((set: any, language) => {
+        set[language.lang] = language.untranslated;
+        data.lang[language.lang] = true;
 
-        return data;
+        return set;
     }, {
         timestamp
-    });
-}) as any[];
+    }));
+
+
+    return data;
+}, {
+    set: [] as any[],
+    lang: {}
+}) as {set: any[], lang: any};
+
+const COLORS = [
+    "#0084d8",
+    "#82ca9d",
+    "#82009d"
+];
 
 console.log("####!!!", summaryData);
 
@@ -29,7 +42,7 @@ const StatsI18n = () => {
                     <LineChart
                         width={500}
                         height={300}
-                        data={summaryData}
+                        data={summaryData.set}
                         margin={{
                             top: 10, right: 30, left: 20, bottom: 0,
                         }}
@@ -39,9 +52,9 @@ const StatsI18n = () => {
                         <YAxis />
                         <Tooltip />
                         <Legend />
-                        <Line type="monotone" dataKey="de" stroke="#0084d8" strokeWidth={2} dot={{ r:2 }} activeDot={{ r: 5 }} />
-                        <Line type="monotone" dataKey="fr" stroke="#8884d8" strokeWidth={2} dot={{ r:2 }} activeDot={{ r: 5 }} />
-                        <Line type="monotone" dataKey="en-GB" stroke="#82ca9d" strokeWidth={2} dot={{ r:2 }} activeDot={{ r: 5 }}/>
+                        {Object.keys(summaryData.lang).map((lang, index) => (
+                            <Line key={lang} type="monotone" dataKey={lang} stroke={COLORS[index % COLORS.length]} strokeWidth={2} dot={{ r:2 }} activeDot={{ r: 5 }} />
+                        ))}
                     </LineChart>
                 </ResponsiveContainer>
             </div>
