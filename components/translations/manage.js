@@ -18,7 +18,31 @@ import {
 } from "./utils";
 
 export const manage = ({messagesPath, translationsPath, reportsPath, languages, version}) => ({update} = {update: true}) => {
+    if (!messagesPath) {
+        console.error(chalk.red("'messagesPath' not supplied"));
+        process.exit(1);
+    }
+
+    if (!translationsPath) {
+        console.error(chalk.red("'translationsPath' not supplied"));
+        process.exit(1);
+    }
+
+    if (!version) {
+        console.error(chalk.red("'version' not supplied"));
+        process.exit(1);
+    }
+
+    if (!languages) {
+        console.error(chalk.red("'languages' not supplied"));
+        process.exit(1);
+    } else if (!Array.isArray(languages)) {
+        console.error(chalk.red("'languages' must be an array"));
+        process.exit(1);
+    }
+
     const report = {
+        version,
         updated: false,
         timestamp: undefined,
         summary: {
@@ -73,6 +97,11 @@ export const manage = ({messagesPath, translationsPath, reportsPath, languages, 
         const managed = {
             getReport: () => report,
             saveReport: () => {
+                if (!reportsPath) {
+                    console.error(chalk.red("'reportsPath' not supplied"));
+                    process.exit(1);
+                }
+
                 mkdirp(reportsPath);
                 fs.writeFileSync(path.join(reportsPath, "i18l-untranslated.json"), stringifyMessages(report));
 
@@ -89,7 +118,7 @@ export const manage = ({messagesPath, translationsPath, reportsPath, languages, 
                 };
             },
             updateSummary: () => {
-                const {timestamp} = report;
+                const {timestamp, version} = report;
                 const summary = managed.getSummary();
 
                 const filename = path.join(translationsPath, "summary.json");
@@ -100,7 +129,7 @@ export const manage = ({messagesPath, translationsPath, reportsPath, languages, 
                 const lastSummary = summaryReport.languages[summaryReport.languages.length - 1];
 
                 if (!lastSummary || !isEqual(lastSummary.summary, summary)) {
-                    summaryReport.languages.push({timestamp, summary});
+                    summaryReport.languages.push({timestamp, version, summary});
 
                     mkdirp(translationsPath);
                     fs.writeFileSync(filename, stringifyMessages(summaryReport));
@@ -164,6 +193,11 @@ export const manage = ({messagesPath, translationsPath, reportsPath, languages, 
                 }).filter(translations => translations);
 
                 if (translations.length > 0) {
+                    if (!reportsPath) {
+                        console.error(chalk.red("'reportsPath' not supplied"));
+                        process.exit(1);
+                    }
+
                     const langPath = path.join(reportsPath, "languages");
                     mkdirp(langPath);
                     rimraf.sync(path.join(langPath, `${version}-*.json`));
