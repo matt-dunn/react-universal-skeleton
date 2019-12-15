@@ -1,0 +1,25 @@
+[
+  {
+    "defaultMessage": "Hello {name}. You have {unreadCount, number} {unreadCount, plural,\n                      one {message}\n                      other {messages}\n                    }",
+    "description": "Main locale page title",
+    "id": "containers.1645138363"
+  },
+  {
+    "defaultMessage": "The date today is {date}",
+    "description": "The locale date now",
+    "id": "containers.2731101254"
+  },
+  {
+    "defaultMessage": "Forms (Lazy Loaded)",
+    "id": "containers.Forms.165405603"
+  },
+  {
+    "defaultMessage": "Reset Form",
+    "id": "containers.Forms.layouts.reset"
+  },
+  {
+    "defaultMessage": "Submit Form",
+    "description": "The submit button",
+    "id": "containers.Forms.layouts.submit"
+  }
+]
