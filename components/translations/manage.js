@@ -171,7 +171,7 @@ export const manage = ({messagesPath, translationsPath, reportsPath, languages, 
                     console.log(chalk`Creating {yellow ${translations.length}} translation files:`);
 
                     translations.forEach(({lang, count, untranslated}) => {
-                        const langFilename = path.join(langPath, `${version}-${lang}.json`);
+                        const langFilename = path.join(langPath, `${version}_${lang}.json`);
                         fs.writeFileSync(langFilename, stringifyMessages(untranslated));
                         console.log(chalk`  {yellow ${lang}} (${count} outstanding translations): '${langFilename}'`);
                     });

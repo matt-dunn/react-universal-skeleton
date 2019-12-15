@@ -5,7 +5,8 @@ import commandLineArgs from "command-line-args";
 import metadata from "app/webpack/metadata";
 
 const optionDefinitions = [
-    { name: "src", type: String, defaultOption: true}
+    { name: "src", type: String, defaultOption: true},
+    { name: "lang", type: String}
 ];
 
 const options = commandLineArgs(optionDefinitions);
@@ -25,5 +26,5 @@ const managedTranslations = translations({
 });
 
 managedTranslations
-    .apply(options.src)
+    .apply(options.src, options.lang)
     .printSummary();

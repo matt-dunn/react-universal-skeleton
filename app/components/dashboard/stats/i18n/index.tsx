@@ -24,7 +24,7 @@ const summaryData = languages.reduce((data: any, {summary, timestamp}) => {
 }, {
     set: [] as any[],
     lang: {}
-}) as {set: any[], lang: any};
+}) as {set: any[]; lang: any};
 
 const COLORS = [
     "#0084d8",
