@@ -200,7 +200,7 @@ export const manage = ({messagesPath, translationsPath, reportsPath, languages, 
 
                     const langPath = path.join(reportsPath, "languages");
                     mkdirp(langPath);
-                    rimraf.sync(path.join(langPath, `${version}-*.json`));
+                    rimraf.sync(path.join(langPath, `${version}_*.json`));
 
                     console.log(chalk`Creating {yellow ${translations.length}} translation files:`);
 
