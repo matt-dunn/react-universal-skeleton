@@ -16,7 +16,7 @@ const reports = process.env.REPORTS || "reports";
 
 const {port, host} = (publicPath && url.parse(publicPath)) || {};
 
-const availableLocales = ["en-GB", "de", "fr"];
+const availableLocales = ["en-GB", "de", "fr", "es"];
 
 module.exports = (props) => ({
     context: path.join(__dirname, ".."),
