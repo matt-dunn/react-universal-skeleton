@@ -172,7 +172,7 @@ export const manage = ({messagesPath, translationsPath, reportsPath, languages, 
                         "Added": formatNumber(Object.keys(delta.added).length),
                         "Removed": formatNumber(Object.keys(delta.removed).length),
                         "Updated": formatNumber(Object.keys(delta.updated).length),
-                        "% Complete": `${Math.round((100 - ((untranslated / translationCount) * 100)) * 100) / 100}%`,
+                        "% Complete": `${translationCount && (Math.round((100 - ((untranslated / translationCount) * 100)) * 100) / 100) || 0}%`,
                         "≈ Outstanding Words": formatNumber(wordCount)
                     }, {color});
                 });
