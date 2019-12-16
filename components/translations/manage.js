@@ -182,6 +182,16 @@ export const manage = ({messagesPath, translationsPath, reportsPath, languages, 
                 return managed;
             },
             generateTranslations: () => {
+                if (!reportsPath) {
+                    console.error(chalk.red("'reportsPath' not supplied"));
+                    process.exit(1);
+                }
+
+                const langPath = path.join(reportsPath, "languages");
+                if (fs.existsSync(langPath)) {
+                    rimraf.sync(path.join(langPath, `${version}_*.json`));
+                }
+
                 const translations = report.languages.map(({lang, untranslated, delta}) => {
                     if (untranslated > 0) {
                         return {
@@ -193,14 +203,7 @@ export const manage = ({messagesPath, translationsPath, reportsPath, languages, 
                 }).filter(translations => translations);
 
                 if (translations.length > 0) {
-                    if (!reportsPath) {
-                        console.error(chalk.red("'reportsPath' not supplied"));
-                        process.exit(1);
-                    }
-
-                    const langPath = path.join(reportsPath, "languages");
                     mkdirp(langPath);
-                    rimraf.sync(path.join(langPath, `${version}_*.json`));
 
                     console.log(chalk`Creating {yellow ${translations.length}} translation files:`);
 
