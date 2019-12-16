@@ -14,7 +14,7 @@ const publicPath = process.env.PUBLIC_PATH;
 const target = process.env.TARGET || "dist";
 const reports = process.env.REPORTS || "reports";
 
-const {port, host} = (publicPath && url.parse(publicPath)) || {};
+const {port, hostname} = (publicPath && url.parse(publicPath)) || {};
 
 const availableLocales = ["en-GB", "de", "fr", "es"];
 
@@ -38,7 +38,7 @@ module.exports = (props) => ({
     name: packageJSON.name,
     description: packageJSON.description,
     port,
-    host,
+    hostname,
     availableLocales,
     ...props
 });

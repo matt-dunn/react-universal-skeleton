@@ -22,7 +22,7 @@ const partialStats = require("./partials/stats");
 const optimizationStats = require("./partials/optimization");
 
 const metadata = require("./metadata")({configType: "client"});
-const {environment, version, context, root, target, publicPath, port, host} = metadata;
+const {environment, version, context, root, target, publicPath, port, hostname} = metadata;
 
 log(chalk`🔨 Building {white.bold client}...
      Environment: {yellow ${environment}}
@@ -30,7 +30,7 @@ log(chalk`🔨 Building {white.bold client}...
 
      Target: {yellow ${target}}
      Public Path: {yellow ${publicPath}}
-     Host: {yellow ${host}}
+     Host: {yellow ${hostname}}
      Port: {yellow ${port}}
 `);
 
@@ -146,7 +146,7 @@ module.exports = merge(
             port,
             sockPort: port,
             open: false,
-            public: host,
+            public: `${hostname}:${port}`,
             historyApiFallback: true,
             https: {
                 key: fs.readFileSync(path.join(context, "server", "ssl", "private.key")),
