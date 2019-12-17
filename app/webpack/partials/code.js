@@ -2,6 +2,8 @@ const path = require("path");
 
 const ReactIntlPlugin = require("react-intl-webpack-plugin");
 
+// const I18NChunksWebpackPlugin = require("../../../components/translations/chunks");
+
 module.exports = ({root, target, i18nMessagesPath/*, i18nLocalePath*/}) => ({
     module :{
         rules: [
@@ -41,6 +43,27 @@ module.exports = ({root, target, i18nMessagesPath/*, i18nLocalePath*/}) => ({
     plugins: [
         new ReactIntlPlugin({
             filename: path.join(path.relative(target, i18nMessagesPath), "defaultMessages.json")
-        })
+        }),
+        // new I18NChunksWebpackPlugin({
+        //     // Modules requiring translation
+        //     modules: [
+        //         {
+        //             // Identigying module
+        //             rule: /src\/module1\.js$/i,
+        //
+        //             // Defining langs for it
+        //             languagesFiles: {
+        //                 'en-US': 'i18n/en.json', // Filename doesen't matter but key does.
+        //                 'fr-FR': 'i18n/fr.json'
+        //             }
+        //         },
+        //         // ... you can add other rules or import a ones of package
+        //     ],
+        //
+        //     /**
+        //      * Directory for temporary files (i18n chunks)
+        //      **/
+        //     tmpEntriesPath: path.join(root, "dist", 'webpack-i18n-entries')
+        // }),
     ]
 });
