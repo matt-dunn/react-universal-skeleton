@@ -68,6 +68,8 @@ module.exports =  {
         "emotion/no-vanilla": "error",
         "emotion/import-from-emotion": "error",
         "emotion/styled-import": "error",
-        "emotion/syntax-preference": [2, "string"]
+        "emotion/syntax-preference": [2, "string"],
+        "prefer-const": 2,
+        "no-var": 2,
     }
 };

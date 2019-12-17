@@ -1,6 +1,7 @@
 const path = require("path");
 
-const ReactIntlPlugin = require("react-intl-webpack-plugin");
+// const ReactIntlPlugin = require("react-intl-webpack-plugin");
+const ReactIntlPlugin = require("../../../components/translations/webpack/update");
 
 // const I18NChunksWebpackPlugin = require("../../../components/translations/chunks");
 
