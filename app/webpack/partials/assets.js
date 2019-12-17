@@ -22,7 +22,7 @@ module.exports = ({root}) => ( {
                 type: "javascript/auto",
                 test: /i18n\/.*?\.json$/i,
                 exclude: /node_modules/,
-                use: "translations/loader",
+                use: "translations/webpack/transformToHash",
             },
             {
                 test: /readme\.md$/i,
