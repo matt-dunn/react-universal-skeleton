@@ -36,7 +36,7 @@ ReactIntlPlugin.prototype.apply = function (compiler) {
     compiler.hooks.emit.tapAsync("ReactIntlPlugin", function (compilation, callback) {
         // console.log("emitting messages");
 
-        console.log(">>>", messagesHash);
+        // console.log(">>>", messagesHash);
         // check for duplicates and flatten
         const jsonMessages = [];
         const idIndex = {};
@@ -57,7 +57,7 @@ ReactIntlPlugin.prototype.apply = function (compiler) {
         });
 
         const jsonString = JSON.stringify(jsonMessages, undefined, 2);
-        console.log("jsonString:",jsonString);
+        // console.log("jsonString:",jsonString);
 
         // // Insert this list into the Webpack build as a new file asset:
         compilation.assets[options.filename] = {
