@@ -10,8 +10,8 @@ console.log(summary);
 
 const {languages} = summary;
 
-const summaryData = languages.reduce((data: any, {summary, timestamp}) => {
-    data.set.push(summary.languages.reduce((set: any, language) => {
+const summaryData = languages.reduce((data: any, {summary, timestamp}: {summary: {languages: any[]}; timestamp: string}) => {
+    data.set.push(summary.languages.reduce((set: any, language: {lang: string; untranslated: any}) => {
         set[language.lang] = language.untranslated;
         data.lang[language.lang] = true;
 
