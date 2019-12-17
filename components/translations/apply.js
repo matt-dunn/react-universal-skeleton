@@ -3,14 +3,9 @@ import fs from "fs";
 import {Table} from "console-table-printer";
 import chalk from "chalk";
 
-import {
-    formatNumber,
-    getLangMessages,
-    getLangWhitelist,
-    hashMessages,
-    saveLangMessages,
-    saveWhitelist
-} from "./utils";
+import {formatNumber, hashMessages,} from "./utils";
+import {getLangMessages, saveLangMessages} from "./utils/messages";
+import {getLangWhitelist, saveWhitelist} from "./utils/whitelist";
 
 export const apply = ({languages, translationsPath}) => (languageFilename, language = undefined) => {
     if (!translationsPath) {

@@ -1,0 +1,40 @@
+{
+  "languages": {
+    "de": {
+      "filename": "app/i18n/de.json",
+      "files": [
+        "app/i18n/de.json",
+        "app/i18n/de_whitelist.json"
+      ],
+      "lang": "de",
+      "whitelistFilename": "app/i18n/de_whitelist.json"
+    },
+    "en-GB": {
+      "filename": "app/i18n/en-GB.json",
+      "files": [
+        "app/i18n/en-GB.json",
+        "app/i18n/en-GB_whitelist.json"
+      ],
+      "lang": "en-GB",
+      "whitelistFilename": "app/i18n/en-GB_whitelist.json"
+    },
+    "es": {
+      "filename": "app/i18n/es.json",
+      "files": [
+        "app/i18n/es.json",
+        "app/i18n/es_whitelist.json"
+      ],
+      "lang": "es",
+      "whitelistFilename": "app/i18n/es_whitelist.json"
+    },
+    "fr": {
+      "filename": "app/i18n/fr.json",
+      "files": [
+        "app/i18n/fr.json",
+        "app/i18n/fr_whitelist.json"
+      ],
+      "lang": "fr",
+      "whitelistFilename": "app/i18n/fr_whitelist.json"
+    }
+  }
+}
