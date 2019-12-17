@@ -7,17 +7,24 @@ import mkdirp from "mkdirp";
 import rimraf from "rimraf";
 
 import {
+    applyDelta,
+    applyWhitelistDelta,
     cleanTranslationsFiles,
     convertHashToArray,
     countWords,
     formatNumber,
+    getDefaultMessages,
+    getDelta,
+    getLangMessageFilename,
+    getLangMessages,
+    getLangWhitelist,
     getRelativePath,
+    getWhitelistFilename,
+    saveLangMessages,
+    saveManifest,
+    saveWhitelist,
     stringifyMessages
 } from "./utils";
-import {getDefaultMessages, getLangMessageFilename, getLangMessages, saveLangMessages} from "./utils/messages";
-import {getLangWhitelist, getWhitelistFilename, saveWhitelist} from "./utils/whitelist";
-import {applyDelta, applyWhitelistDelta, getDelta} from "./utils/delta";
-import {saveManifest} from "./utils/manifest";
 
 export const manage = ({messagesPath, translationsPath, reportsPath, languages, version}) => ({update} = {update: true}) => {
     if (!messagesPath) {
