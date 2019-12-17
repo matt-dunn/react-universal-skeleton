@@ -3,6 +3,7 @@ import path from "path";
 import stringify from "json-stable-stringify";
 import { parse } from "intl-messageformat-parser";
 import mkdirp from "mkdirp";
+import {sortBy} from "lodash";
 
 export const stringifyMessages = messages => stringify(messages, {
     space: 2,
@@ -26,7 +27,7 @@ export const getLangWhitelist = (translationsPath, lang) => {
 export const saveLangMessages = (translationsPath, messages, lang = "default") => {
     const filename = path.join(translationsPath, `${lang}.json`);
     mkdirp(translationsPath);
-    fs.writeFileSync(filename, stringifyMessages(messages));
+    fs.writeFileSync(filename, stringifyMessages(sortBy(messages, o => o.id)));
 };
 
 export const saveWhitelist = (translationsPath, whitelist, lang) => {
