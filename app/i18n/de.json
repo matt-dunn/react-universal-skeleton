@@ -10,10 +10,6 @@
     "id": "containers.2731101254"
   },
   {
-    "defaultMessage": "Formulare (Lazy Loaded)",
-    "id": "containers.Forms.165405603"
-  },
-  {
     "defaultMessage": "Formular leeren",
     "id": "containers.Forms.layouts.reset"
   },
@@ -21,5 +17,9 @@
     "defaultMessage": "Formular abschicken",
     "description": "The submit button",
     "id": "containers.Forms.layouts.submit"
+  },
+  {
+    "defaultMessage": "Formulare (Lazy Loaded)",
+    "id": "containers.Forms.title"
   }
 ]

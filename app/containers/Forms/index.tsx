@@ -99,6 +99,7 @@ const Forms = () => {
             </Helmet>
             <Title>
                 <FormattedMessage
+                    key="title"
                     defaultMessage={"Forms (Lazy Loaded)"}
                 />
             </Title>

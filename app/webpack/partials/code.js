@@ -4,7 +4,7 @@ const ReactIntlPlugin = require("react-intl-webpack-plugin");
 
 // const I18NChunksWebpackPlugin = require("../../../components/translations/chunks");
 
-module.exports = ({root, target, i18nMessagesPath/*, i18nLocalePath*/}) => ({
+module.exports = ({environment, root, target, i18nMessagesPath/*, i18nLocalePath*/}) => ({
     module :{
         rules: [
             {
@@ -25,14 +25,16 @@ module.exports = ({root, target, i18nMessagesPath/*, i18nLocalePath*/}) => ({
                             "react-intl-auto",
                             {
                                 "removePrefix": "app/",
-                                "filebase": false
+                                "filebase": false,
+                                "includeExportName": true,
+                                "useKey": true
                             }
                         ],
                         [
                             "react-intl", {
                                 messagesDir: i18nMessagesPath,
                                 extractSourceLocation: false,
-                                removeDefaultMessage: true
+                                removeDefaultMessage: environment === "production"
                             }
                         ]
                     ]

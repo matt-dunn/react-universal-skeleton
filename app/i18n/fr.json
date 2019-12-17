@@ -10,10 +10,6 @@
     "id": "containers.2731101254"
   },
   {
-    "defaultMessage": "Forms (Lazy Loaded)",
-    "id": "containers.Forms.165405603"
-  },
-  {
     "defaultMessage": "Réinitialisation",
     "id": "containers.Forms.layouts.reset"
   },
@@ -21,5 +17,9 @@
     "defaultMessage": "Soumettre",
     "description": "The submit button",
     "id": "containers.Forms.layouts.submit"
+  },
+  {
+    "defaultMessage": "Forms (Lazy Loaded)",
+    "id": "containers.Forms.title"
   }
 ]
