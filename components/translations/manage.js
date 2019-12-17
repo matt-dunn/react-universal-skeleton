@@ -7,14 +7,21 @@ import mkdirp from "mkdirp";
 import rimraf from "rimraf";
 
 import {
-    applyDelta, applyWhitelistDelta,
+    applyDelta,
+    applyWhitelistDelta,
+    cleanTranslationsFiles,
     convertHashToArray,
     countWords, formatNumber,
     getDefaultMessages,
-    getDelta,
+    getDelta, getLangMessageFilename,
     getLangMessages,
     getLangWhitelist,
-    saveLangMessages, saveWhitelist, stringifyMessages
+    getRelativePath,
+    getWhitelistFilename,
+    saveLangMessages,
+    saveManifest,
+    saveWhitelist,
+    stringifyMessages
 } from "./utils";
 
 export const manage = ({messagesPath, translationsPath, reportsPath, languages, version}) => ({update} = {update: true}) => {
@@ -55,6 +62,8 @@ export const manage = ({messagesPath, translationsPath, reportsPath, languages, 
     };
 
     try {
+        cleanTranslationsFiles(translationsPath, languages);
+
         const sourceDefaultMessages = getDefaultMessages(messagesPath);
         const defaultLangMessages = getLangMessages(translationsPath);
 
@@ -75,6 +84,8 @@ export const manage = ({messagesPath, translationsPath, reportsPath, languages, 
 
             report.languages.push({
                 lang,
+                filename: getRelativePath(getLangMessageFilename(translationsPath, lang)),
+                whitelistFilename: getRelativePath(getWhitelistFilename(translationsPath, lang)),
                 wordCount,
                 untranslated: untranslatedCount,
                 added: Object.keys(delta.added).length,
@@ -89,10 +100,14 @@ export const manage = ({messagesPath, translationsPath, reportsPath, languages, 
             }
         });
 
-        update && saveLangMessages(translationsPath, sourceDefaultMessages);
-
-        report.updated = update && new Date().toISOString();
         report.timestamp = new Date().toISOString();
+
+        if (update) {
+            report.updated = new Date().toISOString();
+
+            saveLangMessages(translationsPath, sourceDefaultMessages);
+            saveManifest(translationsPath, report);
+        }
 
         const managed = {
             getReport: () => report,

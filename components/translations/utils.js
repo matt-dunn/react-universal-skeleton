@@ -10,31 +10,89 @@ export const stringifyMessages = messages => stringify(messages, {
     trailingNewline: false
 });
 
+export const getRelativePath = filename => path.relative(__dirname, filename).replace(/\.\.\//g, "");
+
+export const getLangMessageFilename = (translationsPath, lang = "default") => path.join(translationsPath, `${lang}.json`);
+
+export const getWhitelistFilename = (translationsPath, lang) => path.join(translationsPath, `${lang}_whitelist.json`);
+
 export const getDefaultMessages = messagesPath => JSON.parse(fs.readFileSync(path.join(process.cwd(), messagesPath, "defaultMessages.json")).toString());
 
 export const getLangMessages = (translationsPath, lang = "default") => {
-    const filename = path.join(translationsPath, `${lang}.json`);
+    const filename = getLangMessageFilename(translationsPath, lang);
     return (fs.existsSync(filename) && JSON.parse(fs.readFileSync(filename).toString())) || [];
 };
 
+export const saveLangMessages = (translationsPath, messages, lang = "default") => {
+    const filename = getLangMessageFilename(translationsPath, lang);
+    mkdirp(translationsPath);
+    fs.writeFileSync(filename, stringifyMessages(sortBy(messages, o => o.id)));
+    return filename;
+};
+
+export const getManifest = (translationsPath) => {
+    const filename = path.join(translationsPath, "manifest.json");
+    return (fs.existsSync(filename) && JSON.parse(fs.readFileSync(filename).toString())) || {
+        languages: {}
+    };
+};
+
+export const saveManifest = (translationsPath, report) => {
+    const filename = path.join(translationsPath, "manifest.json");
+    const {languages} = report;
+    const manifest = {
+        languages: languages.reduce((languages, {lang, filename, whitelistFilename}) => {
+            languages[lang] = {
+                lang,
+                filename,
+                whitelistFilename,
+                files: [
+                    filename,
+                    whitelistFilename,
+                ]
+            };
+
+            return languages;
+        }, {})
+    };
+
+    mkdirp(translationsPath);
+    fs.writeFileSync(filename, stringifyMessages(manifest));
+
+    return filename;
+};
+
+export const cleanTranslationsFiles = (translationsPath, languages) => {
+    const manifest = getManifest(translationsPath);
+    const removeFiles = [];
+
+    manifest.languages && Object.values(manifest.languages).forEach(({lang, files}) => {
+        if (languages.indexOf(lang) === -1) {
+            files && files.forEach(file => {
+                if (fs.existsSync(file)) {
+                    fs.unlinkSync(file);
+                    removeFiles.push(file);
+                }
+            });
+        }
+    });
+
+    return removeFiles;
+};
+
 export const getLangWhitelist = (translationsPath, lang) => {
-    const filename = path.join(translationsPath, `${lang}_whitelist.json`);
+    const filename = getWhitelistFilename(translationsPath, lang);
     return (fs.existsSync(filename) && JSON.parse(fs.readFileSync(filename).toString())) || {
         ids: []
     };
 };
 
-export const saveLangMessages = (translationsPath, messages, lang = "default") => {
-    const filename = path.join(translationsPath, `${lang}.json`);
-    mkdirp(translationsPath);
-    fs.writeFileSync(filename, stringifyMessages(sortBy(messages, o => o.id)));
-};
-
 export const saveWhitelist = (translationsPath, whitelist, lang) => {
-    const filename = path.join(translationsPath, `${lang}_whitelist.json`);
+    const filename = getWhitelistFilename(translationsPath, lang);
     whitelist.ids.sort();
     mkdirp(translationsPath);
     fs.writeFileSync(filename, stringifyMessages(whitelist));
+    return filename;
 };
 
 export const hashMessages = messages => messages.reduce((hash, message) => {
