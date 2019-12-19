@@ -26,7 +26,7 @@ const GridItem = styled.div`
 const messages = defineMessages({
     submit: {
         // id: 'ra.action.delete',
-        defaultMessage: "Submit Form!!!",
+        defaultMessage: "Submit Form",
         description: "The submit button"
     },
     reset: {

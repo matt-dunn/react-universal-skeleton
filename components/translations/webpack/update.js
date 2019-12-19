@@ -9,7 +9,7 @@ function ReactIntlPlugin(options) {
 
 const getLangMessageFilename = (translationsPath, lang = "default") => path.join(translationsPath, `${lang}.json`);
 
-const getDefaultMessages = messagesPath => JSON.parse(fs.readFileSync(path.join(process.cwd(), messagesPath, "defaultMessages.json")).toString());
+// const getDefaultMessages = messagesPath => JSON.parse(fs.readFileSync(path.join(process.cwd(), messagesPath, "defaultMessages.json")).toString());
 
 const getLangMessages = (translationsPath, lang = "default") => {
     const filename = getLangMessageFilename(translationsPath, lang);
@@ -29,9 +29,10 @@ ReactIntlPlugin.prototype.apply = function (compiler) {
     const options = this.options;
 
     const sourceDefaultMessages = getLangMessages(options.translationsPath);
-    let sourceMessagesHash = hashMessages(sourceDefaultMessages);
+    const sourceMessagesHash = hashMessages(sourceDefaultMessages);
 
-    let changedMessages = {};
+    const changedMessages = {};
+    let prevChanged;
 
     compiler.hooks.compilation.tap("ReactIntlPlugin", function(compilation) {
         compilation.hooks.normalModuleLoader.tap("ReactIntlPlugin", function (context, module) {
@@ -42,7 +43,11 @@ ReactIntlPlugin.prototype.apply = function (compiler) {
                     messages[module.resource].forEach(message => {
                         // if (!sourceMessagesHash[message.id] || message.defaultMessage !== sourceMessagesHash[message.id].defaultMessage || (changedMessages[message.id] && changedMessages[message.id].defaultMessage !== message.defaultMessage)) {
                         if (sourceMessagesHash[message.id] && message.defaultMessage !== sourceMessagesHash[message.id].defaultMessage) {
-                            changedMessages[message.id] = message;
+                            if (changedMessages[message.id] === sourceMessagesHash[message.id].defaultMessage) {
+                                delete changedMessages[message.id];
+                            } else {
+                                changedMessages[message.id] = message;
+                            }
                         } else if (changedMessages[message.id]) {
                             delete changedMessages[message.id];
                         }
@@ -53,26 +58,34 @@ ReactIntlPlugin.prototype.apply = function (compiler) {
 
         compilation.hooks.optimizeModules.tap("ReactIntlPlugin", function(modules) {
             modules.forEach(mod => {
-                if (mod.resource && mod.resource.indexOf('App.js') !== -1) {
+                if (mod.resource && mod.resource.indexOf("App.js") !== -1) {
                     if (environment === "development") {
-                        console.log(">>>CHANGED!!", changedMessages)
-                        mod.addVariable(
-                            "global",
-                            `
-                            (function(){
-                                // ${Date.now()}
-                                if (typeof window !== "undefined") {
-                                    window.CHANGED = ${JSON.stringify(changedMessages)}
-                                } else if (typeof process !== "undefined") {
-                                    process.CHANGED = ${JSON.stringify(changedMessages)}
-                                }
-                            })()
-                            `
-                        );
+                        const messages = JSON.stringify(Object.values(changedMessages).reduce((messages, message) => {
+                            messages[message.id] = message.defaultMessage;
+                            return messages;
+                        }, {}));
+
+                        if (messages !== prevChanged) {
+                            mod.addVariable(
+                                "i18nChanged",
+                                `
+                                (function(){
+                                    // ${Date.now()}
+                                    if (typeof window !== "undefined") {
+                                        window.I18N_CHANGED = ${messages}
+                                    } else if (typeof process !== "undefined") {
+                                        process.I18N_CHANGED = ${messages}
+                                    }
+                                })()
+                                `
+                            );
+
+                            prevChanged = messages;
+                        }
                     }
                 }
             });
-        })
+        });
     });
 
     compiler.hooks.emit.tapAsync("ReactIntlPlugin", function (compilation, callback) {

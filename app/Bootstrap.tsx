@@ -29,13 +29,6 @@ type BootstrapProps<T> = {
 function Bootstrap<T>({languagePack, asyncData, formData, error, store, helmetContext, children}: BootstrapProps<T>) {
     const [lang, setLang] = useState(languagePack);
 
-    if (typeof window !== "undefined") {
-        console.log("$$$$$$CLIENT", window.CHANGED)
-    } else if (typeof process !== "undefined") {
-        console.log("$$$$$$SERVER", process.CHANGED)
-    }
-
-
     useEffect(() => {
         if (!lang) {
             const {language} = navigator;
@@ -47,7 +40,7 @@ function Bootstrap<T>({languagePack, asyncData, formData, error, store, helmetCo
                         setLang({
                             locale: language,
                             messagesLocale: locale,
-                            messages
+                            messages: Object.assign({}, messages, (((typeof window !== "undefined" && window) || (typeof process !== "undefined" && process) || {} as any).I18N_CHANGED || {}))
                         });
                     })
                     .catch(reason => {
