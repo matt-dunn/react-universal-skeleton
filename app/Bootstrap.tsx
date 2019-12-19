@@ -29,21 +29,19 @@ type BootstrapProps<T> = {
 function Bootstrap<T>({languagePack, asyncData, formData, error, store, helmetContext, children}: BootstrapProps<T>) {
     const [lang, setLang] = useState(languagePack);
 
+    if (typeof window !== "undefined") {
+        console.log("$$$$$$CLIENT", window.CHANGED)
+    } else if (typeof process !== "undefined") {
+        console.log("$$$$$$SERVER", process.CHANGED)
+    }
+
+
     useEffect(() => {
         if (!lang) {
             const {language} = navigator;
             const locale = (availableLocales.indexOf(language) !== -1 && language) || "default";
 
             if (locale) {
-                // import("translations/webpack/transformToHash!./i18n/source/defaultMessages_changed.json")
-                // import("module-foobar.json")
-                //     .then(messages => {
-                //         console.log("!!!!CHANGED", messages)
-                //     })
-                //     .catch(ex => {
-                //         console.error(ex)
-                //     })
-
                 import(`app/i18n/${locale}.json`)
                     .then(messages => {
                         setLang({
