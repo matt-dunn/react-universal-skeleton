@@ -25,13 +25,15 @@ const environment = process.env.NODE_ENV || "production";
 
 
 ReactIntlPlugin.prototype.apply = function (compiler) {
-    const messages = {};
-    const options = this.options;
+    const {translationsPath, filename} = this.options;
+    const entry = path.resolve(compiler.options.context, (Array.isArray(compiler.options.entry) && compiler.options.entry[0]) || compiler.options.entry);
 
-    const sourceDefaultMessages = getLangMessages(options.translationsPath);
+    const sourceDefaultMessages = getLangMessages(translationsPath);
     const sourceMessagesHash = hashMessages(sourceDefaultMessages);
 
+    const messages = {};
     const changedMessages = {};
+
     let prevChanged;
 
     compiler.hooks.compilation.tap("ReactIntlPlugin", function(compilation) {
@@ -41,7 +43,6 @@ ReactIntlPlugin.prototype.apply = function (compiler) {
                     messages[module.resource] = metadata["react-intl"].messages;
 
                     messages[module.resource].forEach(message => {
-                        // if (!sourceMessagesHash[message.id] || message.defaultMessage !== sourceMessagesHash[message.id].defaultMessage || (changedMessages[message.id] && changedMessages[message.id].defaultMessage !== message.defaultMessage)) {
                         if (sourceMessagesHash[message.id] && message.defaultMessage !== sourceMessagesHash[message.id].defaultMessage) {
                             if (changedMessages[message.id] === sourceMessagesHash[message.id].defaultMessage) {
                                 delete changedMessages[message.id];
@@ -58,30 +59,32 @@ ReactIntlPlugin.prototype.apply = function (compiler) {
 
         compilation.hooks.optimizeModules.tap("ReactIntlPlugin", function(modules) {
             modules.forEach(mod => {
-                if (mod.resource && mod.resource.indexOf("App.js") !== -1) {
-                    if (environment === "development") {
-                        const messages = JSON.stringify(Object.values(changedMessages).reduce((messages, message) => {
-                            messages[message.id] = message.defaultMessage;
-                            return messages;
-                        }, {}));
+                if (environment === "development" && mod.resource && mod.resource.indexOf(entry) !== -1) {
+                    const messages = Object.values(changedMessages).reduce((messages, message) => {
+                        messages[message.id] = message.defaultMessage;
+                        return messages;
+                    }, {});
 
-                        if (messages !== prevChanged) {
-                            mod.addVariable(
-                                "i18nChanged",
-                                `
-                                (function(){
-                                    // ${Date.now()}
-                                    if (typeof window !== "undefined") {
-                                        window.I18N_CHANGED = ${messages}
-                                    } else if (typeof process !== "undefined") {
-                                        process.I18N_CHANGED = ${messages}
-                                    }
-                                })()
-                                `
-                            );
+                    const jsonMessages = JSON.stringify(messages);
 
-                            prevChanged = messages;
-                        }
+                    if (jsonMessages !== prevChanged) {
+                        console.log(`Setting changed i18n messages: ${Object.keys(messages).length}`);
+
+                        mod.addVariable(
+                            "i18nChanged",
+                            `
+                            (function(){
+                                // ${Date.now()}
+                                if (typeof window !== "undefined") {
+                                    window.I18N_CHANGED = ${jsonMessages}
+                                } else if (typeof process !== "undefined") {
+                                    process.I18N_CHANGED = ${jsonMessages}
+                                }
+                            })()
+                            `
+                        );
+
+                        prevChanged = messages;
                     }
                 }
             });
@@ -108,10 +111,9 @@ ReactIntlPlugin.prototype.apply = function (compiler) {
         });
 
         const jsonString = JSON.stringify(jsonMessages, undefined, 2);
-        // console.log("jsonString:",jsonString);
 
         // // Insert this list into the Webpack build as a new file asset:
-        compilation.assets[options.filename] = {
+        compilation.assets[filename] = {
             source: function () {
                 return jsonString;
             },
@@ -120,7 +122,7 @@ ReactIntlPlugin.prototype.apply = function (compiler) {
             }
         };
 
-        const filenameParts = path.parse(options.filename);
+        const filenameParts = path.parse(filename);
         const jsonChangedMessages = JSON.stringify(changedMessages);
         compilation.assets[`${filenameParts.name}_changed${filenameParts.ext}`] = {
             source: function () {
