@@ -44,9 +44,6 @@ module.exports = ({environment, root, target, i18nMessagesPath, i18nLocalePath})
         ]
     },
     plugins: [
-        // new ReactIntlPlugin({
-        //     filename: path.join(path.relative(target, i18nMessagesPath), "defaultMessages.json"),
-        // }),
         new ReactIntlPlugin({
             filename: path.join(path.relative(target, i18nMessagesPath), "defaultMessages.json"),
             messagesPath: i18nMessagesPath,

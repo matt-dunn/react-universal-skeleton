@@ -100,7 +100,7 @@ const Forms = () => {
             <Title>
                 <FormattedMessage
                     key="title"
-                    defaultMessage={"Forms (Lazy Loaded)"}
+                    defaultMessage="Forms (Lazy Loaded)"
                 />
             </Title>
 
