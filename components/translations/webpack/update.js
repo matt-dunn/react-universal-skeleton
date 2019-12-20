@@ -107,7 +107,7 @@ ReactIntlPlugin.prototype.apply = function (compiler) {
                             `
                         );
 
-                        prevChanged = messages;
+                        prevChanged = jsonMessages;
                     }
                 }
             });

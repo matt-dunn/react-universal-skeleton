@@ -1,14 +1,10 @@
 function getValue(source) {
     const value = typeof source === "string" && JSON.parse(source);
 
-    if (value && Array.isArray(value) && value[0] && value[0].id && value[0].defaultMessage) {
-        return value.reduce((hash, {id, defaultMessage}) => {
-            hash[id] = defaultMessage;
-            return hash;
-        }, {});
-    }
-
-    return value;
+    return value && Object.values(value).reduce((messages, message) => {
+        messages[message.id] = message.defaultMessage;
+        return messages;
+    }, {});
 }
 
 module.exports = function(content) {
