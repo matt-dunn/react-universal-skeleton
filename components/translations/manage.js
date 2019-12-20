@@ -1,12 +1,12 @@
-import fs from "fs";
-import path from "path";
-import {isEqual, sortBy} from "lodash";
-import {Table} from "console-table-printer";
-import chalk from "chalk";
-import mkdirp from "mkdirp";
-import rimraf from "rimraf";
+const fs = require("fs");
+const path = require("path");
+const {isEqual, sortBy} = require("lodash");
+const {Table} = require("console-table-printer");
+const chalk = require("chalk");
+const mkdirp = require("mkdirp");
+const rimraf = require("rimraf");
 
-import {
+const {
     applyDelta,
     applyWhitelistDelta,
     cleanTranslationsFiles,
@@ -21,12 +21,14 @@ import {
     getRelativePath,
     getWhitelistFilename,
     saveLangMessages,
-    saveManifest,
+
     saveWhitelist,
     stringifyMessages
-} from "./utils";
+} = require("./utils");
 
-export const manage = ({messagesPath, translationsPath, reportsPath, languages, version}) => ({update} = {update: true}) => {
+const {saveManifest} = require("./utils/manifest")
+console.log(saveManifest, stringifyMessages)
+module.exports.manage = ({messagesPath, translationsPath, reportsPath, languages, version}) => ({update} = {update: true}) => {
     if (!messagesPath) {
         console.error(chalk.red("'messagesPath' not supplied"));
         process.exit(1);
@@ -242,6 +244,7 @@ export const manage = ({messagesPath, translationsPath, reportsPath, languages, 
         return managed;
     } catch (ex) {
         console.error(chalk.red(ex.message));
+        console.log(ex)
         process.exit(1);
     }
 };

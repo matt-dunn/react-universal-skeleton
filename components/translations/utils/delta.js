@@ -1,6 +1,6 @@
-import {hashMessages} from "./index";
+const {hashMessages} = require("./utils");
 
-export const getDelta = (sourceDefaultMessages, defaultLangMessages, messages, whitelist) => {
+const getDelta = (sourceDefaultMessages, defaultLangMessages, messages, whitelist) => {
     const {ids: whitelistIds} = whitelist;
 
     const delta = Object.values(sourceDefaultMessages).reduce((delta, message) => {
@@ -37,7 +37,7 @@ export const getDelta = (sourceDefaultMessages, defaultLangMessages, messages, w
     return delta;
 };
 
-export const applyDelta = (sourceMessages, messages, {added, removed, updated}) => {
+const applyDelta = (sourceMessages, messages, {added, removed, updated}) => {
     return hashMessages(Object.values(messages)
         .map(message => {
             const {id} = message;
@@ -60,7 +60,7 @@ export const applyDelta = (sourceMessages, messages, {added, removed, updated}) 
         .concat(Object.keys(added).map(key => added[key])));
 };
 
-export const applyWhitelistDelta = (whitelist, {removed, updated}) => ({
+const applyWhitelistDelta = (whitelist, {removed, updated}) => ({
     ...whitelist,
     ids: whitelist.ids
         .map(id => {
@@ -72,4 +72,8 @@ export const applyWhitelistDelta = (whitelist, {removed, updated}) => ({
         })
         .filter(message => message)
 });
+
+module.exports.getDelta = getDelta;
+module.exports.applyDelta = applyDelta;
+module.exports.applyWhitelistDelta = applyWhitelistDelta;
 

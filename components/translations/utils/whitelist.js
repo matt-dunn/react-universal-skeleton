@@ -1,19 +1,19 @@
-import fs from "fs";
-import path from "path";
-import mkdirp from "mkdirp";
+const fs = require("fs");
+const path = require("path");
+const mkdirp = require("mkdirp");
 
-import {stringifyMessages} from "./index";
+const {stringifyMessages} = require("./utils");
 
-export const getWhitelistFilename = (translationsPath, lang) => path.join(translationsPath, `${lang}_whitelist.json`);
+const getWhitelistFilename = (translationsPath, lang) => path.join(translationsPath, `${lang}_whitelist.json`);
 
-export const getLangWhitelist = (translationsPath, lang) => {
+const getLangWhitelist = (translationsPath, lang) => {
     const filename = getWhitelistFilename(translationsPath, lang);
     return (fs.existsSync(filename) && JSON.parse(fs.readFileSync(filename).toString())) || {
         ids: []
     };
 };
 
-export const saveWhitelist = (translationsPath, whitelist, lang) => {
+const saveWhitelist = (translationsPath, whitelist, lang) => {
     const filename = getWhitelistFilename(translationsPath, lang);
     whitelist.ids.sort();
     mkdirp(translationsPath);
@@ -21,3 +21,6 @@ export const saveWhitelist = (translationsPath, whitelist, lang) => {
     return filename;
 };
 
+module.exports.getWhitelistFilename = getWhitelistFilename;
+module.exports.getLangWhitelist = getLangWhitelist;
+module.exports.saveWhitelist = saveWhitelist;

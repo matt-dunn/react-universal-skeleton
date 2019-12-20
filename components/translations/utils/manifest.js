@@ -1,19 +1,19 @@
-import fs from "fs";
-import path from "path";
-import mkdirp from "mkdirp";
+const fs = require("fs");
+const path = require("path");
+const mkdirp = require("mkdirp");
 
-import {stringifyMessages} from "./index";
+const {stringifyMessages} = require("./utils");
 
-export const getManifestFilename = translationsPath => path.join(translationsPath, "manifest.json");
+const getManifestFilename = translationsPath => path.join(translationsPath, "manifest.json");
 
-export const getManifest = (translationsPath) => {
+const getManifest = (translationsPath) => {
     const filename = getManifestFilename(translationsPath);
     return (fs.existsSync(filename) && JSON.parse(fs.readFileSync(filename).toString())) || {
         languages: {}
     };
 };
 
-export const saveManifest = (translationsPath, report) => {
+const saveManifest = (translationsPath, report) => {
     const filename = getManifestFilename(translationsPath);
     const {languages} = report;
     const manifest = {
@@ -37,3 +37,6 @@ export const saveManifest = (translationsPath, report) => {
 
     return filename;
 };
+
+module.exports.getManifest = getManifest;
+module.exports.saveManifest = saveManifest;

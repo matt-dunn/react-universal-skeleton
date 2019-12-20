@@ -1,7 +1,7 @@
-import {apply} from "./apply";
-import {manage} from "./manage";
+const {apply} = require("./apply");
+const {manage} = require("./manage");
 
-export const translations = ({messagesPath, translationsPath, reportsPath, languages, version}) => {
+module.exports.translations = ({messagesPath, translationsPath, reportsPath, languages, version}) => {
     return {
         apply: apply({messagesPath, translationsPath, languages}),
         manage: manage({messagesPath, translationsPath, reportsPath, languages, version})

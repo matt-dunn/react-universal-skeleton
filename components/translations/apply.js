@@ -1,18 +1,18 @@
-import path from "path";
-import fs from "fs";
-import {Table} from "console-table-printer";
-import chalk from "chalk";
+const path = require("path");
+const fs = require("fs");
+const {Table} = require("console-table-printer");
+const chalk = require("chalk");
 
-import {
+const {
     formatNumber,
     hashMessages,
     getLangMessages,
     saveLangMessages,
     getLangWhitelist,
     saveWhitelist
-} from "./utils";
+} = require("./utils");
 
-export const apply = ({languages, translationsPath}) => (languageFilename, language = undefined) => {
+module.exports.apply = ({languages, translationsPath}) => (languageFilename, language = undefined) => {
     if (!translationsPath) {
         console.error(chalk.red("'translationsPath' not supplied"));
         process.exit(1);

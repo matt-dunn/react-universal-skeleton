@@ -1,21 +1,46 @@
-import fs from "fs";
-import path from "path";
-import mkdirp from "mkdirp";
+const fs = require("fs");
+const path = require("path");
+const mkdirp = require("mkdirp");
 
-import {hashMessages, stringifyMessages} from "./index";
+const {stringifyMessages, hashMessages} = require("./utils");
+const {getManifest} = require("./manifest");
 
-export const getLangMessageFilename = (translationsPath, lang = "default") => path.join(translationsPath, `${lang}.json`);
+const getLangMessageFilename = (translationsPath, lang = "default") => path.join(translationsPath, `${lang}.json`);
 
-export const getDefaultMessages = messagesPath => hashMessages(JSON.parse(fs.readFileSync(path.join(process.cwd(), messagesPath, "defaultMessages.json")).toString()));
+const getDefaultMessages = messagesPath => hashMessages(JSON.parse(fs.readFileSync(path.join(process.cwd(), messagesPath, "defaultMessages.json")).toString()));
 
-export const getLangMessages = (translationsPath, lang = "default") => {
+const getLangMessages = (translationsPath, lang = "default") => {
     const filename = getLangMessageFilename(translationsPath, lang);
     return (fs.existsSync(filename) && JSON.parse(fs.readFileSync(filename).toString())) || [];
 };
 
-export const saveLangMessages = (translationsPath, messages, lang = "default") => {
+const saveLangMessages = (translationsPath, messages, lang = "default") => {
     const filename = getLangMessageFilename(translationsPath, lang);
     mkdirp(translationsPath);
     fs.writeFileSync(filename, stringifyMessages(messages));
     return filename;
 };
+
+const cleanTranslationsFiles = (translationsPath, languages) => {
+    const manifest = getManifest(translationsPath);
+    const removeFiles = [];
+
+    manifest.languages && Object.values(manifest.languages).forEach(({lang, files}) => {
+        if (languages.indexOf(lang) === -1) {
+            files && files.forEach(file => {
+                if (fs.existsSync(file)) {
+                    fs.unlinkSync(file);
+                    removeFiles.push(file);
+                }
+            });
+        }
+    });
+
+    return removeFiles;
+};
+
+module.exports.getLangMessageFilename = getLangMessageFilename;
+module.exports.getDefaultMessages = getDefaultMessages;
+module.exports.getLangMessages = getLangMessages;
+module.exports.saveLangMessages = saveLangMessages;
+module.exports.cleanTranslationsFiles = cleanTranslationsFiles;
