@@ -10,4 +10,4 @@ module.exports = {
     ...manifest,
     ...messages,
     ...whitelist
-}
+};

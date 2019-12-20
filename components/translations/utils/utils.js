@@ -1,4 +1,3 @@
-const fs = require("fs");
 const path = require("path");
 const stringify = require("json-stable-stringify");
 const { parse } = require("intl-messageformat-parser");

@@ -21,13 +21,11 @@ const {
     getRelativePath,
     getWhitelistFilename,
     saveLangMessages,
-
+    saveManifest,
     saveWhitelist,
     stringifyMessages
 } = require("./utils");
 
-const {saveManifest} = require("./utils/manifest")
-console.log(saveManifest, stringifyMessages)
 module.exports.manage = ({messagesPath, translationsPath, reportsPath, languages, version}) => ({update} = {update: true}) => {
     if (!messagesPath) {
         console.error(chalk.red("'messagesPath' not supplied"));
@@ -244,7 +242,6 @@ module.exports.manage = ({messagesPath, translationsPath, reportsPath, languages
         return managed;
     } catch (ex) {
         console.error(chalk.red(ex.message));
-        console.log(ex)
         process.exit(1);
     }
 };
