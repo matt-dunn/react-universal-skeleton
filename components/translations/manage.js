@@ -26,7 +26,9 @@ const {
     stringifyMessages
 } = require("./utils");
 
-module.exports.manage = ({messagesPath, translationsPath, reportsPath, languages, version}) => ({update} = {update: true}) => {
+module.exports.manage = ({messagesPath, translationsPath, reportsPath, languages, version}) => options => {
+    const {emmit, defaultMessages, updatedMessagesCallback} = Object.assign({}, {emmit: false, defaultMessages: undefined, updatedMessagesCallback: undefined}, options);
+
     if (!messagesPath) {
         console.error(chalk.red("'messagesPath' not supplied"));
         process.exit(1);
@@ -66,7 +68,7 @@ module.exports.manage = ({messagesPath, translationsPath, reportsPath, languages
     try {
         cleanTranslationsFiles(translationsPath, languages);
 
-        const sourceDefaultMessages = getDefaultMessages(messagesPath);
+        const sourceDefaultMessages = defaultMessages || getDefaultMessages(messagesPath);
         const defaultLangMessages = getLangMessages(translationsPath);
 
         const translationCount = Object.keys(sourceDefaultMessages).length;
@@ -84,10 +86,13 @@ module.exports.manage = ({messagesPath, translationsPath, reportsPath, languages
             report.summary.totalUntranslatedCount += untranslatedCount;
             report.summary.totalWordCount += wordCount;
 
+            const filename = getRelativePath(getLangMessageFilename(translationsPath, lang));
+            const whitelistFilename = getRelativePath(getWhitelistFilename(translationsPath, lang));
+
             report.languages.push({
                 lang,
-                filename: getRelativePath(getLangMessageFilename(translationsPath, lang)),
-                whitelistFilename: getRelativePath(getWhitelistFilename(translationsPath, lang)),
+                filename,
+                whitelistFilename,
                 wordCount,
                 untranslated: untranslatedCount,
                 added: Object.keys(delta.added).length,
@@ -96,15 +101,19 @@ module.exports.manage = ({messagesPath, translationsPath, reportsPath, languages
                 delta
             });
 
-            if (update) {
-                saveLangMessages(translationsPath, applyDelta(sourceDefaultMessages, messages, delta), lang);
+            const updatedMessages = applyDelta(sourceDefaultMessages, messages, delta);
+
+            updatedMessagesCallback && updatedMessagesCallback(lang, updatedMessages, {filename, whitelistFilename});
+
+            if (emmit) {
+                saveLangMessages(translationsPath, updatedMessages, lang);
                 saveWhitelist(translationsPath, applyWhitelistDelta(whitelist, delta), lang);
             }
         });
 
         report.timestamp = new Date().toISOString();
 
-        if (update) {
+        if (emmit) {
             report.updated = new Date().toISOString();
 
             saveLangMessages(translationsPath, sourceDefaultMessages);
