@@ -6,14 +6,14 @@ import metadata from "app/webpack/metadata";
 
 import languages from "./languages";
 
-const {availableLocales, i18nMessagesPath, i18nLocalePath, reportsPath, version} = metadata();
-
 const optionDefinitions = [
     { name: "gen", type: Boolean},
     { name: "status", type: Boolean}
 ];
 
 const options = commandLineArgs(optionDefinitions);
+
+const {i18nMessagesPath, i18nLocalePath, reportsPath, version} = metadata();
 
 const managedTranslations = translations({
     messagesPath: i18nMessagesPath,
@@ -23,7 +23,7 @@ const managedTranslations = translations({
     reportsPath
 })
     .manage({
-        emmit: true
+        emmit: false
     });
 
 managedTranslations
