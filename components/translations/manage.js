@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import {isEqual} from "lodash";
+import {isEqual, sortBy} from "lodash";
 import {Table} from "console-table-printer";
 import chalk from "chalk";
 import mkdirp from "mkdirp";
@@ -69,7 +69,7 @@ export const manage = ({messagesPath, translationsPath, reportsPath, languages, 
         const sourceDefaultMessages = getDefaultMessages(messagesPath);
         const defaultLangMessages = getLangMessages(translationsPath);
 
-        const translationCount = sourceDefaultMessages.length;
+        const translationCount = Object.keys(sourceDefaultMessages).length;
 
         report.summary.totalTranslationsCount = translationCount;
 
@@ -226,7 +226,7 @@ export const manage = ({messagesPath, translationsPath, reportsPath, languages, 
 
                     translations.forEach(({lang, count, untranslated}) => {
                         const langFilename = path.join(langPath, `${version}_${lang}.json`);
-                        fs.writeFileSync(langFilename, stringifyMessages(untranslated));
+                        fs.writeFileSync(langFilename, stringifyMessages(sortBy(untranslated, o => o.id)));
                         console.log(chalk`  {yellow ${lang}} (${count} outstanding translations): '${langFilename}'`);
                     });
                 }

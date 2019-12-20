@@ -2,20 +2,17 @@ import {hashMessages} from "./index";
 
 export const getDelta = (sourceDefaultMessages, defaultLangMessages, messages, whitelist) => {
     const {ids: whitelistIds} = whitelist;
-    const messagesHash = hashMessages(messages);
-    const defaultLangMessagesHash = hashMessages(defaultLangMessages);
-    const defaultMessagesHash = hashMessages(sourceDefaultMessages);
 
-    const delta = sourceDefaultMessages.reduce((delta, message) => {
+    const delta = Object.values(sourceDefaultMessages).reduce((delta, message) => {
         const {id} = message;
 
-        if (!messagesHash[id]) {
+        if (!messages[id]) {
             delta.added[id] = message;
             delta.untranslated[id] = message;
-        } else if (defaultLangMessagesHash[id] && defaultMessagesHash[id].defaultMessage !== defaultLangMessagesHash[id].defaultMessage) {
+        } else if (defaultLangMessages[id] && sourceDefaultMessages[id].defaultMessage !== defaultLangMessages[id].defaultMessage) {
             delta.updated[id] = message;
             delta.untranslated[id] = message;
-        } else if (messagesHash[id] && !defaultMessagesHash[id]) {
+        } else if (messages[id] && !sourceDefaultMessages[id]) {
             delta.removed[id] = message;
         }
 
@@ -27,11 +24,11 @@ export const getDelta = (sourceDefaultMessages, defaultLangMessages, messages, w
         untranslated: {}
     });
 
-    Object.keys(messagesHash).reduce((delta, id) => {
-        if (!defaultMessagesHash[id]) {
-            delta.removed[id] = messagesHash[id];
-        } else if (messagesHash[id].defaultMessage === defaultMessagesHash[id].defaultMessage && whitelistIds.indexOf(id) === -1) {
-            delta.untranslated[id] = messagesHash[id];
+    Object.keys(messages).reduce((delta, id) => {
+        if (!sourceDefaultMessages[id]) {
+            delta.removed[id] = messages[id];
+        } else if (messages[id].defaultMessage === sourceDefaultMessages[id].defaultMessage && whitelistIds.indexOf(id) === -1) {
+            delta.untranslated[id] = messages[id];
         }
 
         return delta;
@@ -41,9 +38,7 @@ export const getDelta = (sourceDefaultMessages, defaultLangMessages, messages, w
 };
 
 export const applyDelta = (sourceMessages, messages, {added, removed, updated}) => {
-    const defaultMessagesHash = hashMessages(sourceMessages);
-
-    return messages
+    return hashMessages(Object.values(messages)
         .map(message => {
             const {id} = message;
 
@@ -51,18 +46,18 @@ export const applyDelta = (sourceMessages, messages, {added, removed, updated}) 
                 return undefined;
             } else if (updated[id]) {
                 return {
-                    ...defaultMessagesHash[id],
+                    ...sourceMessages[id],
                     defaultMessage: updated[id].defaultMessage
                 };
             }
 
             return {
-                ...defaultMessagesHash[id],
+                ...sourceMessages[id],
                 defaultMessage: message.defaultMessage
             };
         })
         .filter(message => message)
-        .concat(Object.keys(added).map(key => added[key]));
+        .concat(Object.keys(added).map(key => added[key])));
 };
 
 export const applyWhitelistDelta = (whitelist, {removed, updated}) => ({

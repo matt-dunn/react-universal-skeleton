@@ -1,25 +1,25 @@
-[
-  {
+{
+  "containers.1645138363": {
     "defaultMessage": "Willkommen {name}. Sie haben {unreadCount, number} {unreadCount, plural, one {Nachricht} other {Nachrichten}}",
     "description": "Main locale page title",
     "id": "containers.1645138363"
   },
-  {
+  "containers.2731101254": {
     "defaultMessage": "Das heutige Datum ist {date}",
     "description": "The locale date now",
     "id": "containers.2731101254"
   },
-  {
+  "containers.Forms.layouts.reset": {
     "defaultMessage": "Formular leeren",
     "id": "containers.Forms.layouts.reset"
   },
-  {
+  "containers.Forms.layouts.submit": {
     "defaultMessage": "Formular abschicken",
     "description": "The submit button",
     "id": "containers.Forms.layouts.submit"
   },
-  {
+  "containers.Forms.title": {
     "defaultMessage": "Formulare (Lazy Loaded)",
     "id": "containers.Forms.title"
   }
-]
+}

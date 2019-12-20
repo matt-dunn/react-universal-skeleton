@@ -7,6 +7,15 @@ function ReactIntlPlugin(options) {
     }, options);
 }
 
+const getManifestFilename = translationsPath => path.join(translationsPath, "manifest.json");
+
+const getManifest = (translationsPath) => {
+    const filename = getManifestFilename(translationsPath);
+    return (fs.existsSync(filename) && JSON.parse(fs.readFileSync(filename).toString())) || {
+        languages: {}
+    };
+};
+
 const getLangMessageFilename = (translationsPath, lang = "default") => path.join(translationsPath, `${lang}.json`);
 
 // const getDefaultMessages = messagesPath => JSON.parse(fs.readFileSync(path.join(process.cwd(), messagesPath, "defaultMessages.json")).toString());
@@ -27,6 +36,9 @@ const environment = process.env.NODE_ENV || "production";
 ReactIntlPlugin.prototype.apply = function (compiler) {
     const {translationsPath, filename} = this.options;
     const entry = path.resolve(compiler.options.context, (Array.isArray(compiler.options.entry) && compiler.options.entry[0]) || compiler.options.entry);
+
+    const manifest = getManifest(translationsPath);
+    const languageFiles = Object.values(manifest.languages).map(({filename}) => filename);
 
     const sourceDefaultMessages = getLangMessages(translationsPath);
     const sourceMessagesHash = hashMessages(sourceDefaultMessages);
@@ -57,8 +69,14 @@ ReactIntlPlugin.prototype.apply = function (compiler) {
             };
         });
 
-        compilation.hooks.optimizeModules.tap("ReactIntlPlugin", function(modules) {
+        compilation.hooks.finishModules.tap("ReactIntlPlugin", function(modules) {
             modules.forEach(mod => {
+                if (mod.resource && languageFiles.filter(file => mod.resource.indexOf(file) !== -1).length > 0) {
+                    // mod._source._value = `module.exports = {a:42}`;
+
+                    console.log(">>>>", mod.resource);
+                }
+
                 if (environment === "development" && mod.resource && mod.resource.indexOf(entry) !== -1) {
                     const messages = Object.values(changedMessages).reduce((messages, message) => {
                         messages[message.id] = message.defaultMessage;

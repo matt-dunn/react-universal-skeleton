@@ -46,13 +46,12 @@ export const apply = ({languages, translationsPath}) => (languageFilename, langu
         const sourceMessagesHash = hashMessages(sourceMessages);
 
         const targetMessages = getLangMessages(translationsPath, lang);
-        const targetMessagesHash = hashMessages(targetMessages);
 
         const defaultMessages = getLangMessages(translationsPath);
 
         const whitelist = getLangWhitelist(translationsPath, lang);
 
-        const updatedMessages = defaultMessages.map(message => {
+        const updatedMessages = hashMessages(Object.values(defaultMessages).map(message => {
             const {id, defaultMessage} = message;
 
             if (sourceMessagesHash[id]) {
@@ -69,7 +68,7 @@ export const apply = ({languages, translationsPath}) => (languageFilename, langu
                     }
                 }
 
-                if (targetMessagesHash[id].defaultMessage !== sourceMessagesHash[id].defaultMessage) {
+                if (targetMessages[id].defaultMessage !== sourceMessagesHash[id].defaultMessage) {
                     report.summary.updatedCount++;
                 }
 
@@ -81,11 +80,11 @@ export const apply = ({languages, translationsPath}) => (languageFilename, langu
 
             return {
                 ...message,
-                defaultMessage: (targetMessagesHash[id] && targetMessagesHash[id].defaultMessage) || defaultMessage
+                defaultMessage: (targetMessages[id] && targetMessages[id].defaultMessage) || defaultMessage
             };
-        });
+        }));
 
-        report.summary.totalTranslationsCount = defaultMessages.length;
+        report.summary.totalTranslationsCount = Object.keys(defaultMessages).length;
 
         saveLangMessages(translationsPath, updatedMessages, lang);
         saveWhitelist(translationsPath, whitelist, lang);
