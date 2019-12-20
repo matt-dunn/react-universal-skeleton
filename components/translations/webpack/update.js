@@ -1,3 +1,5 @@
+const {translations} = require("../index");
+
 const path = require("path");
 
 function ReactIntlPlugin(options) {
@@ -6,12 +8,12 @@ function ReactIntlPlugin(options) {
     }, options);
 }
 
-const {getLangMessages, getManifest} = require("../utils");
+const {getLangMessages, getManifest, getLanguages, transformHash} = require("../utils");
 
 const environment = process.env.NODE_ENV || "production";
 
 ReactIntlPlugin.prototype.apply = function (compiler) {
-    const {translationsPath, filename} = this.options;
+    const {translationsPath, messagesPath, reportsPath, filename, version, failOnIncompleteTranslations} = this.options;
     const entry = path.resolve(compiler.options.context, (Array.isArray(compiler.options.entry) && compiler.options.entry[0]) || compiler.options.entry);
 
     const manifest = getManifest(translationsPath);
@@ -20,9 +22,35 @@ ReactIntlPlugin.prototype.apply = function (compiler) {
     const sourceDefaultMessages = getLangMessages(translationsPath);
 
     const messages = {};
+    const defaultMessages = {};
     const changedMessages = {};
+    const languageModules = {};
 
     let prevChanged;
+
+    const languages = getLanguages(translationsPath);
+
+    const manageTranslations = translations({
+        messagesPath,
+        translationsPath,
+        languages,
+        version,
+        reportsPath
+    });
+
+    let managedTranslations;
+
+    compiler.hooks.done.tap("ReactIntlPlugin", function() {
+        if (managedTranslations) {
+            managedTranslations.printSummary();
+
+            if (reportsPath) {
+                managedTranslations
+                    .saveReport()
+                    .generateTranslations();
+            }
+        }
+    });
 
     compiler.hooks.compilation.tap("ReactIntlPlugin", function(compilation) {
         compilation.hooks.normalModuleLoader.tap("ReactIntlPlugin", function (context, module) {
@@ -31,6 +59,8 @@ ReactIntlPlugin.prototype.apply = function (compiler) {
                     messages[module.resource] = metadata["react-intl"].messages;
 
                     messages[module.resource].forEach(message => {
+                        defaultMessages[message.id] = message;
+
                         if (sourceDefaultMessages[message.id] && message.defaultMessage !== sourceDefaultMessages[message.id].defaultMessage) {
                             if (changedMessages[message.id] === sourceDefaultMessages[message.id].defaultMessage) {
                                 delete changedMessages[message.id];
@@ -47,10 +77,9 @@ ReactIntlPlugin.prototype.apply = function (compiler) {
 
         compilation.hooks.finishModules.tap("ReactIntlPlugin", function(modules) {
             modules.forEach(mod => {
+                // Collect language modules
                 if (mod.resource && languageFiles.filter(file => mod.resource.indexOf(file) !== -1).length > 0) {
-                    // mod._source._value = `module.exports = {a:42}`;
-
-                    console.log(">>>>", mod.resource);
+                    languageModules[path.parse(mod.resource).name] = mod;
                 }
 
                 if (environment === "development" && mod.resource && mod.resource.indexOf(entry) !== -1) {
@@ -82,6 +111,21 @@ ReactIntlPlugin.prototype.apply = function (compiler) {
                     }
                 }
             });
+
+            if (environment === "production" && Object.keys(languageModules).length === languages.length) {
+                managedTranslations = manageTranslations.manage({
+                    emmit: false,
+                    defaultMessages,
+                    updatedMessagesCallback: (lang, messages) => {
+                        languageModules[lang]._source._value = `module.exports = ${JSON.stringify(transformHash(messages))}`;
+                    }
+                });
+
+                if (failOnIncompleteTranslations && !managedTranslations.isComplete()) {
+                    const summary = managedTranslations.getSummary();
+                    compilation.errors.push(new Error(`There ${summary.totalUntranslatedCount} are outstanding translations. See '${managedTranslations.getReportPath()}'`));
+                }
+            }
         });
     });
 

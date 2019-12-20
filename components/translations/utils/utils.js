@@ -23,6 +23,11 @@ const formatNumber = num => num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$
 
 const convertHashToArray = messages => Object.values(messages);
 
+const transformHash = messages => Object.values(messages).reduce((messages, message) => {
+    messages[message.id] = message.defaultMessage;
+    return messages;
+}, {});
+
 const stringifyMessages = messages => stringify(messages, {
     space: 2,
     trailingNewline: false
@@ -33,4 +38,5 @@ module.exports.hashMessages = hashMessages;
 module.exports.countWords = countWords;
 module.exports.formatNumber = formatNumber;
 module.exports.convertHashToArray = convertHashToArray;
+module.exports.transformHash = transformHash;
 module.exports.stringifyMessages = stringifyMessages;

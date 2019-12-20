@@ -122,6 +122,7 @@ module.exports.manage = ({messagesPath, translationsPath, reportsPath, languages
 
         const managed = {
             getReport: () => report,
+            getReportPath: () => path.join(reportsPath, "i18l-status.json"),
             saveReport: () => {
                 if (!reportsPath) {
                     console.error(chalk.red("'reportsPath' not supplied"));
@@ -129,7 +130,7 @@ module.exports.manage = ({messagesPath, translationsPath, reportsPath, languages
                 }
 
                 mkdirp(reportsPath);
-                fs.writeFileSync(path.join(reportsPath, "i18l-untranslated.json"), stringifyMessages(report));
+                fs.writeFileSync(managed.getReportPath(), stringifyMessages(report));
 
                 return managed;
             },
@@ -241,11 +242,12 @@ module.exports.manage = ({messagesPath, translationsPath, reportsPath, languages
                 }
             },
             checkStatus: () => {
-                if (report.summary.totalUntranslatedCount > 0) {
+                if (!managed.isComplete()) {
                     console.error(chalk.red(`Build failed because translations have not completed. ${report.summary.totalUntranslatedCount} total translations outstanding.`));
                     process.exit(3);
                 }
-            }
+            },
+            isComplete: () => report.summary.totalUntranslatedCount === 0
         };
 
         return managed;
