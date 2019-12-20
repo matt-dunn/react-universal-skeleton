@@ -14,7 +14,7 @@ const partialManifest = require("./partials/manifest");
 const partialStats = require("./partials/stats");
 
 const metadata = require("./metadata")({configType: "server"});
-const {environment, version, context, target, publicPath} = metadata;
+const {environment, version, context, target, publicPath, availableLocales} = metadata;
 
 log(chalk`🔨 Building {white.bold server}...
      Environment: {yellow ${environment}}
@@ -22,6 +22,8 @@ log(chalk`🔨 Building {white.bold server}...
 
      Target: {yellow ${target}}
      Public Path: {yellow ${publicPath}}
+
+     Languages: {yellow ${availableLocales}}
 `);
 
 module.exports = merge(

@@ -1,4 +1,3 @@
-const fs = require("fs");
 const path = require("path");
 
 function ReactIntlPlugin(options) {
@@ -7,31 +6,9 @@ function ReactIntlPlugin(options) {
     }, options);
 }
 
-const getManifestFilename = translationsPath => path.join(translationsPath, "manifest.json");
-
-const getManifest = (translationsPath) => {
-    const filename = getManifestFilename(translationsPath);
-    return (fs.existsSync(filename) && JSON.parse(fs.readFileSync(filename).toString())) || {
-        languages: {}
-    };
-};
-
-const getLangMessageFilename = (translationsPath, lang = "default") => path.join(translationsPath, `${lang}.json`);
-
-// const getDefaultMessages = messagesPath => JSON.parse(fs.readFileSync(path.join(process.cwd(), messagesPath, "defaultMessages.json")).toString());
-
-const getLangMessages = (translationsPath, lang = "default") => {
-    const filename = getLangMessageFilename(translationsPath, lang);
-    return (fs.existsSync(filename) && JSON.parse(fs.readFileSync(filename).toString())) || [];
-};
-
-const hashMessages = messages => messages.reduce((hash, message) => {
-    hash[message.id] = message;
-    return hash;
-}, {});
+const {getLangMessages, getManifest} = require("../utils");
 
 const environment = process.env.NODE_ENV || "production";
-
 
 ReactIntlPlugin.prototype.apply = function (compiler) {
     const {translationsPath, filename} = this.options;
@@ -41,7 +18,6 @@ ReactIntlPlugin.prototype.apply = function (compiler) {
     const languageFiles = Object.values(manifest.languages).map(({filename}) => filename);
 
     const sourceDefaultMessages = getLangMessages(translationsPath);
-    const sourceMessagesHash = hashMessages(sourceDefaultMessages);
 
     const messages = {};
     const changedMessages = {};
@@ -55,8 +31,8 @@ ReactIntlPlugin.prototype.apply = function (compiler) {
                     messages[module.resource] = metadata["react-intl"].messages;
 
                     messages[module.resource].forEach(message => {
-                        if (sourceMessagesHash[message.id] && message.defaultMessage !== sourceMessagesHash[message.id].defaultMessage) {
-                            if (changedMessages[message.id] === sourceMessagesHash[message.id].defaultMessage) {
+                        if (sourceDefaultMessages[message.id] && message.defaultMessage !== sourceDefaultMessages[message.id].defaultMessage) {
+                            if (changedMessages[message.id] === sourceDefaultMessages[message.id].defaultMessage) {
                                 delete changedMessages[message.id];
                             } else {
                                 changedMessages[message.id] = message;

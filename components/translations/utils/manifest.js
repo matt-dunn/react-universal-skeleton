@@ -38,5 +38,8 @@ const saveManifest = (translationsPath, report) => {
     return filename;
 };
 
+const getLanguages = (translationsPath) => Object.keys(getManifest(translationsPath).languages);
+
 module.exports.getManifest = getManifest;
 module.exports.saveManifest = saveManifest;
+module.exports.getLanguages = getLanguages;

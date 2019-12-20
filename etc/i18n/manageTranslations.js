@@ -1,7 +1,10 @@
-import {translations} from "components/translations";
 import commandLineArgs from "command-line-args";
 
+import {translations} from "components/translations";
+
 import metadata from "app/webpack/metadata";
+
+import languages from "./languages";
 
 const {availableLocales, i18nMessagesPath, i18nLocalePath, reportsPath, version} = metadata();
 
@@ -15,12 +18,12 @@ const options = commandLineArgs(optionDefinitions);
 const managedTranslations = translations({
     messagesPath: i18nMessagesPath,
     translationsPath: i18nLocalePath,
-    languages: availableLocales,
+    languages,
     version,
     reportsPath
 })
     .manage({
-        update: true
+        emmit: true
     });
 
 managedTranslations

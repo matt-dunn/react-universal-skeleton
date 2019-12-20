@@ -22,7 +22,7 @@ const partialStats = require("./partials/stats");
 const optimizationStats = require("./partials/optimization");
 
 const metadata = require("./metadata")({configType: "client"});
-const {environment, version, context, root, target, publicPath, port, hostname} = metadata;
+const {environment, version, context, root, target, publicPath, port, hostname, availableLocales} = metadata;
 
 log(chalk`🔨 Building {white.bold client}...
      Environment: {yellow ${environment}}
@@ -32,6 +32,8 @@ log(chalk`🔨 Building {white.bold client}...
      Public Path: {yellow ${publicPath}}
      Host: {yellow ${hostname}}
      Port: {yellow ${port}}
+
+     Languages: {yellow ${availableLocales}}
 `);
 
 module.exports = merge(
