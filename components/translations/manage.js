@@ -8,26 +8,20 @@ const rimraf = require("rimraf");
 
 const {
     applyDelta,
-    applyWhitelistDelta,
-    cleanTranslationsFiles,
     convertHashToArray,
     countWords,
     formatNumber,
-    getDefaultMessages,
     getDelta,
     getLangMessageFilename,
     getLangMessages,
     getLangWhitelist,
     getRelativePath,
     getWhitelistFilename,
-    saveLangMessages,
-    saveManifest,
-    saveWhitelist,
     stringifyMessages
 } = require("./utils");
 
 module.exports.manage = ({messagesPath, translationsPath, reportsPath, languages, version}) => options => {
-    const {emmit, defaultMessages, updatedMessagesCallback} = Object.assign({}, {emmit: false, defaultMessages: undefined, updatedMessagesCallback: undefined}, options);
+    const {updatedMessagesCallback} = Object.assign({}, {emmit: false, defaultMessages: undefined, updatedMessagesCallback: undefined}, options);
 
     if (!messagesPath) {
         console.error(chalk.red("'messagesPath' not supplied"));
@@ -57,6 +51,7 @@ module.exports.manage = ({messagesPath, translationsPath, reportsPath, languages
         updated: false,
         timestamp: undefined,
         summary: {
+            sourceLanguages: languages,
             totalLanguagesCount: languages.length,
             totalTranslationsCount: 0,
             totalUntranslatedCount: 0,
@@ -66,59 +61,7 @@ module.exports.manage = ({messagesPath, translationsPath, reportsPath, languages
     };
 
     try {
-        cleanTranslationsFiles(translationsPath, languages);
-
-        const sourceDefaultMessages = defaultMessages || getDefaultMessages(messagesPath);
-        const defaultLangMessages = getLangMessages(translationsPath);
-
-        const translationCount = Object.keys(sourceDefaultMessages).length;
-
-        report.summary.totalTranslationsCount = translationCount;
-
-        languages.forEach(lang => {
-            const messages = getLangMessages(translationsPath, lang);
-            const whitelist = getLangWhitelist(translationsPath, lang);
-            const delta = getDelta(sourceDefaultMessages, defaultLangMessages, messages, whitelist);
-
-            const untranslatedCount = Object.keys(delta.untranslated).length;
-            const wordCount = countWords(convertHashToArray(delta.untranslated));
-
-            report.summary.totalUntranslatedCount += untranslatedCount;
-            report.summary.totalWordCount += wordCount;
-
-            const filename = getRelativePath(getLangMessageFilename(translationsPath, lang));
-            const whitelistFilename = getRelativePath(getWhitelistFilename(translationsPath, lang));
-
-            report.languages.push({
-                lang,
-                filename,
-                whitelistFilename,
-                wordCount,
-                untranslated: untranslatedCount,
-                added: Object.keys(delta.added).length,
-                updated: Object.keys(delta.updated).length,
-                removed: Object.keys(delta.removed).length,
-                delta
-            });
-
-            const updatedMessages = applyDelta(sourceDefaultMessages, messages, delta);
-
-            updatedMessagesCallback && updatedMessagesCallback(lang, updatedMessages, {filename, whitelistFilename});
-
-            if (emmit) {
-                saveLangMessages(translationsPath, updatedMessages, lang);
-                saveWhitelist(translationsPath, applyWhitelistDelta(whitelist, delta), lang);
-            }
-        });
-
-        report.timestamp = new Date().toISOString();
-
-        if (emmit) {
-            report.updated = new Date().toISOString();
-
-            saveLangMessages(translationsPath, sourceDefaultMessages);
-            saveManifest(translationsPath, report);
-        }
+        // cleanTranslationsFiles(translationsPath, languages);
 
         const managed = {
             getReport: () => report,
@@ -137,7 +80,6 @@ module.exports.manage = ({messagesPath, translationsPath, reportsPath, languages
             getSummary: () => {
                 return {
                     ...report.summary,
-                    translationLanguages: languages,
                     languages: report.languages.map(language => {
                         const {delta, ...rest} = language;  // eslint-disable-line no-unused-vars
                         return rest;
@@ -165,6 +107,8 @@ module.exports.manage = ({messagesPath, translationsPath, reportsPath, languages
                 return managed;
             },
             printSummary: () => {
+                const translationCount = report.summary.totalTranslationsCount;
+
                 const t = new Table({
                     columns: [
                         {name: "Language", alignment: "left"},
@@ -179,7 +123,7 @@ module.exports.manage = ({messagesPath, translationsPath, reportsPath, languages
                     ],
                 });
 
-                report.languages.forEach(({lang, untranslated, wordCount, delta}) => {
+                sortBy(report.languages, ({untranslated}) => untranslated).reverse().forEach(({lang, untranslated, wordCount, delta}) => {
                     let color = "";
                     let status = "In Progress";
 
@@ -250,7 +194,80 @@ module.exports.manage = ({messagesPath, translationsPath, reportsPath, languages
             isComplete: () => report.summary.totalUntranslatedCount === 0
         };
 
-        return managed;
+        const manageLanguages = {
+            processLanguages: (defaultMessages) => {
+                languages.forEach(lang => {
+                    manageLanguages.processLanguage(lang, defaultMessages);
+                });
+
+                return manageLanguages.done();
+            },
+            processLanguage: (lang, defaultMessages) => {
+                const sourceDefaultMessages = defaultMessages || getLangMessages(translationsPath);
+                const defaultLangMessages = getLangMessages(translationsPath);
+
+                const translationCount = Object.keys(sourceDefaultMessages).length;
+                const messages = getLangMessages(translationsPath, lang);
+                const whitelist = getLangWhitelist(translationsPath, lang);
+                const delta = getDelta(sourceDefaultMessages, defaultLangMessages, messages, whitelist);
+
+                const untranslatedCount = Object.keys(delta.untranslated).length;
+                const wordCount = countWords(convertHashToArray(delta.untranslated));
+
+                report.summary.totalTranslationsCount = translationCount;
+                report.summary.totalUntranslatedCount += untranslatedCount;
+                report.summary.totalWordCount += wordCount;
+
+                const filename = getRelativePath(getLangMessageFilename(translationsPath, lang));
+                const whitelistFilename = getRelativePath(getWhitelistFilename(translationsPath, lang));
+
+                report.languages.push({
+                    lang,
+                    filename,
+                    whitelistFilename,
+                    wordCount,
+                    untranslated: untranslatedCount,
+                    added: Object.keys(delta.added).length,
+                    updated: Object.keys(delta.updated).length,
+                    removed: Object.keys(delta.removed).length,
+                    delta
+                });
+
+                const updatedMessages = applyDelta(sourceDefaultMessages, messages, delta);
+
+                updatedMessagesCallback && updatedMessagesCallback(lang, updatedMessages, {filename, whitelistFilename});
+
+                // if (emmit) {
+                //     saveLangMessages(translationsPath, updatedMessages, lang);
+                //     saveWhitelist(translationsPath, applyWhitelistDelta(whitelist, delta), lang);
+                // }
+
+                return updatedMessages;
+            },
+            done: () => {
+                const reportLanguages = Object.values(report.languages).map(({lang}) => lang);
+
+                // Add any missing languages to report
+                languages.forEach(lang => {
+                    if (reportLanguages.indexOf(lang) === -1) {
+                        manageLanguages.processLanguage(lang);
+                    }
+                });
+
+                report.timestamp = new Date().toISOString();
+
+                // if (emmit) {
+                //     report.updated = new Date().toISOString();
+                //
+                //     saveLangMessages(translationsPath, sourceDefaultMessages);
+                //     saveManifest(translationsPath, report);
+                // }
+
+                return managed;
+            }
+        };
+
+        return manageLanguages;
     } catch (ex) {
         console.error(chalk.red(ex.message));
         process.exit(1);

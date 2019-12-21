@@ -11,7 +11,7 @@ const getDefaultMessages = messagesPath => hashMessages(JSON.parse(fs.readFileSy
 
 const getLangMessages = (translationsPath, lang = "default") => {
     const filename = getLangMessageFilename(translationsPath, lang);
-    return (fs.existsSync(filename) && JSON.parse(fs.readFileSync(filename).toString())) || [];
+    return (fs.existsSync(filename) && JSON.parse(fs.readFileSync(filename).toString())) || {};
 };
 
 const saveLangMessages = (translationsPath, messages, lang = "default") => {

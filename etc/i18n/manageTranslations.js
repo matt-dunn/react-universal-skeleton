@@ -26,15 +26,16 @@ const managedTranslations = translations({
         emmit: false
     });
 
-managedTranslations
+const done = managedTranslations
+    .processLanguages()
     .printSummary()
     .saveReport()
     .updateSummary();
 
 if (options.gen) {
-    managedTranslations.generateTranslations();
+    done.generateTranslations();
 }
 
 if (options.status) {
-    managedTranslations.checkStatus();
+    done.checkStatus();
 }

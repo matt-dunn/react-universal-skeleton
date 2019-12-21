@@ -1,6 +1,6 @@
-const {translations} = require("../index");
-
 const path = require("path");
+
+const {translations} = require("../index");
 
 function ReactIntlPlugin(options) {
     this.options = Object.assign({}, {
@@ -24,7 +24,6 @@ ReactIntlPlugin.prototype.apply = function (compiler) {
     const messages = {};
     const defaultMessages = {};
     const changedMessages = {};
-    const languageModules = {};
 
     let prevChanged;
 
@@ -36,19 +35,28 @@ ReactIntlPlugin.prototype.apply = function (compiler) {
         languages,
         version,
         reportsPath
+    }).manage({
+        emmit: false,
+        // defaultMessages,
+        // updatedMessagesCallback: (lang, messages) => {
+        //     languageModules[lang]._source._value = `module.exports = ${JSON.stringify(transformHash(messages))}`;
+        // }
     });
 
-    let managedTranslations;
+    compiler.hooks.done.tap("ReactIntlPlugin", function(compilation) {
+        const done = manageTranslations.done();
 
-    compiler.hooks.done.tap("ReactIntlPlugin", function() {
-        if (managedTranslations) {
-            managedTranslations.printSummary();
+        if (failOnIncompleteTranslations && !done.isComplete()) {
+            const summary = done.getSummary();
+            compilation.errors.push(new Error(`There ${summary.totalUntranslatedCount} are outstanding translations. See '${done.getReportPath()}'`));
+        }
 
-            if (reportsPath) {
-                managedTranslations
-                    .saveReport()
-                    .generateTranslations();
-            }
+        done.printSummary();
+
+        if (reportsPath) {
+            done
+                .saveReport()
+                .generateTranslations();
         }
     });
 
@@ -77,9 +85,12 @@ ReactIntlPlugin.prototype.apply = function (compiler) {
 
         compilation.hooks.finishModules.tap("ReactIntlPlugin", function(modules) {
             modules.forEach(mod => {
-                // Collect language modules
                 if (mod.resource && languageFiles.filter(file => mod.resource.indexOf(file) !== -1).length > 0) {
-                    languageModules[path.parse(mod.resource).name] = mod;
+                    const lang = path.parse(mod.resource).name;
+
+                    const messages = manageTranslations.processLanguage(lang, defaultMessages);
+
+                    mod._source._value = `module.exports = ${JSON.stringify(transformHash(messages))}`;
                 }
 
                 if (environment === "development" && mod.resource && mod.resource.indexOf(entry) !== -1) {
@@ -111,21 +122,6 @@ ReactIntlPlugin.prototype.apply = function (compiler) {
                     }
                 }
             });
-
-            if (environment === "production" && Object.keys(languageModules).length === languages.length) {
-                managedTranslations = manageTranslations.manage({
-                    emmit: false,
-                    defaultMessages,
-                    updatedMessagesCallback: (lang, messages) => {
-                        languageModules[lang]._source._value = `module.exports = ${JSON.stringify(transformHash(messages))}`;
-                    }
-                });
-
-                if (failOnIncompleteTranslations && !managedTranslations.isComplete()) {
-                    const summary = managedTranslations.getSummary();
-                    compilation.errors.push(new Error(`There ${summary.totalUntranslatedCount} are outstanding translations. See '${managedTranslations.getReportPath()}'`));
-                }
-            }
         });
     });
 

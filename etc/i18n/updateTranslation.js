@@ -20,13 +20,11 @@ if (!options.src) {
 
 const {i18nMessagesPath, i18nLocalePath, reportsPath} = metadata();
 
-const managedTranslations = translations({
+translations({
     messagesPath: i18nMessagesPath,
     translationsPath: i18nLocalePath,
     languages,
     reportsPath
-});
-
-managedTranslations
+})
     .apply(options.src, options.lang)
     .printSummary();

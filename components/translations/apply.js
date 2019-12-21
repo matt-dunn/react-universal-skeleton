@@ -4,6 +4,12 @@ const {Table} = require("console-table-printer");
 const chalk = require("chalk");
 
 const {
+    cleanTranslationsFiles,
+    getLangMessageFilename,
+    getManifest,
+    getRelativePath,
+    getWhitelistFilename,
+    saveManifest,
     formatNumber,
     hashMessages,
     getLangMessages,
@@ -34,13 +40,18 @@ module.exports.apply = ({languages, translationsPath}) => (languageFilename, lan
             process.exit(1);
         }
 
+        const manifest = getManifest(translationsPath);
+
         const report = {
+            languages: Object.values(manifest.languages),
             summary: {
                 updatedCount: 0,
                 totalTranslationsCount: 0,
                 whiteListCount: 0
             }
         };
+
+        cleanTranslationsFiles(translationsPath, languages);
 
         const sourceMessages = JSON.parse(fs.readFileSync(languageFilename).toString());
         const sourceMessagesHash = hashMessages(sourceMessages);
@@ -68,7 +79,7 @@ module.exports.apply = ({languages, translationsPath}) => (languageFilename, lan
                     }
                 }
 
-                if (targetMessages[id].defaultMessage !== sourceMessagesHash[id].defaultMessage) {
+                if (!targetMessages[id] || targetMessages[id].defaultMessage !== sourceMessagesHash[id].defaultMessage) {
                     report.summary.updatedCount++;
                 }
 
@@ -88,6 +99,17 @@ module.exports.apply = ({languages, translationsPath}) => (languageFilename, lan
 
         saveLangMessages(translationsPath, updatedMessages, lang);
         saveWhitelist(translationsPath, whitelist, lang);
+
+        const filename = getRelativePath(getLangMessageFilename(translationsPath, lang));
+        const whitelistFilename = getRelativePath(getWhitelistFilename(translationsPath, lang));
+
+        report.languages.push({
+            lang,
+            filename,
+            whitelistFilename
+        });
+
+        saveManifest(translationsPath, report);
 
         const managed = {
             getReport: () => report,
