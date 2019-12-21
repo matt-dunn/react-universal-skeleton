@@ -8,6 +8,15 @@ function ReactIntlPlugin(options) {
     }, options);
 }
 
+/*
+
+TODO
+
+* Update default lang as per langs
+*  
+
+ */
+
 const {getLangMessages, getManifest, getLanguages, transformHash} = require("../utils");
 
 const environment = process.env.NODE_ENV || "production";
