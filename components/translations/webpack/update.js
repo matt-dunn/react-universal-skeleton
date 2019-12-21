@@ -36,11 +36,13 @@ ReactIntlPlugin.prototype.apply = function (compiler) {
         version,
         reportsPath
     }).manage({
-        emmit: true
+        emmit: false
     });
 
+    let sealedTranslations;
+
     compiler.hooks.done.tap("ReactIntlPlugin", function(compilation) {
-        const done = manageTranslations.done();
+        const done = sealedTranslations.done();
 
         if (failOnIncompleteTranslations && !done.isComplete()) {
             const summary = done.getSummary();
@@ -56,8 +58,8 @@ ReactIntlPlugin.prototype.apply = function (compiler) {
         }
     });
 
-    compiler.hooks.emit.tap("ReactIntlPlugin", function(modules) {
-        console.log("**********DONE", defaultMessages)
+    compiler.hooks.afterCompile.tap("ReactIntlPlugin", function() {
+        sealedTranslations = manageTranslations.seal(defaultMessages);
     });
 
     compiler.hooks.compilation.tap("ReactIntlPlugin", function(compilation) {
@@ -88,9 +90,7 @@ ReactIntlPlugin.prototype.apply = function (compiler) {
                 if (mod.resource && languageFiles.filter(file => mod.resource.indexOf(file) !== -1).length > 0) {
                     const lang = path.parse(mod.resource).name;
 
-                    console.log(">>>>>!!!!!",lang, defaultMessages)
-
-                    const messages = manageTranslations.processLanguage(lang, defaultMessages);
+                    const messages = sealedTranslations.processLanguage(lang);
 
                     mod._source._value = `module.exports = ${JSON.stringify(transformHash(messages))}`;
                 }

@@ -19,7 +19,8 @@ const {
     getRelativePath,
     getWhitelistFilename,
     stringifyMessages,
-    saveLangMessages
+    saveLangMessages,
+    getDefaultMessages
 } = require("./utils");
 
 module.exports.manage = ({messagesPath, translationsPath, reportsPath, version}) => options => {
@@ -61,7 +62,7 @@ module.exports.manage = ({messagesPath, translationsPath, reportsPath, version})
 
         let sourceDefaultMessages;
 
-        const managed = {
+        const phaseComplete = {
             getReport: () => report,
             getReportPath: () => path.join(reportsPath, "i18l-status.json"),
             saveReport: () => {
@@ -71,9 +72,9 @@ module.exports.manage = ({messagesPath, translationsPath, reportsPath, version})
                 }
 
                 mkdirp(reportsPath);
-                fs.writeFileSync(managed.getReportPath(), stringifyMessages(report));
+                fs.writeFileSync(phaseComplete.getReportPath(), stringifyMessages(report));
 
-                return managed;
+                return phaseComplete;
             },
             getSummary: () => {
                 return {
@@ -86,7 +87,7 @@ module.exports.manage = ({messagesPath, translationsPath, reportsPath, version})
             },
             updateSummary: () => {
                 const {timestamp, version} = report;
-                const summary = managed.getSummary();
+                const summary = phaseComplete.getSummary();
 
                 const filename = path.join(translationsPath, "summary.json");
                 const summaryReport = (fs.existsSync(filename) && JSON.parse(fs.readFileSync(filename).toString())) || {
@@ -102,7 +103,7 @@ module.exports.manage = ({messagesPath, translationsPath, reportsPath, version})
                     fs.writeFileSync(filename, stringifyMessages(summaryReport));
                 }
 
-                return managed;
+                return phaseComplete;
             },
             printSummary: () => {
                 const translationCount = report.summary.totalTranslationsCount;
@@ -148,7 +149,7 @@ module.exports.manage = ({messagesPath, translationsPath, reportsPath, version})
 
                 t.printTable();
 
-                return managed;
+                return phaseComplete;
             },
             generateTranslations: () => {
                 if (!reportsPath) {
@@ -184,7 +185,7 @@ module.exports.manage = ({messagesPath, translationsPath, reportsPath, version})
                 }
             },
             checkStatus: () => {
-                if (!managed.isComplete()) {
+                if (!phaseComplete.isComplete()) {
                     console.error(chalk.red(`Build failed because translations have not completed. ${report.summary.totalUntranslatedCount} total translations outstanding.`));
                     process.exit(3);
                 }
@@ -192,19 +193,8 @@ module.exports.manage = ({messagesPath, translationsPath, reportsPath, version})
             isComplete: () => report.summary.totalUntranslatedCount === 0
         };
 
-        const manageLanguages = {
-            processLanguages: (defaultMessages) => {
-                languages.forEach(lang => {
-                    manageLanguages.processLanguage(lang, defaultMessages);
-                });
-
-                return manageLanguages.done();
-            },
-            processLanguage: (lang, defaultMessages) => {
-                sourceDefaultMessages = defaultMessages//)// || getLangMessages(translationsPath);
-
-                console.log("!!!!!PROCESS",lang,sourceDefaultMessages)
-
+        const phaseManage = {
+            processLanguage: (lang) => {
                 const defaultLangMessages = getLangMessages(translationsPath);
 
                 const translationCount = Object.keys(sourceDefaultMessages).length;
@@ -238,11 +228,6 @@ module.exports.manage = ({messagesPath, translationsPath, reportsPath, version})
 
                 updatedMessagesCallback && updatedMessagesCallback(lang, updatedMessages, {filename, whitelistFilename});
 
-                // if (emmit) {
-                //     saveLangMessages(translationsPath, updatedMessages, lang);
-                //     saveWhitelist(translationsPath, applyWhitelistDelta(whitelist, delta), lang);
-                // }
-
                 return updatedMessages;
             },
             done: () => {
@@ -251,25 +236,39 @@ module.exports.manage = ({messagesPath, translationsPath, reportsPath, version})
                 // Add any missing languages to report
                 languages.forEach(lang => {
                     if (reportLanguages.indexOf(lang) === -1) {
-                        manageLanguages.processLanguage(lang, sourceDefaultMessages);
+                        phaseManage.processLanguage(lang, sourceDefaultMessages);
                     }
                 });
 
                 report.timestamp = new Date().toISOString();
 
-                console.log("@@@@@@@@", emmit, sourceDefaultMessages, translationsPath)
                 if (emmit) {
-                    // report.updated = new Date().toISOString();
-
                     sourceDefaultMessages && saveLangMessages(translationsPath, sourceDefaultMessages);
-                    // saveManifest(translationsPath, report);
                 }
 
-                return managed;
+                return phaseComplete;
             }
         };
 
-        return manageLanguages;
+        const phaseBegin = {
+            processLanguages: () => {
+                // const done = phaseBegin.seal(getLangMessages(translationsPath));
+                const done = phaseBegin.seal(getDefaultMessages(messagesPath));
+
+                languages.forEach(lang => {
+                    done.processLanguage(lang, );
+                });
+
+                return done.done();
+            },
+            seal: (defaultMessages) => {
+                sourceDefaultMessages = defaultMessages;
+
+                return phaseManage;
+            }
+        };
+
+        return phaseBegin;
     } catch (ex) {
         console.error(chalk.red(ex.message));
         process.exit(1);
