@@ -36,11 +36,7 @@ ReactIntlPlugin.prototype.apply = function (compiler) {
         version,
         reportsPath
     }).manage({
-        emmit: false,
-        // defaultMessages,
-        // updatedMessagesCallback: (lang, messages) => {
-        //     languageModules[lang]._source._value = `module.exports = ${JSON.stringify(transformHash(messages))}`;
-        // }
+        emmit: true
     });
 
     compiler.hooks.done.tap("ReactIntlPlugin", function(compilation) {
@@ -58,6 +54,10 @@ ReactIntlPlugin.prototype.apply = function (compiler) {
                 .saveReport()
                 .generateTranslations();
         }
+    });
+
+    compiler.hooks.emit.tap("ReactIntlPlugin", function(modules) {
+        console.log("**********DONE", defaultMessages)
     });
 
     compiler.hooks.compilation.tap("ReactIntlPlugin", function(compilation) {
@@ -87,6 +87,8 @@ ReactIntlPlugin.prototype.apply = function (compiler) {
             modules.forEach(mod => {
                 if (mod.resource && languageFiles.filter(file => mod.resource.indexOf(file) !== -1).length > 0) {
                     const lang = path.parse(mod.resource).name;
+
+                    console.log(">>>>>!!!!!",lang, defaultMessages)
 
                     const messages = manageTranslations.processLanguage(lang, defaultMessages);
 

@@ -7,6 +7,7 @@ const mkdirp = require("mkdirp");
 const rimraf = require("rimraf");
 
 const {
+    getConfig,
     applyDelta,
     convertHashToArray,
     countWords,
@@ -17,11 +18,12 @@ const {
     getLangWhitelist,
     getRelativePath,
     getWhitelistFilename,
-    stringifyMessages
+    stringifyMessages,
+    saveLangMessages
 } = require("./utils");
 
-module.exports.manage = ({messagesPath, translationsPath, reportsPath, languages, version}) => options => {
-    const {updatedMessagesCallback} = Object.assign({}, {emmit: false, defaultMessages: undefined, updatedMessagesCallback: undefined}, options);
+module.exports.manage = ({messagesPath, translationsPath, reportsPath, version}) => options => {
+    const {updatedMessagesCallback, emmit} = Object.assign({}, {emmit: true, defaultMessages: undefined, updatedMessagesCallback: undefined}, options);
 
     if (!messagesPath) {
         console.error(chalk.red("'messagesPath' not supplied"));
@@ -38,30 +40,26 @@ module.exports.manage = ({messagesPath, translationsPath, reportsPath, languages
         process.exit(1);
     }
 
-    if (!languages) {
-        console.error(chalk.red("'languages' not supplied"));
-        process.exit(1);
-    } else if (!Array.isArray(languages)) {
-        console.error(chalk.red("'languages' must be an array"));
-        process.exit(1);
-    }
-
-    const report = {
-        version,
-        updated: false,
-        timestamp: undefined,
-        summary: {
-            sourceLanguages: languages,
-            totalLanguagesCount: languages.length,
-            totalTranslationsCount: 0,
-            totalUntranslatedCount: 0,
-            totalWordCount: 0,
-        },
-        languages: []
-    };
-
     try {
-        // cleanTranslationsFiles(translationsPath, languages);
+        const config = getConfig();
+
+        const {languages} = config;
+
+        const report = {
+            version,
+            updated: false,
+            timestamp: undefined,
+            summary: {
+                sourceLanguages: languages,
+                totalLanguagesCount: languages.length,
+                totalTranslationsCount: 0,
+                totalUntranslatedCount: 0,
+                totalWordCount: 0,
+            },
+            languages: []
+        };
+
+        let sourceDefaultMessages;
 
         const managed = {
             getReport: () => report,
@@ -203,7 +201,10 @@ module.exports.manage = ({messagesPath, translationsPath, reportsPath, languages
                 return manageLanguages.done();
             },
             processLanguage: (lang, defaultMessages) => {
-                const sourceDefaultMessages = defaultMessages || getLangMessages(translationsPath);
+                sourceDefaultMessages = defaultMessages//)// || getLangMessages(translationsPath);
+
+                console.log("!!!!!PROCESS",lang,sourceDefaultMessages)
+
                 const defaultLangMessages = getLangMessages(translationsPath);
 
                 const translationCount = Object.keys(sourceDefaultMessages).length;
@@ -250,18 +251,19 @@ module.exports.manage = ({messagesPath, translationsPath, reportsPath, languages
                 // Add any missing languages to report
                 languages.forEach(lang => {
                     if (reportLanguages.indexOf(lang) === -1) {
-                        manageLanguages.processLanguage(lang);
+                        manageLanguages.processLanguage(lang, sourceDefaultMessages);
                     }
                 });
 
                 report.timestamp = new Date().toISOString();
 
-                // if (emmit) {
-                //     report.updated = new Date().toISOString();
-                //
-                //     saveLangMessages(translationsPath, sourceDefaultMessages);
-                //     saveManifest(translationsPath, report);
-                // }
+                console.log("@@@@@@@@", emmit, sourceDefaultMessages, translationsPath)
+                if (emmit) {
+                    // report.updated = new Date().toISOString();
+
+                    sourceDefaultMessages && saveLangMessages(translationsPath, sourceDefaultMessages);
+                    // saveManifest(translationsPath, report);
+                }
 
                 return managed;
             }

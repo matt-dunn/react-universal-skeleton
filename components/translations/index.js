@@ -1,9 +1,9 @@
 const {apply} = require("./apply");
 const {manage} = require("./manage");
 
-module.exports.translations = ({messagesPath, translationsPath, reportsPath, languages, version}) => {
+module.exports.translations = ({messagesPath, translationsPath, reportsPath, version}) => {
     return {
-        apply: apply({messagesPath, translationsPath, languages}),
-        manage: manage({messagesPath, translationsPath, reportsPath, languages, version})
+        apply: apply({messagesPath, translationsPath}),
+        manage: manage({messagesPath, translationsPath, reportsPath, version})
     };
 };

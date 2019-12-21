@@ -1,6 +1,14 @@
+const fs = require("fs");
 const path = require("path");
 const stringify = require("json-stable-stringify");
 const { parse } = require("intl-messageformat-parser");
+
+const getConfig = () => {
+    const filename = path.join(__dirname, "..", "..", "..", "i18n.config.json");
+    return (fs.existsSync(filename) && JSON.parse(fs.readFileSync(filename).toString())) || {
+        languages: []
+    };
+};
 
 const getRelativePath = filename => path.relative(__dirname, filename).replace(/\.\.\//g, "");
 
@@ -33,6 +41,7 @@ const stringifyMessages = messages => stringify(messages, {
     trailingNewline: false
 });
 
+module.exports.getConfig = getConfig;
 module.exports.getRelativePath = getRelativePath;
 module.exports.hashMessages = hashMessages;
 module.exports.countWords = countWords;

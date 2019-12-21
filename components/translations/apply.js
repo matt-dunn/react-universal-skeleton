@@ -4,6 +4,7 @@ const {Table} = require("console-table-printer");
 const chalk = require("chalk");
 
 const {
+    getConfig,
     cleanTranslationsFiles,
     getLangMessageFilename,
     getManifest,
@@ -18,21 +19,16 @@ const {
     saveWhitelist
 } = require("./utils");
 
-module.exports.apply = ({languages, translationsPath}) => (languageFilename, language = undefined) => {
+module.exports.apply = ({translationsPath}) => (languageFilename, language = undefined) => {
     if (!translationsPath) {
         console.error(chalk.red("'translationsPath' not supplied"));
         process.exit(1);
     }
 
-    if (!languages) {
-        console.error(chalk.red("'languages' not supplied"));
-        process.exit(1);
-    } else if (!Array.isArray(languages)) {
-        console.error(chalk.red("'languages' must be an array"));
-        process.exit(1);
-    }
-
     try {
+        const config = getConfig();
+
+        const {languages} = config;
         const lang = language || path.parse(languageFilename).name.split("_")[1];
 
         if (languages.indexOf(lang) === -1) {

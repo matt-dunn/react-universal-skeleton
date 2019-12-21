@@ -4,8 +4,6 @@ import commandLineArgs from "command-line-args";
 
 import metadata from "app/webpack/metadata";
 
-import languages from "./languages";
-
 const optionDefinitions = [
     { name: "src", type: String, defaultOption: true},
     { name: "lang", type: String}
@@ -23,7 +21,6 @@ const {i18nMessagesPath, i18nLocalePath, reportsPath} = metadata();
 translations({
     messagesPath: i18nMessagesPath,
     translationsPath: i18nLocalePath,
-    languages,
     reportsPath
 })
     .apply(options.src, options.lang)
