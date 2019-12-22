@@ -17,7 +17,7 @@ const {
     saveLangMessages,
     getLangWhitelist,
     saveWhitelist
-} = require("./utils");
+} = require("../utils");
 
 module.exports.apply = ({translationsPath}) => (languageFilename, language = undefined) => {
     if (!translationsPath) {
