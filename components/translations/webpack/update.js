@@ -48,28 +48,30 @@ ReactIntlPlugin.prototype.apply = function(compiler) {
         emmit: false
     });
 
-    let sealedTranslations;
+    let translationsSealed;
+    let translationsDone;
 
-    compiler.hooks.done.tap("ReactIntlPlugin", compilation => {
-        const done = sealedTranslations.done();
-
-        // TODO: move this somewhere after processing and has compilation...
-        if (failOnIncompleteTranslations && !done.isComplete()) {
-            const summary = done.getSummary();
-            compilation.errors.push(new Error(`There ${summary.totalUntranslatedCount} are outstanding translations. See '${done.getReportPath()}'`));
-        }
-
-        done.printSummary();
+    compiler.hooks.done.tap("ReactIntlPlugin", () => {
+        translationsDone.printSummary();
 
         if (reportsPath) {
-            done
+            translationsDone
                 .saveReport()
                 .generateTranslations();
         }
     });
 
     compiler.hooks.afterCompile.tap("ReactIntlPlugin", () => {
-        sealedTranslations = manageTranslations.seal({defaultMessages});
+        translationsSealed = manageTranslations.seal({defaultMessages});
+    });
+
+    compiler.hooks.afterEmit.tap("ReactIntlPlugin", compilation => {
+        translationsDone = translationsSealed.done();
+
+        if (failOnIncompleteTranslations && !translationsDone.isComplete()) {
+            const summary = translationsDone.getSummary();
+            compilation.errors.push(new Error(`There ${summary.totalUntranslatedCount} are outstanding translations. See '${translationsDone.getReportPath()}'`));
+        }
     });
 
     compiler.hooks.compilation.tap("ReactIntlPlugin", compilation => {
@@ -100,7 +102,7 @@ ReactIntlPlugin.prototype.apply = function(compiler) {
                 if (mod.resource && languageFiles.filter(file => mod.resource.indexOf(file) !== -1).length > 0) {
                     const lang = path.parse(mod.resource).name;
 
-                    const messages = sealedTranslations.processLanguage(lang);
+                    const messages = translationsSealed.processLanguage(lang);
 
                     mod._source._value = `module.exports = ${JSON.stringify(transformHash(messages))}`;
                 }
