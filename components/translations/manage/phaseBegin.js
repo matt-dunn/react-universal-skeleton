@@ -18,9 +18,7 @@ const phaseBegin = (config) => {
 
             return done.done();
         },
-        seal: ({defaultMessages}) => {
-            return phaseManage(config, {defaultMessages});
-        }
+        seal: ({defaultMessages}) => phaseManage(config, {defaultMessages})
     };
 
     return ret;

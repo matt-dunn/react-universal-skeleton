@@ -31,7 +31,7 @@ const phaseManage = (config, {defaultMessages}) => {
     };
 
     const ret = {
-        processLanguage: (lang) => {
+        processLanguage: lang => {
             const defaultLangMessages = getLangMessages(translationsPath);
 
             const translationCount = Object.keys(defaultMessages).length;

@@ -28,15 +28,13 @@ const phaseComplete = (config, report) => {
 
             return ret;
         },
-        getSummary: () => {
-            return {
-                ...report.summary,
-                languages: report.languages.map(language => {
-                    const {delta, ...rest} = language;  // eslint-disable-line no-unused-vars
-                    return rest;
-                })
-            };
-        },
+        getSummary: () => ({
+            ...report.summary,
+            languages: report.languages.map(language => {
+                const {delta, ...rest} = language;  // eslint-disable-line no-unused-vars
+                return rest;
+            })
+        }),
         updateSummary: () => {
             const {timestamp, version} = report;
             const summary = ret.getSummary();
@@ -140,7 +138,10 @@ const phaseComplete = (config, report) => {
             if (!ret.isComplete()) {
                 console.error(chalk.red(`Build failed because translations have not completed. ${report.summary.totalUntranslatedCount} total translations outstanding.`));
                 process.exit(3);
+                return false;
             }
+
+            return true;
         },
         isComplete: () => report.summary.totalUntranslatedCount === 0
     };
