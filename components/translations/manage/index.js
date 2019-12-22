@@ -21,7 +21,7 @@ const {
     stringifyMessages,
     saveLangMessages,
     getDefaultMessages
-} = require("./utils");
+} = require("../utils");
 
 module.exports.manage = ({messagesPath, translationsPath, reportsPath, version}) => options => {
     const {updatedMessagesCallback, emmit} = Object.assign({}, {emmit: true, updatedMessagesCallback: undefined}, options);
