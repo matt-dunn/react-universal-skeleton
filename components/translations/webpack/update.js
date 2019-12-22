@@ -1,25 +1,15 @@
 const path = require("path");
 
 const {translations} = require("../index");
+const {getLangMessages, getManifest, getLanguages, transformHash} = require("../utils");
+
+const environment = process.env.NODE_ENV || "production";
 
 function ReactIntlPlugin(options) {
     this.options = Object.assign({}, {
         filename: "./reactIntlMessages.json"
     }, options);
 }
-
-/*
-
-TODO
-
-* Update default lang as per langs
-* Handle no langs - should output defaultMessage in code
-
- */
-
-const {getLangMessages, getManifest, getLanguages, transformHash} = require("../utils");
-
-const environment = process.env.NODE_ENV || "production";
 
 ReactIntlPlugin.prototype.apply = function(compiler) {
     const {translationsPath, messagesPath, reportsPath, filename, version, failOnIncompleteTranslations} = this.options;
