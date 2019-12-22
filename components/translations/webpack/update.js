@@ -21,7 +21,7 @@ const {getLangMessages, getManifest, getLanguages, transformHash} = require("../
 
 const environment = process.env.NODE_ENV || "production";
 
-ReactIntlPlugin.prototype.apply = function (compiler) {
+ReactIntlPlugin.prototype.apply = function(compiler) {
     const {translationsPath, messagesPath, reportsPath, filename, version, failOnIncompleteTranslations} = this.options;
     const entry = path.resolve(compiler.options.context, (Array.isArray(compiler.options.entry) && compiler.options.entry[0]) || compiler.options.entry);
 
@@ -50,9 +50,10 @@ ReactIntlPlugin.prototype.apply = function (compiler) {
 
     let sealedTranslations;
 
-    compiler.hooks.done.tap("ReactIntlPlugin", function(compilation) {
+    compiler.hooks.done.tap("ReactIntlPlugin", compilation => {
         const done = sealedTranslations.done();
 
+        // TODO: move this somewhere after processing and has compilation...
         if (failOnIncompleteTranslations && !done.isComplete()) {
             const summary = done.getSummary();
             compilation.errors.push(new Error(`There ${summary.totalUntranslatedCount} are outstanding translations. See '${done.getReportPath()}'`));
@@ -67,13 +68,13 @@ ReactIntlPlugin.prototype.apply = function (compiler) {
         }
     });
 
-    compiler.hooks.afterCompile.tap("ReactIntlPlugin", function() {
+    compiler.hooks.afterCompile.tap("ReactIntlPlugin", () => {
         sealedTranslations = manageTranslations.seal({defaultMessages});
     });
 
-    compiler.hooks.compilation.tap("ReactIntlPlugin", function(compilation) {
-        compilation.hooks.normalModuleLoader.tap("ReactIntlPlugin", function (context, module) {
-            context["metadataReactIntlPlugin"] = function (metadata) {
+    compiler.hooks.compilation.tap("ReactIntlPlugin", compilation => {
+        compilation.hooks.normalModuleLoader.tap("ReactIntlPlugin", (context, module) => {
+            context["metadataReactIntlPlugin"] = metadata => {
                 if (metadata["react-intl"].messages && metadata["react-intl"].messages.length > 0) {
                     messages[module.resource] = metadata["react-intl"].messages;
 
@@ -94,7 +95,7 @@ ReactIntlPlugin.prototype.apply = function (compiler) {
             };
         });
 
-        compilation.hooks.finishModules.tap("ReactIntlPlugin", function(modules) {
+        compilation.hooks.finishModules.tap("ReactIntlPlugin", modules => {
             modules.forEach(mod => {
                 if (mod.resource && languageFiles.filter(file => mod.resource.indexOf(file) !== -1).length > 0) {
                     const lang = path.parse(mod.resource).name;
@@ -137,11 +138,11 @@ ReactIntlPlugin.prototype.apply = function (compiler) {
         });
     });
 
-    compiler.hooks.emit.tapAsync("ReactIntlPlugin", function (compilation, callback) {
+    compiler.hooks.emit.tapAsync("ReactIntlPlugin", (compilation, callback) => {
         const jsonMessages = [];
         const idIndex = {};
-        Object.keys(messages).map(function (e) {
-            messages[e].map(function (m) {
+        Object.keys(messages).map(e => {
+            messages[e].map(m => {
                 if (!idIndex[m.id]) {
                     idIndex[m.id] = e;
                     jsonMessages.push(m);
@@ -152,31 +153,21 @@ ReactIntlPlugin.prototype.apply = function (compiler) {
         });
 
         // order jsonString based on id (since files are under version control this makes changes easier visible)
-        jsonMessages.sort(function (a, b){
-            return ( a.id < b.id ) ? -1 : ( a.id > b.id ? 1 : 0 );
-        });
+        jsonMessages.sort((a, b) => ( a.id < b.id ) ? -1 : ( a.id > b.id ? 1 : 0 ));
 
         const jsonString = JSON.stringify(jsonMessages, undefined, 2);
 
         // // Insert this list into the Webpack build as a new file asset:
         compilation.assets[filename] = {
-            source: function () {
-                return jsonString;
-            },
-            size: function () {
-                return jsonString.length;
-            }
+            source: () => jsonString,
+            size: () => jsonString.length
         };
 
         const filenameParts = path.parse(filename);
         const jsonChangedMessages = JSON.stringify(changedMessages);
         compilation.assets[`${filenameParts.name}_changed${filenameParts.ext}`] = {
-            source: function () {
-                return jsonChangedMessages;
-            },
-            size: function () {
-                return jsonChangedMessages.length;
-            }
+            source: () => jsonChangedMessages,
+            size: () => jsonChangedMessages.length
         };
 
         callback();
