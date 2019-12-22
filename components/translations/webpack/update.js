@@ -26,7 +26,7 @@ ReactIntlPlugin.prototype.apply = function(compiler) {
     const entry = path.resolve(compiler.options.context, (Array.isArray(compiler.options.entry) && compiler.options.entry[0]) || compiler.options.entry);
 
     const manifest = getManifest(translationsPath);
-    const languageFiles = Object.values(manifest.languages).map(({filename}) => filename);
+    const languageFiles = Object.values(manifest.languages).map(({filename}) => filename).concat([(path.join(translationsPath, "default.json"))]);
 
     const sourceDefaultMessages = getLangMessages(translationsPath);
 
@@ -102,11 +102,10 @@ ReactIntlPlugin.prototype.apply = function(compiler) {
                 if (mod.resource && languageFiles.filter(file => mod.resource.indexOf(file) !== -1).length > 0) {
                     const lang = path.parse(mod.resource).name;
 
-                    const messages = translationsSealed.processLanguage(lang);
+                    const messages = (lang === "default" && defaultMessages) || translationsSealed.processLanguage(lang);
 
                     mod._source._value = `module.exports = ${JSON.stringify(transformHash(messages))}`;
                 }
-                // TODO: else if default lang update default lang module with messages var
 
                 if (environment === "development" && mod.resource && mod.resource.indexOf(entry) !== -1) {
                     const messages = Object.values(changedMessages).reduce((messages, message) => {
