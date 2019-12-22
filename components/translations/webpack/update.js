@@ -13,7 +13,7 @@ function ReactIntlPlugin(options) {
 TODO
 
 * Update default lang as per langs
-*  
+* Handle no langs - should output defaultMessage in code
 
  */
 
@@ -68,7 +68,7 @@ ReactIntlPlugin.prototype.apply = function (compiler) {
     });
 
     compiler.hooks.afterCompile.tap("ReactIntlPlugin", function() {
-        sealedTranslations = manageTranslations.seal(defaultMessages);
+        sealedTranslations = manageTranslations.seal({defaultMessages});
     });
 
     compiler.hooks.compilation.tap("ReactIntlPlugin", function(compilation) {
@@ -103,6 +103,7 @@ ReactIntlPlugin.prototype.apply = function (compiler) {
 
                     mod._source._value = `module.exports = ${JSON.stringify(transformHash(messages))}`;
                 }
+                // TODO: else if default lang update default lang module with messages var
 
                 if (environment === "development" && mod.resource && mod.resource.indexOf(entry) !== -1) {
                     const messages = Object.values(changedMessages).reduce((messages, message) => {
