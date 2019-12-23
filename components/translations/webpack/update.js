@@ -42,7 +42,7 @@ ReactIntlPlugin.prototype.apply = function(compiler) {
     let translationsDone;
 
     compiler.hooks.done.tap("ReactIntlPlugin", () => {
-        if (translationsDone) {
+        if (environment !== "development" && translationsDone) {
             translationsDone.printSummary();
 
             if (reportsPath) {
@@ -54,7 +54,9 @@ ReactIntlPlugin.prototype.apply = function(compiler) {
     });
 
     compiler.hooks.afterCompile.tap("ReactIntlPlugin", () => {
-        translationsSealed = manageTranslations.seal({defaultMessages});
+        if (environment !== "development") {
+            translationsSealed = manageTranslations.seal({defaultMessages});
+        }
     });
 
     compiler.hooks.afterEmit.tap("ReactIntlPlugin", compilation => {
@@ -93,7 +95,7 @@ ReactIntlPlugin.prototype.apply = function(compiler) {
 
         compilation.hooks.finishModules.tap("ReactIntlPlugin", modules => {
             modules.forEach(mod => {
-                if (mod.resource && languageFiles.filter(file => mod.resource.indexOf(file) !== -1).length > 0) {
+                if (environment !== "development" && mod.resource && languageFiles.filter(file => mod.resource.indexOf(file) !== -1).length > 0) {
                     const lang = path.parse(mod.resource).name;
 
                     const messages = (lang === "default" && defaultMessages) || translationsSealed.processLanguage(lang);
@@ -150,7 +152,9 @@ ReactIntlPlugin.prototype.apply = function(compiler) {
             idHash: {}
         });
 
-        saveDefaultMessages(translationsPath, messageData.messages);
+        if (environment !== "development") {
+            saveDefaultMessages(translationsPath, messageData.messages);
+        }
 
         if (filename) {
             const jsonString = JSON.stringify(messageData.messages, undefined, 2);
