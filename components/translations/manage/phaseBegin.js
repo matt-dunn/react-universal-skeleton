@@ -5,12 +5,11 @@ const {
 const phaseManage = require("./phaseManage");
 
 const phaseBegin = (config) => {
-    const {languages, messagesPath} = config;
+    const {languages, translationsPath} = config;
 
     const ret = {
         processLanguages: () => {
-            // const done = ret.seal({defaultMessages: getLangMessages(translationsPath)});
-            const done = ret.seal({defaultMessages: getDefaultMessages(messagesPath)});
+            const done = ret.seal({defaultMessages: getDefaultMessages(translationsPath)});
 
             languages.forEach(lang => {
                 done.processLanguage(lang,);

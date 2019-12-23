@@ -1,7 +1,7 @@
 const path = require("path");
 
 const {translations} = require("../index");
-const {getLangMessages, getManifest, getLanguages, transformHash} = require("../utils");
+const {getLangMessages, getManifest, getLanguages, transformHash, saveDefaultMessages} = require("../utils");
 
 const environment = process.env.NODE_ENV || "production";
 
@@ -134,36 +134,40 @@ ReactIntlPlugin.prototype.apply = function(compiler) {
     });
 
     compiler.hooks.emit.tapAsync("ReactIntlPlugin", (compilation, callback) => {
-        const jsonMessages = [];
-        const idIndex = {};
-        Object.keys(messages).map(e => {
-            messages[e].map(m => {
-                if (!idIndex[m.id]) {
-                    idIndex[m.id] = e;
-                    jsonMessages.push(m);
+        const messageData = Object.keys(messages).reduce((m,e) => {
+            messages[e].map(message => {
+                if (!m.idHash[message.id]) {
+                    m.idHash[message.id] = e;
+                    m.messages.push(message);
                 } else {
-                    compilation.errors.push("ReactIntlPlugin -> duplicate id: '" + m.id + "'.Found in '" + idIndex[m.id] + "' and '" + e + "'.");
+                    compilation.errors.push("ReactIntlPlugin -> duplicate id: '" + message.id + "'.Found in '" + m.idHash[message.id] + "' and '" + e + "'.");
                 }
             });
+
+            return m;
+        }, {
+            messages: [],
+            idHash: {}
         });
 
-        // order jsonString based on id (since files are under version control this makes changes easier visible)
-        jsonMessages.sort((a, b) => ( a.id < b.id ) ? -1 : ( a.id > b.id ? 1 : 0 ));
+        saveDefaultMessages(translationsPath, messageData.messages);
 
-        const jsonString = JSON.stringify(jsonMessages, undefined, 2);
+        if (filename) {
+            const jsonString = JSON.stringify(messageData.messages, undefined, 2);
 
-        // // Insert this list into the Webpack build as a new file asset:
-        compilation.assets[filename] = {
-            source: () => jsonString,
-            size: () => jsonString.length
-        };
+            // // Insert this list into the Webpack build as a new file asset:
+            compilation.assets[filename] = {
+                source: () => jsonString,
+                size: () => jsonString.length
+            };
 
-        const filenameParts = path.parse(filename);
-        const jsonChangedMessages = JSON.stringify(changedMessages);
-        compilation.assets[`${filenameParts.name}_changed${filenameParts.ext}`] = {
-            source: () => jsonChangedMessages,
-            size: () => jsonChangedMessages.length
-        };
+            const filenameParts = path.parse(filename);
+            const jsonChangedMessages = JSON.stringify(changedMessages);
+            compilation.assets[`${filenameParts.name}_changed${filenameParts.ext}`] = {
+                source: () => jsonChangedMessages,
+                size: () => jsonChangedMessages.length
+            };
+        }
 
         callback();
     });

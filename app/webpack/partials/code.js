@@ -5,7 +5,7 @@ const ReactIntlPlugin = require("../../../components/translations/webpack/update
 
 // const I18NChunksWebpackPlugin = require("../../../components/translations/chunks");
 
-module.exports = ({root, target, i18nMessagesPath, i18nLocalePath, reportsPath, version, availableLocales}) => ({
+module.exports = ({root, i18nMessagesPath, i18nLocalePath, reportsPath, version, availableLocales}) => ({
     module :{
         rules: [
             {
@@ -45,7 +45,7 @@ module.exports = ({root, target, i18nMessagesPath, i18nLocalePath, reportsPath, 
     },
     plugins: [
         new ReactIntlPlugin({
-            filename: path.join(path.relative(target, i18nMessagesPath), "defaultMessages.json"),
+            // filename: path.join(path.relative(target, i18nMessagesPath), "defaultMessages.json"),
             messagesPath: i18nMessagesPath,
             translationsPath: i18nLocalePath,
             reportsPath: reportsPath,

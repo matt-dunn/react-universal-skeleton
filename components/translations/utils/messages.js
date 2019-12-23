@@ -7,7 +7,23 @@ const {getManifest} = require("./manifest");
 
 const getLangMessageFilename = (translationsPath, lang = "default") => path.join(translationsPath, `${lang}.json`);
 
-const getDefaultMessages = messagesPath => hashMessages(JSON.parse(fs.readFileSync(path.join(process.cwd(), messagesPath, "defaultMessages.json")).toString()));
+const getDefaultMessagesFilename = translationsPath => path.join(translationsPath, ".metadata", "defaultMessages.json");
+
+const getDefaultMessages = translationsPath => {
+    const filename = getDefaultMessagesFilename(translationsPath);
+    return (fs.existsSync(filename) && hashMessages(JSON.parse(fs.readFileSync(filename).toString()))) || {};
+};
+
+const saveDefaultMessages = (translationsPath, messages) => {
+    if (!Array.isArray(messages)) {
+        throw new Error("Messages are invalid; must be an array of messageFormat objects");
+    }
+
+    const filename = getDefaultMessagesFilename(translationsPath);
+    mkdirp(path.parse(filename).dir);
+    fs.writeFileSync(filename, stringifyMessages(messages));
+    return filename;
+};
 
 const getLangMessages = (translationsPath, lang = "default") => {
     const filename = getLangMessageFilename(translationsPath, lang);
@@ -41,6 +57,7 @@ const cleanTranslationsFiles = (translationsPath, languages) => {
 
 module.exports.getLangMessageFilename = getLangMessageFilename;
 module.exports.getDefaultMessages = getDefaultMessages;
+module.exports.saveDefaultMessages = saveDefaultMessages;
 module.exports.getLangMessages = getLangMessages;
 module.exports.saveLangMessages = saveLangMessages;
 module.exports.cleanTranslationsFiles = cleanTranslationsFiles;
