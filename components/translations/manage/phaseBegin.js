@@ -5,7 +5,21 @@ const {
 const phaseManage = require("./phaseManage");
 
 const phaseBegin = (config) => {
-    const {languages, translationsPath} = config;
+    const {languages, translationsPath, version} = config;
+
+    const report = {
+        version,
+        updated: false,
+        timestamp: undefined,
+        summary: {
+            sourceLanguages: languages,
+            totalLanguagesCount: languages.length,
+            totalTranslationsCount: 0,
+            totalUntranslatedCount: 0,
+            totalWordCount: 0,
+        },
+        languages: []
+    };
 
     const ret = {
         processLanguages: () => {
@@ -17,7 +31,7 @@ const phaseBegin = (config) => {
 
             return done.done();
         },
-        seal: ({defaultMessages}) => phaseManage(config, {defaultMessages})
+        seal: ({defaultMessages}) => phaseManage(config, {defaultMessages, report})
     };
 
     return ret;

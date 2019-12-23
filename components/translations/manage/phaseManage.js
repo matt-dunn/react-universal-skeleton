@@ -3,6 +3,7 @@ const {
     convertHashToArray,
     countWords,
     getDelta,
+    getDefaultMessages,
     getLangMessageFilename,
     getLangMessages,
     getLangWhitelist,
@@ -13,24 +14,10 @@ const {
 
 const phaseComplete = require("./phaseComplete");
 
-const phaseManage = (config, {defaultMessages}) => {
-    const {languages, translationsPath, version, updatedMessagesCallback, emmit} = config;
+const phaseManage = (config, {defaultMessages, report}) => {
+    const {languages, translationsPath, updatedMessagesCallback, emmit} = config;
 
-    const report = {
-        version,
-        updated: false,
-        timestamp: undefined,
-        summary: {
-            sourceLanguages: languages,
-            totalLanguagesCount: languages.length,
-            totalTranslationsCount: 0,
-            totalUntranslatedCount: 0,
-            totalWordCount: 0,
-        },
-        languages: []
-    };
-
-    const defaultLangMessages = getLangMessages(translationsPath);
+    const defaultLangMessages = getDefaultMessages(translationsPath);
     const translationCount = Object.keys(defaultMessages).length;
 
     const ret = {
