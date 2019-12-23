@@ -16,7 +16,7 @@ const getLangWhitelist = (translationsPath, lang) => {
 const saveWhitelist = (translationsPath, whitelist, lang) => {
     const filename = getWhitelistFilename(translationsPath, lang);
     whitelist.ids.sort();
-    mkdirp(translationsPath);
+    mkdirp(path.parse(filename).dir);
     fs.writeFileSync(filename, stringifyMessages(whitelist));
     return filename;
 };

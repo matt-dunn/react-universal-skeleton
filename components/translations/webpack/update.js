@@ -42,12 +42,14 @@ ReactIntlPlugin.prototype.apply = function(compiler) {
     let translationsDone;
 
     compiler.hooks.done.tap("ReactIntlPlugin", () => {
-        translationsDone.printSummary();
+        if (translationsDone) {
+            translationsDone.printSummary();
 
-        if (reportsPath) {
-            translationsDone
-                .saveReport()
-                .generateTranslations();
+            if (reportsPath) {
+                translationsDone
+                    .saveReport()
+                    .generateTranslations();
+            }
         }
     });
 
@@ -56,11 +58,13 @@ ReactIntlPlugin.prototype.apply = function(compiler) {
     });
 
     compiler.hooks.afterEmit.tap("ReactIntlPlugin", compilation => {
-        translationsDone = translationsSealed.done();
+        if (translationsSealed) {
+            translationsDone = translationsSealed.done();
 
-        if (failOnIncompleteTranslations && !translationsDone.isComplete()) {
-            const summary = translationsDone.getSummary();
-            compilation.errors.push(new Error(`There ${summary.totalUntranslatedCount} are outstanding translations. See '${translationsDone.getReportPath()}'`));
+            if (failOnIncompleteTranslations && !translationsDone.isComplete()) {
+                const summary = translationsDone.getSummary();
+                compilation.errors.push(new Error(`There ${summary.totalUntranslatedCount} are outstanding translations. See '${translationsDone.getReportFilename()}'`));
+            }
         }
     });
 

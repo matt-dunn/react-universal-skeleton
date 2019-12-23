@@ -4,7 +4,7 @@ import {
 } from "recharts";
 import {useIntl} from "react-intl";
 
-import summary from "app/i18n/summary.json";
+import summary from "app/i18n/.metadata/summary.json";
 
 console.log(summary);
 

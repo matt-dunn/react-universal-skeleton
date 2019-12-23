@@ -4,7 +4,7 @@ const mkdirp = require("mkdirp");
 
 const {stringifyMessages} = require("./utils");
 
-const getManifestFilename = translationsPath => path.join(translationsPath, "manifest.json");
+const getManifestFilename = translationsPath => path.join(translationsPath, ".metadata", "manifest.json");
 
 const getManifest = (translationsPath) => {
     const filename = getManifestFilename(translationsPath);
@@ -32,7 +32,7 @@ const saveManifest = (translationsPath, report) => {
         }, {})
     };
 
-    mkdirp(translationsPath);
+    mkdirp(path.parse(filename).dir);
     fs.writeFileSync(filename, stringifyMessages(manifest));
 
     return filename;

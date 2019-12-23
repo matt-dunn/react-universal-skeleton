@@ -16,15 +16,15 @@ const phaseComplete = (config, report) => {
 
     const ret = {
         getReport: () => report,
-        getReportPath: () => path.join(reportsPath, "i18l-status.json"),
+        getReportFilename: () => path.join(reportsPath, "i18l-status.json"),
         saveReport: () => {
             if (!reportsPath) {
                 console.error(chalk.red("'reportsPath' not supplied"));
                 process.exit(1);
             }
 
-            mkdirp(reportsPath);
-            fs.writeFileSync(ret.getReportPath(), stringifyMessages(report));
+            mkdirp(path.parse(reportsPath).dir);
+            fs.writeFileSync(ret.getReportFilename(), stringifyMessages(report));
 
             return ret;
         },
@@ -39,7 +39,7 @@ const phaseComplete = (config, report) => {
             const {timestamp, version} = report;
             const summary = ret.getSummary();
 
-            const filename = path.join(translationsPath, "summary.json");
+            const filename = path.join(translationsPath, ".metadata", "summary.json");
             const summaryReport = (fs.existsSync(filename) && JSON.parse(fs.readFileSync(filename).toString())) || {
                 languages: []
             };
@@ -49,7 +49,7 @@ const phaseComplete = (config, report) => {
             if (!lastSummary || !isEqual(lastSummary.summary, summary)) {
                 summaryReport.languages.push({timestamp, version, summary});
 
-                mkdirp(translationsPath);
+                mkdirp(path.parse(filename).dir);
                 fs.writeFileSync(filename, stringifyMessages(summaryReport));
             }
 

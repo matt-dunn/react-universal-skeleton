@@ -16,7 +16,7 @@ const getLangMessages = (translationsPath, lang = "default") => {
 
 const saveLangMessages = (translationsPath, messages, lang = "default") => {
     const filename = getLangMessageFilename(translationsPath, lang);
-    mkdirp(translationsPath);
+    mkdirp(path.parse(filename).dir);
     fs.writeFileSync(filename, stringifyMessages(messages));
     return filename;
 };
