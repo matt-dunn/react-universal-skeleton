@@ -1,6 +1,6 @@
 {
   "name": "universal-app",
-  "version": "1.0.236-dev.0",
+  "version": "1.0.240-dev.0",
   "main": "app/index.js",
   "private": true,
   "dependencies": {
@@ -27,6 +27,7 @@
     "lodash": "^4.17.15",
     "marked": "^0.7.0",
     "object-path-immutable": "^3.0.2",
+    "pino": "^5.13.3",
     "prismjs": "^1.17.1",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
@@ -123,7 +124,6 @@
     "mini-css-extract-plugin": "^0.8.0",
     "mkdirp": "^0.5.1",
     "node-sass": "^4.13.0",
-    "pino": "^5.13.3",
     "postcss-loader": "^3.0.0",
     "postcss-modules": "^1.4.1",
     "raw-loader": "^4.0.0",
