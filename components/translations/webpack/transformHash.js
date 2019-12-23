@@ -1,17 +1,17 @@
-function getValue(source) {
+const getValue = source => {
     const value = typeof source === "string" && JSON.parse(source);
 
-    return value && Object.values(value).reduce((messages, message) => {
+    return (value && typeof value === "object" && Object.values(value).reduce((messages, message) => {
         messages[message.id] = message.defaultMessage;
         return messages;
-    }, {});
-}
+    }, {})) || value;
+};
 
-module.exports = function(content) {
-    const obj = JSON.stringify(getValue(content))
+module.exports = content => {
+    const obj = content && JSON.stringify(getValue(content))
         .replace(/\u2028/g, "\\u2028")
         .replace(/\u2029/g, "\\u2029");
 
-    return `module.exports = ${obj}`;
+    return obj && `module.exports = ${obj}`;
 };
 

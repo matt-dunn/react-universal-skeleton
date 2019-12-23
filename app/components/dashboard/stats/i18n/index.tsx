@@ -6,8 +6,6 @@ import {useIntl} from "react-intl";
 
 import summary from "app/i18n/.metadata/summary.json";
 
-console.log(summary);
-
 const {languages} = summary;
 
 const summaryData = languages.reduce((data: any, {summary, timestamp}: {summary: {languages: any[]}; timestamp: string}) => {

@@ -20,8 +20,8 @@ module.exports = ({root}) => ( {
             },
             {
                 type: "javascript/auto",
-                test: /i18n\/.*?\.json$/i,
-                exclude: /node_modules/,
+                test: /i18n\/[a-z-]*\.json$/i,
+                exclude: /\.metadata/,
                 use: "translations/webpack/transformHash",
             },
             {
