@@ -5,8 +5,6 @@ const mkdirp = require("mkdirp");
 const {stringifyMessages, hashMessages} = require("./utils");
 const {getManifest} = require("./manifest");
 
-const getLangMessageFilename = (translationsPath, lang = "default") => path.join(translationsPath, `${lang}.json`);
-
 const getDefaultMessagesFilename = translationsPath => path.join(translationsPath, ".metadata", "defaultMessages.json");
 
 const getDefaultMessages = translationsPath => {
@@ -24,6 +22,8 @@ const saveDefaultMessages = (translationsPath, messages) => {
     fs.writeFileSync(filename, stringifyMessages(messages));
     return filename;
 };
+
+const getLangMessageFilename = (translationsPath, lang = "default") => path.join(translationsPath, `${lang}.json`);
 
 const getLangMessages = (translationsPath, lang = "default") => {
     const filename = getLangMessageFilename(translationsPath, lang);

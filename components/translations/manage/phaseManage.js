@@ -30,11 +30,11 @@ const phaseManage = (config, {defaultMessages}) => {
         languages: []
     };
 
+    const defaultLangMessages = getLangMessages(translationsPath);
+    const translationCount = Object.keys(defaultMessages).length;
+
     const ret = {
         processLanguage: lang => {
-            const defaultLangMessages = getLangMessages(translationsPath);
-
-            const translationCount = Object.keys(defaultMessages).length;
             const messages = getLangMessages(translationsPath, lang);
             const whitelist = getLangWhitelist(translationsPath, lang);
             const delta = getDelta(defaultMessages, defaultLangMessages, messages, whitelist);
