@@ -25,7 +25,7 @@ const normalize = o => o.map(({type, value, options}) => {
     }
 }).filter(w => w && w.trim() !== "").join(" ").split(/\b/).filter(word => word.trim() !== "");
 
-const countWords = messages => messages.reduce((wordCount, {defaultMessage}) => wordCount + normalize(parse(defaultMessage)).length, 0);
+const countWords = messages => messages.reduce((wordCount, defaultMessage) => wordCount + normalize(parse(defaultMessage)).length, 0);
 
 const formatNumber = num => num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
 

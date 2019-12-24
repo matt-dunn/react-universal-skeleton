@@ -1792,6 +1792,351 @@
       },
       "timestamp": "2019-12-23T14:58:19.520Z",
       "version": "1.0.237"
+    },
+    {
+      "summary": {
+        "languages": [
+          {
+            "added": 0,
+            "filename": "app/i18n/en-GB.json",
+            "lang": "en-GB",
+            "removed": 0,
+            "untranslated": 0,
+            "updated": 0,
+            "whitelistFilename": "app/i18n/en-GB_whitelist.json",
+            "wordCount": 0
+          },
+          {
+            "added": 0,
+            "filename": "app/i18n/de.json",
+            "lang": "de",
+            "removed": 0,
+            "untranslated": 0,
+            "updated": 0,
+            "whitelistFilename": "app/i18n/de_whitelist.json",
+            "wordCount": 0
+          },
+          {
+            "added": 0,
+            "filename": "app/i18n/fr.json",
+            "lang": "fr",
+            "removed": 0,
+            "untranslated": 0,
+            "updated": 0,
+            "whitelistFilename": "app/i18n/fr_whitelist.json",
+            "wordCount": 0
+          },
+          {
+            "added": 0,
+            "filename": "app/i18n/es.json",
+            "lang": "es",
+            "removed": 0,
+            "untranslated": 0,
+            "updated": 0,
+            "whitelistFilename": "app/i18n/es_whitelist.json",
+            "wordCount": 0
+          },
+          {
+            "added": 5,
+            "filename": "app/i18n/it.json",
+            "lang": "it",
+            "removed": 0,
+            "untranslated": 5,
+            "updated": 0,
+            "whitelistFilename": "app/i18n/it_whitelist.json",
+            "wordCount": 16
+          }
+        ],
+        "sourceLanguages": [
+          "en-GB",
+          "de",
+          "fr",
+          "es",
+          "it"
+        ],
+        "totalLanguagesCount": 5,
+        "totalTranslationsCount": 5,
+        "totalUntranslatedCount": 5,
+        "totalWordCount": 16
+      },
+      "timestamp": "2019-12-23T21:06:11.612Z",
+      "version": "1.0.240-dev.0"
+    },
+    {
+      "summary": {
+        "languages": [
+          {
+            "added": 0,
+            "filename": "app/i18n/en-GB.json",
+            "lang": "en-GB",
+            "removed": 0,
+            "untranslated": 5,
+            "updated": 5,
+            "whitelistFilename": "app/i18n/en-GB_whitelist.json",
+            "wordCount": 23
+          },
+          {
+            "added": 0,
+            "filename": "app/i18n/de.json",
+            "lang": "de",
+            "removed": 0,
+            "untranslated": 5,
+            "updated": 5,
+            "whitelistFilename": "app/i18n/de_whitelist.json",
+            "wordCount": 23
+          },
+          {
+            "added": 0,
+            "filename": "app/i18n/fr.json",
+            "lang": "fr",
+            "removed": 0,
+            "untranslated": 5,
+            "updated": 5,
+            "whitelistFilename": "app/i18n/fr_whitelist.json",
+            "wordCount": 23
+          },
+          {
+            "added": 0,
+            "filename": "app/i18n/es.json",
+            "lang": "es",
+            "removed": 0,
+            "untranslated": 5,
+            "updated": 5,
+            "whitelistFilename": "app/i18n/es_whitelist.json",
+            "wordCount": 23
+          },
+          {
+            "added": 5,
+            "filename": "app/i18n/it.json",
+            "lang": "it",
+            "removed": 0,
+            "untranslated": 5,
+            "updated": 0,
+            "whitelistFilename": "app/i18n/it_whitelist.json",
+            "wordCount": 23
+          }
+        ],
+        "sourceLanguages": [
+          "en-GB",
+          "de",
+          "fr",
+          "es",
+          "it"
+        ],
+        "totalLanguagesCount": 5,
+        "totalTranslationsCount": 5,
+        "totalUntranslatedCount": 25,
+        "totalWordCount": 115
+      },
+      "timestamp": "2019-12-23T23:36:07.130Z",
+      "version": "1.0.240-dev.0"
+    },
+    {
+      "summary": {
+        "languages": [
+          {
+            "added": 0,
+            "filename": "app/i18n/en-GB.json",
+            "lang": "en-GB",
+            "removed": 0,
+            "untranslated": 5,
+            "updated": 5,
+            "whitelistFilename": "app/i18n/en-GB_whitelist.json",
+            "wordCount": 16
+          },
+          {
+            "added": 0,
+            "filename": "app/i18n/de.json",
+            "lang": "de",
+            "removed": 0,
+            "untranslated": 5,
+            "updated": 5,
+            "whitelistFilename": "app/i18n/de_whitelist.json",
+            "wordCount": 16
+          },
+          {
+            "added": 0,
+            "filename": "app/i18n/fr.json",
+            "lang": "fr",
+            "removed": 0,
+            "untranslated": 5,
+            "updated": 5,
+            "whitelistFilename": "app/i18n/fr_whitelist.json",
+            "wordCount": 16
+          },
+          {
+            "added": 0,
+            "filename": "app/i18n/es.json",
+            "lang": "es",
+            "removed": 0,
+            "untranslated": 5,
+            "updated": 5,
+            "whitelistFilename": "app/i18n/es_whitelist.json",
+            "wordCount": 16
+          },
+          {
+            "added": 5,
+            "filename": "app/i18n/it.json",
+            "lang": "it",
+            "removed": 0,
+            "untranslated": 5,
+            "updated": 0,
+            "whitelistFilename": "app/i18n/it_whitelist.json",
+            "wordCount": 16
+          }
+        ],
+        "sourceLanguages": [
+          "en-GB",
+          "de",
+          "fr",
+          "es",
+          "it"
+        ],
+        "totalLanguagesCount": 5,
+        "totalTranslationsCount": 5,
+        "totalUntranslatedCount": 25,
+        "totalWordCount": 80
+      },
+      "timestamp": "2019-12-23T23:41:26.352Z",
+      "version": "1.0.240-dev.0"
+    },
+    {
+      "summary": {
+        "languages": [
+          {
+            "added": 0,
+            "filename": "app/i18n/en-GB.json",
+            "lang": "en-GB",
+            "removed": 0,
+            "untranslated": 0,
+            "updated": 5,
+            "whitelistFilename": "app/i18n/en-GB_whitelist.json",
+            "wordCount": 0
+          },
+          {
+            "added": 0,
+            "filename": "app/i18n/de.json",
+            "lang": "de",
+            "removed": 0,
+            "untranslated": 0,
+            "updated": 5,
+            "whitelistFilename": "app/i18n/de_whitelist.json",
+            "wordCount": 0
+          },
+          {
+            "added": 0,
+            "filename": "app/i18n/fr.json",
+            "lang": "fr",
+            "removed": 0,
+            "untranslated": 3,
+            "updated": 5,
+            "whitelistFilename": "app/i18n/fr_whitelist.json",
+            "wordCount": 12
+          },
+          {
+            "added": 0,
+            "filename": "app/i18n/es.json",
+            "lang": "es",
+            "removed": 0,
+            "untranslated": 3,
+            "updated": 5,
+            "whitelistFilename": "app/i18n/es_whitelist.json",
+            "wordCount": 10
+          },
+          {
+            "added": 5,
+            "filename": "app/i18n/it.json",
+            "lang": "it",
+            "removed": 0,
+            "untranslated": 5,
+            "updated": 0,
+            "whitelistFilename": "app/i18n/it_whitelist.json",
+            "wordCount": 16
+          }
+        ],
+        "sourceLanguages": [
+          "en-GB",
+          "de",
+          "fr",
+          "es",
+          "it"
+        ],
+        "totalLanguagesCount": 5,
+        "totalTranslationsCount": 5,
+        "totalUntranslatedCount": 11,
+        "totalWordCount": 38
+      },
+      "timestamp": "2019-12-23T23:42:46.624Z",
+      "version": "1.0.240-dev.0"
+    },
+    {
+      "summary": {
+        "languages": [
+          {
+            "added": 0,
+            "filename": "app/i18n/en-GB.json",
+            "lang": "en-GB",
+            "removed": 0,
+            "untranslated": 5,
+            "updated": 5,
+            "whitelistFilename": "app/i18n/en-GB_whitelist.json",
+            "wordCount": 16
+          },
+          {
+            "added": 0,
+            "filename": "app/i18n/de.json",
+            "lang": "de",
+            "removed": 0,
+            "untranslated": 5,
+            "updated": 5,
+            "whitelistFilename": "app/i18n/de_whitelist.json",
+            "wordCount": 16
+          },
+          {
+            "added": 0,
+            "filename": "app/i18n/fr.json",
+            "lang": "fr",
+            "removed": 0,
+            "untranslated": 5,
+            "updated": 5,
+            "whitelistFilename": "app/i18n/fr_whitelist.json",
+            "wordCount": 16
+          },
+          {
+            "added": 0,
+            "filename": "app/i18n/es.json",
+            "lang": "es",
+            "removed": 0,
+            "untranslated": 5,
+            "updated": 5,
+            "whitelistFilename": "app/i18n/es_whitelist.json",
+            "wordCount": 16
+          },
+          {
+            "added": 5,
+            "filename": "app/i18n/it.json",
+            "lang": "it",
+            "removed": 0,
+            "untranslated": 5,
+            "updated": 0,
+            "whitelistFilename": "app/i18n/it_whitelist.json",
+            "wordCount": 16
+          }
+        ],
+        "sourceLanguages": [
+          "en-GB",
+          "de",
+          "fr",
+          "es",
+          "it"
+        ],
+        "totalLanguagesCount": 5,
+        "totalTranslationsCount": 5,
+        "totalUntranslatedCount": 25,
+        "totalWordCount": 80
+      },
+      "timestamp": "2019-12-23T23:44:51.470Z",
+      "version": "1.0.240-dev.0"
     }
   ]
 }

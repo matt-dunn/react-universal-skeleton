@@ -1,19 +1,19 @@
 const {hashMessages} = require("./utils");
 
-const getDelta = (sourceDefaultMessages, defaultLangMessages, messages, whitelist) => {
+const getDelta = (defaultMessages, sourceDefaultMessages, messages, whitelist) => {
     const {ids: whitelistIds} = whitelist;
 
-    const delta = Object.values(sourceDefaultMessages).reduce((delta, message) => {
-        const {id} = message;
+    const delta = Object.values(defaultMessages).reduce((delta, message) => {
+        const {id, defaultMessage} = message;
 
         if (!messages[id]) {
-            delta.added[id] = message;
-            delta.untranslated[id] = message;
-        } else if (defaultLangMessages[id] && sourceDefaultMessages[id].defaultMessage !== defaultLangMessages[id].defaultMessage) {
-            delta.updated[id] = message;
-            delta.untranslated[id] = message;
-        } else if (messages[id] && !sourceDefaultMessages[id]) {
-            delta.removed[id] = message;
+            delta.added[id] = defaultMessage;
+            delta.untranslated[id] = defaultMessage;
+        } else if (sourceDefaultMessages[id] && defaultMessages[id].defaultMessage !== sourceDefaultMessages[id].defaultMessage) {
+            delta.updated[id] = defaultMessage;
+            delta.untranslated[id] = defaultMessage;
+        } else if (messages[id] && !defaultMessages[id]) {
+            delta.removed[id] = defaultMessage;
         }
 
         return delta;
@@ -25,9 +25,9 @@ const getDelta = (sourceDefaultMessages, defaultLangMessages, messages, whitelis
     });
 
     Object.keys(messages).reduce((delta, id) => {
-        if (!sourceDefaultMessages[id]) {
+        if (!defaultMessages[id]) {
             delta.removed[id] = messages[id];
-        } else if (messages[id].defaultMessage === sourceDefaultMessages[id].defaultMessage && whitelistIds.indexOf(id) === -1) {
+        } else if (messages[id] === defaultMessages[id].defaultMessage && whitelistIds.indexOf(id) === -1) {
             delta.untranslated[id] = messages[id];
         }
 
@@ -38,23 +38,15 @@ const getDelta = (sourceDefaultMessages, defaultLangMessages, messages, whitelis
 };
 
 const applyDelta = (sourceMessages, messages, {added, removed, updated}) => {
-    return hashMessages(Object.values(messages)
-        .map(message => {
-            const {id} = message;
-
+    return hashMessages(Object.keys(messages)
+        .map(id => {
             if (removed[id]) {
                 return undefined;
             } else if (updated[id]) {
-                return {
-                    ...sourceMessages[id],
-                    defaultMessage: updated[id].defaultMessage
-                };
+                return updated[id];
             }
 
-            return {
-                ...sourceMessages[id],
-                defaultMessage: message.defaultMessage
-            };
+            return messages[id];
         })
         .filter(message => message)
         .concat(Object.keys(added).map(key => added[key])));

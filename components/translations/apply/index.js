@@ -58,8 +58,8 @@ module.exports.apply = ({translationsPath}) => (languageFilename, language = und
 
         const whitelist = getLangWhitelist(translationsPath, lang);
 
-        const updatedMessages = hashMessages(Object.values(defaultMessages).map(message => {
-            const {id, defaultMessage} = message;
+        const updatedMessages = Object.keys(defaultMessages).reduce((messages, id) => {
+            const defaultMessage = defaultMessages[id];
 
             if (sourceMessagesHash[id]) {
                 if (sourceMessagesHash[id].defaultMessage === defaultMessage) {
@@ -75,21 +75,17 @@ module.exports.apply = ({translationsPath}) => (languageFilename, language = und
                     }
                 }
 
-                if (!targetMessages[id] || targetMessages[id].defaultMessage !== sourceMessagesHash[id].defaultMessage) {
+                if (!targetMessages[id] || targetMessages[id] !== sourceMessagesHash[id].defaultMessage) {
                     report.summary.updatedCount++;
                 }
 
-                return {
-                    ...message,
-                    defaultMessage: sourceMessagesHash[id].defaultMessage
-                };
+                messages[id] = sourceMessagesHash[id].defaultMessage;
+            } else {
+                messages[id] = targetMessages[id] || defaultMessage;
             }
 
-            return {
-                ...message,
-                defaultMessage: (targetMessages[id] && targetMessages[id].defaultMessage) || defaultMessage
-            };
-        }));
+            return messages;
+        }, {});
 
         report.summary.totalTranslationsCount = Object.keys(defaultMessages).length;
 

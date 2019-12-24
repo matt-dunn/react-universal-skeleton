@@ -69,7 +69,7 @@ const phaseManage = (config, {defaultMessages, report, sourceDefaultMessages, tr
                 defaultMessages && saveLangMessages(translationsPath, defaultMessages);
             }
 
-            return phaseComplete(config, report);
+            return phaseComplete(config, {report, defaultMessages});
         }
     };
 

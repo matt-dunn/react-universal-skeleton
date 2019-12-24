@@ -11,7 +11,7 @@ const {
     stringifyMessages
 } = require("../utils");
 
-const phaseComplete = (config, report) => {
+const phaseComplete = (config, {report, defaultMessages}) => {
     const {translationsPath, reportsPath, version} = config;
 
     const ret = {
@@ -117,7 +117,13 @@ const phaseComplete = (config, report) => {
                     return {
                         lang,
                         count: untranslated,
-                        untranslated: Object.values(delta.untranslated)
+                        untranslated: Object.keys(delta.untranslated).reduce((messages, id) => {
+                            messages[id] = {
+                                defaultMessage: delta.untranslated[id],
+                                ...defaultMessages[id]
+                            };
+                            return messages;
+                        }, {})
                     };
                 }
             }).filter(translations => translations);
