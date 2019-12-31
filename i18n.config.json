@@ -1,3 +1,4 @@
 {
+    "config": "app/webpack/metadata",
     "languages": ["en-GB", "de", "fr", "es", "it"]
 }

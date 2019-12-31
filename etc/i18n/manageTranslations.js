@@ -1,38 +1,44 @@
-import commandLineArgs from "command-line-args";
+const chalk = require("chalk");
+const commandLineArgs = require("command-line-args");
 
-import {translations} from "components/translations";
+const {translations} = require("../../components/translations");
 
-import metadata from "app/webpack/metadata";
+const {getConfig} = require("../../components/translations/utils");
 
-const optionDefinitions = [
-    { name: "gen", type: Boolean},
-    { name: "status", type: Boolean}
-];
+try {
+    const {config: {i18nMessagesPath, i18nLocalePath, reportsPath, version}} = getConfig();
 
-const options = commandLineArgs(optionDefinitions);
+    const optionDefinitions = [
+        {name: "gen", type: Boolean},
+        {name: "status", type: Boolean}
+    ];
 
-const {i18nMessagesPath, i18nLocalePath, reportsPath, version} = metadata();
+    const options = commandLineArgs(optionDefinitions);
 
-const managedTranslations = translations({
-    messagesPath: i18nMessagesPath,
-    translationsPath: i18nLocalePath,
-    version,
-    reportsPath
-})
-    .manage({
-        emmit: false
-    });
+    const managedTranslations = translations({
+        messagesPath: i18nMessagesPath,
+        translationsPath: i18nLocalePath,
+        version,
+        reportsPath
+    })
+        .manage({
+            emmit: false
+        });
 
-const done = managedTranslations
-    .processLanguages()
-    .printSummary()
-    .saveReport()
-    .updateSummary();
+    const done = managedTranslations
+        .processLanguages()
+        .printSummary()
+        .saveReport()
+        .updateSummary();
 
-if (options.gen) {
-    done.generateTranslations();
-}
+    if (options.gen) {
+        done.generateTranslations();
+    }
 
-if (options.status) {
-    done.checkStatus();
+    if (options.status) {
+        done.checkStatus();
+    }
+} catch (ex) {
+    console.error(chalk.red(ex.message));
+    process.exit(1);
 }

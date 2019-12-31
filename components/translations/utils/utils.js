@@ -2,12 +2,32 @@ const fs = require("fs");
 const path = require("path");
 const stringify = require("json-stable-stringify");
 const { parse } = require("intl-messageformat-parser");
+const { struct } =require("superstruct");
+
+const ConfigSchema = struct({
+    config: "string",
+    languages: struct.optional(struct.array(["string"]))
+});
 
 const getConfig = () => {
     const filename = path.join(__dirname, "..", "..", "..", "i18n.config.json");
-    return (fs.existsSync(filename) && JSON.parse(fs.readFileSync(filename).toString())) || {
+    const config = Object.assign({}, {
         languages: []
-    };
+    }, (fs.existsSync(filename) && JSON.parse(fs.readFileSync(filename).toString())));
+
+    const [error] = ConfigSchema.validate(config);
+
+    if (error) {
+        throw new Error(`'${error.path}' must be of type '${error.type}'`);
+    }
+
+    try {
+        config.config = require(path.resolve(__dirname, "..", "..", "..", config.config))();
+    } catch (ex) {
+        throw new Error(`Unable to find config '${config.config}'`);
+    }
+
+    return config;
 };
 
 const getRelativePath = filename => path.relative(__dirname, filename).replace(/\.\.\//g, "");

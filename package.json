@@ -139,6 +139,7 @@
     "stylelint-config-recommended": "^3.0.0",
     "stylelint-config-styled-components": "^0.1.1",
     "stylelint-processor-styled-components": "^1.8.0",
+    "superstruct": "^0.8.3",
     "ts-jest": "^24.1.0",
     "typescript": "^3.6.3",
     "webpack": "^4.41.2",
@@ -174,8 +175,8 @@
     "start": "yarn build:run",
     "version": "echo \"versioning $npm_package_version\"",
     "stats:dups": "webpack-stats-duplicates ./reports/client-stats.json && webpack-stats-duplicates ./reports/server-stats.json",
-    "translations:manage": "babel-node --presets @babel/env ./etc/i18n/manageTranslations.js",
-    "translations:update": "babel-node --presets @babel/env ./etc/i18n/updateTranslation.js"
+    "translations:manage": "node ./etc/i18n/manageTranslations.js",
+    "translations:update": "node ./etc/i18n/updateTranslation.js"
   },
   "engines": {
     "node": ">=10",
