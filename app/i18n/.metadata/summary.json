@@ -2137,6 +2137,75 @@
       },
       "timestamp": "2019-12-23T23:44:51.470Z",
       "version": "1.0.240-dev.0"
+    },
+    {
+      "summary": {
+        "languages": [
+          {
+            "added": 0,
+            "filename": "app/i18n/en-GB.json",
+            "lang": "en-GB",
+            "removed": 0,
+            "untranslated": 0,
+            "updated": 0,
+            "whitelistFilename": "app/i18n/en-GB_whitelist.json",
+            "wordCount": 0
+          },
+          {
+            "added": 0,
+            "filename": "app/i18n/de.json",
+            "lang": "de",
+            "removed": 0,
+            "untranslated": 0,
+            "updated": 0,
+            "whitelistFilename": "app/i18n/de_whitelist.json",
+            "wordCount": 0
+          },
+          {
+            "added": 0,
+            "filename": "app/i18n/fr.json",
+            "lang": "fr",
+            "removed": 0,
+            "untranslated": 3,
+            "updated": 0,
+            "whitelistFilename": "app/i18n/fr_whitelist.json",
+            "wordCount": 12
+          },
+          {
+            "added": 0,
+            "filename": "app/i18n/es.json",
+            "lang": "es",
+            "removed": 0,
+            "untranslated": 3,
+            "updated": 0,
+            "whitelistFilename": "app/i18n/es_whitelist.json",
+            "wordCount": 10
+          },
+          {
+            "added": 5,
+            "filename": "app/i18n/it.json",
+            "lang": "it",
+            "removed": 0,
+            "untranslated": 5,
+            "updated": 0,
+            "whitelistFilename": "app/i18n/it_whitelist.json",
+            "wordCount": 16
+          }
+        ],
+        "sourceLanguages": [
+          "en-GB",
+          "de",
+          "fr",
+          "es",
+          "it"
+        ],
+        "totalLanguagesCount": 5,
+        "totalTranslationsCount": 5,
+        "totalUntranslatedCount": 11,
+        "totalWordCount": 38
+      },
+      "timestamp": "2019-12-31T12:08:24.186Z",
+      "version": "1.0.240-dev.0"
     }
   ]
 }
