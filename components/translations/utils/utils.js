@@ -31,7 +31,7 @@ const parseConfig = config => {
                 version
             };
         } catch (ex) {
-            throw new Error(`Unable to find config '${config}'`);
+            throw new Error(`Error parsing config '${config}' - ${ex.message}`);
         }
     }
 };
