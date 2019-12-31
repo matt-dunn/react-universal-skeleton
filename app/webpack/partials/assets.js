@@ -19,12 +19,6 @@ module.exports = ({root}) => ( {
                 use: "raw-loader",
             },
             {
-                type: "javascript/auto",
-                test: /i18n\/[a-z-]*\.json$/i,
-                exclude: /\.metadata/,
-                use: "translations/webpack/transformHash",
-            },
-            {
                 test: /readme\.md$/i,
                 exclude: /node_modules/,
                 use: "raw-loader",

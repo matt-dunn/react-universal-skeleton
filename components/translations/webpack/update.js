@@ -79,8 +79,8 @@ ReactIntlPlugin.prototype.apply = function(compiler) {
                     messages[module.resource].forEach(message => {
                         defaultMessages[message.id] = message;
 
-                        if (sourceDefaultMessages[message.id] && message.defaultMessage !== sourceDefaultMessages[message.id].defaultMessage) {
-                            if (changedMessages[message.id] === sourceDefaultMessages[message.id].defaultMessage) {
+                        if (sourceDefaultMessages[message.id] && message.defaultMessage !== sourceDefaultMessages[message.id]) {
+                            if (changedMessages[message.id] === sourceDefaultMessages[message.id]) {
                                 delete changedMessages[message.id];
                             } else {
                                 changedMessages[message.id] = message;
