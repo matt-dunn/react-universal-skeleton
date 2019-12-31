@@ -5,13 +5,40 @@ const { parse } = require("intl-messageformat-parser");
 const { struct } =require("superstruct");
 
 const ConfigSchema = struct({
-    config: "string",
+    config: "string|object",
     languages: struct.optional(struct.array(["string"]))
 });
 
+const ConfigOptionsSchema = struct({
+    i18nMessagesPath: "string",
+    i18nLocalePath: "string",
+    reportsPath: "string",
+    version: "string"
+});
+
+const parseConfig = config => {
+    if (typeof config === "object") {
+        return config;
+    } else {
+        try {
+            const configOptions = require(path.resolve(__dirname, "..", "..", "..", config));
+            const {i18nMessagesPath, i18nLocalePath, reportsPath, version} = (typeof configOptions === "function" && configOptions()) || configOptions;
+
+            return {
+                i18nMessagesPath,
+                i18nLocalePath,
+                reportsPath,
+                version
+            };
+        } catch (ex) {
+            throw new Error(`Unable to find config '${config}'`);
+        }
+    }
+};
+
 const getConfig = () => {
     const filename = path.join(__dirname, "..", "..", "..", "i18n.config.json");
-    const config = Object.assign({}, {
+    const config = Object.assign({
         languages: []
     }, (fs.existsSync(filename) && JSON.parse(fs.readFileSync(filename).toString())));
 
@@ -21,10 +48,10 @@ const getConfig = () => {
         throw new Error(`'${error.path}' must be of type '${error.type}'`);
     }
 
-    try {
-        config.config = require(path.resolve(__dirname, "..", "..", "..", config.config))();
-    } catch (ex) {
-        throw new Error(`Unable to find config '${config.config}'`);
+    config.config = parseConfig(config.config);
+    const [errorConfig] = ConfigOptionsSchema.validate(config.config);
+    if (errorConfig) {
+        throw new Error(`'${errorConfig.path}' must be of type '${errorConfig.type}'`);
     }
 
     return config;
