@@ -175,8 +175,8 @@
     "start": "yarn build:run",
     "version": "echo \"versioning $npm_package_version\"",
     "stats:dups": "webpack-stats-duplicates ./reports/client-stats.json && webpack-stats-duplicates ./reports/server-stats.json",
-    "translations:manage": "node ./etc/i18n/manageTranslations.js",
-    "translations:update": "node ./etc/i18n/updateTranslation.js"
+    "translations:manage": "node ./components/translations/cli/manageTranslations.js",
+    "translations:update": "node ./components/translations/cli/updateTranslation.js"
   },
   "engines": {
     "node": ">=10",
