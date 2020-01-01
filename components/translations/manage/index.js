@@ -24,20 +24,15 @@ module.exports.manage = ({messagesPath, translationsPath, reportsPath, version})
         process.exit(1);
     }
 
-    try {
-        const config = {
-            ...getConfig(),
-            messagesPath,
-            translationsPath,
-            reportsPath,
-            version,
-            updatedMessagesCallback,
-            emmit
-        };
+    const config = {
+        ...getConfig(),
+        messagesPath,
+        translationsPath,
+        reportsPath,
+        version,
+        updatedMessagesCallback,
+        emmit
+    };
 
-        return phaseBegin(config);
-    } catch (ex) {
-        console.error(chalk.red(ex.message));
-        process.exit(1);
-    }
+    return phaseBegin(config);
 };

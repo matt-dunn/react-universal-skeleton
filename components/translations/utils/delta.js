@@ -1,5 +1,3 @@
-const {hashMessages} = require("./utils");
-
 const getDelta = (defaultMessages, sourceDefaultMessages, messages, whitelist) => {
     const {ids: whitelistIds} = whitelist;
 
@@ -9,7 +7,7 @@ const getDelta = (defaultMessages, sourceDefaultMessages, messages, whitelist) =
         if (!messages[id]) {
             delta.added[id] = defaultMessage;
             delta.untranslated[id] = defaultMessage;
-        } else if (sourceDefaultMessages[id] && defaultMessages[id].defaultMessage !== sourceDefaultMessages[id].defaultMessage) {
+        } else if (sourceDefaultMessages[id] && defaultMessages[id].defaultMessage !== sourceDefaultMessages[id] && messages[id] !== defaultMessages[id].defaultMessage) {
             delta.updated[id] = defaultMessage;
             delta.untranslated[id] = defaultMessage;
         } else if (messages[id] && !defaultMessages[id]) {
@@ -37,20 +35,20 @@ const getDelta = (defaultMessages, sourceDefaultMessages, messages, whitelist) =
     return delta;
 };
 
-const applyDelta = (sourceMessages, messages, {added, removed, updated}) => {
-    return hashMessages(Object.keys(messages)
-        .map(id => {
-            if (removed[id]) {
-                return undefined;
-            } else if (updated[id]) {
-                return updated[id];
+const applyDelta = (sourceMessages, messages, {added, removed, updated}) => Object.assign((Object.keys(messages)
+    .reduce((update, id) => {
+        if (!removed[id]) {
+            if (updated[id]) {
+                update[id] = updated[id];
+            } else if (added[id]) {
+                update[id] = added[id];
+            } else {
+                update[id] = messages[id];
             }
+        }
 
-            return messages[id];
-        })
-        .filter(message => message)
-        .concat(Object.keys(added).map(key => added[key])));
-};
+        return update;
+    }, {})), added);
 
 const applyWhitelistDelta = (whitelist, {removed, updated}) => ({
     ...whitelist,

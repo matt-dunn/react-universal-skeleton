@@ -98,9 +98,9 @@ ReactIntlPlugin.prototype.apply = function(compiler) {
                 if (environment !== "development" && mod.resource && languageFiles.filter(file => mod.resource.indexOf(file) !== -1).length > 0) {
                     const lang = path.parse(mod.resource).name;
 
-                    const messages = (lang === "default" && defaultMessages) || translationsSealed.processLanguage(lang);
+                    const messages = (lang === "default" && transformHash(defaultMessages)) || translationsSealed.processLanguage(lang);
 
-                    mod._source._value = `module.exports = ${JSON.stringify(transformHash(messages))}`;
+                    mod._source._value = `module.exports = ${JSON.stringify(messages)}`;
                 }
 
                 if (environment === "development" && mod.resource && mod.resource.indexOf(entry) !== -1) {

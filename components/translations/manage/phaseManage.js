@@ -13,8 +13,10 @@ const {
 
 const phaseComplete = require("./phaseComplete");
 
-const phaseManage = (config, {defaultMessages, report, sourceDefaultMessages, translationCount}) => {
+const phaseManage = (config, {defaultMessages, report, sourceDefaultMessages}) => {
     const {languages, translationsPath, updatedMessagesCallback, emmit} = config;
+
+    const translationCount = Object.keys(defaultMessages).length;
 
     const ret = {
         processLanguage: lang => {

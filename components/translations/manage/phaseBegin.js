@@ -1,4 +1,5 @@
 const {
+    getLangMessages,
     getDefaultMessages
 } = require("../utils");
 
@@ -21,12 +22,11 @@ const phaseBegin = (config) => {
         languages: []
     };
 
-    const sourceDefaultMessages = getDefaultMessages(translationsPath);
-    const translationCount = Object.keys(sourceDefaultMessages).length;
+    const sourceDefaultMessages = getLangMessages(translationsPath);
 
     const ret = {
         processLanguages: () => {
-            const done = ret.seal({defaultMessages: sourceDefaultMessages});
+            const done = ret.seal({defaultMessages: getDefaultMessages(translationsPath)});
 
             languages.forEach(lang => {
                 done.processLanguage(lang,);
@@ -34,7 +34,7 @@ const phaseBegin = (config) => {
 
             return done.done();
         },
-        seal: ({defaultMessages}) => phaseManage(config, {defaultMessages, report, sourceDefaultMessages, translationCount})
+        seal: ({defaultMessages}) => phaseManage(config, {defaultMessages, report, sourceDefaultMessages})
     };
 
     return ret;
