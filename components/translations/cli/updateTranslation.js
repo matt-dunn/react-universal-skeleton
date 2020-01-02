@@ -3,7 +3,7 @@ const commandLineArgs = require("command-line-args");
 
 const {translations} = require("../index");
 
-const {getConfig} = require("..//utils");
+const {getConfig} = require("../utils");
 
 try {
     const {config: {i18nMessagesPath, i18nLocalePath, reportsPath}} = getConfig();
