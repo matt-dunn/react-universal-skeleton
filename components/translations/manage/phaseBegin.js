@@ -5,7 +5,7 @@ const {
 
 const phaseManage = require("./phaseManage");
 
-const phaseBegin = (config) => {
+const phaseBegin = config => {
     const {languages, translationsPath, version} = config;
 
     const report = {

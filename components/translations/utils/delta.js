@@ -35,7 +35,7 @@ const getDelta = (defaultMessages, sourceDefaultMessages, messages, whitelist) =
     return delta;
 };
 
-const applyDelta = (sourceMessages, messages, {added, removed, updated}) => Object.assign((Object.keys(messages)
+const applyDelta = (sourceMessages, messages, {added, removed, updated}) => Object.assign(Object.keys(messages)
     .reduce((update, id) => {
         if (!removed[id]) {
             if (updated[id]) {
@@ -48,7 +48,7 @@ const applyDelta = (sourceMessages, messages, {added, removed, updated}) => Obje
         }
 
         return update;
-    }, {})), added);
+    }, {}), added);
 
 const applyWhitelistDelta = (whitelist, {removed, updated}) => ({
     ...whitelist,
