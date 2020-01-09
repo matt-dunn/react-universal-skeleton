@@ -34,7 +34,7 @@ const phaseManage = (config, {defaultMessages, report, sourceDefaultMessages}) =
             const filename = getRelativePath(getLangMessageFilename(translationsPath, lang));
             const whitelistFilename = getRelativePath(getWhitelistFilename(translationsPath, lang));
 
-            report.languages.push({
+            const langReport = {
                 lang,
                 filename,
                 whitelistFilename,
@@ -44,7 +44,9 @@ const phaseManage = (config, {defaultMessages, report, sourceDefaultMessages}) =
                 updated: Object.keys(delta.updated).length,
                 removed: Object.keys(delta.removed).length,
                 delta
-            });
+            };
+
+            report.languages.push(langReport);
 
             const updatedMessages = applyDelta(defaultMessages, messages, delta);
 
@@ -53,7 +55,22 @@ const phaseManage = (config, {defaultMessages, report, sourceDefaultMessages}) =
                 whitelistFilename
             });
 
-            return updatedMessages;
+            const langRet = {
+                pipe: (cb) => {
+                    cb(
+                        {
+                            ...config,
+                            lang
+                        },
+                        updatedMessages,
+                        langReport
+                    );
+
+                    return langRet;
+                }
+            };
+
+            return langRet;
         },
         done: () => {
             const reportLanguages = Object.values(report.languages).map(({lang}) => lang);

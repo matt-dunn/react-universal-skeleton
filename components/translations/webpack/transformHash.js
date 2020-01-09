@@ -1,11 +1,13 @@
-const getValue = source => {
-    const value = typeof source === "string" && JSON.parse(source);
+const getValue = source => typeof source === "string" && JSON.parse(source) || source;
 
-    return (value && typeof value === "object" && Object.values(value).reduce((messages, message) => {
-        messages[message.id] = message.defaultMessage;
-        return messages;
-    }, {})) || value;
-};
+// const getValue = source => {
+//     const value = typeof source === "string" && JSON.parse(source) || source;
+//
+//     return (value && typeof value === "object" && Object.values(value).reduce((messages, message) => {
+//         messages[message.id] = message.defaultMessage;
+//         return messages;
+//     }, {})) || value;
+// };
 
 module.exports = content => {
     const obj = content && JSON.stringify(getValue(content))

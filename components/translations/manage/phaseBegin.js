@@ -29,7 +29,13 @@ const phaseBegin = config => {
             const done = ret.seal({defaultMessages: getDefaultMessages(translationsPath)});
 
             languages.forEach(lang => {
-                done.processLanguage(lang,);
+                done.processLanguage(lang);
+                    // .pipe((config, messages, report) => {
+                    //     console.log(config, messages)
+                    // })
+                    // .pipe((config, messages, report) => {
+                    //     console.log(report)
+                    // })
             });
 
             return done.done();

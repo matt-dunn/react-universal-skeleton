@@ -100,6 +100,8 @@ ReactIntlPlugin.prototype.apply = function(compiler) {
 
                     const messages = (lang === "default" && transformHash(defaultMessages)) || translationsSealed.processLanguage(lang);
 
+                    // console.log("@@@@@", lang, messages);
+
                     mod._source._value = `module.exports = ${JSON.stringify(messages)}`;
                 }
 
@@ -108,6 +110,8 @@ ReactIntlPlugin.prototype.apply = function(compiler) {
                         messages[message.id] = message.defaultMessage;
                         return messages;
                     }, {});
+
+                    // console.log("@@@@@", messages);
 
                     const jsonMessages = JSON.stringify(messages);
 
