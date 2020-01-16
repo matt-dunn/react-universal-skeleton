@@ -5,6 +5,7 @@ import {NavLink} from "react-router-dom";
 import loadable from "@loadable/component";
 
 import Page from "../styles/Page";
+import {withWireFrameAnnotation} from "../../components/Wireframe";
 
 const Menu = styled.ul`
   margin: 50px auto;
@@ -36,6 +37,11 @@ const Markdown = loadable(() => import("components/markdown"));
 
 // import Markdown from "../../components/markdown";
 // import content from "mocks/content/test3.md";
+
+const WAMarkdown = withWireFrameAnnotation(Markdown, {
+    title: <div>Markdown</div>,
+    description: <div>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
+});
 
 const Home = () => {
     return (
@@ -73,7 +79,7 @@ const Home = () => {
                 </MenuLink>
             </Menu>
 
-            <Markdown content={import("../../README.md")} id={"md-1"}/>
+            <WAMarkdown content={import("../../README.md")} id={"md-1"}/>
             {/*<Markdown content={import("mocks/content/test2.md")} id={"md-2"}/>*/}
             {/*<Markdown content={import("mocks/content/test3.md")} id={"md-3"}/>*/}
 

@@ -2,6 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import { NavLink } from "react-router-dom";
 import {useAuthenticatedUser} from "./auth";
+import {withWireFrameAnnotation} from "../../components/Wireframe";
 
 const Container = styled.header`
   margin: 0 auto;
@@ -29,6 +30,26 @@ const MenuLink = styled.li`
   text-decoration: none;
 `;
 
+const WSHome = withWireFrameAnnotation((props) => <NavLink {...props}/>, {
+    title: <div>Home</div>,
+    description: <div>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
+});
+
+const WSData = withWireFrameAnnotation((props) => <NavLink {...props}/>, {
+    title: <div>Data</div>,
+    description: <div>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
+});
+
+const WSForms = withWireFrameAnnotation((props) => <NavLink {...props}/>, {
+    title: <div>Forms</div>,
+    description: <div>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
+});
+
+const WALocale = withWireFrameAnnotation((props) => <NavLink {...props}/>, {
+    title: <div>Locale</div>,
+    description: <div>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
+});
+
 const Header = () => {
     const authenticatedUser = useAuthenticatedUser();
 
@@ -37,28 +58,28 @@ const Header = () => {
             <Brand>Universal App Example {authenticatedUser && authenticatedUser.name} {authenticatedUser && <small>{authenticatedUser.email}</small>} </Brand>
             <Menu>
                 <MenuLink>
-                    <NavLink
+                    <WSHome
                         to="/"
                         exact activeClassName="active"
-                    >Home</NavLink>
+                    >Home</WSHome>
                 </MenuLink>
                 <MenuLink>
-                    <NavLink
+                    <WSData
                         to="/data"
                         exact activeClassName="active"
-                    >API SSR Example</NavLink>
+                    >API SSR Example</WSData>
                 </MenuLink>
                 <MenuLink>
-                    <NavLink
+                    <WSForms
                         to="/forms"
                         exact activeClassName="active"
-                    >Schema Forms</NavLink>
+                    >Schema Forms</WSForms>
                 </MenuLink>
                 <MenuLink>
-                    <NavLink
+                    <WALocale
                         to="/locale"
                         exact activeClassName="active"
-                    >Locale Test</NavLink>
+                    >Locale Test</WALocale>
                 </MenuLink>
             </Menu>
         </Container>

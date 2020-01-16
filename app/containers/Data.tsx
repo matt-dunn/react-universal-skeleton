@@ -10,7 +10,7 @@ import { useParams} from "react-router";
 import { IStatus } from "components/state-mutate-with-status/status";
 import {AboveTheFold, ClientOnly} from "components/actions";
 import List from "app/components/List";
-import Item from "app/components/Item";
+import Item, {ItemProps} from "app/components/Item";
 import EditItem from "app/components/EditItem";
 
 import Page from "../styles/Page";
@@ -22,6 +22,7 @@ import {ExampleGetList, ExampleGetItem, ExampleEditItem} from "../components/api
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 import {ModalFooter, ModalTitle, useModal} from "components/Modal";
 import {Button, ButtonSimple, ButtonSimplePrimary} from "components/Buttons";
+import {withWireFrameAnnotation} from "../../components/Wireframe";
 
 export type DataProps = {
     items: ExampleItemState[];
@@ -47,6 +48,15 @@ const DataListItem = styled(EditItem)<{isImportant?: boolean}>`
 
 const importantIds = ["item-1", "item-2"];
 
+const WSButton = withWireFrameAnnotation(Button, {
+    title: <div>Open Modal CTA</div>,
+    description: <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam iaculis convallis ante, ac porttitor eros hendrerit non. Ut a hendrerit ligula. Praesent vestibulum, dui venenatis convallis condimentum, lorem magna rutrum erat, eget convallis odio purus sed ex. Suspendisse congue metus ac blandit vehicula. Suspendisse non elementum purus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
+});
+
+const WSTitle = withWireFrameAnnotation(Title, {
+    title: <div>Page Title</div>,
+    description: <div>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
+});
 
 const Data = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditItem, $status}: DataProps) => {
     const { page } = useParams();
@@ -118,16 +128,16 @@ const Data = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIte
                 <meta name="description" content="Universal App Data Page" />
                 <meta name="keywords" content="api, ssr,..." />
             </Helmet>
-            <Title>
+            <WSTitle>
                 API SSR Example (Lazy Loaded)
-            </Title>
+            </WSTitle>
 
             <div style={{margin: "10px 0 0 0"}}>
-                <Button
+                <WSButton
                     onClick={openTest1}
                 >
                     Open SIMPLE modal
-                </Button>
+                </WSButton>
 
                 <Button
                     onClick={openTest2}

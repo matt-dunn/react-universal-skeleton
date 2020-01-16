@@ -2,8 +2,18 @@ import styled from "@emotion/styled";
 import React, {ComponentType, createContext, ReactNode, ReactText, useContext, useEffect, useState} from "react";
 import {remove} from "lodash";
 
-const Wrapper = styled.div`
+const Wrapper = styled.span`
   position: relative;
+  
+  &:hover {
+      > * {
+        box-shadow: 0 0 0 1px #4086f7 !important;
+      }
+      
+      > cite {
+        opacity: 1;
+      }
+  }
 `;
 
 const IdentifierBase = styled.cite`
@@ -25,7 +35,8 @@ const Identifier = styled(IdentifierBase)`
   position: absolute;
   top: -1em;
   left: -1em;
-  opacity: 0.75;
+  opacity: 0.5;
+  z-index: 10000;
   cursor: pointer;
   
   &:hover {
@@ -58,7 +69,7 @@ type WireFrameAnnotationAPI = {
 }
 
 type Options = {
-    updater?: (components: WireFrameComponents) => any
+    updater?: (components: WireFrameComponents) => any;
 }
 
 const API = function(): WireFrameAnnotationAPI {
@@ -68,6 +79,7 @@ const API = function(): WireFrameAnnotationAPI {
     return {
         setOptions: (options: Options) => {
             apiOptions = options;
+            apiOptions && apiOptions.updater && apiOptions.updater(components);
         },
         register: (Component, options) => {
             const index = components.findIndex(c => c.Component === Component);
@@ -79,15 +91,15 @@ const API = function(): WireFrameAnnotationAPI {
                     count: 1,
                     options
                 };
-                components = [...components, component]
+                components = [...components, component];
 
-                apiOptions.updater && apiOptions.updater(components);
+                apiOptions && apiOptions.updater && apiOptions.updater(components);
 
                 return component;
             } else {
                 components[index].count++;
 
-                apiOptions.updater && apiOptions.updater(components);
+                apiOptions && apiOptions.updater && apiOptions.updater(components);
 
                 return components[index];
             }
@@ -107,7 +119,7 @@ const API = function(): WireFrameAnnotationAPI {
 
             apiOptions.updater && apiOptions.updater(components);
         },
-    }
+    };
 };
 
 const api = API();
@@ -120,11 +132,11 @@ type WireFrameProviderProps = {
 
 const WireFrameContainer = styled.div`
   display: flex;
-`
+`;
 
 const WireFrameBody = styled.div`
   flex-grow: 1;
-`
+`;
 
 const WireFrameAnnotationsContainer = styled.div`
   flex-grow: 0;
@@ -162,6 +174,7 @@ const WireFrameAnnotations = styled.div`
 
 const WireFrameAnnotationsNotes = styled.ul`
   overflow: auto;
+  padding-bottom: 10px;
   
   li {
     margin: 0 0 10px 0;
@@ -186,12 +199,15 @@ const WireFrameAnnotationsNotes = styled.ul`
 `;
 
 export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
+    // return children;
+
     const [components, setComponents] = useState<WireFrameComponents>();
 
     useEffect(() => {
+        console.error("&&&&&&");
         api.setOptions({
             updater: setComponents
-        })
+        });
     }, []);
 
     return (
@@ -219,7 +235,7 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
                                             {component.options.description}
                                         </article>
                                     </li>
-                                )
+                                );
                             })}
                         </WireFrameAnnotationsNotes>
                     </WireFrameAnnotations>
@@ -227,10 +243,12 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
             </WireFrameContainer>
         </WireFrameAnnotationContext.Provider>
     );
-}
+};
 
 export const withWireFrameAnnotation = function<T>(WrappedComponent: ComponentType<T>, options: WireFrameComponentOptions) {
     return (props: T) => {
+        // return <WrappedComponent {...props}/>;
+
         const {register, unregister} = useContext<WireFrameAnnotationAPI>(WireFrameAnnotationContext);
         const [annotation, setAnnotation] = useState();
 
@@ -239,8 +257,8 @@ export const withWireFrameAnnotation = function<T>(WrappedComponent: ComponentTy
 
             return () => {
                 unregister(WrappedComponent);
-            }
-        }, []);
+            };
+        }, [register, unregister]);
 
         return (
             <Wrapper>
@@ -248,7 +266,7 @@ export const withWireFrameAnnotation = function<T>(WrappedComponent: ComponentTy
                 {/*ANNOTATION... {description}*/}
                 <WrappedComponent {...props}/>
             </Wrapper>
-        )
-    }
+        );
+    };
 };
 
