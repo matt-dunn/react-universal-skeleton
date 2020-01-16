@@ -40,7 +40,7 @@ const Markdown = loadable(() => import("components/markdown"));
 
 const WAMarkdown = withWireFrameAnnotation(Markdown, {
     title: <div>Markdown</div>,
-    description: <div>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
+    description: <div>Ut a hendrerit ligula. Praesent vestibulum, dui venenatis convallis condimentum, lorem magna rutrum erat, eget convallis odio purus sed ex. Suspendisse congue metus ac blandit vehicula. Suspendisse non elementum purus.</div>
 });
 
 const Home = () => {

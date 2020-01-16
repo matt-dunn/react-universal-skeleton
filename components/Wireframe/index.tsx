@@ -37,7 +37,7 @@ const Identifier = styled(IdentifierBase)`
   left: -1em;
   opacity: 0.5;
   z-index: 10000;
-  cursor: pointer;
+  cursor: default;
   
   &:hover {
     opacity: 1;
