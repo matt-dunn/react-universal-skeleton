@@ -21,7 +21,7 @@ import {ExampleGetList, ExampleGetItem, ExampleEditItem} from "../components/api
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 import {ModalFooter, ModalTitle, useModal} from "components/Modal";
-import {Button, ButtonDanger, ButtonPrimary} from "components/Buttons";
+import {Button, ButtonSimple, ButtonSimplePrimary} from "components/Buttons";
 
 export type DataProps = {
     items: ExampleItemState[];
@@ -76,20 +76,24 @@ const Data = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIte
         open(({item, onExampleGetItem}) =>
             <>
                 <address>
-                    Some content...
+                    Some content...{" "}
+                    <Button
+                    >
+                        Focusable element
+                    </Button>
                 </address>
                 <Item isShown={true} item={item} onExampleGetItem={onExampleGetItem}/>
                 <ModalFooter>
-                    <Button
+                    <ButtonSimple
                         onClick={close}
                     >
                         Cancel
-                    </Button>
-                    <ButtonPrimary
+                    </ButtonSimple>
+                    <ButtonSimplePrimary
                         disabled={!item || !item.$status.complete}
                     >
                         Submit
-                    </ButtonPrimary>
+                    </ButtonSimplePrimary>
                 </ModalFooter>
                 <ModalTitle>Test Modal With Data</ModalTitle>
                 More content...

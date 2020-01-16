@@ -31,3 +31,29 @@ export const ButtonPrimary = styled(Button)`
   color: #fff;
   text-transform: uppercase;
 `;
+
+export const ButtonSimple = styled.button`
+  padding: 6px 5px;
+  min-height: 20px;
+  line-height: 1.2;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #3498DB;
+  border: none;
+  
+  &[disabled] {
+    opacity: 0.5;
+  }
+
+  +button {
+    margin-left: 10px;
+  }
+`;
+
+export const ButtonSimpleDanger = styled(ButtonSimple)`
+  text-transform: uppercase;
+`;
+
+export const ButtonSimplePrimary = styled(ButtonSimple)`
+  text-transform: uppercase;
+`;

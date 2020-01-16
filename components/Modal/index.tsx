@@ -14,13 +14,19 @@ import React, {
 } from "react";
 import {createPortal} from "react-dom";
 import {CSSTransition} from "react-transition-group";
+import FocusLock from 'react-focus-lock';
 
 const modalRoot = typeof document !== "undefined" && document.body;
 
-const ModalCloseContainer = styled.div`
+const ModalCloseContainer = styled.button`
   flex-grow: 0;
   cursor: pointer;
   line-height: 1;
+  font-size: 1em;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  color: inherit;
 `;
 
 const ModalClose = ({onClose}: {onClose?: () => any}) => <ModalCloseContainer aria-label="Close" onClick={onClose}>×</ModalCloseContainer>;
@@ -38,6 +44,7 @@ const ModalTitleContainer = styled.div`
 
 const ModalTitleBodyContainer = styled.div`
   flex-grow: 1;
+  margin-right: 10px;
 `;
 
 export const ModalTitle = ({children, onClose}: {children: ReactNode; onClose?: () => any}) => {
@@ -52,7 +59,7 @@ export const ModalTitle = ({children, onClose}: {children: ReactNode; onClose?: 
 };
 
 const ModalFooterContainer = styled.div`
-  padding: 10px 15px;
+  padding: 5px 15px;
   border-top: 1px solid #ccc;
   flex-grow: 0;
   text-align: right;
@@ -156,13 +163,15 @@ export const Modal = ({children, open = false, onClose, onClosed}: {children: Re
             onExited={onClosed}
         >
             <ModalContainer onClick={onClose}>
-                <ModalDialog onClick={handleDialogClick}>
-                    {Title && cloneElement(Title, {onClose})}
-                    <ModalBodyContainer>
-                        {rest}
-                    </ModalBodyContainer>
-                    {Footer}
-                </ModalDialog>
+                <FocusLock autoFocus={false}>
+                    <ModalDialog onClick={handleDialogClick}>
+                        {Title && cloneElement(Title, {onClose})}
+                        <ModalBodyContainer>
+                            {rest}
+                        </ModalBodyContainer>
+                        {Footer}
+                    </ModalDialog>
+                </FocusLock>
             </ModalContainer>
         </CSSTransition>,
         el.current
