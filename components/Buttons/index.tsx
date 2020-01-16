@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { darken } from 'polished'
+import { darken } from "polished";
 
 const ButtonBase = styled.button`
   &:not([disabled]) {
@@ -13,7 +13,7 @@ const ButtonBase = styled.button`
   +button {
     margin-left: 10px;
   }
-`
+`;
 
 export const Button = styled(ButtonBase)`
   padding: 6px 15px;
