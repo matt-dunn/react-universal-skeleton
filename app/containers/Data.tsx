@@ -20,6 +20,7 @@ import {ExampleItemState} from "../reducers/__dummy__/example";
 import {ExampleGetList, ExampleGetItem, ExampleEditItem} from "../components/api/__dummy__/example";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
+import {ModalFooter, ModalTitle, useModal} from "../../components/Modal";
 
 export type DataProps = {
     items: ExampleItemState[];
@@ -55,7 +56,41 @@ const Data = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIte
 
     const renderItem = useCallback(({ isVisible }) => <Item isShown={isVisible} item={item} onExampleGetItem={onExampleGetItem}/>, [item, onExampleGetItem]);
 
-    useWhatChanged(Data, { items, item, onExampleGetList, onExampleGetItem, onExampleEditItem, $status, renderListItem, page});
+    const [modal, open, close] = useModal();
+
+    const openTest1 = () => {
+        open("Hello there!")
+            .then(() => {
+                console.log("CLOSED 1...");
+            });
+    };
+
+    const openTest2 = () => {
+        open(
+            <>
+                <address>
+                    XXXX
+                </address>
+                <Item isShown={true} item={item} onExampleGetItem={onExampleGetItem}/>
+                <ModalFooter>
+                    FOOTER
+                    <button
+                        onClick={close}
+                    >
+                        CLOSE
+                    </button>
+                </ModalFooter>
+                <ModalTitle>Hello</ModalTitle>
+                MOOSE
+            </>
+        )
+            .then(() => {
+                console.log("CLOSED 2...");
+            });
+    };
+
+
+    useWhatChanged(Data, { modal, open, close, items, item, onExampleGetList, onExampleGetItem, onExampleEditItem, $status, renderListItem, page});
 
     return (
         <Page>
@@ -67,6 +102,20 @@ const Data = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIte
             <Title>
                 API SSR Example (Lazy Loaded)
             </Title>
+
+            <button
+                onClick={openTest1}
+            >
+                OPEN 1
+            </button>
+
+            <button
+                onClick={openTest2}
+            >
+                OPEN 2
+            </button>
+
+            {modal}
 
             <AboveTheFold>
                 {/*<List items={items} onExampleGetList={onExampleGetList} onExampleEditItem={onExampleEditItem} activePage={parseInt(page || "0", 10)}>*/}

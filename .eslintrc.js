@@ -1,7 +1,7 @@
 module.exports =  {
     plugins: [
         "react-hooks",
-        "jam3",
+        // "jam3",
         "emotion"
     ],
     env: {
@@ -57,8 +57,8 @@ module.exports =  {
     rules:  {
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "warn",
-        "jam3/no-sanitizer-with-danger": [2, {wrapperName: ["sanitize"]}],
-        "jam3/no-sanitizer-window-location": 2,
+        // "jam3/no-sanitizer-with-danger": [2, {wrapperName: ["sanitize"]}],
+        // "jam3/no-sanitizer-window-location": 2,
         "semi": 2,
         "semi-spacing": [2, {"before": false, "after": true}],
         "quotes": [2, "double", "avoid-escape"],
