@@ -73,37 +73,40 @@ const Data = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIte
     };
 
     const openTest2 = () => {
-        open(({item, onExampleGetItem}) =>
-            <>
-                <address>
-                    Some content...{" "}
-                    <Button
-                    >
-                        Focusable element
-                    </Button>
-                </address>
-                <Item isShown={true} item={item} onExampleGetItem={onExampleGetItem}/>
-                <ModalFooter>
-                    <ButtonSimple
-                        onClick={close}
-                    >
-                        Cancel
-                    </ButtonSimple>
-                    <ButtonSimplePrimary
-                        disabled={!item || !item.$status.complete}
-                    >
-                        Submit
-                    </ButtonSimplePrimary>
-                </ModalFooter>
-                <ModalTitle>Test Modal With Data</ModalTitle>
-                More content...
-            </>
-        )
+        open(
+            ({item, onExampleGetItem}) => (
+                <>
+                    <address>
+                        Some content...{" "}
+                        <Button
+                        >
+                            Focusable element
+                        </Button>
+                    </address>
+                    <Item isShown={true} item={item} onExampleGetItem={onExampleGetItem}/>
+                    <ModalFooter>
+                        <ButtonSimple
+                            onClick={close}
+                        >
+                            Cancel
+                        </ButtonSimple>
+                        <ButtonSimplePrimary
+                            disabled={!item || !item.$status.complete}
+                        >
+                            Submit
+                        </ButtonSimplePrimary>
+                    </ModalFooter>
+                    <ModalTitle hasClose={true}>Test Modal With Data</ModalTitle>
+                    More content...
+                </>
+            ),
+            {
+                isStatic: true
+            })
             .then(() => {
                 console.log("CLOSED 2...");
             });
     };
-
 
     useWhatChanged(Data, { modal, open, close, items, item, onExampleGetList, onExampleGetItem, onExampleEditItem, $status, renderListItem, page});
 

@@ -14,7 +14,7 @@ import React, {
 } from "react";
 import {createPortal} from "react-dom";
 import {CSSTransition} from "react-transition-group";
-import FocusLock from 'react-focus-lock';
+import FocusLock from "react-focus-lock";
 
 const modalRoot = typeof document !== "undefined" && document.body;
 
@@ -29,7 +29,11 @@ const ModalCloseContainer = styled.button`
   color: inherit;
 `;
 
-const ModalClose = ({onClose}: {onClose?: () => any}) => <ModalCloseContainer aria-label="Close" onClick={onClose}>×</ModalCloseContainer>;
+type ModalCloseProps = {
+    onClose?: () => any;
+}
+
+const ModalClose = ({onClose}: ModalCloseProps) => <ModalCloseContainer aria-label="Close" onClick={onClose}>×</ModalCloseContainer>;
 
 const ModalTitleContainer = styled.div`
   padding: 5px 15px;
@@ -47,13 +51,19 @@ const ModalTitleBodyContainer = styled.div`
   margin-right: 10px;
 `;
 
-export const ModalTitle = ({children, onClose}: {children: ReactNode; onClose?: () => any}) => {
+type ModalTitleProps = {
+    children: ReactNode;
+    onClose?: () => any;
+    hasClose?: boolean;
+}
+
+export const ModalTitle = ({children, onClose, hasClose = true}: ModalTitleProps) => {
     return (
         <ModalTitleContainer>
             <ModalTitleBodyContainer>
                 {children}
             </ModalTitleBodyContainer>
-            <ModalClose onClose={onClose}/>
+            {hasClose && <ModalClose onClose={onClose}/>}
         </ModalTitleContainer>
     );
 };
@@ -65,16 +75,14 @@ const ModalFooterContainer = styled.div`
   text-align: right;
 `;
 
-export const ModalFooter = ({children}: {children: ReactNode}) =>
+type ModalFooterProps = {
+    children: ReactNode;
+}
+
+export const ModalFooter = ({children}: ModalFooterProps) =>
     <ModalFooterContainer>
         {children}
     </ModalFooterContainer>;
-
-type ModalComponents = {
-    Title?: ReactElement;
-    Footer?: ReactElement;
-    rest: ReactNode[];
-}
 
 const handleDialogClick = (e: SyntheticEvent): void => e.stopPropagation();
 
@@ -120,7 +128,27 @@ const ModalBodyContainer = styled.div`
   flex-grow: 1;
 `;
 
-export const Modal = ({children, open = false, onClose, onClosed}: {children: ReactNode | ReactNode[]; open: boolean; onClose?: () => any; onClosed?: () => any}) => {
+type ModalComponents = {
+    Title?: ReactElement;
+    Footer?: ReactElement;
+    rest: ReactNode[];
+}
+
+type ModalBaseProps = {
+    open: boolean;
+}
+
+type ModalOptions = {
+    isStatic?: boolean;
+}
+
+type ModalProps = {
+    children: ReactNode | ReactNode[];
+    onClose?: () => any;
+    onClosed?: () => any;
+} & ModalBaseProps & ModalOptions;
+
+export const Modal = ({children, open = false, onClose, onClosed, isStatic = false}: ModalProps) => {
     const el = useRef<HTMLDivElement | undefined>((typeof document !== "undefined" && document.createElement("div") || undefined));
 
     const [isClient, setIsClient] = useState(false);
@@ -153,6 +181,10 @@ export const Modal = ({children, open = false, onClose, onClosed}: {children: Re
         rest: []
     }), [children]);
 
+    const handleClose = () => {
+        !isStatic && onClose && onClose();
+    };
+
     return (isClient && el.current && createPortal(
         <CSSTransition
             timeout={250}
@@ -162,7 +194,7 @@ export const Modal = ({children, open = false, onClose, onClosed}: {children: Re
             unmountOnExit={true}
             onExited={onClosed}
         >
-            <ModalContainer onClick={onClose}>
+            <ModalContainer onClick={handleClose}>
                 <FocusLock autoFocus={false}>
                     <ModalDialog onClick={handleDialogClick}>
                         {Title && cloneElement(Title, {onClose})}
@@ -182,18 +214,10 @@ type PromiseLike<T = any> = {
     then: (cb: () => T) => void;
 }
 
-type ModalBaseProps = {
-    open: boolean;
-}
-
-interface ModalAdditionalProps {
-    hasClose?: boolean;
-}
-
-type ModalProps = ModalBaseProps & ModalAdditionalProps;
+type UseModalProps = ModalBaseProps & ModalOptions;
 
 type HandleOpen<T> = {
-    (content: (props: T) => ReactNode | ReactText, options?: ModalAdditionalProps): PromiseLike;
+    (content: (props: T) => ReactNode | ReactText, options?: ModalOptions): PromiseLike;
 }
 
 type HandleClose = {
@@ -207,7 +231,7 @@ type UseModal<T = any> = [
 ]
 
 export function useModal<T>(props: T): UseModal<T> {
-    const [modalProps, setModalProps] = useState<ModalProps>({open: false});
+    const [modalProps, setModalProps] = useState<UseModalProps>({open: false});
     const [content, setContent] = useState();
 
     const closed = useRef<() => any | undefined>();
