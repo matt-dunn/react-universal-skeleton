@@ -11,7 +11,7 @@ import {ExampleItemState} from "../../reducers/__dummy__/example";
 import {ExampleResponse} from "../api/__dummy__/example";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
-// import {withWireFrameAnnotation} from "components/Wireframe";
+import {withWireFrameAnnotation} from "components/Wireframe";
 
 export type ItemProps = {
     item: ExampleItemState;
@@ -95,8 +95,9 @@ const Item = ({item, onChange, type, className, disabled}: ItemProps) => {
 
 Item.displayName = "Items.Item";
 
-export default React.memo<ItemProps>(Item);
+// export default React.memo<ItemProps>(Item);
 
-// export default React.memo<ItemProps>(withWireFrameAnnotation<ItemProps>(Item, {
-//     description: "Editable item"
-// }));
+export default React.memo<ItemProps>(withWireFrameAnnotation<ItemProps>(Item, {
+    title: <div><strong>Edit</strong> item</div>,
+    description: <div>Maecenas eget turpis sit amet orci dictum faucibus pretium eu sapien. Proin rhoncus risus id mollis aliquet. Praesent pellentesque urna et ante rhoncus scelerisque. Proin eget pellentesque quam, non finibus eros. Quisque id arcu eget leo hendrerit vehicula. Suspendisse potenti.</div>
+}));

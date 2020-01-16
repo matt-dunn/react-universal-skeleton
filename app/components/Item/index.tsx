@@ -11,6 +11,7 @@ import {ExampleItemState} from "../../reducers/__dummy__/example";
 import {ExampleGetItem} from "../api/__dummy__/example";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
+import {withWireFrameAnnotation} from "components/Wireframe";
 
 export type ItemProps = {
     item?: ExampleItemState;
@@ -64,4 +65,9 @@ const Item = ({className, isShown = true, item, onExampleGetItem, ...props}: Ite
     );
 };
 
-export default React.memo<ItemProps>(Item);
+// export default React.memo<ItemProps>(Item);
+
+export default React.memo<ItemProps>(withWireFrameAnnotation<ItemProps>(Item, {
+    title: <div><strong>Simple</strong> item</div>,
+    description: <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam iaculis convallis ante, ac porttitor eros hendrerit non. Ut a hendrerit ligula. Praesent vestibulum, dui venenatis convallis condimentum, lorem magna rutrum erat, eget convallis odio purus sed ex. Suspendisse congue metus ac blandit vehicula. Suspendisse non elementum purus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
+}));
