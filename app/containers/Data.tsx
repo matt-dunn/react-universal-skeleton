@@ -20,7 +20,8 @@ import {ExampleItemState} from "../reducers/__dummy__/example";
 import {ExampleGetList, ExampleGetItem, ExampleEditItem} from "../components/api/__dummy__/example";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
-import {ModalFooter, ModalTitle, useModal} from "../../components/Modal";
+import {ModalFooter, ModalTitle, useModal} from "components/Modal";
+import {Button, ButtonDanger, ButtonPrimary} from "components/Buttons";
 
 export type DataProps = {
     items: ExampleItemState[];
@@ -46,6 +47,7 @@ const DataListItem = styled(EditItem)<{isImportant?: boolean}>`
 
 const importantIds = ["item-1", "item-2"];
 
+
 const Data = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditItem, $status}: DataProps) => {
     const { page } = useParams();
 
@@ -56,32 +58,41 @@ const Data = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIte
 
     const renderItem = useCallback(({ isVisible }) => <Item isShown={isVisible} item={item} onExampleGetItem={onExampleGetItem}/>, [item, onExampleGetItem]);
 
-    const [modal, open, close] = useModal();
+    const [modal, open, close] = useModal<Pick<DataProps, "item" | "onExampleGetItem">>({item, onExampleGetItem});
 
     const openTest1 = () => {
-        open("Hello there!")
+        open(({item, onExampleGetItem}) => {
+            console.log("RENDER MODAL CHILDREN", item);
+            return (
+                <Item isShown={true} item={item} onExampleGetItem={onExampleGetItem}/>
+            );
+        })
             .then(() => {
                 console.log("CLOSED 1...");
             });
     };
 
     const openTest2 = () => {
-        open(
+        open(({item, onExampleGetItem}) =>
             <>
                 <address>
-                    XXXX
+                    Some content...
                 </address>
                 <Item isShown={true} item={item} onExampleGetItem={onExampleGetItem}/>
                 <ModalFooter>
-                    FOOTER
-                    <button
+                    <Button
                         onClick={close}
                     >
-                        CLOSE
-                    </button>
+                        Cancel
+                    </Button>
+                    <ButtonPrimary
+                        disabled={!item || !item.$status.complete}
+                    >
+                        Submit
+                    </ButtonPrimary>
                 </ModalFooter>
-                <ModalTitle>Hello</ModalTitle>
-                MOOSE
+                <ModalTitle>Test Modal With Data</ModalTitle>
+                More content...
             </>
         )
             .then(() => {
@@ -103,19 +114,21 @@ const Data = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIte
                 API SSR Example (Lazy Loaded)
             </Title>
 
-            <button
-                onClick={openTest1}
-            >
-                OPEN 1
-            </button>
+            <div>
+                <Button
+                    onClick={openTest1}
+                >
+                    Open SIMPLE modal
+                </Button>
 
-            <button
-                onClick={openTest2}
-            >
-                OPEN 2
-            </button>
+                <Button
+                    onClick={openTest2}
+                >
+                    Open FULL modal
+                </Button>
+            </div>
 
-            {modal}
+            {modal()}
 
             <AboveTheFold>
                 {/*<List items={items} onExampleGetList={onExampleGetList} onExampleEditItem={onExampleEditItem} activePage={parseInt(page || "0", 10)}>*/}
