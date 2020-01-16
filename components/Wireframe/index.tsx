@@ -36,7 +36,7 @@ const Identifier = styled(IdentifierBase)`
   top: -1em;
   left: -1em;
   opacity: 0.5;
-  z-index: 10000;
+  z-index: 4000;
   cursor: default;
   
   &:hover {
@@ -204,7 +204,6 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
     const [components, setComponents] = useState<WireFrameComponents>();
 
     useEffect(() => {
-        console.error("&&&&&&");
         api.setOptions({
             updater: setComponents
         });

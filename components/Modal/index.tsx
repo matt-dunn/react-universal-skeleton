@@ -94,6 +94,7 @@ const ModalContainer = styled.div`
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.25);
+  z-index: 5050;
 
   &.fade.enter {
     opacity: 0;
