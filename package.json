@@ -28,6 +28,7 @@
     "marked": "^0.7.0",
     "object-path-immutable": "^3.0.2",
     "pino": "^5.13.3",
+    "polished": "^3.4.2",
     "prismjs": "^1.17.1",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",

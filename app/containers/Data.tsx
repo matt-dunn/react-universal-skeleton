@@ -91,6 +91,7 @@ const Data = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIte
                             Cancel
                         </ButtonSimple>
                         <ButtonSimplePrimary
+                            onClick={close}
                             disabled={!item || !item.$status.complete}
                         >
                             Submit
@@ -121,7 +122,7 @@ const Data = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIte
                 API SSR Example (Lazy Loaded)
             </Title>
 
-            <div>
+            <div style={{margin: "10px 0 0 0"}}>
                 <Button
                     onClick={openTest1}
                 >

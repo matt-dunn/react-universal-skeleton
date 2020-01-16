@@ -1,6 +1,21 @@
 import styled from "@emotion/styled";
+import { darken } from 'polished'
 
-export const Button = styled.button`
+const ButtonBase = styled.button`
+  &:not([disabled]) {
+    cursor: pointer;
+  }
+
+  &[disabled] {
+    opacity: 0.5;
+  }
+
+  +button {
+    margin-left: 10px;
+  }
+`
+
+export const Button = styled(ButtonBase)`
   padding: 6px 15px;
   min-height: 20px;
   line-height: 1.2;
@@ -9,12 +24,9 @@ export const Button = styled.button`
   border-radius: 3px;
   font-size: 1.4rem;
   
-  &[disabled] {
-    opacity: 0.5;
-  }
-
-  +button {
-    margin-left: 10px;
+  &:hover,
+  &:focus {
+    color: ${darken(0.2, "#555")};
   }
 `;
 
@@ -32,7 +44,7 @@ export const ButtonPrimary = styled(Button)`
   text-transform: uppercase;
 `;
 
-export const ButtonSimple = styled.button`
+export const ButtonSimple = styled(ButtonBase)`
   padding: 6px 5px;
   min-height: 20px;
   line-height: 1.2;
@@ -40,13 +52,10 @@ export const ButtonSimple = styled.button`
   font-weight: bold;
   color: #3498DB;
   border: none;
-  
-  &[disabled] {
-    opacity: 0.5;
-  }
 
-  +button {
-    margin-left: 10px;
+  &:hover,
+  &:focus {
+    color: ${darken(0.2, "#3498DB")};
   }
 `;
 
