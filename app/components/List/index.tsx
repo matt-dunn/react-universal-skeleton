@@ -15,6 +15,7 @@ import PlaceHolderItem from "app/components/Placeholder/Item";
 import Item from "../EditItem";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
+import {withWireFrameAnnotation} from "components/Wireframe";
 
 interface ExampleItemStateList<T> extends Array<T> {
     $status?: IStatus;
@@ -86,6 +87,11 @@ const PageLink = styled(Link)`
 
 const MAX_ITEMS = 4;
 
+const WFPagination = withWireFrameAnnotation(Pagination, {
+    title: <div>Pagination</div>,
+    description: <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam iaculis convallis ante, ac porttitor eros hendrerit non. Ut a hendrerit ligula. Praesent vestibulum, dui venenatis convallis condimentum, lorem magna rutrum erat, eget convallis odio purus sed ex. Suspendisse congue metus ac blandit vehicula. Suspendisse non elementum purus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
+});
+
 const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditItem, activePage, children, ...props}: ListProps) => {
     const {processing, hasError, error, outstandingTransactionCount} = Status(items.$status);
 
@@ -135,7 +141,7 @@ const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditIt
                 }
             </Loading>
 
-            <Pagination disabled={processing}>
+            <WFPagination disabled={processing}>
                 {Array.from(Array(5).keys()).map(page => (
                     <Page
                         key={page}
@@ -149,7 +155,7 @@ const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditIt
                         </PageLink>
                     </Page>
                 ))}
-            </Pagination>
+            </WFPagination>
         </ListContainer>
     );
 };

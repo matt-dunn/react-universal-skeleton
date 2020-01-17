@@ -3,6 +3,7 @@ import React, {ComponentType, createContext, ReactNode, ReactText, useContext, u
 import {remove} from "lodash";
 import css from "@emotion/css";
 import {Global} from "@emotion/core";
+import useWhatChanged from "../whatChanged/useWhatChanged";
 
 const global = css`
   .wf__annotations--hide {
@@ -26,7 +27,7 @@ const Wrapper = styled.span`
   
   &:hover {
       > * {
-        box-shadow: 0 0 0 1px #4086f7 !important;
+        box-shadow: 0 0 0 2px #4086f7 !important;
       }
       
       > [data-annotation-identifier] {
@@ -235,6 +236,7 @@ const WireFrameAnnotationsToggle = styled.div`
   min-height: 3em;
   display: flex;
   align-items: center;
+  cursor: pointer;
 
   span {
     transition: transform 250ms;
@@ -280,8 +282,6 @@ const WireFrameAnnotationsNotes = styled.ul`
 `;
 
 export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
-    // return children;
-
     const [components, setComponents] = useState<WireFrameComponents>();
     const [show, setShow] = useState(false);
 
@@ -303,6 +303,16 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
         };
     }, [show]);
 
+    const handleToggle = () => {
+        setShow(show => !show);
+    };
+
+    const handleClose = () => {
+        setShow(false);
+    };
+
+    useWhatChanged(WireFrameProvider, { handleToggle, handleClose, components, show});
+
     return (
         <WireFrameAnnotationContext.Provider value={api}>
             <Global
@@ -314,12 +324,12 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
                 </WireFrameBody>
                 <WireFrameAnnotationsContainer data-annotations-container>
                     <WireFrameAnnotations data-annotations>
-                        <WireFrameAnnotationsToggle data-annotations-toggle aria-label="Toggle annotations" onClick={() => setShow(show => !show)}>
+                        <WireFrameAnnotationsToggle data-annotations-toggle aria-label="Toggle annotations" onClick={handleToggle}>
                             <span>⬅</span>
                         </WireFrameAnnotationsToggle>
                         <header>
                             <h1>Annotations</h1>
-                            <WireFrameAnnotationsClose aria-label="Close annotations" onClick={() => setShow(false)}>×</WireFrameAnnotationsClose>
+                            <WireFrameAnnotationsClose aria-label="Close annotations" onClick={handleClose}>×</WireFrameAnnotationsClose>
                         </header>
                         <WireFrameAnnotationsNotes>
                             {components && components.map(component => {
@@ -348,9 +358,7 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
 export const withWireFrameAnnotation = function<T>(WrappedComponent: ComponentType<T>, options: WireFrameComponentOptions) {
     const Component = (props: any) => <WrappedComponent {...props}/>;
 
-    return (props: T) => {
-        // return <WrappedComponent {...props}/>;
-
+    return function WireFrameAnnotation(props: T) {
         const {register, unregister} = useContext<WireFrameAnnotationAPI>(WireFrameAnnotationContext);
         const [annotation, setAnnotation] = useState();
 
@@ -365,10 +373,8 @@ export const withWireFrameAnnotation = function<T>(WrappedComponent: ComponentTy
         return (
             <Wrapper data-annotation>
                 {annotation && <Identifier data-annotation-identifier>{annotation.id}</Identifier>}
-                {/*ANNOTATION... {description}*/}
                 <Component {...props}/>
             </Wrapper>
         );
     };
 };
-

@@ -10,7 +10,7 @@ import { useParams} from "react-router";
 import { IStatus } from "components/state-mutate-with-status/status";
 import {AboveTheFold, ClientOnly} from "components/actions";
 import List from "app/components/List";
-import Item, {ItemProps} from "app/components/Item";
+import Item from "app/components/Item";
 import EditItem from "app/components/EditItem";
 
 import Page from "../styles/Page";
