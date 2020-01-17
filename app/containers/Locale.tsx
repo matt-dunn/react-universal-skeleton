@@ -11,8 +11,8 @@ const Title = styled.h2`
 `;
 
 const WAMessageTitle = withWireFrameAnnotation(Title, {
-    title: <div>Locale title</div>,
-    description: <div>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
+    title: <div>Page title</div>,
+    description: <div>Locale page title. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
 });
 
 const WAMessageDate = withWireFrameAnnotation<JSX.IntrinsicElements["p"]>("p", {

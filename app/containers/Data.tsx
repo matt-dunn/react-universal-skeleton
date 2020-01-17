@@ -49,13 +49,23 @@ const DataListItem = styled(EditItem)<{isImportant?: boolean}>`
 const importantIds = ["item-1", "item-2"];
 
 const WSButton = withWireFrameAnnotation(Button, {
-    title: <div>Open Modal CTA</div>,
+    title: <div>Open modal CTA</div>,
     description: <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam iaculis convallis ante, ac porttitor eros hendrerit non. Ut a hendrerit ligula. Praesent vestibulum, dui venenatis convallis condimentum, lorem magna rutrum erat, eget convallis odio purus sed ex. Suspendisse congue metus ac blandit vehicula. Suspendisse non elementum purus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
 });
 
 const WSTitle = withWireFrameAnnotation(Title, {
-    title: <div>Page Title</div>,
+    title: <div>Page title</div>,
+    description: <div>Data page title. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
+});
+
+const WAModalButton = withWireFrameAnnotation(Button, {
+    title: <div>Focus modal button</div>,
     description: <div>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
+});
+
+const WAModalSubmit = withWireFrameAnnotation(ButtonSimplePrimary, {
+    title: <div>Submit button</div>,
+    description: <div>Only enabled once the data is available.</div>
 });
 
 const Data = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditItem, $status}: DataProps) => {
@@ -88,10 +98,10 @@ const Data = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIte
                 <>
                     <address>
                         Some content...{" "}
-                        <Button
+                        <WAModalButton
                         >
                             Focusable element
-                        </Button>
+                        </WAModalButton>
                     </address>
                     <Item isShown={true} item={item} onExampleGetItem={onExampleGetItem}/>
                     <ModalFooter>
@@ -100,12 +110,12 @@ const Data = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIte
                         >
                             Cancel
                         </ButtonSimple>
-                        <ButtonSimplePrimary
+                        <WAModalSubmit
                             onClick={close}
                             disabled={!item || !item.$status.complete}
                         >
                             Submit
-                        </ButtonSimplePrimary>
+                        </WAModalSubmit>
                     </ModalFooter>
                     <ModalTitle hasClose={true}>Test Modal With Data</ModalTitle>
                     More content...

@@ -79,6 +79,7 @@ const WireFrameAnnotations = styled.div`
   flex-direction: column;
   font-size: 1.2rem;
   transition: transform 250ms;
+  z-index: 6000;
   
   > header {
     margin-bottom: 1em;
