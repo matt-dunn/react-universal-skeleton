@@ -232,7 +232,10 @@ const WireFrameAnnotationsToggle = styled.div`
   padding: 5px;
   border-radius: 5px 0 0 5px;
   transform: translate(-100%, -50%);
-  
+  min-height: 3em;
+  display: flex;
+  align-items: center;
+
   span {
     transition: transform 250ms;
     display: block;
@@ -280,7 +283,7 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
     // return children;
 
     const [components, setComponents] = useState<WireFrameComponents>();
-    const [show, setShow] = useState(true);
+    const [show, setShow] = useState(false);
 
     useEffect(() => {
         api.setOptions({
