@@ -24,13 +24,13 @@ const Identifier = styled(IdentifierBase)`
   position: absolute;
   top: -1em;
   left: -1em;
-  opacity: 0.5;
+  opacity: 0.75;
   z-index: 4000;
   cursor: default;
   transition: opacity 250ms, visibility 250ms;
 `;
 
-export const withWireFrameAnnotation = function<T>(WrappedComponent: ComponentType<T>, options: WireFrameComponentOptions) {
+export const withWireFrameAnnotation = function<T>(WrappedComponent: ComponentType<T> | string, options: WireFrameComponentOptions) {
     const Component = (props: any) => <WrappedComponent {...props}/>;
 
     return function WireFrameAnnotation(props: T) {
