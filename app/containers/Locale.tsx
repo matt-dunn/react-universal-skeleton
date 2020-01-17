@@ -15,7 +15,7 @@ const WAMessageTitle = withWireFrameAnnotation(Title, {
     description: <div>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
 });
 
-const WAMessageDate = withWireFrameAnnotation<any>("p", {
+const WAMessageDate = withWireFrameAnnotation<JSX.IntrinsicElements["p"]>("p", {
     title: <div>Localised date</div>,
     description: <div>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
 });
