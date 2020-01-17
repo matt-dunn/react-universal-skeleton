@@ -30,22 +30,22 @@ const MenuLink = styled.li`
   text-decoration: none;
 `;
 
-const WSHome = withWireFrameAnnotation((props) => <NavLink {...props}/>, {
+const WSHome = withWireFrameAnnotation(NavLink, {
     title: <div>Home</div>,
     description: <div>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
 });
 
-const WSData = withWireFrameAnnotation((props) => <NavLink {...props}/>, {
+const WSData = withWireFrameAnnotation(NavLink, {
     title: <div>Data</div>,
     description: <div>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
 });
 
-const WSForms = withWireFrameAnnotation((props) => <NavLink {...props}/>, {
+const WSForms = withWireFrameAnnotation(NavLink, {
     title: <div>Forms</div>,
     description: <div>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
 });
 
-const WALocale = withWireFrameAnnotation((props) => <NavLink {...props}/>, {
+const WALocale = withWireFrameAnnotation(NavLink, {
     title: <div>Locale</div>,
     description: <div>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
 });

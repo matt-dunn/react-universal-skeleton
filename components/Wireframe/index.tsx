@@ -1,19 +1,20 @@
 import styled from "@emotion/styled";
 import React, {ComponentType, createContext, ReactNode, ReactText, useContext, useEffect, useState} from "react";
 import {remove} from "lodash";
+import css from "@emotion/css";
 
 const Wrapper = styled.span`
   position: relative;
   
-  &:hover {
-      > * {
-        box-shadow: 0 0 0 1px #4086f7 !important;
-      }
-      
-      > cite {
-        opacity: 1;
-      }
-  }
+  //&:hover {
+  //    > * {
+  //      box-shadow: 0 0 0 1px #4086f7 !important;
+  //    }
+  //    
+  //    > cite {
+  //      opacity: 1;
+  //    }
+  //}
 `;
 
 const IdentifierBase = styled.cite`
@@ -38,6 +39,7 @@ const Identifier = styled(IdentifierBase)`
   opacity: 0.5;
   z-index: 4000;
   cursor: default;
+  transition: opacity 250ms;
   
   &:hover {
     opacity: 1;
@@ -130,8 +132,33 @@ type WireFrameProviderProps = {
     children: ReactNode;
 }
 
-const WireFrameContainer = styled.div`
+const WireFrameContainer = styled.div<{show: boolean}>`
   display: flex;
+
+  ${({show = true}) => {
+    if (show) {
+        return css`
+              [data-annotations-container] {
+                  width: 25%;
+                  min-width: 250px;
+              }
+          `
+    } else {
+        return css`
+              [data-annotation-identifier] {
+                opacity: 0 !important;
+              }
+              [data-annotations-container] {
+                  width: 0;
+                  min-width: 0;
+                  
+                  [data-annotations] {
+                    transform: translateX(100%);
+                  }
+              }
+          `
+    }
+}};
 `;
 
 const WireFrameBody = styled.div`
@@ -141,10 +168,10 @@ const WireFrameBody = styled.div`
 const WireFrameAnnotationsContainer = styled.div`
   flex-grow: 0;
   flex-shrink: 0;
-  width: 25%;
   max-width: 400px;
-  min-width: 250px;
-  padding: 0;  
+  padding: 0;
+  transition: width 250ms, min-width 250ms;
+
 `;
 
 const WireFrameAnnotations = styled.div`
@@ -163,6 +190,7 @@ const WireFrameAnnotations = styled.div`
   display: flex;
   flex-direction: column;
   font-size: 1.2rem;
+  transition: transform 250ms;
   
   > header {
     margin-bottom: 1em;
@@ -171,6 +199,17 @@ const WireFrameAnnotations = styled.div`
     color: #fff
   }
 `;
+
+const WireFrameAnnotationsOpen = styled.div`
+  position: absolute;
+  left: -1px;
+  top: 10px;
+  background-color: #555;
+  color: #fff;
+  padding: 5px;
+  border-radius: 5px 0 0 5px;
+  transform: translateX(-100%);
+`
 
 const WireFrameAnnotationsNotes = styled.ul`
   overflow: auto;
@@ -202,6 +241,7 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
     // return children;
 
     const [components, setComponents] = useState<WireFrameComponents>();
+    const [show, setShow] = useState(true);
 
     useEffect(() => {
         api.setOptions({
@@ -211,14 +251,18 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
 
     return (
         <WireFrameAnnotationContext.Provider value={api}>
-            <WireFrameContainer>
+            <WireFrameContainer show={show}>
                 <WireFrameBody>
                     {children}
                 </WireFrameBody>
-                <WireFrameAnnotationsContainer>
-                    <WireFrameAnnotations>
+                <WireFrameAnnotationsContainer data-annotations-container>
+                    <WireFrameAnnotations data-annotations>
+                        <WireFrameAnnotationsOpen onClick={() => setShow(true)}>
+                            O
+                        </WireFrameAnnotationsOpen>
                         <header>
                             <h1>Annotations</h1>
+                            <div onClick={() => setShow(false)}>X</div>
                         </header>
                         <WireFrameAnnotationsNotes>
                             {components && components.map(component => {
@@ -245,6 +289,8 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
 };
 
 export const withWireFrameAnnotation = function<T>(WrappedComponent: ComponentType<T>, options: WireFrameComponentOptions) {
+    const Component = (props: any) => <WrappedComponent {...props}/>
+
     return (props: T) => {
         // return <WrappedComponent {...props}/>;
 
@@ -252,18 +298,18 @@ export const withWireFrameAnnotation = function<T>(WrappedComponent: ComponentTy
         const [annotation, setAnnotation] = useState();
 
         useEffect(() => {
-            setAnnotation(register(WrappedComponent, options));
+            setAnnotation(register(Component, options));
 
             return () => {
-                unregister(WrappedComponent);
+                unregister(Component);
             };
         }, [register, unregister]);
 
         return (
-            <Wrapper>
-                {annotation && <Identifier>{annotation.id}</Identifier>}
+            <Wrapper data-annotation>
+                {annotation && <Identifier data-annotation-identifier>{annotation.id}</Identifier>}
                 {/*ANNOTATION... {description}*/}
-                <WrappedComponent {...props}/>
+                <Component {...props}/>
             </Wrapper>
         );
     };
