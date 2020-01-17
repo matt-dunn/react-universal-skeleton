@@ -359,7 +359,7 @@ export const withWireFrameAnnotation = function<T>(WrappedComponent: ComponentTy
     const Component = (props: any) => <WrappedComponent {...props}/>;
 
     return function WireFrameAnnotation(props: T) {
-        const {register, unregister} = useContext<WireFrameAnnotationAPI>(WireFrameAnnotationContext);
+        const {register, unregister} = useContext(WireFrameAnnotationContext);
         const [annotation, setAnnotation] = useState();
 
         useEffect(() => {
