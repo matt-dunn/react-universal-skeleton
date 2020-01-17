@@ -2,19 +2,38 @@ import styled from "@emotion/styled";
 import React, {ComponentType, createContext, ReactNode, ReactText, useContext, useEffect, useState} from "react";
 import {remove} from "lodash";
 import css from "@emotion/css";
+import {Global} from "@emotion/core";
+
+const global = css`
+  .wf__annotations--hide {
+      [data-annotation] {
+        &:hover {
+          > * {
+            box-shadow: none !important;
+          }
+        }
+
+        [data-annotation-identifier] {
+          opacity: 0 !important;
+          visibility: hidden;
+        }
+      }
+  }
+`;
 
 const Wrapper = styled.span`
   position: relative;
   
-  //&:hover {
-  //    > * {
-  //      box-shadow: 0 0 0 1px #4086f7 !important;
-  //    }
-  //    
-  //    > cite {
-  //      opacity: 1;
-  //    }
-  //}
+  &:hover {
+      > * {
+        box-shadow: 0 0 0 1px #4086f7 !important;
+      }
+      
+      > [data-annotation-identifier] {
+        transition: opacity 0ms, visibility 0ms;
+        opacity: 1;
+      }
+  }
 `;
 
 const IdentifierBase = styled.cite`
@@ -39,11 +58,7 @@ const Identifier = styled(IdentifierBase)`
   opacity: 0.5;
   z-index: 4000;
   cursor: default;
-  transition: opacity 250ms;
-  
-  &:hover {
-    opacity: 1;
-  }
+  transition: opacity 250ms, visibility 250ms;
 `;
 
 const IdentifierNote = styled(IdentifierBase)`
@@ -141,13 +156,16 @@ const WireFrameContainer = styled.div<{show: boolean}>`
               [data-annotations-container] {
                   width: 25%;
                   min-width: 250px;
+                  
+                  [data-annotations-toggle] {
+                    span {
+                      transform: rotate(180deg);
+                    }
+                  }
               }
-          `
+          `;
     } else {
         return css`
-              [data-annotation-identifier] {
-                opacity: 0 !important;
-              }
               [data-annotations-container] {
                   width: 0;
                   min-width: 0;
@@ -156,7 +174,7 @@ const WireFrameContainer = styled.div<{show: boolean}>`
                     transform: translateX(100%);
                   }
               }
-          `
+          `;
     }
 }};
 `;
@@ -196,20 +214,41 @@ const WireFrameAnnotations = styled.div`
     margin-bottom: 1em;
     padding: 3px 10px;
     background-color: #555;
-    color: #fff
+    color: #fff;
+    display: flex;
+    
+    h1 {
+      flex-grow: 1;
+    }
   }
 `;
 
-const WireFrameAnnotationsOpen = styled.div`
+const WireFrameAnnotationsToggle = styled.div`
   position: absolute;
   left: -1px;
-  top: 10px;
+  top: 50%;
   background-color: #555;
   color: #fff;
   padding: 5px;
   border-radius: 5px 0 0 5px;
-  transform: translateX(-100%);
-`
+  transform: translate(-100%, -50%);
+  
+  span {
+    transition: transform 250ms;
+    display: block;
+  }
+`;
+
+const WireFrameAnnotationsClose = styled.button`
+  flex-grow: 0;
+  cursor: pointer;
+  line-height: 1;
+  font-size: 2em;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  color: inherit;
+`;
 
 const WireFrameAnnotationsNotes = styled.ul`
   overflow: auto;
@@ -249,20 +288,35 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
         });
     }, []);
 
+    useEffect(() => {
+        if (show) {
+            document.body.classList.remove("wf__annotations--hide");
+        } else {
+            document.body.classList.add("wf__annotations--hide");
+        }
+
+        return () => {
+            document.body.classList.remove("wf__annotations--hide");
+        };
+    }, [show]);
+
     return (
         <WireFrameAnnotationContext.Provider value={api}>
+            <Global
+                styles={global}
+            />
             <WireFrameContainer show={show}>
                 <WireFrameBody>
                     {children}
                 </WireFrameBody>
                 <WireFrameAnnotationsContainer data-annotations-container>
                     <WireFrameAnnotations data-annotations>
-                        <WireFrameAnnotationsOpen onClick={() => setShow(true)}>
-                            O
-                        </WireFrameAnnotationsOpen>
+                        <WireFrameAnnotationsToggle data-annotations-toggle aria-label="Toggle annotations" onClick={() => setShow(show => !show)}>
+                            <span>⬅</span>
+                        </WireFrameAnnotationsToggle>
                         <header>
                             <h1>Annotations</h1>
-                            <div onClick={() => setShow(false)}>X</div>
+                            <WireFrameAnnotationsClose aria-label="Close annotations" onClick={() => setShow(false)}>×</WireFrameAnnotationsClose>
                         </header>
                         <WireFrameAnnotationsNotes>
                             {components && components.map(component => {
@@ -289,7 +343,7 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
 };
 
 export const withWireFrameAnnotation = function<T>(WrappedComponent: ComponentType<T>, options: WireFrameComponentOptions) {
-    const Component = (props: any) => <WrappedComponent {...props}/>
+    const Component = (props: any) => <WrappedComponent {...props}/>;
 
     return (props: T) => {
         // return <WrappedComponent {...props}/>;
