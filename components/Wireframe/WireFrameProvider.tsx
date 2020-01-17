@@ -5,30 +5,13 @@ import styled from "@emotion/styled";
 
 import {WireFrameAnnotationContext} from "./context";
 import {WireFrameComponents} from "./api";
-import {IdentifierBase} from "./styles";
+import {IdentifierBase, global} from "./styles";
 
 import useWhatChanged from "../whatChanged/useWhatChanged";
 
 type WireFrameProviderProps = {
     children: ReactNode;
 }
-
-const global = css`
-  .wf__annotations--hide {
-      [data-annotation] {
-        &:hover {
-          > * {
-            box-shadow: none !important;
-          }
-        }
-
-        [data-annotation-identifier] {
-          opacity: 0 !important;
-          visibility: hidden;
-        }
-      }
-  }
-`;
 
 const IdentifierNote = styled(IdentifierBase)`
   margin-right: 0.5em;
@@ -176,7 +159,7 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
         api.setOptions({
             updater: setComponents
         });
-    }, []);
+    }, [api]);
 
     useEffect(() => {
         if (show) {

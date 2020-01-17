@@ -1,4 +1,22 @@
 import styled from "@emotion/styled";
+import css from "@emotion/css";
+
+export const global = css`
+  .wf__annotations--hide {
+      [data-annotation] {
+        &:hover {
+          > * {
+            box-shadow: none !important;
+          }
+        }
+
+        [data-annotation-identifier] {
+          opacity: 0 !important;
+          visibility: hidden;
+        }
+      }
+  }
+`;
 
 export const IdentifierBase = styled.cite`
   border-radius: 50px;

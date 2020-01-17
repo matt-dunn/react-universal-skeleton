@@ -1,6 +1,10 @@
 import {ComponentType, ReactNode, ReactText} from "react";
 import {remove} from "lodash";
 
+export type APIOptions = {
+    updater?: (components: WireFrameComponents) => any;
+}
+
 export type WireFrameComponentOptions = {
     title: ReactNode | ReactText;
     description: ReactNode | ReactText;
@@ -16,21 +20,17 @@ export type WireFrameComponent = {
 export type WireFrameComponents = WireFrameComponent[];
 
 export type WireFrameAnnotationAPI = {
-    setOptions: (options: Options) => void;
+    setOptions: (options: APIOptions) => void;
     register: (Component: ComponentType<any>, options: WireFrameComponentOptions) => WireFrameComponent;
     unregister: (Component: ComponentType<any>) => void;
 }
 
-export type Options = {
-    updater?: (components: WireFrameComponents) => any;
-}
-
 export const API = function(): WireFrameAnnotationAPI {
     let components: WireFrameComponents = [];
-    let apiOptions: Options;
+    let apiOptions: APIOptions;
 
     return {
-        setOptions: (options: Options) => {
+        setOptions: (options: APIOptions) => {
             apiOptions = options;
             apiOptions && apiOptions.updater && apiOptions.updater(components);
         },
