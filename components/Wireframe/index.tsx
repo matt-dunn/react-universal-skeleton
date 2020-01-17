@@ -177,7 +177,7 @@ const WireFrameContainer = styled.div<{show: boolean}>`
               }
           `;
     }
-}};
+  }};
 `;
 
 const WireFrameBody = styled.div`
