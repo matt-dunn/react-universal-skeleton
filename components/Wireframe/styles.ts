@@ -2,17 +2,23 @@ import styled from "@emotion/styled";
 import css from "@emotion/css";
 
 export const global = css`
-  .wf__annotations--hide {
+  [data-annotation-identifier] {
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  .wf__annotations--show {
       [data-annotation] {
         &:hover {
           > * {
-            box-shadow: none !important;
+            box-shadow: 0 0 0 1px #4086f7 !important;
           }
         }
 
         [data-annotation-identifier] {
-          opacity: 0 !important;
-          visibility: hidden;
+            transition: opacity 250ms, visibility 250ms;
+            opacity: 0.75;
+            visibility: visible;
         }
       }
   }

@@ -164,13 +164,13 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
 
     useEffect(() => {
         if (show) {
-            document.body.classList.remove("wf__annotations--hide");
+            document.body.classList.add("wf__annotations--show");
         } else {
-            document.body.classList.add("wf__annotations--hide");
+            document.body.classList.remove("wf__annotations--show");
         }
 
         return () => {
-            document.body.classList.remove("wf__annotations--hide");
+            document.body.classList.remove("wf__annotations--show");
         };
     }, [show]);
 
