@@ -29,7 +29,7 @@ export const withWireFrameAnnotation = function<T>(WrappedComponent: ComponentTy
     const Component = (props: any) => <WrappedComponent {...props}/>;
 
     return function WireFrameAnnotation(props: T) {
-        const {register, unregister} = useContext(WireFrameAnnotationContext);
+        const {register, unregister, highlightNote} = useContext(WireFrameAnnotationContext);
         const [annotation, setAnnotation] = useState();
 
         useEffect(() => {
@@ -40,8 +40,20 @@ export const withWireFrameAnnotation = function<T>(WrappedComponent: ComponentTy
             };
         }, [register, unregister]);
 
+        const handleHighlightNote = () => {
+            highlightNote(Component);
+        };
+
+        const handleHighlightNoteReset = () => {
+            highlightNote(undefined);
+        };
+
         return (
-            <Wrapper data-annotation>
+            <Wrapper
+                data-annotation
+                onMouseEnter={handleHighlightNote}
+                onMouseLeave={handleHighlightNoteReset}
+            >
                 {annotation && <Identifier data-annotation-identifier>{annotation.id}</Identifier>}
                 <Component {...props}/>
             </Wrapper>

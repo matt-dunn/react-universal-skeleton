@@ -1,4 +1,4 @@
-import React, {ReactNode, useContext, useEffect, useState} from "react";
+import React, {ComponentType, ReactNode, useContext, useEffect, useState, useCallback} from "react";
 import {Global} from "@emotion/core";
 import css from "@emotion/css";
 import styled from "@emotion/styled";
@@ -130,19 +130,22 @@ const WireFrameAnnotationsNotes = styled.ul`
   padding-bottom: 10px;
   
   li {
-    margin: 0 0 10px 0;
-    padding: 0 0 10px 0;
+    padding: 6px 0;
     border-bottom: 1px solid #ccc;
     
     &:last-child {
-      margin-bottom: 0;
-      padding-bottom: 0;
       border-bottom: none;
+    }
+    
+    &.highlight {
+      background-color: #4086f7;
     }
     
     header {
       display: flex;
       padding: 0 10px;
+      margin-bottom: 5px;
+      align-items: center;
     }
     
     article {
@@ -154,11 +157,13 @@ const WireFrameAnnotationsNotes = styled.ul`
 export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
     const api = useContext(WireFrameAnnotationContext);
     const [components, setComponents] = useState<WireFrameComponents>();
-    const [show, setShow] = useState(false);
+    const [show, setShow] = useState(true);
+    const [highlightedNote, setHighlightedNote] = useState<ComponentType<any> | undefined>(undefined);
 
     useEffect(() => {
         api.setOptions({
-            updater: setComponents
+            updater: setComponents,
+            highlightNote: Component => setHighlightedNote(() => Component)
         });
     }, [api]);
 
@@ -174,15 +179,15 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
         };
     }, [show]);
 
-    const handleToggle = () => {
+    const handleToggle = useCallback(() => {
         setShow(show => !show);
-    };
+    }, []);
 
-    const handleClose = () => {
+    const handleClose = useCallback(() => {
         setShow(false);
-    };
+    }, []);
 
-    useWhatChanged(WireFrameProvider, { handleToggle, handleClose, components, show});
+    useWhatChanged(WireFrameProvider, { handleToggle, handleClose, components, show, highlightedNote});
 
     return (
         <WireFrameAnnotationContext.Provider value={api}>
@@ -205,7 +210,7 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
                         <WireFrameAnnotationsNotes>
                             {components && components.map(component => {
                                 return (
-                                    <li key={component.id}>
+                                    <li key={component.id} className={(highlightedNote === component.Component && "highlight") || ""}>
                                         <header>
                                             <IdentifierNote>{component.id}</IdentifierNote>
                                             <h2>

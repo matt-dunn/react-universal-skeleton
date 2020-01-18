@@ -3,6 +3,7 @@ import {remove} from "lodash";
 
 export type APIOptions = {
     updater?: (components: WireFrameComponents) => any;
+    highlightNote?: (component?: ComponentType<any>) => any;
 }
 
 export type WireFrameComponentOptions = {
@@ -23,6 +24,7 @@ export type WireFrameAnnotationAPI = {
     setOptions: (options: APIOptions) => void;
     register: (Component: ComponentType<any>, options: WireFrameComponentOptions) => WireFrameComponent;
     unregister: (Component: ComponentType<any>) => void;
+    highlightNote: (Component: ComponentType<any> | undefined) => void;
 }
 
 export const API = function(): WireFrameAnnotationAPI {
@@ -57,7 +59,7 @@ export const API = function(): WireFrameAnnotationAPI {
                 return components[index];
             }
         },
-        unregister: (Component) => {
+        unregister: Component => {
             const index = components.findIndex(c => c.Component === Component);
 
             if (index >= 0) {
@@ -72,6 +74,13 @@ export const API = function(): WireFrameAnnotationAPI {
 
             apiOptions.updater && apiOptions.updater(components);
         },
+        highlightNote: Component => {
+            const index = Component && components.findIndex(c => c.Component === Component) || undefined;
+
+            const component = (index && index !== -1 && components[index]) || undefined;
+
+            apiOptions && apiOptions.highlightNote && apiOptions.highlightNote(component?.Component);
+        }
     };
 };
 
