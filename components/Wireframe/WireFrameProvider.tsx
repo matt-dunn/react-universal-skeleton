@@ -4,7 +4,7 @@ import css from "@emotion/css";
 import styled from "@emotion/styled";
 
 import {WireFrameAnnotationContext} from "./context";
-import {WireFrameComponents} from "./api";
+import {WireFrameComponent, WireFrameComponents} from "./api";
 import {IdentifierBase, global} from "./styles";
 
 import useWhatChanged from "../whatChanged/useWhatChanged";
@@ -138,7 +138,7 @@ const WireFrameAnnotationsNotes = styled.ul`
     }
     
     &.highlight {
-      background-color: #4086f7;
+      background-color: rgba(64, 134, 247, 0.25);
     }
     
     header {
@@ -158,7 +158,7 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
     const api = useContext(WireFrameAnnotationContext);
     const [components, setComponents] = useState<WireFrameComponents>();
     const [show, setShow] = useState(true);
-    const [highlightedNote, setHighlightedNote] = useState<ComponentType<any> | undefined>(undefined);
+    const [highlightedNote, setHighlightedNote] = useState<WireFrameComponent | undefined>(undefined);
 
     useLayoutEffect(() => {
         api.setOptions({
@@ -210,7 +210,7 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
                         <WireFrameAnnotationsNotes>
                             {components && components.map(component => {
                                 return (
-                                    <li key={component.id} className={(highlightedNote === component.Component && "highlight") || ""}>
+                                    <li key={component.id} className={(highlightedNote === component && "highlight") || ""}>
                                         <header>
                                             <IdentifierNote>{component.id}</IdentifierNote>
                                             <h2>

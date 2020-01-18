@@ -3,7 +3,7 @@ import {remove} from "lodash";
 
 export type APIOptions = {
     updater?: (components: WireFrameComponents) => any;
-    highlightNote?: (component?: ComponentType<any>) => any;
+    highlightNote?: (component?: WireFrameComponent) => any;
 }
 
 export type WireFrameComponentOptions = {
@@ -74,13 +74,7 @@ export const API = function(): WireFrameAnnotationAPI {
             apiOptions.updater && apiOptions.updater(components);
         },
         highlightNote: Component => {
-            if (Component) {
-                const component = components.find(c => c.Component === Component);
-
-                apiOptions && apiOptions.highlightNote && apiOptions.highlightNote(component?.Component);
-            } else {
-                apiOptions && apiOptions.highlightNote && apiOptions.highlightNote(undefined);
-            }
+            apiOptions && apiOptions.highlightNote && apiOptions.highlightNote(Component && components.find(c => c.Component === Component));
         }
     };
 };
