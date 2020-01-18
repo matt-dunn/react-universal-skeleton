@@ -7,6 +7,8 @@ import {ResponsiveGrid} from "components/Grid";
 import {FieldSet, FieldSetChildrenProps} from "components/Form";
 import {FormOptions} from "components/Form/FormOptions";
 
+import {withWireFrameAnnotation} from "components/Wireframe";
+
 const Markdown = loadable(() => import("components/markdown"));
 
 const GridItems = styled(ResponsiveGrid("div"))``;
@@ -35,6 +37,31 @@ const messages = defineMessages({
     },
 });
 
+const WAMarkdown = withWireFrameAnnotation(Markdown, {
+    title: <div>Markdown</div>,
+    description: <div>Markdown can be used to embed content.</div>
+});
+
+const WAMarkdownEmbedded = withWireFrameAnnotation(Markdown, {
+    title: <div>Person Markdown</div>,
+    description: <div>Markdown can be embedded for each item.</div>
+});
+
+const WAFieldSet1 = withWireFrameAnnotation(FieldSet, {
+    title: <div>Example form items</div>,
+    description: <div>Various form elements...</div>
+});
+
+const WAFieldSet2 = withWireFrameAnnotation(FieldSet, {
+    title: <div>SSR dropdown</div>,
+    description: <div>Fallback when JS is disabled.</div>
+});
+
+const WAFieldSet3 = withWireFrameAnnotation(FieldSet, {
+    title: <div>Notes</div>,
+    description: <div>Multiline notes.</div>
+});
+
 function ComplexLayout<T, P, S>({fieldsetMap: {children, extra, otherLeft, otherRight}}: Pick<FieldSetChildrenProps<T, P, S>, "fieldsetMap">) {
     const intl = useIntl();
 
@@ -48,13 +75,13 @@ function ComplexLayout<T, P, S>({fieldsetMap: {children, extra, otherLeft, other
             <div style={{borderBottom: "1px solid #dfdfdf", margin: "0 0 20px 0", padding: "0 0 10px 0", display: "flex"}}>
                 <GridItems minItemWidth={150}>
                     <GridItem>
-                        <FieldSet
+                        <WAFieldSet1
                             fields={otherLeft}
                         />
                     </GridItem>
                     <GridItem>
-                        <Markdown content={import("mocks/content/test2.md")} id={"md-2"}/>
-                        <FieldSet
+                        <WAMarkdown content={import("mocks/content/test2.md")} id={"md-2"}/>
+                        <WAFieldSet2
                             fields={otherRight}
                         />
                         <p style={{fontSize: "14px", backgroundColor: "#eee", padding: "10px", borderRadius: "10px", margin: "0 0 10px 0"}}>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
@@ -70,7 +97,7 @@ function ComplexLayout<T, P, S>({fieldsetMap: {children, extra, otherLeft, other
                     >
                         {({fieldsetMap: {set1, set2, children}, path}) => (
                             <>
-                                <Markdown content={import("mocks/content/test4.md")} id={`md-4-${path}`}/>
+                                <WAMarkdownEmbedded content={import("mocks/content/test4.md")} id={`md-4-${path}`}/>
                                 <GridItems minItemWidth={150}>
                                     <GridItem>
                                         <FieldSet
@@ -92,7 +119,7 @@ function ComplexLayout<T, P, S>({fieldsetMap: {children, extra, otherLeft, other
                 </GridItem>
                 <GridItem>
                     <p style={{fontSize: "14px", backgroundColor: "#eee", padding: "10px", borderRadius: "10px", margin: "0 0 10px 0"}}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                    <FieldSet
+                    <WAFieldSet3
                         fields={extra}
                     />
                 </GridItem>
