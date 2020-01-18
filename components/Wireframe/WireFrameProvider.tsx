@@ -1,7 +1,8 @@
-import React, {ComponentType, ReactNode, useContext, useEffect, useState, useCallback, useLayoutEffect} from "react";
+import React, {ReactNode, useContext, useEffect, useState, useCallback, useLayoutEffect} from "react";
 import {Global} from "@emotion/core";
 import css from "@emotion/css";
 import styled from "@emotion/styled";
+import scrollIntoView from "scroll-into-view-if-needed";
 
 import {WireFrameAnnotationContext} from "./context";
 import {WireFrameComponent, WireFrameComponents} from "./api";
@@ -189,6 +190,18 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
 
     useWhatChanged(WireFrameProvider, { handleToggle, handleClose, components, show, highlightedNote});
 
+    useEffect(() => {
+        if (highlightedNote) {
+            const el = document.querySelector(`#wf-annotation-${highlightedNote.id}`);
+
+            el && scrollIntoView(el, {
+                behavior: "smooth",
+                scrollMode: "if-needed",
+                boundary: document.getElementById("wf-annotations"),
+            });
+        }
+    }, [highlightedNote]);
+
     return (
         <WireFrameAnnotationContext.Provider value={api}>
             <Global
@@ -207,10 +220,10 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
                             <h1>Annotations</h1>
                             <WireFrameAnnotationsClose aria-label="Close annotations" onClick={handleClose}>×</WireFrameAnnotationsClose>
                         </header>
-                        <WireFrameAnnotationsNotes>
+                        <WireFrameAnnotationsNotes id="wf-annotations">
                             {components && components.map(component => {
                                 return (
-                                    <li key={component.id} className={(highlightedNote === component && "highlight") || ""}>
+                                    <li key={component.id} id={`wf-annotation-${component.id}`} className={(highlightedNote === component && "highlight") || ""}>
                                         <header>
                                             <IdentifierNote>{component.id}</IdentifierNote>
                                             <h2>
