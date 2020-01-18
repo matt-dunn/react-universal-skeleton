@@ -34,7 +34,6 @@ export const API = function(): WireFrameAnnotationAPI {
     return {
         setOptions: (options: APIOptions) => {
             apiOptions = options;
-            apiOptions && apiOptions.updater && apiOptions.updater(components);
         },
         register: (Component, options) => {
             const index = components.findIndex(c => c.Component === Component);
@@ -75,11 +74,13 @@ export const API = function(): WireFrameAnnotationAPI {
             apiOptions.updater && apiOptions.updater(components);
         },
         highlightNote: Component => {
-            const index = Component && components.findIndex(c => c.Component === Component) || undefined;
+            if (Component) {
+                const component = components.find(c => c.Component === Component);
 
-            const component = (index && index !== -1 && components[index]) || undefined;
-
-            apiOptions && apiOptions.highlightNote && apiOptions.highlightNote(component?.Component);
+                apiOptions && apiOptions.highlightNote && apiOptions.highlightNote(component?.Component);
+            } else {
+                apiOptions && apiOptions.highlightNote && apiOptions.highlightNote(undefined);
+            }
         }
     };
 };

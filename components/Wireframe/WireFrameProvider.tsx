@@ -1,4 +1,4 @@
-import React, {ComponentType, ReactNode, useContext, useEffect, useState, useCallback} from "react";
+import React, {ComponentType, ReactNode, useContext, useEffect, useState, useCallback, useLayoutEffect} from "react";
 import {Global} from "@emotion/core";
 import css from "@emotion/css";
 import styled from "@emotion/styled";
@@ -160,7 +160,7 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
     const [show, setShow] = useState(true);
     const [highlightedNote, setHighlightedNote] = useState<ComponentType<any> | undefined>(undefined);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         api.setOptions({
             updater: setComponents,
             highlightNote: Component => setHighlightedNote(() => Component)
