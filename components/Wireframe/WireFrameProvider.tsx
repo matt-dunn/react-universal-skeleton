@@ -127,7 +127,7 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
     const api = useContext(WireFrameAnnotationContext);
 
     const [components, setComponents] = useState<WireFrameComponents>();
-    const [show, setShow] = useState(true);
+    const [show, setShow] = useState(false);
     const [highlightedNote, setHighlightedNote] = useState<WireFrameComponent | undefined>(undefined);
 
     const highlightNote = useCallback(wireFrameComponent => show && setHighlightedNote(wireFrameComponent), [show]);
