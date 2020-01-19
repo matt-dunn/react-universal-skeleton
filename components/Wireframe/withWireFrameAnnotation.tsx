@@ -51,7 +51,7 @@ export const withWireFrameAnnotation = function<T>(WrappedComponent: ComponentTy
         return (
             <Wrapper
                 data-annotation
-                onMouseEnter={handleHighlightNote}
+                onMouseOver={handleHighlightNote}
                 onMouseLeave={handleHighlightNoteReset}
             >
                 {annotation && <Identifier data-annotation-identifier>{annotation.id}</Identifier>}

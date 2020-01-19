@@ -6,17 +6,14 @@ import scrollIntoView from "scroll-into-view-if-needed";
 
 import {WireFrameAnnotationContext} from "./context";
 import {WireFrameComponent, WireFrameComponents} from "./api";
-import {IdentifierBase, global} from "./styles";
+import {global} from "./styles";
 
 import useWhatChanged from "../whatChanged/useWhatChanged";
+import {WireFrameAnnotationsNotes} from "./WireFrameAnnotationNotes";
 
 type WireFrameProviderProps = {
     children: ReactNode;
 }
-
-const IdentifierNote = styled(IdentifierBase)`
-  margin-right: 0.5em;
-`;
 
 const WireFrameContainer = styled.div<{show: boolean}>`
   display: flex;
@@ -126,43 +123,14 @@ const WireFrameAnnotationsClose = styled.button`
   color: inherit;
 `;
 
-const WireFrameAnnotationsNotes = styled.ul`
-  overflow: auto;
-  padding-bottom: 10px;
-  
-  li {
-    padding: 6px 0;
-    border-bottom: 1px solid #ccc;
-    
-    &:last-child {
-      border-bottom: none;
-    }
-    
-    &.highlight {
-      background-color: rgba(64, 134, 247, 0.25);
-    }
-    
-    header {
-      display: flex;
-      padding: 0 10px;
-      margin-bottom: 5px;
-      align-items: center;
-    }
-    
-    article {
-      padding: 0 10px;
-    }
-  }
-`;
-
 export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
     const api = useContext(WireFrameAnnotationContext);
 
     const [components, setComponents] = useState<WireFrameComponents>();
-    const [show, setShow] = useState(false);
+    const [show, setShow] = useState(true);
     const [highlightedNote, setHighlightedNote] = useState<WireFrameComponent | undefined>(undefined);
 
-    const highlightNote = useCallback(Component => show && setHighlightedNote(() => Component), [show]);
+    const highlightNote = useCallback(wireFrameComponent => show && setHighlightedNote(wireFrameComponent), [show]);
 
     const handleToggle = useCallback(() => {
         setShow(show => !show);
@@ -203,7 +171,7 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
         }
     }, [highlightedNote]);
 
-    useWhatChanged(WireFrameProvider, { handleToggle, handleClose, components, show, highlightedNote});
+    useWhatChanged(WireFrameProvider, { api, handleToggle, handleClose, components, show, highlightedNote, highlightNote});
 
     return (
         <WireFrameAnnotationContext.Provider value={api}>
@@ -223,23 +191,10 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
                             <h1>Annotations</h1>
                             <WireFrameAnnotationsClose aria-label="Close annotations" onClick={handleClose}>×</WireFrameAnnotationsClose>
                         </header>
-                        <WireFrameAnnotationsNotes id="wf-annotations">
-                            {components && components.map(component => {
-                                return (
-                                    <li key={component.id} id={`wf-annotation-${component.id}`} className={(highlightedNote === component && "highlight") || ""}>
-                                        <header>
-                                            <IdentifierNote>{component.id}</IdentifierNote>
-                                            <h2>
-                                                {component.options.title}
-                                            </h2>
-                                        </header>
-                                        <article>
-                                            {component.options.description}
-                                        </article>
-                                    </li>
-                                );
-                            })}
-                        </WireFrameAnnotationsNotes>
+                        {components && <WireFrameAnnotationsNotes
+                            components={components}
+                            highlightedNote={highlightedNote}
+                        />}
                     </WireFrameAnnotations>
                 </WireFrameAnnotationsContainer>
             </WireFrameContainer>
