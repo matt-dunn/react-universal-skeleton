@@ -62,6 +62,11 @@ const WAFieldSet3 = withWireFrameAnnotation(FieldSet, {
     description: <div>Multiline notes.</div>
 });
 
+const WAFieldSet4 = withWireFrameAnnotation(FormOptions, {
+    title: <div>Form actions</div>,
+    description: <div>Reset or submit form.</div>
+});
+
 function ComplexLayout<T, P, S>({fieldsetMap: {children, extra, otherLeft, otherRight}}: Pick<FieldSetChildrenProps<T, P, S>, "fieldsetMap">) {
     const intl = useIntl();
 
@@ -85,7 +90,7 @@ function ComplexLayout<T, P, S>({fieldsetMap: {children, extra, otherLeft, other
                             fields={otherRight}
                         />
                         <p style={{fontSize: "14px", backgroundColor: "#eee", padding: "10px", borderRadius: "10px", margin: "0 0 10px 0"}}>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-                        <FormOptions i18n={i18n}/>
+                        <WAFieldSet4 i18n={i18n}/>
                     </GridItem>
                 </GridItems>
             </div>
@@ -124,7 +129,7 @@ function ComplexLayout<T, P, S>({fieldsetMap: {children, extra, otherLeft, other
                     />
                 </GridItem>
             </GridItems>
-            <FormOptions/>
+            <WAFieldSet4/>
         </>
     );
 }
