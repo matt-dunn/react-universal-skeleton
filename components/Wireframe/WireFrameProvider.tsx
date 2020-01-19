@@ -159,7 +159,7 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
     const api = useContext(WireFrameAnnotationContext);
 
     const [components, setComponents] = useState<WireFrameComponents>();
-    const [show, setShow] = useState(true);
+    const [show, setShow] = useState(false);
     const [highlightedNote, setHighlightedNote] = useState<WireFrameComponent | undefined>(undefined);
 
     const highlightNote = useCallback(Component => show && setHighlightedNote(() => Component), [show]);
@@ -191,8 +191,6 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
         };
     }, [show]);
 
-    useWhatChanged(WireFrameProvider, { handleToggle, handleClose, components, show, highlightedNote});
-
     useEffect(() => {
         if (highlightedNote) {
             const el = document.querySelector(`#wf-annotation-${highlightedNote.id}`);
@@ -204,6 +202,8 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
             });
         }
     }, [highlightedNote]);
+
+    useWhatChanged(WireFrameProvider, { handleToggle, handleClose, components, show, highlightedNote});
 
     return (
         <WireFrameAnnotationContext.Provider value={api}>
