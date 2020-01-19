@@ -157,16 +157,27 @@ const WireFrameAnnotationsNotes = styled.ul`
 
 export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
     const api = useContext(WireFrameAnnotationContext);
+
     const [components, setComponents] = useState<WireFrameComponents>();
     const [show, setShow] = useState(true);
     const [highlightedNote, setHighlightedNote] = useState<WireFrameComponent | undefined>(undefined);
 
+    const highlightNote = useCallback(Component => show && setHighlightedNote(() => Component), [show]);
+
+    const handleToggle = useCallback(() => {
+        setShow(show => !show);
+    }, []);
+
+    const handleClose = useCallback(() => {
+        setShow(false);
+    }, []);
+
     useLayoutEffect(() => {
         api.setOptions({
             updater: setComponents,
-            highlightNote: Component => setHighlightedNote(() => Component)
+            highlightNote
         });
-    }, [api]);
+    }, [api, highlightNote]);
 
     useEffect(() => {
         if (show) {
@@ -179,14 +190,6 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
             document.body.classList.remove("wf__annotations--show");
         };
     }, [show]);
-
-    const handleToggle = useCallback(() => {
-        setShow(show => !show);
-    }, []);
-
-    const handleClose = useCallback(() => {
-        setShow(false);
-    }, []);
 
     useWhatChanged(WireFrameProvider, { handleToggle, handleClose, components, show, highlightedNote});
 
