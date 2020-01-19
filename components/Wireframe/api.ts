@@ -1,14 +1,14 @@
-import {ComponentType, ReactNode, ReactText} from "react";
+import {ComponentType, ReactNode} from "react";
 import {remove} from "lodash";
 
 export type APIOptions = {
-    updater?: (components: WireFrameComponents) => any;
-    highlightNote?: (component?: WireFrameComponent) => any;
+    updater: (components: WireFrameComponents) => void;
+    highlightNote?: (component?: WireFrameComponent) => void;
 }
 
 export type WireFrameComponentOptions = {
-    title: ReactNode | ReactText;
-    description: ReactNode | ReactText;
+    title: ReactNode;
+    description: ReactNode;
 }
 
 export type WireFrameComponent = {
@@ -21,7 +21,7 @@ export type WireFrameComponent = {
 export type WireFrameComponents = WireFrameComponent[];
 
 export type WireFrameAnnotationAPI = {
-    setOptions: (options: APIOptions) => void;
+    setOptions: (options: APIOptions) => APIOptions;
     register: (Component: ComponentType<any>, options: WireFrameComponentOptions) => WireFrameComponent;
     unregister: (Component: ComponentType<any>) => void;
     highlightNote: (Component: ComponentType<any> | undefined) => void;
@@ -31,39 +31,38 @@ export const API = function(): WireFrameAnnotationAPI {
     let components: WireFrameComponents = [];
     let apiOptions: APIOptions;
 
-    return {
-        setOptions: (options: APIOptions) => {
-            apiOptions = options;
-        },
-        register: (Component, options) => {
-            const index = components.findIndex(c => c.Component === Component);
+    const getComponent = (Component: ComponentType<any> | undefined): WireFrameComponent | undefined => Component && components.find(c => c.Component === Component);
 
-            if (index === -1) {
-                const component = {
-                    id: components.length + 1,
-                    Component,
-                    count: 1,
-                    options
-                };
-                components = [...components, component];
+    return {
+        setOptions: options => apiOptions = options,
+        register: (Component, options) => {
+            const component = getComponent(Component);
+
+            if (component) {
+                component.count++;
 
                 apiOptions && apiOptions.updater && apiOptions.updater(components);
 
                 return component;
             } else {
-                components[index].count++;
+                const newComponent = {
+                    id: components.length + 1,
+                    Component,
+                    count: 1,
+                    options
+                };
+
+                components = [...components, newComponent];
 
                 apiOptions && apiOptions.updater && apiOptions.updater(components);
 
-                return components[index];
+                return newComponent;
             }
         },
         unregister: Component => {
-            const index = components.findIndex(c => c.Component === Component);
+            const component = getComponent(Component);
 
-            if (index >= 0) {
-                const component = components[index];
-
+            if (component) {
                 component.count--;
 
                 if (component.count === 0) {
@@ -73,9 +72,7 @@ export const API = function(): WireFrameAnnotationAPI {
 
             apiOptions.updater && apiOptions.updater(components);
         },
-        highlightNote: Component => {
-            apiOptions && apiOptions.highlightNote && apiOptions.highlightNote(Component && components.find(c => c.Component === Component));
-        }
+        highlightNote: Component => apiOptions && apiOptions.highlightNote && apiOptions.highlightNote(getComponent(Component))
     };
 };
 
