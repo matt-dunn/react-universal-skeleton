@@ -1,13 +1,18 @@
+import React, {useEffect, useState} from "react";
+
 const middlewareExecutor = middleware => (action, done) => [...middleware].reverse().reduce((dispatch, middleware) => {
-    return action => middleware(action, action => dispatch(action));
+    return action => middleware(action, action => {
+        console.log(`%c${middleware.name}`, "color:#000;background-color:orange;padding: 2px 4px;border-radius:1em;", action)
+        return dispatch(action)
+    })
 }, done)(action);
 
-const getStore = (initialState, reducers, middleware = []) => {
+export const getStore = (initialState, reducers, middleware = []) => {
     const callbacks = [];
 
     const execMiddleware = middlewareExecutor(middleware);
 
-    let state = Object.assign({}, initialState);
+    let state = {...initialState};
 
     return {
         dispatch: action => {
@@ -38,136 +43,87 @@ const getStore = (initialState, reducers, middleware = []) => {
     };
 };
 
-// - Example reducers --------------------------------------------------------------------------------------------------------------------
-const exampleReducer = (state, {type, payload}) => {
-    switch (type) {
-        case "SIMPLE_ASYNC_ACTION": {
-            return {
-                ...state,
-                asyncData: payload
-            };
-        }
-        case "SIMPLE_SYNC_ACTION": {
-            return {
-                ...state,
-                syncData: payload
-            };
-        }
-        default: {
-            return state;
-        }
-    }
-};
+export const connect = (store, mapStateToProps, mapDispatchToProps) => {
+    const state = store.getState();
 
-// - Example action creators --------------------------------------------------------------------------------------------------------------------
-const simpleAsyncAction = id => ({
-    type: "SIMPLE_ASYNC_ACTION",
-    payload: new Promise(resolve => {
-        setTimeout(() => {
-            resolve({
-                id,
-                data: `Async data for ${id}`
+    const actions = mapDispatchToProps(store.dispatch)
+
+    return Component => () => {
+        const [props, setProps] = useState(mapStateToProps(state))
+
+        useEffect(() => {
+            store.register((state, prevState) => {
+                console.group("STATE CHANGE");
+                console.error("state", state);
+                console.error("prevState", prevState);
+                console.error("changed", state !== prevState);
+                console.groupEnd();
+
+                setProps(mapStateToProps(state))
             });
-        }, 4000);
-    })
-});
+        }, [])
 
-const simpleSyncAction = id => ({
-    type: "SIMPLE_SYNC_ACTION",
-    payload: {id, data: `Sync data for ${id}`}
-});
+        return React.createElement(Component, {
+            ...props,
+            ...actions
+        })
+    }
+}
 
 // - Example middleware --------------------------------------------------------------------------------------------------------------------
-const middleware = [
-    async (action, next) => {
-        console.error(">>1", action);
-        if (action.payload && action.payload.then && action.payload.catch) {
-            next({
-                ...action,
-                payload: {
-                    $status: {
-                        processing: true
-                    }
-                },
-                meta: {
-                    processing: true,
-                    complete: false
-                }
-            });
 
-            next({
-                ...action,
-                payload: {
-                    ...await action.payload,
-                    $status: {
-                        processing: false
-                    }
-                },
-                meta: {
-                    processing: false,
-                    complete: true
+export const simplePromiseDecorator = async (action, next) => {
+    if (action.payload && action.payload.then && action.payload.catch) {
+        next({
+            ...action,
+            payload: {
+                $status: {
+                    processing: true
                 }
-            });
-        } else {
-            next(action);
-        }
-    },
-    (action, next) => {
-        console.error(">>2", action);
-        setTimeout(() => {
-        next({
-            ...action,
+            },
             meta: {
-                ...action.meta,
-                some: true
+                processing: true,
+                complete: false
             }
         });
-        }, 1000);
-    },
-    (action, next) => {
-        console.error(">>3", action);
 
-        // setTimeout(() => {
         next({
             ...action,
+            payload: {
+                ...await action.payload,
+                $status: {
+                    processing: false
+                }
+            },
             meta: {
-                ...action.meta,
-                more: true
+                processing: false,
+                complete: true
             }
         });
-        // }, 2000);
-    },
-    (action, next) => {
-        console.error(">>4", action);
-        // setTimeout(() => {
-        next({
-            ...action,
-            meta: {
-                ...action.meta,
-                another: true
-            }
-        });
-        // }, 2000);
+    } else {
+        next(action);
     }
-];
+}
 
-const rootReducer = {
-    someData: exampleReducer
-};
+export const simpleAsyncDecorator = (action, next) => {
+    setTimeout(() => {
+        next({
+            ...action,
+            meta: {
+                ...action.meta,
+                simpleAsyncDecorator: true
+            }
+        });
+    }, 1000);
+}
 
-const myStore = getStore({}, rootReducer, middleware);
-
-myStore.register((state, prevState) => {
-    console.group("STATE CHANGE");
-    console.error("state", state);
-    console.error("prevState", prevState);
-    console.error("changed", state !== prevState);
-    console.groupEnd();
-});
-
-myStore.dispatch(simpleAsyncAction("123-456"))
-    .then(x => {
-        console.error("!!!!!", x);
+export const simpleDecorator = (action, next) => {
+    next({
+        ...action,
+        meta: {
+            ...action.meta,
+            simpleDecorator: true
+        }
     });
+}
 
-myStore.dispatch(simpleSyncAction("456-789"));
