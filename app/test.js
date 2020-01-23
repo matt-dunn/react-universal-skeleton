@@ -44,11 +44,17 @@ const middleware = [
             //     }
             // })
 
-            const payload = await action.payload;
-
             next({
                 ...action,
-                payload
+                payload: {
+                    ...await action.payload,
+                    $status: {
+                        complete: true
+                    }
+                },
+                meta: {
+                    async: true
+                }
             })
         } else {
             next();
@@ -59,6 +65,7 @@ const middleware = [
             next({
                 ...action,
                 meta: {
+                    ...action.meta,
                     something: true
                 }
             });
