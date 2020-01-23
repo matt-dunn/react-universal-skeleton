@@ -43,7 +43,8 @@ const simpleAsyncAction = id => ({
         setTimeout(() => {
             resolve({
                 id,
-                data: `Async data for ${id}`
+                data: `Async data for ${id}`,
+                timestamp: Date.now()
             });
         }, 1000);
     })
@@ -51,7 +52,11 @@ const simpleAsyncAction = id => ({
 
 const simpleSyncAction = id => ({
     type: "SIMPLE_SYNC_ACTION",
-    payload: {id, data: `Sync data for ${id}`}
+    payload: {
+        id,
+        data: `Sync data for ${id}`,
+        timestamp: Date.now()
+    }
 });
 
 const rootReducer = {
@@ -88,24 +93,24 @@ const StateComponent = ({asyncData, syncData, getAsyncData, getSyncData}) => {
                 </pre>
             </article>
         </>
-    )
-}
+    );
+};
 
 const mapStateToProps = state => {
     return {
         asyncData: state.someData?.asyncData,
         syncData: state.someData?.syncData,
-    }
-}
+    };
+};
 
 const mapDispatchToProps = dispatch => {
     return {
         getAsyncData: id => dispatch(simpleAsyncAction(id)),
         getSyncData: id => dispatch(simpleSyncAction(id))
-    }
-}
+    };
+};
 
-const ConnectedStateComponent = connect(myStore, mapStateToProps, mapDispatchToProps)(StateComponent)
+const ConnectedStateComponent = connect(myStore, mapStateToProps, mapDispatchToProps)(StateComponent);
 
 const State = () => {
     return (

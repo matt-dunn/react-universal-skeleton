@@ -2,9 +2,9 @@ import React, {useEffect, useState} from "react";
 
 const middlewareExecutor = middleware => (action, done) => [...middleware].reverse().reduce((dispatch, middleware) => {
     return action => middleware(action, action => {
-        console.log(`%c${middleware.name}`, "color:#000;background-color:orange;padding: 2px 4px;border-radius:1em;", action)
-        return dispatch(action)
-    })
+        console.log(`%c${middleware.name}`, "color:#000;background-color:orange;padding: 2px 4px;border-radius:1em;", action);
+        return dispatch(action);
+    });
 }, done)(action);
 
 export const getStore = (initialState, reducers, middleware = []) => {
@@ -46,10 +46,10 @@ export const getStore = (initialState, reducers, middleware = []) => {
 export const connect = (store, mapStateToProps, mapDispatchToProps) => {
     const state = store.getState();
 
-    const actions = mapDispatchToProps(store.dispatch)
+    const actions = mapDispatchToProps(store.dispatch);
 
     return Component => () => {
-        const [props, setProps] = useState(mapStateToProps(state))
+        const [props, setProps] = useState(mapStateToProps(state));
 
         useEffect(() => {
             store.register((state, prevState) => {
@@ -59,16 +59,16 @@ export const connect = (store, mapStateToProps, mapDispatchToProps) => {
                 console.error("changed", state !== prevState);
                 console.groupEnd();
 
-                setProps(mapStateToProps(state))
+                setProps(mapStateToProps(state));
             });
-        }, [])
+        }, []);
 
         return React.createElement(Component, {
             ...props,
             ...actions
-        })
-    }
-}
+        });
+    };
+};
 
 // - Example middleware --------------------------------------------------------------------------------------------------------------------
 
@@ -103,7 +103,7 @@ export const simplePromiseDecorator = async (action, next) => {
     } else {
         next(action);
     }
-}
+};
 
 export const simpleAsyncDecorator = (action, next) => {
     setTimeout(() => {
@@ -115,7 +115,7 @@ export const simpleAsyncDecorator = (action, next) => {
             }
         });
     }, 1000);
-}
+};
 
 export const simpleDecorator = (action, next) => {
     next({
@@ -125,5 +125,5 @@ export const simpleDecorator = (action, next) => {
             simpleDecorator: true
         }
     });
-}
+};
 
