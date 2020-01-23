@@ -1,6 +1,45 @@
-const defaultState = undefined;
+const middlewareExecutor = middleware => (action, done) => [...middleware].reverse().reduce((dispatch, middleware) => {
+    return action => middleware(action, action => dispatch(action));
+}, done)(action);
 
-const userReducer = (state = defaultState, action) => {
+const getStore = (initialState, reducers, middleware = []) => {
+    const callbacks = [];
+
+    const execMiddleware = middlewareExecutor(middleware);
+
+    let state = Object.assign({}, initialState);
+
+    return {
+        dispatch: action => {
+            execMiddleware(action, action => {
+                const newState = Object.keys(reducers).reduce((state, key) => {
+                    const newState = reducers[key](state[key], action);
+
+                    if (newState !== state[key]) {
+                        state = {
+                            ...state,
+                            [key]: newState
+                        };
+                    }
+
+                    return state;
+                }, state);
+
+                if (newState !== state) {
+                    callbacks.forEach(cb => cb(newState, state));
+                    state = newState;
+                }
+            });
+
+            return action.payload;
+        },
+        register: cb => callbacks.push(cb),
+        getState: () => state
+    };
+};
+
+// - Example reducers --------------------------------------------------------------------------------------------------------------------
+const userReducer = (state, action) => {
     switch (action.type) {
         case "GET_USER": {
             return  action.payload;
@@ -11,16 +50,7 @@ const userReducer = (state = defaultState, action) => {
     }
 };
 
-// const userReducer = {
-//     getUserReducer
-// }
-
-
-
-const state = {
-    items: []
-};
-
+// - Example action creators --------------------------------------------------------------------------------------------------------------------
 const getUser = id => ({
     type: "GET_USER",
     // payload: {id, name: "HELLO"}
@@ -30,89 +60,83 @@ const getUser = id => ({
                 id,
                 name: `User ${id}`
             });
-        }, 1000);
+        }, 4000);
     })
 });
 
+// - Example middleware --------------------------------------------------------------------------------------------------------------------
 const middleware = [
     async (action, next) => {
+        console.error(">>1", action);
         if (action.payload && action.payload.then && action.payload.catch) {
-            // next({
-            //     ...action,
-            //     meta: {
-            //         processing: true
-            //     }
-            // })
+            next({
+                ...action,
+                payload: {
+                    $status: {
+                        processing: true
+                    }
+                },
+                meta: {
+                    processing: true,
+                    complete: false
+                }
+            });
 
             next({
                 ...action,
                 payload: {
                     ...await action.payload,
                     $status: {
-                        complete: true
+                        processing: false
                     }
                 },
                 meta: {
-                    async: true
+                    processing: false,
+                    complete: true
                 }
-            })
+            });
         } else {
-            next();
+            next(action);
         }
     },
     (action, next) => {
+        console.error(">>2", action);
+        setTimeout(() => {
+        next({
+            ...action,
+            meta: {
+                ...action.meta,
+                some: true
+            }
+        });
+        }, 1000);
+    },
+    (action, next) => {
+        console.error(">>3", action);
+
         // setTimeout(() => {
-            next({
-                ...action,
-                meta: {
-                    ...action.meta,
-                    something: true
-                }
-            });
+        next({
+            ...action,
+            meta: {
+                ...action.meta,
+                more: true
+            }
+        });
+        // }, 2000);
+    },
+    (action, next) => {
+        console.error(">>4", action);
+        // setTimeout(() => {
+        next({
+            ...action,
+            meta: {
+                ...action.meta,
+                another: true
+            }
+        });
         // }, 2000);
     }
 ];
-
-const execMiddleware = async (middleware, action) => middleware.reduce(async (promise, m) => {
-    const action = await promise;
-
-    return new Promise(resolve => {
-        m(action, a => resolve(a || action));
-    });
-}, Promise.resolve(action));
-
-const getStore = (initialState, reducers, middleware = []) => {
-    let state = Object.assign({}, initialState);
-    const callbacks = [];
-
-    return {
-        dispatch: async originalAction => {
-            const action = await execMiddleware(middleware, originalAction);
-
-            console.error(">>>FINAL ACTION", action)
-
-            const newState = Object.keys(reducers).reduce((state, key) => {
-                const newState = reducers[key](state[key], action);
-
-                if (newState !== state[key]) {
-                    state = {
-                        ...state,
-                        [key]: newState
-                    };
-                }
-
-                return state;
-            }, state);
-
-            if (newState !== state) {
-                callbacks.forEach(cb => cb(newState, state));
-                state = newState;
-            }
-        },
-        register: cb => callbacks.push(cb),
-        getState: () => state
-    };
-};
 
 const rootReducer = {
     user: userReducer
@@ -121,17 +145,14 @@ const rootReducer = {
 const myStore = getStore({}, rootReducer, middleware);
 
 myStore.register((state, prevState) => {
-    console.error("STATE CHANGE", state, prevState, state === prevState);
+    console.group("STATE CHANGE");
+    console.error("state", state);
+    console.error("prevState", prevState);
+    console.error("changed", state !== prevState);
+    console.groupEnd();
 });
 
-const s1 = myStore.getState();
-
-myStore.dispatch(getUser("123-456"));
-
-const s2 = myStore.getState();
-
-console.error("%%%%%", s1 === s2, s1, s2);
-
-// myStore.dispatch(getUser("123-456-789"))
-
-// console.error(userReducer({}, getUser("123-456")))
+myStore.dispatch(getUser("123-456"))
+    .then(x => {
+        console.error("!!!!!", x);
+    });
