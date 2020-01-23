@@ -39,10 +39,19 @@ const getStore = (initialState, reducers, middleware = []) => {
 };
 
 // - Example reducers --------------------------------------------------------------------------------------------------------------------
-const userReducer = (state, action) => {
-    switch (action.type) {
-        case "GET_USER": {
-            return  action.payload;
+const exampleReducer = (state, {type, payload}) => {
+    switch (type) {
+        case "SIMPLE_ASYNC_ACTION": {
+            return {
+                ...state,
+                asyncData: payload
+            };
+        }
+        case "SIMPLE_SYNC_ACTION": {
+            return {
+                ...state,
+                syncData: payload
+            };
         }
         default: {
             return state;
@@ -51,17 +60,21 @@ const userReducer = (state, action) => {
 };
 
 // - Example action creators --------------------------------------------------------------------------------------------------------------------
-const getUser = id => ({
-    type: "GET_USER",
-    // payload: {id, name: "HELLO"}
+const simpleAsyncAction = id => ({
+    type: "SIMPLE_ASYNC_ACTION",
     payload: new Promise(resolve => {
         setTimeout(() => {
             resolve({
                 id,
-                name: `User ${id}`
+                data: `Async data for ${id}`
             });
         }, 4000);
     })
+});
+
+const simpleSyncAction = id => ({
+    type: "SIMPLE_SYNC_ACTION",
+    payload: {id, data: `Sync data for ${id}`}
 });
 
 // - Example middleware --------------------------------------------------------------------------------------------------------------------
@@ -139,7 +152,7 @@ const middleware = [
 ];
 
 const rootReducer = {
-    user: userReducer
+    someData: exampleReducer
 };
 
 const myStore = getStore({}, rootReducer, middleware);
@@ -152,7 +165,9 @@ myStore.register((state, prevState) => {
     console.groupEnd();
 });
 
-myStore.dispatch(getUser("123-456"))
+myStore.dispatch(simpleAsyncAction("123-456"))
     .then(x => {
         console.error("!!!!!", x);
     });
+
+myStore.dispatch(simpleSyncAction("456-789"));
