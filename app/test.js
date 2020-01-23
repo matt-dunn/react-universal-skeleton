@@ -9,7 +9,7 @@ const userReducer = (state = defaultState, action) => {
             return state;
         }
     }
-}
+};
 
 // const userReducer = {
 //     getUserReducer
@@ -19,7 +19,7 @@ const userReducer = (state = defaultState, action) => {
 
 const state = {
     items: []
-}
+};
 
 const getUser = id => ({
     type: "GET_USER",
@@ -30,100 +30,100 @@ const getUser = id => ({
                 id,
                 name: `User ${id}`
             });
-        }, 1000)
+        }, 1000);
     })
-})
+});
 
 const middleware = [
-    // (action, next) => {
-    //     console.error("@@ACTION", action, next)
-    //     if (action.payload && action.payload.then && action.payload.catch) {
-    //         action.payload.then(next)
-    //     } else {
-    //         setTimeout(() => {
-    //             next()
-    //         }, 2000)
-    //     }
-    // },
-    // (action, next) => {
-    //     console.error("@@ACTION", action, next)
-    //     if (action.payload && action.payload.then && action.payload.catch) {
-    //         action.payload.then(next)
-    //     } else {
-    //         setTimeout(() => {
-    //             next({
-    //                 ...action.payload,
-    //                 size: 42
-    //             })
-    //         }, 2000)
-    //     }
-    // }
-]
+    async (action, next) => {
+        if (action.payload && action.payload.then && action.payload.catch) {
+            // next({
+            //     ...action,
+            //     meta: {
+            //         processing: true
+            //     }
+            // })
 
-const getStore2 = (initialState, reducers, middleware = []) => {
+            const payload = await action.payload;
+
+            next({
+                ...action,
+                payload
+            })
+        } else {
+            next();
+        }
+    },
+    (action, next) => {
+        // setTimeout(() => {
+            next({
+                ...action,
+                meta: {
+                    something: true
+                }
+            });
+        // }, 2000);
+    }
+];
+
+const execMiddleware = async (middleware, action) => middleware.reduce(async (promise, m) => {
+    const action = await promise;
+
+    return new Promise(resolve => {
+        m(action, a => resolve(a || action));
+    });
+}, Promise.resolve(action));
+
+const getStore = (initialState, reducers, middleware = []) => {
     let state = Object.assign({}, initialState);
     const callbacks = [];
 
     return {
-        dispatch: action => {
+        dispatch: async originalAction => {
+            const action = await execMiddleware(middleware, originalAction);
 
-            const p = middleware.reduce((promise, m) => {
-                return promise.then(payload => {
-                    console.error("!!!", payload)
+            console.error(">>>FINAL ACTION", action)
 
-                    return new Promise(resolve => {
-                        m({
-                            ...action,
-                            payload
-                        }, p => resolve(p || payload))
-                    });
-                })
-            }, Promise.resolve(action.payload))
+            const newState = Object.keys(reducers).reduce((state, key) => {
+                const newState = reducers[key](state[key], action);
 
-            p.then(payload => {
-                const newState = Object.keys(reducers).reduce((state, key) => {
-                    const newState = reducers[key](state[key], {
-                        ...action,
-                        payload
-                    });
-                    if (newState !== state[key]) {
-                        state = {
-                            ...state,
-                            [key]: newState
-                        };
-                    }
-                    return state;
-                }, state)
-
-                if (newState !== state) {
-                    callbacks.forEach(cb => cb(newState, state))
-                    state = newState;
+                if (newState !== state[key]) {
+                    state = {
+                        ...state,
+                        [key]: newState
+                    };
                 }
-            })
 
+                return state;
+            }, state);
+
+            if (newState !== state) {
+                callbacks.forEach(cb => cb(newState, state));
+                state = newState;
+            }
         },
         register: cb => callbacks.push(cb),
         getState: () => state
-    }
-}
+    };
+};
 
 const rootReducer = {
     user: userReducer
-}
+};
 
-const myStore = getStore2({}, rootReducer, middleware);
+const myStore = getStore({}, rootReducer, middleware);
 
 myStore.register((state, prevState) => {
-    console.error("STATE CHANGE", state, prevState, state === prevState)
-})
+    console.error("STATE CHANGE", state, prevState, state === prevState);
+});
 
-const s1 = myStore.getState()
+const s1 = myStore.getState();
 
-myStore.dispatch(getUser("123-456"))
+myStore.dispatch(getUser("123-456"));
 
-const s2 = myStore.getState()
+const s2 = myStore.getState();
 
-console.error("%%%%%", s1 === s2, s1, s2)
+console.error("%%%%%", s1 === s2, s1, s2);
 
 // myStore.dispatch(getUser("123-456-789"))
 
