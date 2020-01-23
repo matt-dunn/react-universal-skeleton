@@ -21,7 +21,10 @@ const exampleReducer = (state, {type, payload}) => {
         case "SIMPLE_ASYNC_ACTION": {
             return {
                 ...state,
-                asyncData: payload
+                asyncData: {
+                    ...state?.asyncData,
+                    ...payload
+                }
             };
         }
         case "SIMPLE_SYNC_ACTION": {
