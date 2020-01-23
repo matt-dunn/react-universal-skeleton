@@ -2,14 +2,15 @@ import React from "react";
 import {Helmet} from "react-helmet-async";
 import styled from "@emotion/styled";
 
-import Page from "../styles/Page";
+import Page from "../../styles/Page";
 
 import {
     connect,
     getStore,
     simplePromiseDecorator,
-} from "../exampleStateManagement";
-import useWhatChanged from "../../components/whatChanged/useWhatChanged";
+} from "./exampleStateManagement";
+
+import useWhatChanged from "components/whatChanged/useWhatChanged";
 
 const Title = styled.h2`
     color: #ccc;
