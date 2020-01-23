@@ -6,6 +6,9 @@ import Page from "../../styles/Page";
 
 import {
     connect,
+    createAction,
+    createReducer,
+    getType,
     getStore,
     simplePromiseDecorator,
     StoreProvider,
@@ -13,34 +16,11 @@ import {
 
 import {TestComponent} from "./TestComponent";
 
-// - Example reducers --------------------------------------------------------------------------------------------------------------------
-const exampleReducer = (state, {type, payload}) => {
-    switch (type) {
-        case "SIMPLE_ASYNC_ACTION": {
-            return {
-                ...state,
-                asyncData: {
-                    ...state?.asyncData,
-                    ...payload
-                }
-            };
-        }
-        case "SIMPLE_SYNC_ACTION": {
-            return {
-                ...state,
-                syncData: payload
-            };
-        }
-        default: {
-            return state;
-        }
-    }
-};
-
 // - Example action creators --------------------------------------------------------------------------------------------------------------------
-const simpleAsyncAction = id => ({
-    type: "SIMPLE_ASYNC_ACTION",
-    payload: new Promise((resolve, reject) => {
+
+const simpleAsyncAction = createAction(
+    "SIMPLE_ASYNC_ACTION",
+    id => new Promise((resolve, reject) => {
         setTimeout(() => {
             (id === "error" && reject(new Error("Oops"))) || resolve({
                 id,
@@ -49,16 +29,34 @@ const simpleAsyncAction = id => ({
             });
         }, 1000);
     })
-});
+);
 
-const simpleSyncAction = id => ({
-    type: "SIMPLE_SYNC_ACTION",
-    payload: {
+const simpleSyncAction = createAction(
+    "SIMPLE_SYNC_ACTION",
+    id => ({
         id,
         data: `Sync data for ${id}`,
         timestamp: Date.now()
-    }
+    })
+);
+
+// - Example reducers --------------------------------------------------------------------------------------------------------------------
+
+const exampleReducer = createReducer({
+    [getType(simpleAsyncAction)]: (state, {payload}) => ({
+        ...state,
+        asyncData: {
+            ...state?.asyncData,
+            ...payload
+        }
+    }),
+    [getType(simpleSyncAction)]: (state, {payload}) => ({
+        ...state,
+        syncData: payload
+    }),
 });
+
+// - Example create, map and connect --------------------------------------------------------------------------------------------------------------------
 
 const rootReducer = {
     someData: exampleReducer

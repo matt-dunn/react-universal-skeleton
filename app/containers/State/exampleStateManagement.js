@@ -1,5 +1,23 @@
 import React, {useCallback, useContext, useEffect, useState} from "react";
 
+export const createAction = (type, payloadCreator) => {
+    const action = (...args) => ({
+        type,
+        payload: payloadCreator.apply(null, args)
+    });
+
+    action.type = type;
+
+    return action;
+};
+
+export const createReducer = reducers => (state, action) => {
+    const reducer = reducers[action.type];
+    return (reducer && reducer(state, action)) || state;
+};
+
+export const getType = creator => creator.type;
+
 const middlewareExecutor = middleware => (action, done) => [...middleware].reverse().reduce((dispatch, middleware) => {
     return action => middleware(action, action => {
         console.log(`%c${middleware.name}`, "color:#000;background-color:orange;padding: 2px 4px;border-radius:1em;", action);
