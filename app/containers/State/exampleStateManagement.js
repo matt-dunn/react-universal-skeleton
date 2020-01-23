@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useContext, useEffect, useState} from "react";
 
 const middlewareExecutor = middleware => (action, done) => [...middleware].reverse().reduce((dispatch, middleware) => {
     return action => middleware(action, action => {
@@ -8,7 +8,7 @@ const middlewareExecutor = middleware => (action, done) => [...middleware].rever
 }, done)(action);
 
 export const getStore = (initialState, reducers, middleware = []) => {
-    const callbacks = [];
+    let callbacks = [];
 
     const execMiddleware = middlewareExecutor(middleware);
 
@@ -38,21 +38,32 @@ export const getStore = (initialState, reducers, middleware = []) => {
 
             return action.payload;
         },
-        register: cb => callbacks.push(cb),
+        register: cb => {
+            callbacks = [...callbacks, cb];
+        },
+        unregister: cb => {
+            callbacks = callbacks.filter(callback => callback !== cb);
+        },
         getState: () => state
     };
 };
 
-export const connect = (store, mapStateToProps, mapDispatchToProps) => {
-    const state = store.getState();
+const StoreContext = React.createContext(undefined);
 
-    const actions = mapDispatchToProps(store.dispatch);
+export const StoreProvider = StoreContext.Provider;
 
+export const connect = (mapStateToProps, mapDispatchToProps) => {
     return Component => () => {
+        const store = useContext(StoreContext);
+
+        const state = store.getState();
+
+        const actions = useCallback(mapDispatchToProps(store.dispatch), [mapDispatchToProps]);
+
         const [props, setProps] = useState(mapStateToProps(state));
 
         useEffect(() => {
-            store.register((state, prevState) => {
+            const cb = (state, prevState) => {
                 console.group("STATE CHANGE");
                 console.error("state", state);
                 console.error("prevState", prevState);
@@ -60,8 +71,14 @@ export const connect = (store, mapStateToProps, mapDispatchToProps) => {
                 console.groupEnd();
 
                 setProps(mapStateToProps(state));
-            });
-        }, []);
+            };
+
+            store.register(cb);
+
+            return () => {
+                store.unregister(cb);
+            };
+        }, [store]);
 
         return React.createElement(Component, {
             ...props,
@@ -74,32 +91,40 @@ export const connect = (store, mapStateToProps, mapDispatchToProps) => {
 
 export const simplePromiseDecorator = async (action, next) => {
     if (action.payload && action.payload.then && action.payload.catch) {
-        next({
-            ...action,
-            payload: {
-                $status: {
-                    processing: true
+        try {
+            next({
+                ...action,
+                payload: {
+                    $status: {
+                        processing: true,
+                        complete: false,
+                    }
                 }
-            },
-            meta: {
-                processing: true,
-                complete: false
-            }
-        });
+            });
 
-        next({
-            ...action,
-            payload: {
-                ...await action.payload,
-                $status: {
-                    processing: false
+            next({
+                ...action,
+                payload: {
+                    ...await action.payload,
+                    $status: {
+                        processing: false,
+                        complete: true
+                    }
                 }
-            },
-            meta: {
-                processing: false,
-                complete: true
-            }
-        });
+            });
+        } catch(error) {
+            next({
+                ...action,
+                payload: {
+                    $status: {
+                        processing: false,
+                        complete: false,
+                        error: error.message
+                    }
+                },
+                error: true
+            });
+        }
     } else {
         next(action);
     }

@@ -8,13 +8,10 @@ import {
     connect,
     getStore,
     simplePromiseDecorator,
+    StoreProvider,
 } from "./exampleStateManagement";
 
-import useWhatChanged from "components/whatChanged/useWhatChanged";
-
-const Title = styled.h2`
-    color: #ccc;
-`;
+import {TestComponent} from "./TestComponent";
 
 // - Example reducers --------------------------------------------------------------------------------------------------------------------
 const exampleReducer = (state, {type, payload}) => {
@@ -43,9 +40,9 @@ const exampleReducer = (state, {type, payload}) => {
 // - Example action creators --------------------------------------------------------------------------------------------------------------------
 const simpleAsyncAction = id => ({
     type: "SIMPLE_ASYNC_ACTION",
-    payload: new Promise(resolve => {
+    payload: new Promise((resolve, reject) => {
         setTimeout(() => {
-            resolve({
+            (id === "error" && reject(new Error("Oops"))) || resolve({
                 id,
                 data: `Async data for ${id}`,
                 timestamp: Date.now()
@@ -73,33 +70,6 @@ const myStore = getStore({}, rootReducer, [
     // simpleDecorator
 ]);
 
-const StateComponent = ({asyncData, syncData, getAsyncData, getSyncData}) => {
-    useWhatChanged(StateComponent, {asyncData, syncData, getAsyncData, getSyncData});
-
-    return (
-        <>
-            <article>
-                <h1>
-                    ASYNC
-                    <button disabled={asyncData?.$status.processing} onClick={() => getAsyncData("1234")}>Get data</button>
-                </h1>
-                <pre>
-                    {JSON.stringify(asyncData)}
-                </pre>
-            </article>
-            <article>
-                <h1>
-                    SYNC
-                    <button onClick={() => getSyncData("5678")}>Get data</button>
-                </h1>
-                <pre>
-                    {JSON.stringify(syncData)}
-                </pre>
-            </article>
-        </>
-    );
-};
-
 const mapStateToProps = state => {
     return {
         asyncData: state.someData?.asyncData,
@@ -114,21 +84,28 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-const ConnectedStateComponent = connect(myStore, mapStateToProps, mapDispatchToProps)(StateComponent);
+const ConnectedTestComponent = connect(mapStateToProps, mapDispatchToProps)(TestComponent);
+
+const Title = styled.h2`
+    color: #ccc;
+    margin: 0 0 20px 0;
+`;
 
 const State = () => {
     return (
-        <Page>
-            <Helmet>
-                <title>State Test</title>
-            </Helmet>
+        <StoreProvider value={myStore}>
+            <Page>
+                <Helmet>
+                    <title>State Test</title>
+                </Helmet>
 
-            <Title>
-                State Test
-            </Title>
+                <Title>
+                    State Test
+                </Title>
 
-            <ConnectedStateComponent/>
-        </Page>
+                <ConnectedTestComponent/>
+            </Page>
+        </StoreProvider>
     );
 };
 
