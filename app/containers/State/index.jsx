@@ -42,18 +42,22 @@ const simpleSyncAction = createAction(
 
 // - Example reducers --------------------------------------------------------------------------------------------------------------------
 
+const simpleAsyncReducer = (state, {payload}) => ({
+    ...state,
+    asyncData: {
+        ...state?.asyncData,
+        ...payload
+    }
+});
+
+const simpleSyncReducer = (state, {payload}) => ({
+    ...state,
+    syncData: payload
+});
+
 const exampleReducer = createReducer({
-    [getType(simpleAsyncAction)]: (state, {payload}) => ({
-        ...state,
-        asyncData: {
-            ...state?.asyncData,
-            ...payload
-        }
-    }),
-    [getType(simpleSyncAction)]: (state, {payload}) => ({
-        ...state,
-        syncData: payload
-    }),
+    [getType(simpleAsyncAction)]: simpleAsyncReducer,
+    [getType(simpleSyncAction)]: simpleSyncReducer
 });
 
 // - Example create, map and connect --------------------------------------------------------------------------------------------------------------------
@@ -68,19 +72,15 @@ const myStore = getStore({}, rootReducer, [
     // simpleDecorator
 ]);
 
-const mapStateToProps = state => {
-    return {
-        asyncData: state.someData?.asyncData,
-        syncData: state.someData?.syncData,
-    };
-};
+const mapStateToProps = state => ({
+    asyncData: state.someData?.asyncData,
+    syncData: state.someData?.syncData,
+});
 
-const mapDispatchToProps = dispatch => {
-    return {
-        getAsyncData: id => dispatch(simpleAsyncAction(id)),
-        getSyncData: id => dispatch(simpleSyncAction(id))
-    };
-};
+const mapDispatchToProps = dispatch => ({
+    getAsyncData: id => dispatch(simpleAsyncAction(id)),
+    getSyncData: id => dispatch(simpleSyncAction(id))
+});
 
 const ConnectedTestComponent = connect(mapStateToProps, mapDispatchToProps)(TestComponent);
 
@@ -91,7 +91,7 @@ const Title = styled.h2`
 
 const State = () => {
     return (
-        <StoreProvider value={myStore}>
+        <StoreProvider store={myStore}>
             <Page>
                 <Helmet>
                     <title>State Test</title>

@@ -66,9 +66,11 @@ export const getStore = (initialState, reducers, middleware = []) => {
     };
 };
 
+// - React bindings --------------------------------------------------------------------------------------------------------------------
+
 const StoreContext = React.createContext(undefined);
 
-export const StoreProvider = StoreContext.Provider;
+export const StoreProvider = ({store, children}) => <StoreContext.Provider value={store}>{children}</StoreContext.Provider>;
 
 export const connect = (mapStateToProps, mapDispatchToProps) => {
     return Component => () => {

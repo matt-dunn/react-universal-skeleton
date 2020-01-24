@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "@emotion/styled";
 
+import Loading from "components/Loading";
+
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
 const Data = styled.pre`
@@ -34,7 +36,11 @@ export const TestComponent = ({asyncData, syncData, getAsyncData, getSyncData}) 
         <>
             <article>
                 <header>
-                    <h3>ASYNC</h3>
+                    <h3>
+                        <Loading inline={true} loading={asyncData?.$status.processing || false}>
+                            ASYNC
+                        </Loading>
+                    </h3>
                     <Option disabled={asyncData?.$status.processing} onClick={handleGetAsyncData}>Get data</Option>
                     <Option disabled={asyncData?.$status.processing} onClick={handleGetAsyncDataWithError}>Get data with error</Option>
                 </header>

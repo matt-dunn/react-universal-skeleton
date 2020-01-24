@@ -34,7 +34,7 @@ const LoaderContainer = styled.div<{height: number}>`
 const ContainerInline = styled.span`
   display: flex;
   align-items: center;
-`
+`;
 
 const LoaderContainerInline = styled.span`
   display: inline-block;
@@ -70,7 +70,7 @@ const Loading = ({children, loading = true, loader, timeout = 500, height = 50, 
                 {children}
                 {show && loading && <LoaderContainerInline>{LoadingLoader}</LoaderContainerInline>}
             </ContainerInline>
-        )
+        );
     } else {
         return (
             <Container height={height}>
