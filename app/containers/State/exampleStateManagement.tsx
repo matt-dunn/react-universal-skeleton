@@ -4,7 +4,6 @@ import React, {
     useEffect,
     useState,
     ReactNode,
-    ReactElement,
     FunctionComponent,
     ComponentClass
 } from "react";
@@ -54,12 +53,29 @@ type GetStore<S, A> = {
     getState: () => S;
 }
 
+type StoreProvider<S, A> = {
+    store: GetStore<S, A>;
+    children: ReactNode;
+}
+
+type Connect<P> = {
+    (Component: FunctionComponent<P> | ComponentClass<P> | string): FunctionComponent<P>;
+}
+
+type MapStateToProps<S, P> = {
+    (state: S): Partial<P>;
+}
+
+type MapDispatchToProps<P, A extends StandardAction = any> = {
+    (dispatch: Dispatcher<A>): any;
+}
+
 
 
 export const createAction = <P, M, A extends any[] = any[]>(type: string, payloadCreator: PayloadCreator<P, M, A>): ActionCreator<P, M, A> => {
     const action = (...args: A): StandardAction<P, M> => ({
         type,
-        payload: payloadCreator.apply(null, args)
+        payload: payloadCreator(...args)
     });
 
     action.type = type;
@@ -128,28 +144,8 @@ export const getStore = <S extends {}, P, M, A extends StandardAction<P, M>>(ini
 
 const StoreContext = React.createContext<GetStore<any, any>>({} as GetStore<any, any>);
 
-type StoreProvider<S, A> = {
-    store: GetStore<S, A>;
-    children: ReactNode;
-}
 export const StoreProvider = <S, A>({store, children}: StoreProvider<S, A>) =>
     <StoreContext.Provider value={store}>{children}</StoreContext.Provider>;
-
-type ConnectedComponent = {
-    (mapStateToProps: any, mapDispatchToProps: any): any;
-}
-
-type Connect<P> = {
-    (Component: FunctionComponent<P> | ComponentClass<P> | string): FunctionComponent<P>;
-}
-
-type MapStateToProps<S, P> = {
-    (state: S): Partial<P>;
-}
-
-type MapDispatchToProps<P, A extends StandardAction = any> = {
-    (dispatch: Dispatcher<A>): any;
-}
 
 export function connect<S, P>(mapStateToProps: MapStateToProps<S, P>, mapDispatchToProps: MapDispatchToProps<P>): Connect<any> {
     return Component => () => {

@@ -16,7 +16,18 @@ import {
 
 import {TestComponent, TestComponentProps} from "./TestComponent";
 
+// - Example types --------------------------------------------------------------------------------------------------------------------
+
 type ExamplePayload = {id: string; data: string; timestamp: number};
+
+type ExampleState = {
+    asyncData?: ExamplePayload;
+    syncData?: ExamplePayload;
+}
+
+type RootState = {
+    someData?: ExampleState;
+}
 
 // - Example action creators --------------------------------------------------------------------------------------------------------------------
 
@@ -42,19 +53,7 @@ const simpleSyncAction = createAction(
     })
 );
 
-const x = simpleAsyncAction("2").payload.then(z => console.log(z.timestamp));
-const y = simpleSyncAction("2").payload;
-
 // - Example reducers --------------------------------------------------------------------------------------------------------------------
-
-type ExampleState = {
-    asyncData?: ExamplePayload;
-    syncData?: ExamplePayload;
-}
-
-type RootState = {
-    someData?: ExampleState;
-}
 
 const simpleAsyncReducer = (state: ExampleState, {payload}: StandardAction<ExamplePayload>): ExampleState => ({
     ...state,
@@ -88,44 +87,15 @@ const myStore = getStore(initialState, rootReducer, [
     // simpleDecorator
 ]);
 
-myStore.register((a) => {
-    a.someData?.syncData?.timestamp.toExponential();
-});
-
-// const mapStateToProps = state => ({
-//     // asyncData: state.someData?.asyncData,
-//     // syncData: state.someData?.syncData,
-// });
-//
-// const mapDispatchToProps = dispatch => ({
-//     // getAsyncData: (id: string) => dispatch(simpleAsyncAction(id)),
-//     // getSyncData: (id: string) => dispatch(simpleSyncAction(id))
-// });
-
-type P = {
-    asyncData?: ExamplePayload;
-    syncData?: ExamplePayload;
-    getAsyncData: any;
-    getSyncData: any;
-    // moose: string;
-}
 const ConnectedTestComponent = connect<RootState, TestComponentProps>(
-    state => {
-        return {
-            asyncData: state.someData?.asyncData,
-            syncData: state.someData?.syncData,
-            // getAsyncData: (id: string) => 3,
-            // getSyncData: (id: string) => 2
-            // loose: 34,
-            // moose: "3"
-        };
-    },
-    dispatch => {
-        return {
-            getAsyncData: (id: string) => dispatch(3),
-            getSyncData: (id: string) => dispatch(simpleSyncAction(id))
-        };
-    }
+    state => ({
+        asyncData: state.someData?.asyncData,
+        syncData: state.someData?.syncData
+    }),
+    dispatch => ({
+        getAsyncData: (id: string) => dispatch(simpleAsyncAction(id)),
+        getSyncData: (id: string) => dispatch(simpleSyncAction(id))
+    })
 )(TestComponent);
 
 const Title = styled.h2`

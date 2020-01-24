@@ -25,14 +25,13 @@ const Option = styled.button`
   }
 `;
 
-type ExamplePayload = {id: string; data: string; timestamp: number; $status?: any};
+type ExamplePayload = {id: string; data: string; timestamp: number; $status?: {processing: boolean}};
 
 export type TestComponentProps = {
     asyncData: ExamplePayload;
     syncData: ExamplePayload;
     getAsyncData: any;
     getSyncData: any;
-    moose: boolean;
 }
 
 export const TestComponent = ({asyncData, syncData, getAsyncData, getSyncData}: TestComponentProps) => {
@@ -47,12 +46,12 @@ export const TestComponent = ({asyncData, syncData, getAsyncData, getSyncData}: 
             <article>
                 <header>
                     <h3>
-                        <Loading inline={true} loading={asyncData?.$status.processing || false}>
+                        <Loading inline={true} loading={asyncData?.$status?.processing || false}>
                             ASYNC
                         </Loading>
                     </h3>
-                    <Option disabled={asyncData?.$status.processing} onClick={handleGetAsyncData}>Get data</Option>
-                    <Option disabled={asyncData?.$status.processing} onClick={handleGetAsyncDataWithError}>Get data with error</Option>
+                    <Option disabled={asyncData?.$status?.processing} onClick={handleGetAsyncData}>Get data</Option>
+                    <Option disabled={asyncData?.$status?.processing} onClick={handleGetAsyncDataWithError}>Get data with error</Option>
                 </header>
                 {asyncData && <Data>
                     {JSON.stringify(asyncData)}
