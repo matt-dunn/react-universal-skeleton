@@ -1,7 +1,23 @@
 import React, {useCallback, useContext, useEffect, useState} from "react";
 
-export const createAction = (type, payloadCreator) => {
-    const action = (...args) => ({
+export type StandardAction<P = any, M = any> = {
+    type: string;
+    payload: P;
+    meta?: M;
+    error?: boolean;
+}
+
+type ActionCreator<P = any, M = any, A extends any[] = any[]> = {
+    (...args: A): StandardAction<P, M>;
+    type: string;
+}
+
+type PayloadCreator<P = any, M = any, A extends any[] = any[]> = {
+    (...args: A): P
+}
+
+export const createAction = <P = any, M = any, A extends any[] = any[]>(type: string, payloadCreator: PayloadCreator<P, M, A>): ActionCreator<P, M, A> => {
+    const action = (...args: A): StandardAction<P, M> => ({
         type,
         payload: payloadCreator.apply(null, args)
     });
@@ -11,26 +27,55 @@ export const createAction = (type, payloadCreator) => {
     return action;
 };
 
-export const createReducer = reducers => (state, action) => {
+type Reducer<P = any, M = any, S = any, A extends StandardAction<P, M> = any> = {
+    (state: S, action: A): S
+}
+
+type Reducers<P = any, M = any, S = any, A extends StandardAction<P, M> = any> = {
+    [type: string]: Reducer<P, M, S, A>;
+};
+
+export const createReducer = <P, M, S, A extends StandardAction<P, M>>(reducers: Reducers<P, M, S, A>) => (state: S, action: A) => {
     const reducer = reducers[action.type];
     return (reducer && reducer(state, action)) || state;
 };
 
-export const getType = creator => creator.type;
+export const getType = <P, M, A extends any[] = any[]>(creator: ActionCreator<P, M, A>) => creator.type;
 
-const middlewareExecutor = middleware => (action, done) => [...middleware].reverse().reduce((dispatch, middleware) => {
-    return action => middleware(action, action => {
-        console.log(`%c${middleware.name}`, "color:#000;background-color:orange;padding: 2px 4px;border-radius:1em;", action);
-        return dispatch(action);
-    });
-}, done)(action);
+type Middleware<P = any, M= any, A extends StandardAction<P, M> = any> = {
+    (action: A, next?: Middleware<P, M, A>): void
+}
 
-export const getStore = (initialState, reducers, middleware = []) => {
-    let callbacks = [];
+const middlewareExecutor = <P, M, S, A extends StandardAction<P, M>>(middleware: Middleware<P, A>[]) =>
+    (action: A, done: Middleware<P, M, A>) =>
+        [...middleware].reverse().reduce((dispatch, middleware) => {
+            return action => middleware(action, action => {
+                console.log(`%c${middleware.name}`, "color:#000;background-color:orange;padding: 2px 4px;border-radius:1em;", action);
+                return dispatch(action);
+            });
+        }, done)(action);
+
+type Callback<S> = {
+    (newState: S, state: S): void
+}
+
+export type State<S> = {
+    [key: string]: any;
+}
+
+type GetStore<S, A> = {
+    dispatch: (action: A) => void;
+    register: (cb: Callback<S>) => void;
+    unregister: (cb: Callback<S>) => void;
+    getState: () => S;
+}
+
+export const getStore = <S, P, M, A extends StandardAction<P, M>, X extends State<S>>(initialState: S, reducers: Reducers, middleware: Middleware[] = []): GetStore<S, A> => {
+    let callbacks: Callback<S>[] = [];
 
     const execMiddleware = middlewareExecutor(middleware);
 
-    let state = {...initialState};
+    let state: S = {...initialState};
 
     return {
         dispatch: action => {
