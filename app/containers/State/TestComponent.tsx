@@ -25,7 +25,17 @@ const Option = styled.button`
   }
 `;
 
-export const TestComponent = ({asyncData, syncData, getAsyncData, getSyncData}) => {
+type ExamplePayload = {id: string; data: string; timestamp: number; $status?: any};
+
+export type TestComponentProps = {
+    asyncData: ExamplePayload;
+    syncData: ExamplePayload;
+    getAsyncData: any;
+    getSyncData: any;
+    moose: boolean;
+}
+
+export const TestComponent = ({asyncData, syncData, getAsyncData, getSyncData}: TestComponentProps) => {
     useWhatChanged(TestComponent, {asyncData, syncData, getAsyncData, getSyncData});
 
     const handleGetAsyncData = () => getAsyncData("1234");

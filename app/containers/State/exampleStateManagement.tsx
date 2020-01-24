@@ -1,4 +1,13 @@
-import React, {useCallback, useContext, useEffect, useState} from "react";
+import React, {
+    useCallback,
+    useContext,
+    useEffect,
+    useState,
+    ReactNode,
+    ReactElement,
+    FunctionComponent,
+    ComponentClass
+} from "react";
 
 export type StandardAction<P = any, M = any> = {
     type: string;
@@ -13,10 +22,41 @@ type ActionCreator<P = any, M = any, A extends any[] = any[]> = {
 }
 
 type PayloadCreator<P = any, M = any, A extends any[] = any[]> = {
-    (...args: A): P
+    (...args: A): P;
 }
 
-export const createAction = <P = any, M = any, A extends any[] = any[]>(type: string, payloadCreator: PayloadCreator<P, M, A>): ActionCreator<P, M, A> => {
+type Reducer<P = any, M = any, S = any, A extends StandardAction<P, M> = any> = {
+    (state: S, action: A): S;
+}
+
+type Reducers<P = any, M = any, S = any, A extends StandardAction<P, M> = any> = {
+    [type: string]: Reducer<P, M, S, A>;
+};
+
+type Dispatcher<A> = (action: A) => void;
+
+type Middleware<P = any, M= any, A extends StandardAction<P, M> = any> = {
+    (action: A, next: Dispatcher<A>): void;
+}
+
+type Callback<S> = {
+    (newState: S, state: S): void;
+}
+
+type State<S> = {
+    [key: string]: Partial<S>;
+}
+
+type GetStore<S, A> = {
+    dispatch: Dispatcher<A>;
+    register: (cb: Callback<S>) => void;
+    unregister: (cb: Callback<S>) => void;
+    getState: () => S;
+}
+
+
+
+export const createAction = <P, M, A extends any[] = any[]>(type: string, payloadCreator: PayloadCreator<P, M, A>): ActionCreator<P, M, A> => {
     const action = (...args: A): StandardAction<P, M> => ({
         type,
         payload: payloadCreator.apply(null, args)
@@ -27,14 +67,6 @@ export const createAction = <P = any, M = any, A extends any[] = any[]>(type: st
     return action;
 };
 
-type Reducer<P = any, M = any, S = any, A extends StandardAction<P, M> = any> = {
-    (state: S, action: A): S
-}
-
-type Reducers<P = any, M = any, S = any, A extends StandardAction<P, M> = any> = {
-    [type: string]: Reducer<P, M, S, A>;
-};
-
 export const createReducer = <P, M, S, A extends StandardAction<P, M>>(reducers: Reducers<P, M, S, A>) => (state: S, action: A) => {
     const reducer = reducers[action.type];
     return (reducer && reducer(state, action)) || state;
@@ -42,12 +74,8 @@ export const createReducer = <P, M, S, A extends StandardAction<P, M>>(reducers:
 
 export const getType = <P, M, A extends any[] = any[]>(creator: ActionCreator<P, M, A>) => creator.type;
 
-type Middleware<P = any, M= any, A extends StandardAction<P, M> = any> = {
-    (action: A, next?: Middleware<P, M, A>): void
-}
-
 const middlewareExecutor = <P, M, S, A extends StandardAction<P, M>>(middleware: Middleware<P, A>[]) =>
-    (action: A, done: Middleware<P, M, A>) =>
+    (action: A, done: Dispatcher<A>) =>
         [...middleware].reverse().reduce((dispatch, middleware) => {
             return action => middleware(action, action => {
                 console.log(`%c${middleware.name}`, "color:#000;background-color:orange;padding: 2px 4px;border-radius:1em;", action);
@@ -55,27 +83,12 @@ const middlewareExecutor = <P, M, S, A extends StandardAction<P, M>>(middleware:
             });
         }, done)(action);
 
-type Callback<S> = {
-    (newState: S, state: S): void
-}
-
-export type State<S> = {
-    [key: string]: any;
-}
-
-type GetStore<S, A> = {
-    dispatch: (action: A) => void;
-    register: (cb: Callback<S>) => void;
-    unregister: (cb: Callback<S>) => void;
-    getState: () => S;
-}
-
-export const getStore = <S, P, M, A extends StandardAction<P, M>, X extends State<S>>(initialState: S, reducers: Reducers, middleware: Middleware[] = []): GetStore<S, A> => {
+export const getStore = <S extends {}, P, M, A extends StandardAction<P, M>>(initialState: S, reducers: Reducers, middleware: Middleware[] = []): GetStore<S, A> => {
     let callbacks: Callback<S>[] = [];
 
     const execMiddleware = middlewareExecutor(middleware);
 
-    let state: S = {...initialState};
+    let state: State<S> = {...initialState};
 
     return {
         dispatch: action => {
@@ -94,7 +107,7 @@ export const getStore = <S, P, M, A extends StandardAction<P, M>, X extends Stat
                 }, state);
 
                 if (newState !== state) {
-                    callbacks.forEach(cb => cb(newState, state));
+                    callbacks.forEach(cb => cb(newState as S, state as S));
                     state = newState;
                 }
             });
@@ -107,19 +120,40 @@ export const getStore = <S, P, M, A extends StandardAction<P, M>, X extends Stat
         unregister: cb => {
             callbacks = callbacks.filter(callback => callback !== cb);
         },
-        getState: () => state
+        getState: () => state as S
     };
 };
 
 // - React bindings --------------------------------------------------------------------------------------------------------------------
 
-const StoreContext = React.createContext(undefined);
+const StoreContext = React.createContext<GetStore<any, any>>({} as GetStore<any, any>);
 
-export const StoreProvider = ({store, children}) => <StoreContext.Provider value={store}>{children}</StoreContext.Provider>;
+type StoreProvider<S, A> = {
+    store: GetStore<S, A>;
+    children: ReactNode;
+}
+export const StoreProvider = <S, A>({store, children}: StoreProvider<S, A>) =>
+    <StoreContext.Provider value={store}>{children}</StoreContext.Provider>;
 
-export const connect = (mapStateToProps, mapDispatchToProps) => {
+type ConnectedComponent = {
+    (mapStateToProps: any, mapDispatchToProps: any): any;
+}
+
+type Connect<P> = {
+    (Component: FunctionComponent<P> | ComponentClass<P> | string): FunctionComponent<P>;
+}
+
+type MapStateToProps<S, P> = {
+    (state: S): Partial<P>;
+}
+
+type MapDispatchToProps<P, A extends StandardAction = any> = {
+    (dispatch: Dispatcher<A>): any;
+}
+
+export function connect<S, P>(mapStateToProps: MapStateToProps<S, P>, mapDispatchToProps: MapDispatchToProps<P>): Connect<any> {
     return Component => () => {
-        const store = useContext(StoreContext);
+        const store = useContext<GetStore<S, any>>(StoreContext);
 
         const state = store.getState();
 
@@ -128,7 +162,7 @@ export const connect = (mapStateToProps, mapDispatchToProps) => {
         const [props, setProps] = useState(mapStateToProps(state));
 
         useEffect(() => {
-            const cb = (state, prevState) => {
+            const cb = (state: S, prevState: S) => {
                 console.group("STATE CHANGE");
                 console.error("state", state);
                 console.error("prevState", prevState);
@@ -150,11 +184,11 @@ export const connect = (mapStateToProps, mapDispatchToProps) => {
             ...actions
         });
     };
-};
+}
 
 // - Example middleware --------------------------------------------------------------------------------------------------------------------
 
-export const simplePromiseDecorator = async (action, next) => {
+export const simplePromiseDecorator: Middleware = async (action, next) => {
     if (action.payload && action.payload.then && action.payload.catch) {
         try {
             next({
@@ -195,7 +229,7 @@ export const simplePromiseDecorator = async (action, next) => {
     }
 };
 
-export const simpleAsyncDecorator = (action, next) => {
+export const simpleAsyncDecorator: Middleware = (action, next) => {
     setTimeout(() => {
         next({
             ...action,
@@ -207,7 +241,7 @@ export const simpleAsyncDecorator = (action, next) => {
     }, 1000);
 };
 
-export const simpleDecorator = (action, next) => {
+export const simpleDecorator: Middleware = (action, next) => {
     next({
         ...action,
         meta: {

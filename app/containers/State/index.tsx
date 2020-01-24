@@ -11,16 +11,18 @@ import {
     getType,
     getStore,
     simplePromiseDecorator,
-    StoreProvider,
+    StoreProvider, StandardAction
 } from "./exampleStateManagement";
 
-import {TestComponent} from "./TestComponent";
+import {TestComponent, TestComponentProps} from "./TestComponent";
+
+type ExamplePayload = {id: string; data: string; timestamp: number};
 
 // - Example action creators --------------------------------------------------------------------------------------------------------------------
 
 const simpleAsyncAction = createAction(
     "SIMPLE_ASYNC_ACTION",
-    id => new Promise((resolve, reject) => {
+    (id: string) => new Promise<ExamplePayload>((resolve, reject) => {
         setTimeout(() => {
             (id === "error" && reject(new Error("Oops"))) || resolve({
                 id,
@@ -33,16 +35,28 @@ const simpleAsyncAction = createAction(
 
 const simpleSyncAction = createAction(
     "SIMPLE_SYNC_ACTION",
-    id => ({
+    (id: string) => ({
         id,
         data: `Sync data for ${id}`,
         timestamp: Date.now()
     })
 );
 
+const x = simpleAsyncAction("2").payload.then(z => console.log(z.timestamp));
+const y = simpleSyncAction("2").payload;
+
 // - Example reducers --------------------------------------------------------------------------------------------------------------------
 
-const simpleAsyncReducer = (state, {payload}) => ({
+type ExampleState = {
+    asyncData?: ExamplePayload;
+    syncData?: ExamplePayload;
+}
+
+type RootState = {
+    someData?: ExampleState;
+}
+
+const simpleAsyncReducer = (state: ExampleState, {payload}: StandardAction<ExamplePayload>): ExampleState => ({
     ...state,
     asyncData: {
         ...state?.asyncData,
@@ -50,7 +64,7 @@ const simpleAsyncReducer = (state, {payload}) => ({
     }
 });
 
-const simpleSyncReducer = (state, {payload}) => ({
+const simpleSyncReducer = (state: ExampleState, {payload}: StandardAction<ExamplePayload>): ExampleState => ({
     ...state,
     syncData: payload
 });
@@ -66,23 +80,53 @@ const rootReducer = {
     someData: exampleReducer
 };
 
-const myStore = getStore({}, rootReducer, [
+const initialState: RootState = {};
+
+const myStore = getStore(initialState, rootReducer, [
     simplePromiseDecorator,
     // simpleAsyncDecorator,
     // simpleDecorator
 ]);
 
-const mapStateToProps = state => ({
-    asyncData: state.someData?.asyncData,
-    syncData: state.someData?.syncData,
+myStore.register((a) => {
+    a.someData?.syncData?.timestamp.toExponential();
 });
 
-const mapDispatchToProps = dispatch => ({
-    getAsyncData: id => dispatch(simpleAsyncAction(id)),
-    getSyncData: id => dispatch(simpleSyncAction(id))
-});
+// const mapStateToProps = state => ({
+//     // asyncData: state.someData?.asyncData,
+//     // syncData: state.someData?.syncData,
+// });
+//
+// const mapDispatchToProps = dispatch => ({
+//     // getAsyncData: (id: string) => dispatch(simpleAsyncAction(id)),
+//     // getSyncData: (id: string) => dispatch(simpleSyncAction(id))
+// });
 
-const ConnectedTestComponent = connect(mapStateToProps, mapDispatchToProps)(TestComponent);
+type P = {
+    asyncData?: ExamplePayload;
+    syncData?: ExamplePayload;
+    getAsyncData: any;
+    getSyncData: any;
+    // moose: string;
+}
+const ConnectedTestComponent = connect<RootState, TestComponentProps>(
+    state => {
+        return {
+            asyncData: state.someData?.asyncData,
+            syncData: state.someData?.syncData,
+            // getAsyncData: (id: string) => 3,
+            // getSyncData: (id: string) => 2
+            // loose: 34,
+            // moose: "3"
+        };
+    },
+    dispatch => {
+        return {
+            getAsyncData: (id: string) => dispatch(3),
+            getSyncData: (id: string) => dispatch(simpleSyncAction(id))
+        };
+    }
+)(TestComponent);
 
 const Title = styled.h2`
     color: #ccc;
