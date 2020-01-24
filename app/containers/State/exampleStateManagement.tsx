@@ -158,15 +158,7 @@ export function connect<S, P>(mapStateToProps: MapStateToProps<S, P>, mapDispatc
         const [props, setProps] = useState(mapStateToProps(state));
 
         useEffect(() => {
-            const cb = (state: S, prevState: S) => {
-                console.group("STATE CHANGE");
-                console.error("state", state);
-                console.error("prevState", prevState);
-                console.error("changed", state !== prevState);
-                console.groupEnd();
-
-                setProps(mapStateToProps(state));
-            };
+            const cb = (state: S) => setProps(mapStateToProps(state));
 
             store.register(cb);
 
