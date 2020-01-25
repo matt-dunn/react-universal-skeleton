@@ -17,17 +17,17 @@ type MapDispatchToProps<S, A extends StandardAction = any> = {
     (dispatch: Dispatcher<A>): S;
 }
 
-const StoreContext = React.createContext<GetStore<any, any>>({} as GetStore<any, any>);
+const StoreContext = React.createContext<GetStore<any, any>>({} as GetStore<any>);
 
 export const StoreProvider = <S, A extends StandardAction = any>({store, children}: StoreProvider<S, A>) =>
     <StoreContext.Provider value={store}>{children}</StoreContext.Provider>;
 
-export const connect = <TOwnProps extends {} = {}, TStateProps = {}, TDispatchProps = {}, TState = {}>(
+export function connect<TOwnProps = {}, TStateProps = {}, TDispatchProps = {}, TState = {}>(
     mapStateToProps: MapStateToProps<TStateProps, TState>,
     mapDispatchToProps: MapDispatchToProps<TDispatchProps>
-): InferableComponentEnhancerWithProps<TStateProps & TDispatchProps, TOwnProps> => {
-    return Component => (ownProps) => {
-        const store = useContext<GetStore<TState, any>>(StoreContext);
+): InferableComponentEnhancerWithProps<TStateProps & TDispatchProps, TOwnProps> {
+    return Component => ownProps => {
+        const store = useContext<GetStore<TState>>(StoreContext);
 
         const actions = useCallback<any>(mapDispatchToProps(store.dispatch), [mapDispatchToProps]);
 
@@ -49,4 +49,4 @@ export const connect = <TOwnProps extends {} = {}, TStateProps = {}, TDispatchPr
             ...actions
         });
     };
-};
+}
