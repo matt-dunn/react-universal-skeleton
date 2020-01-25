@@ -38,7 +38,7 @@ export const withWireFrameAnnotation = function<T>(WrappedComponent: ComponentTy
             return () => {
                 unregister(Component);
             };
-        }, [register, unregister]);
+        }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
         const handleHighlightNote = () => {
             highlightNote(Component);
