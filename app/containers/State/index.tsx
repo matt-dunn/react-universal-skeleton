@@ -101,14 +101,14 @@ const State = () => {
         <StoreProvider store={myStore}>
             <Page>
                 <Helmet>
-                    <title>State Test</title>
+                    <title>State Example</title>
                 </Helmet>
 
                 <Title>
-                    State Test
+                    State Example
                 </Title>
 
-                <ConnectedTestComponent/>
+                <ConnectedTestComponent description="Simple flux-style implementation of state management with async payload decoration."/>
             </Page>
         </StoreProvider>
     );

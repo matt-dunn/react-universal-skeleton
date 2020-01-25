@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 import {useAuthenticatedUser} from "./auth";
 import {withWireFrameAnnotation} from "../../components/Wireframe";
 
-const Container = styled.header`
+const Container = styled.nav`
   margin: 0 auto;
   padding: 20px;
   display: flex;
@@ -14,7 +14,7 @@ const Container = styled.header`
   background-color: #f5f5f5;
 `;
 
-const Brand = styled.h1`
+const Brand = styled.header`
   font-size: var(--step-up-1);
 `;
 

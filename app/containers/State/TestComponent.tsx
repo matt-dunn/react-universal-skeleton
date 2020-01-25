@@ -1,4 +1,4 @@
-import React from "react";
+import React, {ReactNode} from "react";
 import styled from "@emotion/styled";
 
 import Loading from "components/Loading";
@@ -25,16 +25,21 @@ const Option = styled.button`
   }
 `;
 
-type ExamplePayload = {id: string; data: string; timestamp: number; $status?: {processing: boolean}};
+const Description = styled.header`
+  margin: 0 0 20px 0;
+`;
+
+type ExampleData = {id: string; data: string; timestamp: number; $status?: {processing: boolean}};
 
 export type TestComponentProps = {
-    asyncData: ExamplePayload;
-    syncData: ExamplePayload;
+    asyncData: ExampleData;
+    syncData: ExampleData;
     getAsyncData: any;
     getSyncData: any;
+    description?: ReactNode;
 }
 
-export const TestComponent = ({asyncData, syncData, getAsyncData, getSyncData}: TestComponentProps) => {
+export const TestComponent = ({asyncData, syncData, getAsyncData, getSyncData, description}: TestComponentProps) => {
     useWhatChanged(TestComponent, {asyncData, syncData, getAsyncData, getSyncData});
 
     const handleGetAsyncData = () => getAsyncData("1234");
@@ -42,7 +47,8 @@ export const TestComponent = ({asyncData, syncData, getAsyncData, getSyncData}: 
     const handleGetSyncData = () => getSyncData("5678");
 
     return (
-        <>
+        <article>
+            {description && <Description>{description}</Description>}
             <article>
                 <header>
                     <h3>
@@ -66,7 +72,7 @@ export const TestComponent = ({asyncData, syncData, getAsyncData, getSyncData}: 
                     {JSON.stringify(syncData)}
                 </Data>}
             </article>
-        </>
+        </article>
     );
 };
 

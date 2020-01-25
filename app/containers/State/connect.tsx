@@ -26,14 +26,12 @@ export const StoreProvider = <S, A>({store, children}: StoreProvider<S, A>) =>
     <StoreContext.Provider value={store}>{children}</StoreContext.Provider>;
 
 export function connect<S, P>(mapStateToProps: MapStateToProps<S, P>, mapDispatchToProps: MapDispatchToProps<P>): Connect<any> {
-    return Component => () => {
+    return Component => (ownProps: P) => {
         const store = useContext<GetStore<S, any>>(StoreContext);
-
-        const state = store.getState();
 
         const actions = useCallback(mapDispatchToProps(store.dispatch), [mapDispatchToProps]);
 
-        const [props, setProps] = useState(mapStateToProps(state));
+        const [props, setProps] = useState(mapStateToProps(store.getState()));
 
         useEffect(() => {
             const cb = (state: S) => setProps(mapStateToProps(state));
@@ -46,6 +44,7 @@ export function connect<S, P>(mapStateToProps: MapStateToProps<S, P>, mapDispatc
         }, [store]);
 
         return React.createElement(Component, {
+            ...ownProps,
             ...props,
             ...actions
         });
