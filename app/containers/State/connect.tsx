@@ -1,40 +1,40 @@
 // - React bindings --------------------------------------------------------------------------------------------------------------------
 
-import React, {ComponentClass, FunctionComponent, ReactNode, useCallback, useContext, useEffect, useState} from "react";
+import React, {ReactNode, useCallback, useContext, useEffect, useState} from "react";
 import {StandardAction, GetStore, Dispatcher} from "./exampleStateManagement";
+import {InferableComponentEnhancerWithProps} from "./utils";
 
-type StoreProvider<S, A> = {
+type StoreProvider<S, A extends StandardAction = any> = {
     store: GetStore<S, A>;
     children: ReactNode;
 }
 
-type Connect<P> = {
-    (Component: FunctionComponent<P> | ComponentClass<P> | string): FunctionComponent<P>;
+type MapStateToProps<S, TState> = {
+    (state: TState): S;
 }
 
-type MapStateToProps<S, P> = {
-    (state: S): Partial<P>;
-}
-
-type MapDispatchToProps<P, A extends StandardAction = any> = {
-    (dispatch: Dispatcher<A>): any;
+type MapDispatchToProps<S, A extends StandardAction = any> = {
+    (dispatch: Dispatcher<A>): S;
 }
 
 const StoreContext = React.createContext<GetStore<any, any>>({} as GetStore<any, any>);
 
-export const StoreProvider = <S, A>({store, children}: StoreProvider<S, A>) =>
+export const StoreProvider = <S, A extends StandardAction = any>({store, children}: StoreProvider<S, A>) =>
     <StoreContext.Provider value={store}>{children}</StoreContext.Provider>;
 
-export function connect<S, P>(mapStateToProps: MapStateToProps<S, P>, mapDispatchToProps: MapDispatchToProps<P>): Connect<any> {
-    return Component => (ownProps: P) => {
-        const store = useContext<GetStore<S, any>>(StoreContext);
+export const connect = <TOwnProps extends {} = {}, TStateProps = {}, TDispatchProps = {}, TState = {}>(
+    mapStateToProps: MapStateToProps<TStateProps, TState>,
+    mapDispatchToProps: MapDispatchToProps<TDispatchProps>
+): InferableComponentEnhancerWithProps<TStateProps & TDispatchProps, TOwnProps> => {
+    return Component => (ownProps) => {
+        const store = useContext<GetStore<TState, any>>(StoreContext);
 
-        const actions = useCallback(mapDispatchToProps(store.dispatch), [mapDispatchToProps]);
+        const actions = useCallback<any>(mapDispatchToProps(store.dispatch), [mapDispatchToProps]);
 
         const [props, setProps] = useState(mapStateToProps(store.getState()));
 
         useEffect(() => {
-            const cb = (state: S) => setProps(mapStateToProps(state));
+            const cb = (state: TState) => setProps(mapStateToProps(state));
 
             store.register(cb);
 
@@ -49,4 +49,4 @@ export function connect<S, P>(mapStateToProps: MapStateToProps<S, P>, mapDispatc
             ...actions
         });
     };
-}
+};

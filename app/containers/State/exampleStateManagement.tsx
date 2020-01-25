@@ -22,7 +22,7 @@ type Reducers<P = any, M = any, S = any, A extends StandardAction<P, M> = any> =
     [type: string]: Reducer<P, M, S, A>;
 };
 
-export type Dispatcher<A> = (action: A) => void;
+export type Dispatcher<A extends StandardAction = any> = (action: A) => void;
 
 type Middleware<P = any, M= any, A extends StandardAction<P, M> = any> = {
     (action: A, next: Dispatcher<A>): void;
@@ -36,7 +36,7 @@ type State<S> = {
     [key: string]: Partial<S>;
 }
 
-export type GetStore<S, A> = {
+export type GetStore<S, A extends StandardAction = any> = {
     dispatch: Dispatcher<A>;
     register: (cb: Callback<S>) => void;
     unregister: (cb: Callback<S>) => void;

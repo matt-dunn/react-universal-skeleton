@@ -7,7 +7,7 @@ import Page from "../../styles/Page";
 import {createAction, createReducer, getType, getStore, simplePromiseDecorator, StandardAction} from "./exampleStateManagement";
 import {connect, StoreProvider} from "./connect";
 
-import {TestComponent, TestComponentProps} from "./TestComponent";
+import {TestComponent} from "./TestComponent";
 
 // - Example types --------------------------------------------------------------------------------------------------------------------
 
@@ -80,8 +80,8 @@ const myStore = getStore(initialState, rootReducer, [
     // simpleDecorator
 ]);
 
-const ConnectedTestComponent = connect<RootState, TestComponentProps>(
-    state => ({
+const ConnectedTestComponent = connect(
+    (state: RootState) => ({
         asyncData: state.someData?.asyncData,
         syncData: state.someData?.syncData
     }),
@@ -108,7 +108,9 @@ const State = () => {
                     State Example
                 </Title>
 
-                <ConnectedTestComponent description="Simple flux-style implementation of state management with async payload decoration."/>
+                <ConnectedTestComponent
+                    description="Simple flux-style implementation of state management with async payload decoration."
+                />
             </Page>
         </StoreProvider>
     );
