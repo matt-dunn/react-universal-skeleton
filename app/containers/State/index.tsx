@@ -4,7 +4,8 @@ import styled from "@emotion/styled";
 
 import Page from "../../styles/Page";
 
-import {createAction, createReducer, getType, getStore, simplePromiseDecorator, StandardAction} from "./exampleStateManagement";
+import {createAction, createReducer, getType, getStore, StandardAction} from "./exampleStateManagement";
+import {simplePromiseDecorator} from "./middleware";
 import {connect, StoreProvider} from "./connect";
 
 import {TestComponent} from "./TestComponent";

@@ -1,6 +1,6 @@
 import React, {ReactElement, ReactNode, useContext, useEffect, useRef, useState} from "react";
 import {useHistory, useLocation} from "react-router";
-import {History, Location, LocationState} from "history";
+import {History, Location, UnregisterCallback} from "history";
 
 import {ErrorLike} from "components/error";
 
@@ -35,7 +35,7 @@ const getInitialComponent = (ex: ErrorLike, handler: CallHandler, location: Loca
 const ErrorHandler = ({handler, children, ...props}: ErrorHandlerProps) => {
     const history = useHistory();
     const location = useLocation();
-    const unlisten = useRef<LocationState>(null);
+    const unlisten = useRef<UnregisterCallback>();
     const errorContext = useContext(ErrorContext);
     const [component, setComponent] = useState(errorContext && errorContext.error && getInitialComponent(errorContext.error, handler, location, history, props));
 
@@ -46,7 +46,7 @@ const ErrorHandler = ({handler, children, ...props}: ErrorHandlerProps) => {
         });
 
         return () => {
-            unlisten.current();
+            unlisten.current && unlisten.current();
         };
     }, [errorContext, history]);
 
