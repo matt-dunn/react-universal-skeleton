@@ -1,11 +1,12 @@
 // - React bindings --------------------------------------------------------------------------------------------------------------------
 
 import React, {ReactNode, useCallback, useContext, useEffect, useState} from "react";
-import {StandardAction, GetStore, Dispatcher} from "./exampleStateManagement";
+
+import {GetStore, Dispatcher} from "./exampleStateManagement";
 import {InferableComponentEnhancerWithProps} from "./utils";
 
-type StoreProvider<S, A extends StandardAction = any> = {
-    store: GetStore<S, A>;
+type StoreProvider<S> = {
+    store: GetStore<S>;
     children: ReactNode;
 }
 
@@ -19,7 +20,7 @@ type MapDispatchToProps<S> = {
 
 const StoreContext = React.createContext<GetStore<any, any>>({} as GetStore<any>);
 
-export const StoreProvider = <S, A extends StandardAction = any>({store, children}: StoreProvider<S, A>) =>
+export const StoreProvider = <S extends {}>({store, children}: StoreProvider<S>) =>
     <StoreContext.Provider value={store}>{children}</StoreContext.Provider>;
 
 export function connect<TOwnProps = {}, TStateProps = {}, TDispatchProps = {}, TState = {}>(

@@ -1,7 +1,9 @@
 import {ComponentType} from "react";
 
 export type GetProps<C> = C extends ComponentType<infer P> ? P : never;
+
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+
 export type Shared<
     InjectedProps,
     DecorationTargetProps
