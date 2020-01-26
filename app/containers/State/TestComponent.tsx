@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 
 import Loading from "components/Loading";
 
-import {DecoratedWithStatus, getStatus} from "./middleware";
+import {DecoratedWithStatus, getStatus} from "./simpleState";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
