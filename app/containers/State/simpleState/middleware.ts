@@ -23,7 +23,7 @@ const Status = (status?: Partial<Status>): Status => ({
     ...status
 });
 
-const decorateWithStatus = <P>(status?: Partial<Status>, payload?: P): P & DecoratedWithStatus => ({
+const decorateWithStatus = <P extends DecoratedWithStatus>(status?: Partial<Status>, payload?: P): P & DecoratedWithStatus => ({
     ...payload || {} as P,
     [$status]: Status(status)
 });

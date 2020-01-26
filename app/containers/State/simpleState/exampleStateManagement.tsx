@@ -75,9 +75,9 @@ const middlewareExecutor = <P, M, S, A extends StandardAction<P, M>>(middleware:
         }, done)(action);
 
 export const getStore = <S extends {}, P, M, A extends StandardAction<P, M>>(initialState: S, reducers: Reducers, middleware: Middleware[] = []): GetStore<S, A> => {
-    let callbacks: Callback<S>[] = [];
-
     const execMiddleware = middlewareExecutor(middleware);
+
+    let callbacks: Callback<S>[] = [];
 
     let state: State<S> = {...initialState};
 

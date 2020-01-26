@@ -28,7 +28,7 @@ export function connect<TOwnProps = {}, TStateProps = {}, TDispatchProps = {}, T
     mapDispatchToProps: MapDispatchToProps<TDispatchProps>
 ): InferableComponentEnhancerWithProps<TStateProps & TDispatchProps, TOwnProps> {
     return Component => ownProps => {
-        const store = useContext<GetStore<TState>>(StoreContext);
+        const store = useContext(StoreContext);
 
         const actions = useCallback<any>(mapDispatchToProps(store.dispatch), [mapDispatchToProps]);
 
