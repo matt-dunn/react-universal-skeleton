@@ -84,22 +84,22 @@ export const getStore = <S extends {}, P, M, A extends StandardAction<P, M>>(ini
     return {
         dispatch: action => {
             execMiddleware(action, action => {
-                const newState = Object.keys(reducers).reduce((state, key) => {
-                    const newState = reducers[key](state[key], action);
+                const nextState = Object.keys(reducers).reduce((state, key) => {
+                    const nextState = reducers[key](state[key], action);
 
-                    if (newState !== state[key]) {
+                    if (nextState !== state[key]) {
                         state = {
                             ...state,
-                            [key]: newState
+                            [key]: nextState
                         };
                     }
 
                     return state;
                 }, state);
 
-                if (newState !== state) {
-                    callbacks.forEach(cb => cb(newState as S, state as S));
-                    state = newState;
+                if (nextState !== state) {
+                    callbacks.forEach(cb => cb(nextState as S, state as S));
+                    state = nextState;
                 }
             });
 
