@@ -31,10 +31,10 @@ const Description = styled.header`
   margin: 0 0 20px 0;
 `;
 
-type ExampleData = {id: string; data: string; timestamp: number} & DecoratedWithStatus;
+type ExampleData = {id: string; data: string; timestamp: number};
 
 export type TestComponentProps = {
-    asyncData?: ExampleData;
+    asyncData?: ExampleData & DecoratedWithStatus;
     syncData?: ExampleData;
     getAsyncData: (id: string) => any;
     getSyncData: (id: string) => any;
@@ -42,11 +42,11 @@ export type TestComponentProps = {
 }
 
 export const TestComponent = ({asyncData, syncData, getAsyncData, getSyncData, description}: TestComponentProps) => {
-    useWhatChanged(TestComponent, {asyncData, syncData, getAsyncData, getSyncData});
-
     const handleGetAsyncData = () => getAsyncData("1234");
     const handleGetAsyncDataWithError = () => getAsyncData("error");
     const handleGetSyncData = () => getSyncData("5678");
+
+    useWhatChanged(TestComponent, {asyncData, syncData, getAsyncData, getSyncData});
 
     const statusAsyncData = getStatus(asyncData);
 
