@@ -1,6 +1,6 @@
 // - Example middleware --------------------------------------------------------------------------------------------------------------------
 
-import {Middleware} from "../exampleStateManagement";
+import {Middleware} from "../getStore";
 
 export const simpleAsyncDecorator: Middleware = (action, next) => {
     setTimeout(() => {

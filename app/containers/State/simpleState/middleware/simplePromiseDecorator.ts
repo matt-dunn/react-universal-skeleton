@@ -1,6 +1,6 @@
 import isPromise from "is-promise";
 
-import {Middleware} from "../exampleStateManagement";
+import {Middleware} from "../getStore";
 import {errorLike, ErrorLike} from "../utils";
 
 const $status = Symbol("$status");

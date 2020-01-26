@@ -1,5 +1,5 @@
 import {ComponentType} from "react";
-import {StandardAction, Reducers} from "./exampleStateManagement";
+import {StandardAction, Reducers} from "./getStore";
 
 export type GetProps<C> = C extends ComponentType<infer P> ? P : never;
 

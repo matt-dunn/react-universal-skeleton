@@ -2,7 +2,7 @@
 
 import React, {ReactNode, useCallback, useContext, useEffect, useState} from "react";
 
-import {GetStore, Dispatcher} from "./exampleStateManagement";
+import {GetStore, Dispatcher} from "./getStore";
 import {InferableComponentEnhancerWithProps} from "./utils";
 
 type StoreProvider<S> = {
