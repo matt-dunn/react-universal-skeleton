@@ -3,6 +3,8 @@ import styled from "@emotion/styled";
 
 import Loading from "components/Loading";
 
+import {DecoratedWithStatus, getStatus} from "./middleware";
+
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
 const Data = styled.pre`
@@ -29,7 +31,7 @@ const Description = styled.header`
   margin: 0 0 20px 0;
 `;
 
-type ExampleData = {id: string; data: string; timestamp: number; $status?: {processing: boolean}};
+type ExampleData = {id: string; data: string; timestamp: number} & DecoratedWithStatus;
 
 export type TestComponentProps = {
     asyncData?: ExampleData;
@@ -46,21 +48,26 @@ export const TestComponent = ({asyncData, syncData, getAsyncData, getSyncData, d
     const handleGetAsyncDataWithError = () => getAsyncData("error");
     const handleGetSyncData = () => getSyncData("5678");
 
+    const statusAsyncData = getStatus(asyncData);
+
     return (
         <article>
             {description && <Description>{description}</Description>}
             <article>
                 <header>
                     <h3>
-                        <Loading inline={true} loading={asyncData?.$status?.processing || false}>
+                        <Loading inline={true} loading={statusAsyncData.processing}>
                             ASYNC
                         </Loading>
                     </h3>
-                    <Option disabled={asyncData?.$status?.processing} onClick={handleGetAsyncData}>Get data</Option>
-                    <Option disabled={asyncData?.$status?.processing} onClick={handleGetAsyncDataWithError}>Get data with error</Option>
+                    <Option disabled={statusAsyncData.processing} onClick={handleGetAsyncData}>Get data</Option>
+                    <Option disabled={statusAsyncData.processing} onClick={handleGetAsyncDataWithError}>Get data with error</Option>
                 </header>
+                {statusAsyncData && <Data>
+                    STATUS: {JSON.stringify(statusAsyncData)}
+                </Data>}
                 {asyncData && <Data>
-                    {JSON.stringify(asyncData)}
+                    PAYLOAD: {JSON.stringify(asyncData)}
                 </Data>}
             </article>
             <article>
@@ -69,7 +76,7 @@ export const TestComponent = ({asyncData, syncData, getAsyncData, getSyncData, d
                     <Option onClick={handleGetSyncData}>Get data</Option>
                 </header>
                 {syncData && <Data>
-                    {JSON.stringify(syncData)}
+                    PAYLOAD: {JSON.stringify(syncData)}
                 </Data>}
             </article>
         </article>
