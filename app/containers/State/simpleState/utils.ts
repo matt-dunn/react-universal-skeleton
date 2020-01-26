@@ -1,4 +1,5 @@
 import {ComponentType} from "react";
+import {StandardAction, Reducers} from "./exampleStateManagement";
 
 export type GetProps<C> = C extends ComponentType<infer P> ? P : never;
 
@@ -33,6 +34,15 @@ export type ErrorLike = {
     status?: number;
 }
 
+type ActionCreator<P = any, M = any, A extends any[] = any[]> = {
+    (...args: A): StandardAction<P, M>;
+    type: string;
+}
+
+type PayloadCreator<P = any, M = any, A extends any[] = any[]> = {
+    (...args: A): P;
+}
+
 export const errorLike = (error: ErrorLike & {[index: string]: any}): ErrorLike => {
     const {stack, ...rest} = Object.getOwnPropertyNames(error).reduce((o: any, key: string) => { // eslint-disable-line @typescript-eslint/no-unused-vars
         o[key] = error[key];
@@ -41,4 +51,22 @@ export const errorLike = (error: ErrorLike & {[index: string]: any}): ErrorLike 
 
     return rest;
 };
+
+export const createAction = <P, M, A extends any[] = any[]>(type: string, payloadCreator: PayloadCreator<P, M, A>): ActionCreator<P, M, A> => {
+    const action = (...args: A): StandardAction<P, M> => ({
+        type,
+        payload: payloadCreator(...args)
+    });
+
+    action.type = type;
+
+    return action;
+};
+
+export const createReducer = <P, M, S, A extends StandardAction<P, M>>(reducers: Reducers<P, M, S, A>) => (state: S, action: A) => {
+    const reducer = reducers[action.type];
+    return (reducer && reducer(state, action)) || state;
+};
+
+export const getType = <P, M, A extends any[] = any[]>(creator: ActionCreator<P, M, A>) => creator.type;
 

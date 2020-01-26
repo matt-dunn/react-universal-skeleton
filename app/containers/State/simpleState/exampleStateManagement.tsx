@@ -5,20 +5,11 @@ export type StandardAction<P = any, M = any> = {
     error?: boolean;
 }
 
-type ActionCreator<P = any, M = any, A extends any[] = any[]> = {
-    (...args: A): StandardAction<P, M>;
-    type: string;
-}
-
-type PayloadCreator<P = any, M = any, A extends any[] = any[]> = {
-    (...args: A): P;
-}
-
 type Reducer<P = any, M = any, S = any, A extends StandardAction<P, M> = StandardAction<P, M>> = {
     (state: S, action: A): S;
 }
 
-type Reducers<P = any, M = any, S = any, A extends StandardAction<P, M> = StandardAction<P, M>> = {
+export type Reducers<P = any, M = any, S = any, A extends StandardAction<P, M> = StandardAction<P, M>> = {
     [type: string]: Reducer<P, M, S, A>;
 };
 
@@ -46,24 +37,6 @@ export type GetStore<S, A extends StandardAction = StandardAction> = {
 }
 
 
-
-export const createAction = <P, M, A extends any[] = any[]>(type: string, payloadCreator: PayloadCreator<P, M, A>): ActionCreator<P, M, A> => {
-    const action = (...args: A): StandardAction<P, M> => ({
-        type,
-        payload: payloadCreator(...args)
-    });
-
-    action.type = type;
-
-    return action;
-};
-
-export const createReducer = <P, M, S, A extends StandardAction<P, M>>(reducers: Reducers<P, M, S, A>) => (state: S, action: A) => {
-    const reducer = reducers[action.type];
-    return (reducer && reducer(state, action)) || state;
-};
-
-export const getType = <P, M, A extends any[] = any[]>(creator: ActionCreator<P, M, A>) => creator.type;
 
 const middlewareExecutor = <P, M, S, A extends StandardAction<P, M>>(middleware: Middleware[]) =>
     (action: A, done: Dispatcher<A>) =>

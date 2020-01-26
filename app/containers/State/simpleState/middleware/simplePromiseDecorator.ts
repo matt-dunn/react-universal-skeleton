@@ -26,7 +26,7 @@ const decorateWithStatus = <P extends DecoratedWithStatus>(status?: Partial<Stat
     [$status]: Status(status)
 });
 
-export const getStatus = <P extends DecoratedWithStatus | undefined>(payload: P): Status => (payload && payload[$status]) || Status();
+export const getStatus = <P extends DecoratedWithStatus>(payload?: P): Status => (payload && payload[$status]) || Status();
 
 export const simplePromiseDecorator: Middleware = async (action, next) => {
     if (isPromise(action.payload)) {
