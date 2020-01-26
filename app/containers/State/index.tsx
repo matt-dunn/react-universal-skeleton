@@ -53,7 +53,7 @@ const simpleAsyncReducer = (state: ExampleState, {payload}: StandardAction<Examp
     asyncData: {
         ...state?.asyncData,
         ...payload
-    }
+    } as ExamplePayload
 });
 
 const simpleSyncReducer = (state: ExampleState, {payload}: StandardAction<ExamplePayload>): ExampleState => ({

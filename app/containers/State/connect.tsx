@@ -9,12 +9,12 @@ type StoreProvider<S, A extends StandardAction = any> = {
     children: ReactNode;
 }
 
-type MapStateToProps<S, TState> = {
-    (state: TState): S;
+type MapStateToProps<TStateProps, TState> = {
+    (state: TState): TStateProps;
 }
 
-type MapDispatchToProps<S, A extends StandardAction = any> = {
-    (dispatch: Dispatcher<A>): S;
+type MapDispatchToProps<S> = {
+    (dispatch: Dispatcher): S;
 }
 
 const StoreContext = React.createContext<GetStore<any, any>>({} as GetStore<any>);

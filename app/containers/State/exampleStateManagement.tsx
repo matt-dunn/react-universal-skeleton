@@ -1,6 +1,6 @@
 export type StandardAction<P = any, M = any> = {
     type: string;
-    payload: P;
+    payload?: P;
     meta?: M;
     error?: boolean;
 }
@@ -14,17 +14,19 @@ type PayloadCreator<P = any, M = any, A extends any[] = any[]> = {
     (...args: A): P;
 }
 
-type Reducer<P = any, M = any, S = any, A extends StandardAction<P, M> = any> = {
+type Reducer<P = any, M = any, S = any, A extends StandardAction<P, M> = StandardAction<P, M>> = {
     (state: S, action: A): S;
 }
 
-type Reducers<P = any, M = any, S = any, A extends StandardAction<P, M> = any> = {
+type Reducers<P = any, M = any, S = any, A extends StandardAction<P, M> = StandardAction<P, M>> = {
     [type: string]: Reducer<P, M, S, A>;
 };
 
-export type Dispatcher<A extends StandardAction = any> = (action: A) => void;
+export type Dispatcher<A extends StandardAction = StandardAction> = {
+    (action: A): void;
+};
 
-type Middleware<P = any, M= any, A extends StandardAction<P, M> = any> = {
+type Middleware<P = any, M = any, A extends StandardAction<P, M> = any> = {
     (action: A, next: Dispatcher<A>): void;
 }
 
@@ -36,7 +38,7 @@ type State<S> = {
     [key: string]: Partial<S>;
 }
 
-export type GetStore<S, A extends StandardAction = any> = {
+export type GetStore<S, A extends StandardAction = StandardAction> = {
     dispatch: Dispatcher<A>;
     register: (cb: Callback<S>) => void;
     unregister: (cb: Callback<S>) => void;
@@ -63,7 +65,7 @@ export const createReducer = <P, M, S, A extends StandardAction<P, M>>(reducers:
 
 export const getType = <P, M, A extends any[] = any[]>(creator: ActionCreator<P, M, A>) => creator.type;
 
-const middlewareExecutor = <P, M, S, A extends StandardAction<P, M>>(middleware: Middleware<P, A>[]) =>
+const middlewareExecutor = <P, M, S, A extends StandardAction<P, M>>(middleware: Middleware[]) =>
     (action: A, done: Dispatcher<A>) =>
         [...middleware].reverse().reduce((dispatch, middleware) => {
             return action => middleware(action, action => {
