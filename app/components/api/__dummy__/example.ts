@@ -11,7 +11,7 @@ interface ExampleListResponse {
 }
 
 export interface ExampleGetList {
-    (page?: number, count?: number): Promise<ExampleListResponse>;
+    (page?: number, count?: number, cancel?: any): Promise<ExampleListResponse>;
 }
 
 export interface ExampleGetItem {
@@ -29,11 +29,11 @@ export interface ExampleApi {
 }
 
 const exampleApi: ExampleApi = {
-    exampleGetList:(page = 0, count = 3) => new Promise<ExampleListResponse>((resolve/*, reject*/) => {
-        console.log("API CALL: exampleGetList");
+    exampleGetList:(page = 0, count = 3, cancel) => new Promise<ExampleListResponse>((resolve/*, reject*/) => {
+        console.log("API CALL: exampleGetList", page, count);
         // throw new Error("Error in exampleGetList")
         // throw new APIError("Authentication Failed", "auth", 401)
-        setTimeout(() => {
+        const t = setTimeout(() => {
             console.log("API CALL COMPLETE: exampleGetList");
             // reject(new Error("Error in exampleGetList"))
 
@@ -45,6 +45,11 @@ const exampleApi: ExampleApi = {
                 };
             }));
         }, (process as any).browser ? 2000 : 0);
+
+        cancel.on(() => {
+            console.error("@@@@@@CANCEL**************");
+            clearTimeout(t);
+        });
     }),
     exampleGetItem:() => new Promise<ExampleResponse>((resolve/*, reject*/) => {
         console.log("API CALL: exampleGetItem");

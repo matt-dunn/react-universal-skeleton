@@ -97,15 +97,16 @@ const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditIt
 
     usePerformAction(
         useCallback(() => {
-            return onExampleGetList(activePage, MAX_ITEMS)
-                .then(e => {
-                    console.log("DONE", e);
-                    return e;
-                })
-                .catch(ex => {
-                    console.log("ERROR", ex.message);
-                    throw ex;
-                });
+            onExampleGetList(0, 2);
+            return onExampleGetList(activePage, MAX_ITEMS);
+                // .then(e => {
+                //     console.log("DONE", e);
+                //     return e;
+                // })
+                // .catch(ex => {
+                //     console.log("ERROR", ex.message);
+                //     throw ex;
+                // });
         }, [onExampleGetList, activePage]),
         useCallback(() => isShown, [isShown])
     );

@@ -5,10 +5,11 @@ import {ExampleApi} from "../../components/api/__dummy__/example";
 
 const exampleGetList = createAction(
     "@__dummy__/EXAMPLE_GET_LIST",
-    ({page, count}: {page?: number; count?: number}) => ({ services }: {services: ExampleApi}) => services.exampleGetList(page, count),
-    () => ({
-        hasRetry: true
-    })
+    ({page, count}: {page?: number; count?: number}) => ({page, count}),
+    // ({page, count}: {page?: number; count?: number}) => ({ services }: {services: ExampleApi}) => services.exampleGetList(page, count),
+    // () => ({
+    //     hasRetry: true
+    // })
 )();
 
 const exampleGetItem = createAction(
