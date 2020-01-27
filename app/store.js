@@ -34,22 +34,7 @@ const getStore = (initialState = {}) => {
     return store;
 };
 
-import {exampleActions} from "app/actions";
-import {getType} from "typesafe-actions";
 import uuid from "uuid";
-
-const Api = {
-    fetchUser: userId => {
-        console.error("***userId", userId);
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                resolve([{
-                    a: 42
-                }]);
-            }, 2000);
-        });
-    }
-};
 
 const canceller = function() {
     let c;
@@ -73,7 +58,9 @@ function* callAsyncWithCancel(action) {
                 }
             }
         });
+
         const user = yield call(servicesExample.exampleGetList, action.payload.page, action.payload.count, cancel);
+
         yield put({
             ...action,
             payload: user,
