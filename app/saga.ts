@@ -2,7 +2,7 @@ import {put, cancelled} from "redux-saga/effects";
 import uuid from "uuid";
 import {ErrorLike} from "./containers/State/simpleState";
 
-export type StandardAction<P = any, M = any> = {
+type StandardAction<P = any, M = any> = {
     type: string;
     payload?: P;
     meta?: M;
@@ -22,17 +22,6 @@ type Caller = {
     (action: StandardAction, cancel: Cancel): void;
 }
 
-const Cancel = function(): Cancel {
-    let callback: Callback;
-
-    return {
-        on: cb => callback = cb,
-        cancelled: () => callback && callback()
-    };
-};
-
-// const $status = Symbol("$status");
-
 type Status = {
     readonly transactionId: string;
     readonly processing: boolean;
@@ -42,12 +31,24 @@ type Status = {
     readonly cancelled?: boolean;
 }
 
-export type DecoratedWithStatus = {
+type DecoratedWithStatus = {
     readonly $status?: Status;
 }
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 type WithOptional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+
+
+
+
+const Cancel = function(): Cancel {
+    let callback: Callback;
+
+    return {
+        on: cb => callback = cb,
+        cancelled: () => callback && callback()
+    };
+};
 
 const Status = (status: WithOptional<Status, "hasError" | "error" | "cancelled" | "processing" | "complete">): Status => ({
     processing: false,
