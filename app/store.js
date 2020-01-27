@@ -44,7 +44,7 @@ const canceller = function() {
     };
 };
 
-function* callAsyncWithCancel(action) {
+function* callAsyncWithCancel(caller, action) {
     const transactionId = uuid.v4();
     const cancel = canceller();
 
@@ -59,7 +59,7 @@ function* callAsyncWithCancel(action) {
             }
         });
 
-        const user = yield call(servicesExample.exampleGetList, action.payload.page, action.payload.count, cancel);
+        const user = yield caller(action, cancel);
 
         yield put({
             ...action,
@@ -105,7 +105,11 @@ function* callAsyncWithCancel(action) {
 }
 
 function* mySaga() {
-    yield takeLatest(action => (action.type === "@__dummy__/EXAMPLE_GET_LIST" && !action?.meta?.$status), callAsyncWithCancel);
+    yield takeLatest(
+        action => (action.type === "@__dummy__/EXAMPLE_GET_LIST" && !action?.meta?.$status),
+        callAsyncWithCancel,
+        (action, cancel) => call(servicesExample.exampleGetList, action.payload.page, action.payload.count, cancel)
+    );
 }
 
 
