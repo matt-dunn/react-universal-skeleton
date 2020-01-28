@@ -70,27 +70,30 @@ export function* callAsyncWithCancel(caller: Caller, action: StandardAction) {
     try {
         yield put({
             ...action,
+            payload: undefined,
             meta: decorateWithStatus(transactionId,{
                 processing: true
-            })
+            }, action.meta)
         });
 
-        const user = yield caller(action, cancel);
+        const payload = yield caller(action, cancel);
 
         yield put({
             ...action,
-            payload: user,
+            payload,
             meta: decorateWithStatus(transactionId,{
                 complete: true
-            })
+            }, action.meta)
         });
     } catch (error) {
         yield put({
             ...action,
+            payload: error,
+            error: true,
             meta: decorateWithStatus(transactionId,{
                 hasError: true,
                 error
-            })
+            }, action.meta)
         });
     } finally {
         if (yield cancelled()) {
@@ -98,9 +101,10 @@ export function* callAsyncWithCancel(caller: Caller, action: StandardAction) {
 
             yield put({
                 ...action,
+                payload: [],
                 meta: decorateWithStatus(transactionId,{
                     cancelled: true
-                })
+                }, action.meta)
             });
         }
     }

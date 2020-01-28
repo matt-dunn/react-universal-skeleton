@@ -12,6 +12,7 @@ export type IStatus = {
   readonly processedOnServer: boolean;
   readonly processing: boolean;
   readonly hasError: boolean;
+  readonly cancelled?: boolean;
   readonly error?: ErrorLike;
   readonly isActive: boolean;
   readonly outstandingTransactionCount: number;
@@ -24,7 +25,7 @@ export type IStatusTransaction = {
 
 const Status = (status: IStatus = {} as IStatus): IStatus => {
   const {
-    lastUpdated, complete = false, processing = false, hasError = false, error, isActive = false, processedOnServer = false
+    lastUpdated, complete = false, processing = false, hasError = false, error, isActive = false, processedOnServer = false, cancelled = false
   } = status;
 
   const activeTransactions = status[symbolActiveTransactions] || {};
@@ -35,6 +36,7 @@ const Status = (status: IStatus = {} as IStatus): IStatus => {
     processing,
     hasError,
     isActive,
+    cancelled,
     processedOnServer,
     error: error && errorLike(error),
     outstandingTransactionCount: Object.keys(activeTransactions).length,

@@ -22,9 +22,9 @@ const getStore = (initialState = {}) => {
         // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
         composeEnhancers(applyMiddleware(
             // promiseMiddleware,
+            sagaMiddleware,
             stateDecorator({ dependencies: { services: {...servicesExample, ...servicesAuth} } }),
             notification({notify: () => import("./notify").then(module => module.notify)}),
-            sagaMiddleware,
             // thunkMiddleware,
             // loggerMiddleware,
         )),
@@ -40,7 +40,7 @@ function* mySaga() {
     yield takeLatest(
         createPattern( "@__dummy__/EXAMPLE_GET_LIST"),
         callAsyncWithCancel,
-        (action, cancel) => call(servicesExample.exampleGetList, action.payload.page, action.payload.count, cancel)
+        ({meta: {params: {page, count}}}, cancel) => call(servicesExample.exampleGetList, page, count, cancel)
     );
 }
 

@@ -54,7 +54,7 @@ const updateState = <S, P>(state: S, { meta, error, payload }: FluxStandardActio
       updatedState,
       [...path, "$status"],
       decorateStatus(status, $status, isCurrent === true)
-  ) as any;
+  );
 };
 
 export default updateState;
