@@ -4,7 +4,7 @@ import React, {useCallback} from "react";
 
 import Loading from "components/Loading";
 import {usePerformAction} from "components/actions";
-import Status, {IStatus} from "components/state-mutate-with-status/status";
+import {getStatus, DecoratedWithStatus} from "components/state-mutate-with-status/status";
 import PlaceHolderItem from "app/components/Placeholder/Item";
 
 import {ExampleItemState} from "../../reducers/__dummy__/example";
@@ -14,7 +14,7 @@ import useWhatChanged from "components/whatChanged/useWhatChanged";
 import {withWireFrameAnnotation} from "components/Wireframe";
 
 export type ItemProps = {
-    item?: ExampleItemState;
+    item?: ExampleItemState & DecoratedWithStatus;
     onExampleGetItem: ExampleGetItem;
     className?: string;
     isShown?: boolean;
@@ -37,7 +37,7 @@ const PlaceHolderListItem = PlaceHolderItem(styled.div`color:#ddd`);
 
 
 const Item = ({className, isShown = true, item, onExampleGetItem, ...props}: ItemProps) => {
-    const {complete, processing, hasError, error} = (item && Status(item.$status)) || {} as IStatus;
+    const {complete, processing, hasError, error} = getStatus(item);
 
     useWhatChanged(Item, { className, isShown, item, onExampleGetItem, ...props });
 

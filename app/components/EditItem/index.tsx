@@ -5,16 +5,17 @@ import {css} from "@emotion/core";
 import TextInput from "react-responsive-ui/modules/TextInput";
 
 // import Status from "components/state-mutate-with-status/status";
-import useAutosave from "components/hooks/useAutosave";
+// import useAutosave from "components/hooks/useAutosave";
 
 import {ExampleItemState} from "../../reducers/__dummy__/example";
 import {ExampleResponse} from "../api/__dummy__/example";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 import {withWireFrameAnnotation} from "components/Wireframe";
+import {getStatus, DecoratedWithStatus} from "components/state-mutate-with-status/status";
 
 export type ItemProps = {
-    item: ExampleItemState;
+    item: ExampleItemState & DecoratedWithStatus;
     onChange?: (item: ExampleItemState) => Promise<ExampleResponse>;
     type?: "primary" | "secondary";
     className?: string;
@@ -42,11 +43,11 @@ const Saving = styled.div`
 `;
 
 const Item = ({item, onChange, type, className, disabled}: ItemProps) => {
-    const {name/*, $status*/} = item;
-    // const {complete, isActive, processing, hasError, error, lastUpdated} = Status($status);
+    const {name} = item;
+    const {processing} = getStatus(item);
 
     const [value, setValue] = useState(name);
-    const [saving, setSaving] = useState(false);
+    // const [saving, setSaving] = useState(false);
 
     useEffect(() => {
         setValue(name);
@@ -73,7 +74,7 @@ const Item = ({item, onChange, type, className, disabled}: ItemProps) => {
         [item, onChange, value]
     );
 
-    useWhatChanged(Item, {saving, inputEl, item, onChange, value, handleChange, disabled}, {idProp: "item.id"});
+    useWhatChanged(Item, {inputEl, item, onChange, value, handleChange, disabled}, {idProp: "item.id"});
 
     return (
         <div className={className}>
@@ -86,7 +87,7 @@ const Item = ({item, onChange, type, className, disabled}: ItemProps) => {
                     onChange={handleChange}
                 />
             </Container>
-            {saving &&
+            {processing &&
                 <Saving>
                     Saving...
                 </Saving>

@@ -5,7 +5,6 @@ import {getType, createReducer} from "typesafe-actions";
 import { ActionMeta } from "components/state-mutate-with-status";
 // import nextState from 'components/state-mutate-with-status/immutable';
 import nextState from "components/state-mutate-with-status/frozen";
-import { IStatus } from "components/state-mutate-with-status/status";
 
 import {exampleActions as actions} from "../../actions";
 
@@ -13,7 +12,6 @@ import {exampleActions as actions} from "../../actions";
 export interface ExampleItemState {
     id: string;
     name: string;
-    $status: IStatus;
 }
 
 // export interface ExampleListState extends List<ExampleItemState>{}
@@ -22,7 +20,6 @@ export interface ExampleItemState {
 export interface ExampleState {
     items: ExampleItemState[];
     item?: ExampleItemState;
-    $status?: IStatus;
 }
 
 const exampleGetList = (state: ExampleState, action: FluxStandardAction<string, any, ActionMeta>): ExampleState => {

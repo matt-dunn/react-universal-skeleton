@@ -4,6 +4,8 @@ import { useSelector } from "react-redux";
 import {AuthState} from "../../reducers/auth";
 import {AppState} from "../../reducers";
 
+import {getStatus} from "components/state-mutate-with-status/status";
+
 const AuthContext = React.createContext<AuthState | undefined>(undefined);
 
 type AboutProviderProps = {
@@ -22,8 +24,9 @@ const AuthProvider = ({children}: AboutProviderProps) => {
 
 export const useAuthenticatedUser = () => {
     const {authenticatedUser} = useContext(AuthContext) || {};
+    const {complete} = getStatus(authenticatedUser);
 
-    if ((authenticatedUser && authenticatedUser.$status && authenticatedUser.$status.complete && authenticatedUser)) {
+    if ((authenticatedUser && complete && authenticatedUser)) {
         const {$status, ...rest} = authenticatedUser; // eslint-disable-line @typescript-eslint/no-unused-vars
         return {...rest};
     }

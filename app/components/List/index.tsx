@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import {css} from "@emotion/core";
 import { Link } from "react-router-dom";
 
-import Status, {IStatus} from "components/state-mutate-with-status/status";
+import {getStatus, DecoratedWithStatus} from "components/state-mutate-with-status/status";
 import Loading from "components/Loading";
 import {usePerformAction} from "components/actions";
 import {ResponsiveGrid} from "components/Grid";
@@ -17,14 +17,12 @@ import Item from "../EditItem";
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 import {withWireFrameAnnotation} from "components/Wireframe";
 
-interface ExampleItemStateList<T> extends Array<T> {
-    $status?: IStatus;
-}
+type ExampleItemStateList<T> = Array<T> & DecoratedWithStatus;
+
 export type ListProps = {
     items: ExampleItemStateList<ExampleItemState>;
     onExampleGetList: ExampleGetList;
     onExampleEditItem: ExampleEditItem;
-    $status?: IStatus;
     isShown?: boolean;
     activePage?: number;
     children?: ({item, disabled}: {item: ExampleItemState; disabled: boolean}) => ReactElement<any>;
@@ -92,8 +90,8 @@ const WFPagination = withWireFrameAnnotation(Pagination, {
     description: <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam iaculis convallis ante, ac porttitor eros hendrerit non. Ut a hendrerit ligula. Praesent vestibulum, dui venenatis convallis condimentum, lorem magna rutrum erat, eget convallis odio purus sed ex. Suspendisse congue metus ac blandit vehicula. Suspendisse non elementum purus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
 });
 
-const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditItem, activePage, children, ...props}: ListProps) => {
-    const {processing, hasError, error, outstandingTransactionCount} = Status(items.$status);
+const List = ({isShown = true, items, onExampleGetList, onExampleEditItem, activePage, children, ...props}: ListProps) => {
+    const {processing, hasError, error, outstandingTransactionCount} = getStatus(items);
 
     usePerformAction(
         useCallback(() => {
@@ -111,7 +109,7 @@ const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditIt
         useCallback(() => isShown, [isShown])
     );
 
-    useWhatChanged(List, { activePage, isShown, items, $status, onExampleGetList, onExampleEditItem, children, usePerformAction, ...props });
+    useWhatChanged(List, { activePage, isShown, items, onExampleGetList, onExampleEditItem, children, usePerformAction, ...props });
 
     return (
         <ListContainer>

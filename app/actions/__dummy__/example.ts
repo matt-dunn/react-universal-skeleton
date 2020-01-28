@@ -1,7 +1,6 @@
 import { createAction } from "typesafe-actions";
 
 import {ExampleItemState} from "../../reducers/__dummy__/example";
-import {ExampleApi} from "../../components/api/__dummy__/example";
 
 import services from "../../components/api/__dummy__/example";
 

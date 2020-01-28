@@ -23,6 +23,10 @@ export type IStatusTransaction = {
   readonly transactionId: string;
 } & IStatus
 
+export type DecoratedWithStatus = {
+  readonly $status?: IStatus;
+}
+
 const Status = (status: IStatus = {} as IStatus): IStatus => {
   const {
     lastUpdated, complete = false, processing = false, hasError = false, error, isActive = false, processedOnServer = false, cancelled = false
@@ -43,6 +47,9 @@ const Status = (status: IStatus = {} as IStatus): IStatus => {
     [symbolActiveTransactions]: { ...activeTransactions },
   };
 };
+
+export const getStatus = <P extends DecoratedWithStatus>(payload?: P): IStatus => (payload && payload.$status) || Status();
+
 
 export { symbolActiveTransactions };
 

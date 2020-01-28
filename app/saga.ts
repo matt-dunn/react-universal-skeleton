@@ -3,6 +3,7 @@ import uuid from "uuid";
 import {isFunction} from "lodash";
 
 import {ErrorLike} from "./containers/State/simpleState";
+import {Task} from "@redux-saga/types";
 
 type StandardAction<P = any, M = any> = {
     type: string;
@@ -35,6 +36,14 @@ type DecoratedWithStatus = {
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 type WithOptional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+
+type Tasks = {
+    [key: string]: Task;
+};
+
+type Actions = {
+    [key: string]: StandardAction;
+}
 
 
 
@@ -108,22 +117,22 @@ export function* callAsyncWithCancel(action: StandardAction) {
     }
 }
 
-export function* asyncAction() {
-    return yield takeAsync(callAsyncWithCancel);
-}
-
 const takeAsync = (saga: (...args: any[]) => any, ...args: any[]) => fork(function*() {
-    let lastTask;
-    let lastAction;
+    const lastTask: Tasks = {};
+    const lastAction: Actions = {};
 
     while (true) {
         const action = yield take((action: StandardAction) => isFunction(action.payload));
 
-        if (lastTask && lastAction && getName(action) === getName(lastAction)) {
-            yield cancel(lastTask);
+        if (lastTask[getName(action)] && lastAction && getName(action) === getName(lastAction[getName(action)])) {
+            yield cancel(lastTask[getName(action)]);
         }
 
-        lastTask = yield fork(saga, ...args.concat(action));
-        lastAction = action;
+        lastTask[getName(action)] = yield fork(saga, ...args.concat(action));
+        lastAction[getName(action)] = action;
     }
 });
+
+export function* asyncAction() {
+    return yield takeAsync(callAsyncWithCancel);
+}

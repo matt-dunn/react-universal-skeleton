@@ -7,7 +7,7 @@ import { Dispatch } from "redux";
 import TrackVisibility from "react-on-screen";
 import { useParams} from "react-router";
 
-import { IStatus } from "components/state-mutate-with-status/status";
+import {DecoratedWithStatus, getStatus} from "components/state-mutate-with-status/status";
 import {AboveTheFold, ClientOnly} from "components/actions";
 import List from "app/components/List";
 import Item from "app/components/Item";
@@ -26,11 +26,10 @@ import {withWireFrameAnnotation} from "../../components/Wireframe";
 
 export type DataProps = {
     items: ExampleItemState[];
-    item?: ExampleItemState;
+    item?: ExampleItemState & DecoratedWithStatus;
     onExampleGetList: ExampleGetList;
     onExampleGetItem: ExampleGetItem;
     onExampleEditItem: ExampleEditItem;
-    $status?: IStatus;
 };
 
 const Title = styled.h2`
@@ -68,7 +67,7 @@ const WAModalSubmit = withWireFrameAnnotation(ButtonSimplePrimary, {
     description: <div>Only enabled once the data is available.</div>
 });
 
-const Data = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditItem, $status}: DataProps) => {
+const Data = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditItem}: DataProps) => {
     const { page } = useParams();
 
     const renderListItem = useCallback(({item, disabled}) => {
@@ -94,33 +93,37 @@ const Data = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIte
 
     const openTest2 = () => {
         open(
-            ({item, onExampleGetItem}) => (
-                <>
-                    <address>
-                        Some content...{" "}
-                        <WAModalButton
-                        >
-                            Focusable element
-                        </WAModalButton>
-                    </address>
-                    <Item isShown={true} item={item} onExampleGetItem={onExampleGetItem}/>
-                    <ModalFooter>
-                        <ButtonSimple
-                            onClick={close}
-                        >
-                            Cancel
-                        </ButtonSimple>
-                        <WAModalSubmit
-                            onClick={close}
-                            disabled={!item || !item.$status.complete}
-                        >
-                            Submit
-                        </WAModalSubmit>
-                    </ModalFooter>
-                    <ModalTitle hasClose={true}>Test Modal With Data</ModalTitle>
-                    More content...
-                </>
-            ),
+            ({item, onExampleGetItem}) => {
+                const {complete} = getStatus(item);
+
+                return (
+                    <>
+                        <address>
+                            Some content...{" "}
+                            <WAModalButton
+                            >
+                                Focusable element
+                            </WAModalButton>
+                        </address>
+                        <Item isShown={true} item={item} onExampleGetItem={onExampleGetItem}/>
+                        <ModalFooter>
+                            <ButtonSimple
+                                onClick={close}
+                            >
+                                Cancel
+                            </ButtonSimple>
+                            <WAModalSubmit
+                                onClick={close}
+                                disabled={!item || !complete}
+                            >
+                                Submit
+                            </WAModalSubmit>
+                        </ModalFooter>
+                        <ModalTitle hasClose={true}>Test Modal With Data</ModalTitle>
+                        More content...
+                    </>
+                );
+            },
             {
                 isStatic: true
             })
@@ -129,7 +132,7 @@ const Data = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIte
             });
     };
 
-    useWhatChanged(Data, { modal, open, close, items, item, onExampleGetList, onExampleGetItem, onExampleEditItem, $status, renderListItem, page});
+    useWhatChanged(Data, { modal, open, close, items, item, onExampleGetList, onExampleGetItem, onExampleEditItem, renderListItem, page});
 
     return (
         <Page>
@@ -204,8 +207,7 @@ const Data = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIte
 const mapStateToProps = (state: AppState) => {
     const item = state.example.item;
     const items = state.example.items;
-    const $status = state.example.$status;
-    return { item, items, $status };
+    return { item, items };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<actions.RootActions>) => {
