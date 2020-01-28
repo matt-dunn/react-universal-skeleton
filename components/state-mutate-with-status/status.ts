@@ -2,11 +2,14 @@ import {errorLike, ErrorLike} from "../error";
 
 const symbolActiveTransactions = Symbol("activeTransactions");
 
-export type IActiveTransactions<T = boolean> = {
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+type WithOptional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+
+export type ActiveTransactions<T = boolean> = {
   [id: string]: T;
 }
 
-export type IStatus = {
+export type Status = {
   readonly lastUpdated?: number;
   readonly complete: boolean;
   readonly processedOnServer: boolean;
@@ -16,18 +19,18 @@ export type IStatus = {
   readonly error?: ErrorLike;
   readonly isActive: boolean;
   readonly outstandingTransactionCount: number;
-  readonly [symbolActiveTransactions]: IActiveTransactions;
+  readonly [symbolActiveTransactions]: ActiveTransactions;
 }
 
-export type IStatusTransaction = {
+export type StatusTransaction = {
   readonly transactionId: string;
-} & IStatus
+} & Status
 
 export type DecoratedWithStatus = {
-  readonly $status?: IStatus;
+  readonly $status?: Status;
 }
 
-const Status = (status: IStatus = {} as IStatus): IStatus => {
+export const Status = (status: WithOptional<Status, "hasError" | "error" | "cancelled" | "processing" | "complete" | "processedOnServer" | "isActive" | "outstandingTransactionCount"> = {} as Status): Status => {
   const {
     lastUpdated, complete = false, processing = false, hasError = false, error, isActive = false, processedOnServer = false, cancelled = false
   } = status;
@@ -48,9 +51,7 @@ const Status = (status: IStatus = {} as IStatus): IStatus => {
   };
 };
 
-export const getStatus = <P extends DecoratedWithStatus>(payload?: P): IStatus => (payload && payload.$status) || Status();
-
+export const getStatus = <P extends DecoratedWithStatus>(payload?: P): Status => (payload && payload.$status) || Status();
 
 export { symbolActiveTransactions };
 
-export default Status;

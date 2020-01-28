@@ -2,7 +2,7 @@ import isEqual from "lodash/isEqual";
 import { get } from "lodash";
 import immutable from "object-path-immutable";
 
-import Status, {IStatus, IStatusTransaction, symbolActiveTransactions} from "./status";
+import {Status, StatusTransaction, symbolActiveTransactions} from "./status";
 import {getPendingState} from "./pendingTransactionState";
 import {Options, Path} from "./index";
 
@@ -12,7 +12,7 @@ export type UpdatedStatus<S, P> = {
     isCurrent?: boolean;
 }
 
-export const decorateStatus = (status: IStatusTransaction, $status: IStatus = {} as IStatus, isCurrent = true): IStatus => {
+export const decorateStatus = (status: StatusTransaction, $status: Status = {} as Status, isCurrent = true): Status => {
     const activeTransactions = { ...$status[symbolActiveTransactions] };
 
     if (status.processing) {
@@ -76,7 +76,7 @@ export const deserialize = (s: string): any => {
     });
 };
 
-export const getPayload = <S extends IStatusTransaction, P>(status: S, payload: P, seedPayload?: P): P | undefined | null => {
+export const getPayload = <S extends StatusTransaction, P>(status: S, payload: P, seedPayload?: P): P | undefined | null => {
     if (status.isActive) {
         return status.hasError ? seedPayload : payload || seedPayload;
     } else if (status.hasError) {
@@ -86,7 +86,7 @@ export const getPayload = <S extends IStatusTransaction, P>(status: S, payload: 
     return status.complete ? payload : seedPayload;
 };
 
-export const getUpdatedState = <S, P, U extends IStatusTransaction>(state: S, payload: P, status: U, path: Path, actionId?: string, options?: Options<P>): UpdatedStatus<S, P> => {
+export const getUpdatedState = <S, P, U extends StatusTransaction>(state: S, payload: P, status: U, path: Path, actionId?: string, options?: Options<P>): UpdatedStatus<S, P> => {
     if (actionId) {
         const array = get(state, path);
 

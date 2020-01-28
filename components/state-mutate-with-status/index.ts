@@ -2,7 +2,7 @@ import immutable from "object-path-immutable";
 import { get } from "lodash";
 import { FluxStandardAction } from "flux-standard-action";
 
-import { IStatusTransaction } from "./status";
+import { StatusTransaction } from "./status";
 import {setPendingState} from "./pendingTransactionState";
 import {decorateStatus, getPayload, getUpdatedState} from "./utils";
 
@@ -10,7 +10,7 @@ export type Path = ReadonlyArray<string>;
 
 export interface ActionMeta {
   id?: string;
-  $status: IStatusTransaction;
+  $status: StatusTransaction;
   seedPayload?: any;
 }
 
@@ -34,7 +34,7 @@ const updateState = <S, P>(state: S, { meta, error, payload }: FluxStandardActio
       error: error && payload,
       complete: true,
       processing: false
-    } as unknown as IStatusTransaction,
+    } as unknown as StatusTransaction,
   } = meta || {} as ActionMeta;
 
   const $status = get(state, [...path, "$status"]);

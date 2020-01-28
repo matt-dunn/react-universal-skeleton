@@ -6,16 +6,15 @@ import { ActionMeta } from "components/state-mutate-with-status/index";
 import nextState from "components/state-mutate-with-status/index";
 
 import {authActions as actions} from "../../actions";
-import {IStatus} from "components/state-mutate-with-status/status";
+import {DecoratedWithStatus} from "components/state-mutate-with-status/status";
 
-export interface AuthenticatedUser {
+export type AuthenticatedUser = {
     id: string;
     name: string;
     email: string;
-    $status: IStatus;
-}
+} & DecoratedWithStatus
 
-export interface AuthState {
+export type AuthState = {
     authenticatedUser?: AuthenticatedUser;
 }
 
