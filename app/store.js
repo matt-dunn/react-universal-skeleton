@@ -14,6 +14,10 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const sagaMiddleware = createSagaMiddleware();
 
+const rootSaga = function* rootSaga() {
+    yield asyncAction();
+};
+
 const getStore = (initialState = {}) => {
     const store = createStore(
         rootReducer,
@@ -33,42 +37,5 @@ const getStore = (initialState = {}) => {
 
     return store;
 };
-
-
-// function* saga1() {
-//     yield asyncAction("@__dummy__/EXAMPLE_GET_LIST")
-//     // yield takeLatest(
-//     //     // createPattern( "@__dummy__/EXAMPLE_GET_LIST"),
-//     //     createPattern("@__dummy__/EXAMPLE_GET_LIST"),
-//     //     callAsyncWithCancel,
-//     //     ({meta: {params: {page, count}}}, cancel) => call(servicesExample.exampleGetList, page, count, cancel)
-//     // );
-// }
-// function* saga2() {
-//     yield takeLatest(
-//         // createPattern( "@__dummy__/EXAMPLE_GET_LIST"),
-//         createPattern("@__dummy__/EXAMPLE_GET_ITEM"),
-//         callAsyncWithCancel,
-//         ({meta: {params: {page, count}}}, cancel) => call(servicesExample.exampleGetList, page, count, cancel)
-//     );
-// }
-// function* saga3() {
-//     yield asyncAction("@__dummy__/EXAMPLE_EDIT_ITEM")
-//     // yield takeLatest(
-//     //     // createPattern( "@__dummy__/EXAMPLE_GET_LIST"),
-//     //     createPattern( "@__dummy__/EXAMPLE_EDIT_ITEM"),
-//     //     callAsyncWithCancel,
-//     //     ({meta: {params: {page, count}}}, cancel) => call(servicesExample.exampleGetList, page, count, cancel)
-//     // );
-// }
-
-const rootSaga = function* rootSaga() {
-    yield asyncAction();
-    // yield fork(saga1)
-    // // yield fork(saga2)
-    // yield fork(saga3)
-    // code after fork-effect
-};
-
 
 export default getStore;
