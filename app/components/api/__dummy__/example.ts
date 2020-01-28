@@ -15,11 +15,11 @@ export interface ExampleGetList {
 }
 
 export interface ExampleGetItem {
-    (): Promise<ExampleResponse>;
+    (cancel?: any): Promise<ExampleResponse>;
 }
 
 export interface ExampleEditItem {
-    (item: ExampleItemState): Promise<ExampleResponse>;
+    (item: ExampleItemState, cancel?: any): Promise<ExampleResponse>;
 }
 
 export interface ExampleApi {
@@ -46,18 +46,18 @@ const exampleApi: ExampleApi = {
             }));
         }, (process as any).browser ? 2000 : 0);
 
-        cancel.on(() => {
-            console.error("@@@@@@CANCEL**************");
+        cancel && cancel.on(() => {
+            console.error("@@@@@@CANCEL: exampleGetList **************");
             clearTimeout(t);
         });
     }),
-    exampleGetItem:() => new Promise<ExampleResponse>((resolve/*, reject*/) => {
+    exampleGetItem:(cancel) => new Promise<ExampleResponse>((resolve/*, reject*/) => {
         console.log("API CALL: exampleGetItem");
         // throw new Error("Error in exampleGetItem")
         // if (typeof window === 'undefined' || !(window as any).authenticated) {
         //     throw new APIError("Authentication Failed", "auth", 401)
         // }
-        setTimeout(() => {
+        const t = setTimeout(() => {
             // reject(new Error("Error in exampleGetItem"))
             console.log("API CALL COMPLETE: exampleGetItem");
             resolve({
@@ -65,17 +65,27 @@ const exampleApi: ExampleApi = {
                 name: "Item 4",
             });
         }, 3000);
+
+        cancel && cancel.on(() => {
+            console.error("@@@@@@CANCEL: exampleGetItem **************");
+            clearTimeout(t);
+        });
     }),
-    exampleEditItem:(item: ExampleItemState) => new Promise<ExampleResponse>((resolve/*, reject*/) => {
-        console.log("API CALL: exampleEditItem", item.name);
+    exampleEditItem:(item, cancel) => new Promise<ExampleResponse>((resolve/*, reject*/) => {
+        console.log("API CALL: exampleEditItem", item.id);
         // throw new Error("Error in exampleEditItem")
 
-        setTimeout(() => {
-            console.log("API CALL COMPLETE: exampleEditItem");
+        const t = setTimeout(() => {
+            console.log("API CALL COMPLETE: exampleEditItem", item.id);
             // reject(new Error("Error in exampleEditItem"))
             // reject(new APIError("Authentication Failed", "auth", 403))
             resolve(item);
-        }, 3000);
+        }, 15000);
+
+        cancel && cancel.on(() => {
+            console.error("@@@@@@CANCEL: exampleEditItem **************", item.id);
+            clearTimeout(t);
+        });
     })
 };
 

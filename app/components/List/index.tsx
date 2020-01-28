@@ -97,7 +97,7 @@ const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditIt
 
     usePerformAction(
         useCallback(() => {
-            onExampleGetList(0, 2);
+            // onExampleGetList(0, 2);
             return onExampleGetList(activePage, MAX_ITEMS);
                 // .then(e => {
                 //     console.log("DONE", e);

@@ -1,5 +1,7 @@
-import {put, cancelled} from "redux-saga/effects";
+import {put, cancelled, fork, take, cancel} from "redux-saga/effects";
 import uuid from "uuid";
+import {isFunction} from "lodash";
+
 import {ErrorLike} from "./containers/State/simpleState";
 
 type StandardAction<P = any, M = any> = {
@@ -16,10 +18,6 @@ type Callback = {
 type Cancel = {
     on: (cb: Callback) => Callback;
     cancelled: () => void;
-}
-
-type Caller = {
-    (action: StandardAction, cancel: Cancel): void;
 }
 
 type Status = {
@@ -61,22 +59,22 @@ const decorateWithStatus = <M extends DecoratedWithStatus>(transactionId: string
     $status: Status({...status, transactionId})
 });
 
-export const createPattern = (type: string) => (action: StandardAction) => (action.type === type && !action?.meta?.$status);
+const getName = (action: StandardAction) => `${action.type}${action.meta.id ? `-${action.meta.id}`: ""}`;
 
-export function* callAsyncWithCancel(caller: Caller, action: StandardAction) {
+export function* callAsyncWithCancel(action: StandardAction) {
     const transactionId = uuid.v4();
     const cancel = Cancel();
 
     try {
         yield put({
             ...action,
-            payload: undefined,
+            payload: action?.meta?.seedPayload,
             meta: decorateWithStatus(transactionId,{
                 processing: true
             }, action.meta)
         });
 
-        const payload = yield caller(action, cancel);
+        const payload = yield action.payload(cancel);
 
         yield put({
             ...action,
@@ -109,3 +107,23 @@ export function* callAsyncWithCancel(caller: Caller, action: StandardAction) {
         }
     }
 }
+
+export function* asyncAction() {
+    return yield takeAsync(callAsyncWithCancel);
+}
+
+const takeAsync = (saga: (...args: any[]) => any, ...args: any[]) => fork(function*() {
+    let lastTask;
+    let lastAction;
+
+    while (true) {
+        const action = yield take((action: StandardAction) => isFunction(action.payload));
+
+        if (lastTask && lastAction && getName(action) === getName(lastAction)) {
+            yield cancel(lastTask);
+        }
+
+        lastTask = yield fork(saga, ...args.concat(action));
+        lastAction = action;
+    }
+});

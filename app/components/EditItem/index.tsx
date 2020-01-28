@@ -54,24 +54,26 @@ const Item = ({item, onChange, type, className, disabled}: ItemProps) => {
 
     const inputEl = useRef<HTMLInputElement>(null);
 
-    const save = useAutosave(onChange, {
-        onSaving: () => setSaving(true),
-        onComplete: () => setSaving(false),
-    });
+    // const save = useAutosave(onChange, {
+    //     onSaving: () => setSaving(true),
+    //     onComplete: () => setSaving(false),
+    // });
 
     const handleChange = useCallback(
         newValue => {
             if (newValue !== value) {
                 setValue(newValue);
 
-                save && save({...item, name: newValue})
-                    .then(a => console.log("SAVE COMPLETE", a.name));
+                onChange && onChange({...item, name: newValue});
+
+                // save && save({...item, name: newValue})
+                //     .then(a => console.log("SAVE COMPLETE", a.name));
             }
         },
-        [item, save, value]
+        [item, onChange, value]
     );
 
-    useWhatChanged(Item, {saving, inputEl, item, onChange, value, handleChange, disabled, save}, {idProp: "item.id"});
+    useWhatChanged(Item, {saving, inputEl, item, onChange, value, handleChange, disabled}, {idProp: "item.id"});
 
     return (
         <div className={className}>
