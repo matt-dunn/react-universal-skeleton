@@ -1,15 +1,14 @@
 import React from "react";
-
 import { useParams, useHistory } from "react-router-dom";
 import {Dispatch} from "redux";
 import {connect} from "react-redux";
+
+import {getStatus} from "components/state-mutate-with-status/status";
 
 import {AppState} from "../reducers";
 import * as actions from "../actions";
 import Page from "../styles/Page";
 import {AuthState} from "../reducers/auth";
-
-import {getStatus} from "components/state-mutate-with-status/status";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 

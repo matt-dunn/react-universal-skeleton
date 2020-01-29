@@ -22,12 +22,9 @@ export interface ExampleState {
     item?: ExampleItemState;
 }
 
-const exampleGetList = (state: ExampleState, action: FluxStandardAction<string, any, ActionMeta>): ExampleState => {
-    // console.error("***********************LIST REDUCER", action)
-    return nextState(state, action, {
-        path: ["items"],
-    });
-};
+const exampleGetList = (state: ExampleState, action: FluxStandardAction<string, any, ActionMeta>): ExampleState => nextState(state, action, {
+    path: ["items"],
+});
 
 const exampleGetItem = (state: ExampleState, action: FluxStandardAction<string, any, ActionMeta>): ExampleState => nextState(state, action, {
     path: ["item"],

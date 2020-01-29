@@ -4,9 +4,6 @@ import {css} from "@emotion/core";
 
 import TextInput from "react-responsive-ui/modules/TextInput";
 
-// import Status from "components/state-mutate-with-status/status";
-// import useAutosave from "components/hooks/useAutosave";
-
 import {ExampleItemState} from "../../reducers/__dummy__/example";
 import {ExampleResponse} from "../api/__dummy__/example";
 
@@ -47,7 +44,6 @@ const Item = ({item, onChange, type, className, disabled}: ItemProps) => {
     const {processing} = getStatus(item);
 
     const [value, setValue] = useState(name);
-    // const [saving, setSaving] = useState(false);
 
     useEffect(() => {
         setValue(name);
@@ -55,20 +51,12 @@ const Item = ({item, onChange, type, className, disabled}: ItemProps) => {
 
     const inputEl = useRef<HTMLInputElement>(null);
 
-    // const save = useAutosave(onChange, {
-    //     onSaving: () => setSaving(true),
-    //     onComplete: () => setSaving(false),
-    // });
-
     const handleChange = useCallback(
         newValue => {
             if (newValue !== value) {
                 setValue(newValue);
 
                 onChange && onChange({...item, name: newValue});
-
-                // save && save({...item, name: newValue})
-                //     .then(a => console.log("SAVE COMPLETE", a.name));
             }
         },
         [item, onChange, value]

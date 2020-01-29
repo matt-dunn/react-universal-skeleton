@@ -1,4 +1,5 @@
-// import {APIError, APPError} from "components/api";
+import {Cancel} from "components/redux/middleware/sagaAsyncAction";
+
 import {ExampleItemState} from "../../../reducers/__dummy__/example";
 
 export interface ExampleResponse {
@@ -11,15 +12,15 @@ interface ExampleListResponse {
 }
 
 export interface ExampleGetList {
-    (page?: number, count?: number, cancel?: any): Promise<ExampleListResponse>;
+    (page?: number, count?: number, cancel?: Cancel): Promise<ExampleListResponse>;
 }
 
 export interface ExampleGetItem {
-    (cancel?: any): Promise<ExampleResponse>;
+    (cancel?: Cancel): Promise<ExampleResponse>;
 }
 
 export interface ExampleEditItem {
-    (item: ExampleItemState, cancel?: any): Promise<ExampleResponse>;
+    (item: ExampleItemState, cancel?: Cancel): Promise<ExampleResponse>;
 }
 
 export interface ExampleApi {

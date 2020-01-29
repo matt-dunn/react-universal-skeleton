@@ -16,7 +16,7 @@ type Callback = {
     (): void;
 }
 
-type Cancel = {
+export type Cancel = {
     on: (cb: Callback) => Callback;
     cancelled: () => void;
 }
