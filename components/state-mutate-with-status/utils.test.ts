@@ -9,6 +9,7 @@ describe("decorateStatus", () => {
         const decoratedStatus = decorateStatus(status);
 
         expect(decoratedStatus).toEqual({
+            "cancelled": false,
             "complete": false,
             "error": undefined,
             "hasError": false,
@@ -25,6 +26,7 @@ describe("decorateStatus", () => {
         const decoratedStatusWithCurrentStatus = decorateStatus(status, currentStatus);
 
         expect(decoratedStatusWithCurrentStatus).toEqual({
+            "cancelled": false,
             "complete": false,
             "error": undefined,
             "hasError": false,
@@ -82,6 +84,7 @@ describe("decorateStatus", () => {
         const currentStatus = Status();
 
         expect(decorateStatus(status, currentStatus)).toEqual({
+            "cancelled": false,
             "complete": false,
             "error": undefined,
             "hasError": false,
@@ -110,6 +113,7 @@ describe("decorateStatus", () => {
         });
 
         expect(decorateStatus(status, currentStatus)).toEqual({
+            "cancelled": false,
             "complete": false,
             "error": undefined,
             "hasError": false,

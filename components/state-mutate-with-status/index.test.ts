@@ -1,5 +1,6 @@
 import { FluxStandardAction } from "flux-standard-action";
 
+import {symbolStatus} from "./status";
 import nextState from "./index";
 
 describe("next state", () => {
@@ -40,7 +41,7 @@ describe("next state", () => {
             })).toMatchObject({
                 item: {
                     text: "item 1",
-                    $status: {
+                    [symbolStatus]: {
                         complete: false,
                         processing: true
                     }
@@ -65,7 +66,7 @@ describe("next state", () => {
             })).toMatchObject({
                 item: {
                     text: "item 1 updated",
-                    $status: {
+                    [symbolStatus]: {
                         complete: true,
                         processing: false
                     }
@@ -73,7 +74,7 @@ describe("next state", () => {
             });
         });
 
-        it("should update payload when using default status", () => {
+        it("should not update payload when using default status", () => {
             const actionWithDefaultStatus: FluxStandardAction<string, any, any> = {
                 type: "TEST",
                 payload: { text: "item 1 updated"}
@@ -83,11 +84,7 @@ describe("next state", () => {
                 path: ["item"]
             })).toMatchObject({
                 item: {
-                    text: "item 1 updated",
-                    $status: {
-                        complete: true,
-                        processing: false
-                    }
+                    text: "item 1"
                 }
             });
         });
@@ -111,7 +108,7 @@ describe("next state", () => {
                     deep: {
                         item: {
                             text: "item 1",
-                            $status: {
+                            [symbolStatus]: {
                                 complete: false,
                                 processing: true,
                             }
@@ -140,7 +137,7 @@ describe("next state", () => {
                     deep: {
                         item: {
                             text: "item 1 updated",
-                            $status: {
+                            [symbolStatus]: {
                                 complete: true,
                                 processing: false
                             }
@@ -205,7 +202,7 @@ describe("next state", () => {
             }).items]).toMatchObject([
                 {
                     text: "item 1 updated",
-                    $status: {
+                    [symbolStatus]: {
                         complete: true,
                         processing: false
                     }
