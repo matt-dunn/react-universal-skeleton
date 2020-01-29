@@ -45,6 +45,11 @@ type Actions = {
     [key: string]: StandardAction;
 }
 
+type Done = {
+    (action: StandardAction): void;
+}
+
+
 
 
 
@@ -70,7 +75,7 @@ const decorateWithStatus = <M extends DecoratedWithStatus>(transactionId: string
 
 const getName = (action: StandardAction) => `${action.type}${action.meta.id ? `-${action.meta.id}`: ""}`;
 
-function* callAsyncWithCancel(action: StandardAction) {
+function* callAsyncWithCancel(action: StandardAction, done?: Done) {
     const transactionId = uuid.v4();
     const cancel = Cancel();
 
@@ -118,22 +123,32 @@ function* callAsyncWithCancel(action: StandardAction) {
                 }, action.meta)
             });
         }
+
+        done && done(action);
     }
 }
 
 const takeAsync = (saga: (...args: any[]) => any, ...args: any[]) => fork(function*() {
-    const lastTask: Tasks = {};
-    const lastAction: Actions = {};
+    const pendingTasks: Tasks = {};
+    const pendingActions: Actions = {};
+
+    const done: Done = action => {
+        const name = getName(action);
+
+        delete pendingTasks[name];
+        delete pendingActions[name];
+    };
 
     while (true) {
         const action = yield take((action: StandardAction) => isFunction(action.payload));
+        const name = getName(action);
 
-        if (lastTask[getName(action)] && lastAction && getName(action) === getName(lastAction[getName(action)])) {
-            yield cancel(lastTask[getName(action)]);
+        if (pendingTasks[name] && pendingActions && name === getName(pendingActions[name])) {
+            yield cancel(pendingTasks[name]);
         }
 
-        lastTask[getName(action)] = yield fork(saga, ...args.concat(action));
-        lastAction[getName(action)] = action;
+        pendingTasks[name] = yield fork(saga, ...args.concat(action, done));
+        pendingActions[name] = action;
     }
 });
 
