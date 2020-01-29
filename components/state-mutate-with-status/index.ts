@@ -2,7 +2,7 @@ import immutable from "object-path-immutable";
 import { get } from "lodash";
 import { FluxStandardAction } from "flux-standard-action";
 
-import { StatusTransaction } from "./status";
+import { StatusTransaction, symbolStatus } from "./status";
 import {setPendingState} from "./pendingTransactionState";
 import {decorateStatus, getPayload, getUpdatedState} from "./utils";
 
@@ -32,12 +32,12 @@ const updateState = <S, P>(state: S, { meta, error, payload }: FluxStandardActio
     $status: status = {
       hasError: error || false,
       error: error && payload,
-      complete: true,
+      complete: false,
       processing: false
     } as unknown as StatusTransaction,
   } = meta || {} as ActionMeta;
 
-  const $status = get(state, [...path, "$status"]);
+  const $status = get(state, [...path, symbolStatus]);
 
   const {updatedState , originalState, isCurrent} = getUpdatedState(
       state,
@@ -52,7 +52,7 @@ const updateState = <S, P>(state: S, { meta, error, payload }: FluxStandardActio
 
   return immutable.set(
       updatedState,
-      [...path, "$status"],
+      [...path, symbolStatus as any],
       decorateStatus(status, $status, isCurrent === true)
   );
 };

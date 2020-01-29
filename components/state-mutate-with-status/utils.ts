@@ -2,7 +2,7 @@ import isEqual from "lodash/isEqual";
 import { get } from "lodash";
 import immutable from "object-path-immutable";
 
-import {Status, StatusTransaction, symbolActiveTransactions} from "./status";
+import {Status, StatusTransaction, symbolActiveTransactions, symbolStatus} from "./status";
 import {getPendingState} from "./pendingTransactionState";
 import {Options, Path} from "./index";
 
@@ -98,7 +98,7 @@ export const getUpdatedState = <S, P, U extends StatusTransaction>(state: S, pay
                     const { getNewItemIndex } = options || {} as Options<P>;
 
                     return {
-                        updatedState: immutable.insert(state, path, Object.assign({}, payload, {$status: decorateStatus(status)}), getNewItemIndex ? getNewItemIndex(array, payload) : array.length),
+                        updatedState: immutable.insert(state, path, Object.assign({}, payload, {[symbolStatus]: decorateStatus(status)}), getNewItemIndex ? getNewItemIndex(array, payload) : array.length),
                         originalState: null // Ensure final payload is not set so this item can be removed from the array on failure
                     };
                 }
@@ -113,8 +113,8 @@ export const getUpdatedState = <S, P, U extends StatusTransaction>(state: S, pay
                 return {
                     updatedState: immutable.update(
                         (payload && immutable.assign(state, [...path, index.toString()], payload as any)) || state,
-                        [...path, index.toString(), "$status"],
-                        state => decorateStatus(status, state && state.$status)
+                        [...path, index.toString(), symbolStatus as any],
+                        state => decorateStatus(status, state && state[symbolStatus])
                     ) as any,
                     originalState: get(state, [...path, index.toString()])
                 };

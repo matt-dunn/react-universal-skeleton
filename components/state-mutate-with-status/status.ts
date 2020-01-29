@@ -1,6 +1,7 @@
 import {errorLike, ErrorLike} from "../error";
 
 const symbolActiveTransactions = Symbol("activeTransactions");
+export const symbolStatus = Symbol("$status");
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 type WithOptional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
@@ -27,7 +28,7 @@ export type StatusTransaction = {
 } & Status
 
 export type DecoratedWithStatus = {
-  readonly $status?: Status;
+  readonly [symbolStatus]?: Status;
 }
 
 export const Status = (status: WithOptional<Status, "hasError" | "error" | "cancelled" | "processing" | "complete" | "processedOnServer" | "isActive" | "outstandingTransactionCount"> = {} as Status): Status => {
@@ -51,7 +52,7 @@ export const Status = (status: WithOptional<Status, "hasError" | "error" | "canc
   };
 };
 
-export const getStatus = <P extends DecoratedWithStatus>(payload?: P): Status => (payload && payload.$status) || Status();
+export const getStatus = <P extends DecoratedWithStatus>(payload?: P): Status => (payload && payload[symbolStatus]) || Status();
 
 export { symbolActiveTransactions };
 
