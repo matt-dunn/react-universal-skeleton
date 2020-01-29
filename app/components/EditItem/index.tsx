@@ -11,7 +11,7 @@ import useWhatChanged from "components/whatChanged/useWhatChanged";
 import {withWireFrameAnnotation} from "components/Wireframe";
 import {getStatus, DecoratedWithStatus} from "components/state-mutate-with-status/status";
 
-export type ItemProps = {
+export type EditItemProps = {
     item: ExampleItemState & DecoratedWithStatus;
     onChange?: (item: ExampleItemState) => Promise<ExampleResponse>;
     type?: "primary" | "secondary";
@@ -39,7 +39,7 @@ const Saving = styled.div`
   font-size: 10px;
 `;
 
-const Item = ({item, onChange, type, className, disabled}: ItemProps) => {
+const EditItem = ({item, onChange, type, className, disabled}: EditItemProps) => {
     const {name} = item;
     const {processing} = getStatus(item);
 
@@ -62,7 +62,7 @@ const Item = ({item, onChange, type, className, disabled}: ItemProps) => {
         [item, onChange, value]
     );
 
-    useWhatChanged(Item, {inputEl, item, onChange, value, handleChange, disabled}, {idProp: "item.id"});
+    useWhatChanged(EditItem, {inputEl, item, onChange, value, handleChange, disabled}, {idProp: "item.id"});
 
     return (
         <div className={className}>
@@ -84,11 +84,9 @@ const Item = ({item, onChange, type, className, disabled}: ItemProps) => {
     );
 };
 
-Item.displayName = "Items.Item";
+// export default React.memo<EditItemProps>(EditItem);
 
-// export default React.memo<ItemProps>(Item);
-
-export default React.memo<ItemProps>(withWireFrameAnnotation<ItemProps>(Item, {
+export default React.memo<EditItemProps>(withWireFrameAnnotation<EditItemProps>(EditItem, {
     title: <div><strong>Edit</strong> item</div>,
     description: <div>Maecenas eget turpis sit amet orci dictum faucibus pretium eu sapien. Proin rhoncus risus id mollis aliquet. Praesent pellentesque urna et ante rhoncus scelerisque. Proin eget pellentesque quam, non finibus eros. Quisque id arcu eget leo hendrerit vehicula. Suspendisse potenti.</div>
 }));
