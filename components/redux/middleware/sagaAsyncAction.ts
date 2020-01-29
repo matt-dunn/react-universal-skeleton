@@ -37,12 +37,11 @@ type DecoratedWithStatus = {
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 type WithOptional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 
-type Tasks = {
-    [key: string]: Task;
-};
-
-type Actions = {
-    [key: string]: StandardAction;
+type Pending = {
+    [key: string]: {
+        task: Task;
+        action: StandardAction;
+    };
 }
 
 type Done = {
@@ -122,33 +121,29 @@ function* callAsyncWithCancel(action: StandardAction, done?: Done) {
                     cancelled: true
                 }, action.meta)
             });
+        } else {
+            done && done(action);
         }
-
-        done && done(action);
     }
 }
 
 const takeAsync = (saga: (...args: any[]) => any, ...args: any[]) => fork(function*() {
-    const pendingTasks: Tasks = {};
-    const pendingActions: Actions = {};
+    const pending: Pending = {};
 
-    const done: Done = action => {
-        const name = getName(action);
-
-        delete pendingTasks[name];
-        delete pendingActions[name];
-    };
+    const done: Done = action => delete pending[getName(action)];
 
     while (true) {
         const action = yield take((action: StandardAction) => isFunction(action.payload));
         const name = getName(action);
 
-        if (pendingTasks[name] && pendingActions && name === getName(pendingActions[name])) {
-            yield cancel(pendingTasks[name]);
+        if (pending[name] && name === getName(pending[name].action)) {
+            yield cancel(pending[name].task);
         }
 
-        pendingTasks[name] = yield fork(saga, ...args.concat(action, done));
-        pendingActions[name] = action;
+        pending[name] = {
+            task: yield fork(saga, ...args.concat(action, done)),
+            action
+        };
     }
 });
 
