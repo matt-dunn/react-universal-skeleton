@@ -2,7 +2,7 @@ import {put, cancelled, fork, take, cancel} from "redux-saga/effects";
 import uuid from "uuid";
 import {isFunction} from "lodash";
 
-import {ErrorLike} from "./containers/State/simpleState";
+import {ErrorLike} from "components/error";
 import {Task} from "@redux-saga/types";
 
 type StandardAction<P = any, M = any> = {
