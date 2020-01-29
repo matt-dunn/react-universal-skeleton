@@ -85,8 +85,6 @@ function* callAsyncWithCancel(action: StandardAction) {
 
         const payload = yield action.payload(cancel);
 
-        action?.meta?.response && action?.meta?.response.resolve(payload);
-
         yield put({
             ...action,
             payload,
@@ -94,9 +92,9 @@ function* callAsyncWithCancel(action: StandardAction) {
                 complete: true
             }, action.meta)
         });
-    } catch (error) {
-        action?.meta?.response && action?.meta?.response.reject(error);
 
+        action?.meta?.response && action?.meta?.response.resolve(payload);
+    } catch (error) {
         yield put({
             ...action,
             payload: error,
@@ -106,6 +104,8 @@ function* callAsyncWithCancel(action: StandardAction) {
                 error
             }, action.meta)
         });
+
+        action?.meta?.response && action?.meta?.response.reject(error);
     } finally {
         if (yield cancelled()) {
             cancel.cancelled();
