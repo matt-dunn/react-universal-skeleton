@@ -1,4 +1,4 @@
-import {put, cancelled, fork, take, cancel} from "redux-saga/effects";
+import {put, cancelled, fork, take, cancel, retry} from "redux-saga/effects";
 import uuid from "uuid";
 import {isFunction} from "lodash";
 
@@ -75,6 +75,8 @@ const decorateWithStatus = <M extends DecoratedWithStatus>(transactionId: string
 
 const getName = (action: StandardAction) => `${action.type}${action.meta.id ? `-${action.meta.id}`: ""}`;
 
+const payloadCreator = (response: any) => (...args: any[]) => (isFunction(response) && response(...args)) || response;
+
 function* callAsyncWithCancel(action: StandardAction, done?: Done, ...args: any[]) {
     const transactionId = uuid.v4();
     const cancel = Cancel();
@@ -88,9 +90,8 @@ function* callAsyncWithCancel(action: StandardAction, done?: Done, ...args: any[
             }, action.meta)
         });
 
-        const ret = action.payload(cancel);
-
-        const payload = yield (isFunction(ret) && ret(...args)) || ret;
+        // TODO: refactor / allow configuration on retry
+        const payload = yield retry(5, 1000, payloadCreator(action.payload(cancel)), ...args);
 
         yield put({
             ...action,

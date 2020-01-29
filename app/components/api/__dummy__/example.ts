@@ -30,10 +30,16 @@ export interface ExampleApi {
     exampleEditItem: ExampleEditItem;
 }
 
+let retryCount = 10;
 export const exampleApi: ExampleApi = {
     exampleGetList:(page = 0, count = 3, cancel) => new Promise<ExampleListResponse>((resolve/*, reject*/) => {
         console.log("API CALL: exampleGetList", page, count);
-        // throw new Error("Error in exampleGetList")
+        if (retryCount < 4) {
+            retryCount++;
+            throw new Error("Error in exampleGetList");
+        } else {
+            retryCount = 0;
+        }
         // throw new APIError("Authentication Failed", 123, 401)
         const t = setTimeout(() => {
             console.log("API CALL COMPLETE: exampleGetList");
