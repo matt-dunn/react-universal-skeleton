@@ -1,15 +1,10 @@
 import { createStore, applyMiddleware, compose } from "redux";
 import createSagaMiddleware from "redux-saga";
 
-// import stateDecorator from "components/redux/middleware/stateDecorator";
-// import notification from "components/redux/middleware/notification";
-
-import rootReducer from "./reducers";
-
-// import servicesExample from "./components/api/__dummy__/example";
-// import servicesAuth from "./components/api/auth";
 import {sagaAsyncAction} from "components/redux/middleware/sagaAsyncAction";
 import promiseDecorator from "components/redux/middleware/promiseDecorator";
+
+import rootReducer from "./reducers";
 
 const composeEnhancers = (typeof window !== "undefined" && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
 
@@ -25,12 +20,7 @@ const getStore = (initialState = {}) => {
         initialState,
         composeEnhancers(applyMiddleware(
             promiseDecorator,
-            sagaMiddleware,
-
-            // promiseMiddleware(),
-            // stateDecorator({ dependencies: { services: {...servicesExample, ...servicesAuth} } }),
-            // thunkMiddleware,
-            // loggerMiddleware,
+            sagaMiddleware
         )),
     );
 
