@@ -46,7 +46,7 @@ const exampleApi: ExampleApi = {
             }));
         }, (process as any).browser ? 2000 : 0);
 
-        cancel && cancel.on(() => {
+        cancel && cancel.on && cancel.on(() => {
             console.error("@@@@@@CANCEL: exampleGetList **************");
             clearTimeout(t);
         });
@@ -66,7 +66,7 @@ const exampleApi: ExampleApi = {
             });
         }, 3000);
 
-        cancel && cancel.on(() => {
+        cancel && cancel.on && cancel.on(() => {
             console.error("@@@@@@CANCEL: exampleGetItem **************");
             clearTimeout(t);
         });
@@ -82,7 +82,7 @@ const exampleApi: ExampleApi = {
             resolve(item);
         }, 15000);
 
-        cancel && cancel.on(() => {
+        cancel && cancel.on && cancel.on(() => {
             console.error("@@@@@@CANCEL: exampleEditItem **************", item.id);
             clearTimeout(t);
         });

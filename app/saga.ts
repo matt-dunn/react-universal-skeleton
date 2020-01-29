@@ -70,7 +70,7 @@ const decorateWithStatus = <M extends DecoratedWithStatus>(transactionId: string
 
 const getName = (action: StandardAction) => `${action.type}${action.meta.id ? `-${action.meta.id}`: ""}`;
 
-export function* callAsyncWithCancel(action: StandardAction) {
+function* callAsyncWithCancel(action: StandardAction) {
     const transactionId = uuid.v4();
     const cancel = Cancel();
 
@@ -85,6 +85,8 @@ export function* callAsyncWithCancel(action: StandardAction) {
 
         const payload = yield action.payload(cancel);
 
+        action?.meta?.response && action?.meta?.response.resolve(payload);
+
         yield put({
             ...action,
             payload,
@@ -93,6 +95,8 @@ export function* callAsyncWithCancel(action: StandardAction) {
             }, action.meta)
         });
     } catch (error) {
+        action?.meta?.response && action?.meta?.response.reject(error);
+
         yield put({
             ...action,
             payload: error,

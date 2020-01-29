@@ -41,20 +41,11 @@ const Login = ({auth, onLogin}: LoginProps, ...props: any[]) => {
     );
 };
 
-const mapStateToProps = (state: AppState) => {
-    const auth = state.auth;
+const mapStateToProps = ({auth}: AppState) => ({auth});
 
-    return { auth };
-};
-
-const mapDispatchToProps = (dispatch: Dispatch<actions.RootActions>) => {
-
-    const onLogin = (username: string, password: string): any => dispatch(actions.authActions.login({username, password}));
-
-    return {
-        onLogin
-    };
-};
+const mapDispatchToProps = (dispatch: Dispatch<actions.RootActions>) => ({
+    onLogin: (username: string, password: string): any => dispatch(actions.authActions.login({username, password}))
+});
 
 const container = connect(
     mapStateToProps,

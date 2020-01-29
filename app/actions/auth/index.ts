@@ -1,6 +1,6 @@
 import { createAction } from "typesafe-actions";
 
-import {AuthApi} from "../../components/api/auth";
+import {authApi} from "../../components/api/auth";
 
 export interface Login {
     username: string;
@@ -9,7 +9,7 @@ export interface Login {
 
 const login = createAction(
     "@auth/LOGIN",
-    ({username, password}: Login) => ({ services }: {services: AuthApi}) => services.login(username, password)
+    ({username, password}: Login) => () => authApi.login(username, password)
 )();
 
 export { login };

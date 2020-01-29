@@ -26,10 +26,7 @@ export const useAuthenticatedUser = () => {
     const {authenticatedUser} = useContext(AuthContext) || {};
     const {complete} = getStatus(authenticatedUser);
 
-    if ((authenticatedUser && complete && authenticatedUser)) {
-        const {$status, ...rest} = authenticatedUser; // eslint-disable-line @typescript-eslint/no-unused-vars
-        return {...rest};
-    }
+    return complete && authenticatedUser;
 };
 
 export default AuthProvider;

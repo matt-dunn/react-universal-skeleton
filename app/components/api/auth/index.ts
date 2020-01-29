@@ -16,7 +16,7 @@ export interface AuthApi {
 
 (typeof window !== "undefined") && ((window as any).authenticated = true);
 
-const exampleApi: AuthApi = {
+export const authApi: AuthApi = {
     login:(username, password) => new Promise<AuthUserResponse>(resolve => {
         console.log("API CALL: login", username, password);
         // throw new Error("Error in login")
@@ -32,5 +32,3 @@ const exampleApi: AuthApi = {
         }, 1500);
     })
 };
-
-export default exampleApi;
