@@ -36,7 +36,7 @@ const exampleEditItem = (state: ExampleState, action: FluxStandardAction<string,
 
 const initialState = {
     item: undefined,
-    items: [] as Array<ExampleItemState>,
+    items: [],
 } as ExampleState;
 
 export default createReducer(initialState, {

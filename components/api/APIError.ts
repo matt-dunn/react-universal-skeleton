@@ -9,6 +9,7 @@ export class APIError extends APPError implements APIError {
     super(message, code);
 
     this.name = "APIError";
+    this.status = status;
   }
 }
 

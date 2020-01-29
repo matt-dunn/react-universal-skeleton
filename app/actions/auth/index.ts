@@ -9,7 +9,7 @@ export interface Login {
 
 const login = createAction(
     "@auth/LOGIN",
-    ({username, password}: Login) => () => ({api: {authApi: {login}}}: API) => login(username, password)
+    ({username, password}) => () => ({api: {authApi: {login}}}: API) => login(username, password)
 )();
 
 export { login };

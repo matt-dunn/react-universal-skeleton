@@ -7,7 +7,7 @@ import {API} from "../../components/api";
 
 const exampleGetList = createAction(
     "@__dummy__/EXAMPLE_GET_LIST",
-    ({page, count}: {page?: number; count?: number}) => (cancel: Cancel) => ({api: {exampleApi: {exampleGetList}}}: API) => exampleGetList(page, count, cancel),
+    ({page, count}) => (cancel: Cancel) => ({api: {exampleApi: {exampleGetList}}}: API) => exampleGetList(page, count, cancel),
     () => ({
         hasRetry: true,
         // seedPayload: [{id: "123", name: "Clem"}]
@@ -24,7 +24,7 @@ const exampleGetItem = createAction(
 
 const exampleEditItem = createAction(
     "@__dummy__/EXAMPLE_EDIT_ITEM",
-    (item: ExampleItemState) => (cancel: Cancel) => ({api: {exampleApi: {exampleEditItem}}}: API) => exampleEditItem(item, cancel),
+    (item) => (cancel: Cancel) => ({api: {exampleApi: {exampleEditItem}}}: API) => exampleEditItem(item, cancel),
     (item: ExampleItemState) => ({
         hasRetry: true,
         id: item.id,
