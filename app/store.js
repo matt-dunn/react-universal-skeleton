@@ -8,7 +8,7 @@ import rootReducer from "./reducers";
 
 // import servicesExample from "./components/api/__dummy__/example";
 // import servicesAuth from "./components/api/auth";
-import {asyncAction} from "./saga";
+import {sagaAsyncAction} from "components/redux/middleware/sagaAsyncAction";
 import promiseDecorator from "components/redux/middleware/promiseDecorator";
 
 const composeEnhancers = (typeof window !== "undefined" && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
@@ -16,7 +16,7 @@ const composeEnhancers = (typeof window !== "undefined" && window.__REDUX_DEVTOO
 const sagaMiddleware = createSagaMiddleware();
 
 const rootSaga = function* rootSaga() {
-    yield asyncAction();
+    yield sagaAsyncAction();
 };
 
 const getStore = (initialState = {}) => {

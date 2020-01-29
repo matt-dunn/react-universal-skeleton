@@ -137,6 +137,6 @@ const takeAsync = (saga: (...args: any[]) => any, ...args: any[]) => fork(functi
     }
 });
 
-export function* asyncAction() {
+export function* sagaAsyncAction() {
     return yield takeAsync(callAsyncWithCancel);
 }
