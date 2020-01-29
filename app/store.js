@@ -6,12 +6,14 @@ import promiseDecorator from "components/redux/middleware/promiseDecorator";
 
 import rootReducer from "./reducers";
 
+import api from "./components/api";
+
 const composeEnhancers = (typeof window !== "undefined" && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
 
 const sagaMiddleware = createSagaMiddleware();
 
 const rootSaga = function* rootSaga() {
-    yield sagaAsyncAction();
+    yield sagaAsyncAction(api);
 };
 
 const getStore = (initialState = {}) => {

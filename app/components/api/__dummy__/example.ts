@@ -29,7 +29,7 @@ export interface ExampleApi {
     exampleEditItem: ExampleEditItem;
 }
 
-const exampleApi: ExampleApi = {
+export const exampleApi: ExampleApi = {
     exampleGetList:(page = 0, count = 3, cancel) => new Promise<ExampleListResponse>((resolve/*, reject*/) => {
         console.log("API CALL: exampleGetList", page, count);
         // throw new Error("Error in exampleGetList")
@@ -47,7 +47,7 @@ const exampleApi: ExampleApi = {
             }));
         }, (process as any).browser ? 2000 : 0);
 
-        cancel && cancel.on && cancel.on(() => {
+        cancel && cancel(() => {
             console.error("@@@@@@CANCEL: exampleGetList **************");
             clearTimeout(t);
         });
@@ -67,7 +67,7 @@ const exampleApi: ExampleApi = {
             });
         }, 3000);
 
-        cancel && cancel.on && cancel.on(() => {
+        cancel && cancel(() => {
             console.error("@@@@@@CANCEL: exampleGetItem **************");
             clearTimeout(t);
         });
@@ -81,13 +81,11 @@ const exampleApi: ExampleApi = {
             // reject(new Error("Error in exampleEditItem"))
             // reject(new APIError("Authentication Failed", "auth", 403))
             resolve(item);
-        }, 15000);
+        }, 5000);
 
-        cancel && cancel.on && cancel.on(() => {
+        cancel && cancel(() => {
             console.error("@@@@@@CANCEL: exampleEditItem **************", item.id);
             clearTimeout(t);
         });
     })
 };
-
-export default exampleApi;

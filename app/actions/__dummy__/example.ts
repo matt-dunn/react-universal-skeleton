@@ -1,12 +1,13 @@
 import { createAction } from "typesafe-actions";
 
-import {ExampleItemState} from "../../reducers/__dummy__/example";
+import {Cancel} from "components/redux/middleware/sagaAsyncAction";
 
-import services from "../../components/api/__dummy__/example";
+import {ExampleItemState} from "../../reducers/__dummy__/example";
+import {API} from "../../components/api";
 
 const exampleGetList = createAction(
     "@__dummy__/EXAMPLE_GET_LIST",
-    ({page, count}: {page?: number; count?: number}) => (cancel: any) => services.exampleGetList(page, count, cancel),
+    ({page, count}: {page?: number; count?: number}) => (cancel: Cancel) => ({api: {exampleApi: {exampleGetList}}}: API) => exampleGetList(page, count, cancel),
     () => ({
         hasRetry: true,
         // seedPayload: [{id: "123", name: "Clem"}]
@@ -15,7 +16,7 @@ const exampleGetList = createAction(
 
 const exampleGetItem = createAction(
     "@__dummy__/EXAMPLE_GET_ITEM",
-    () => (cancel: any) => services.exampleGetItem(cancel),
+    () => (cancel: Cancel) => ({api: {exampleApi: {exampleGetItem}}}: API) => exampleGetItem(cancel),
     () => ({
         hasRetry: true
     })
@@ -23,7 +24,7 @@ const exampleGetItem = createAction(
 
 const exampleEditItem = createAction(
     "@__dummy__/EXAMPLE_EDIT_ITEM",
-    (item: ExampleItemState) => (cancel: any) => services.exampleEditItem(item, cancel),
+    (item: ExampleItemState) => (cancel: Cancel) => ({api: {exampleApi: {exampleEditItem}}}: API) => exampleEditItem(item, cancel),
     (item: ExampleItemState) => ({
         hasRetry: true,
         id: item.id,

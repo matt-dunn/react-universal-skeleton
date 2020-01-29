@@ -5,6 +5,11 @@ import {isFunction} from "lodash";
 import {ErrorLike} from "components/error";
 import {Task} from "@redux-saga/types";
 
+const symbolCancelled = Symbol("cancelled");
+
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+type WithOptional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+
 type StandardAction<P = any, M = any> = {
     type: string;
     payload?: P;
@@ -17,8 +22,8 @@ type Callback = {
 }
 
 export type Cancel = {
-    on: (cb: Callback) => Callback;
-    cancelled: () => void;
+    (cb: Callback): Callback;
+    [symbolCancelled]: () => void;
 }
 
 type Status = {
@@ -34,9 +39,6 @@ type DecoratedWithStatus = {
     readonly $status?: Status;
 }
 
-type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
-type WithOptional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
-
 type Pending = {
     [key: string]: {
         task: Task;
@@ -51,14 +53,13 @@ type Done = {
 
 
 
-
 const Cancel = function(): Cancel {
     let callback: Callback;
 
-    return {
-        on: cb => callback = cb,
-        cancelled: () => callback && callback()
-    };
+    const canceller = (cb: Callback) => callback = cb;
+    (canceller as Cancel)[symbolCancelled] = () => callback && callback();
+
+    return canceller as Cancel;
 };
 
 const Status = (status: WithOptional<Status, "hasError" | "error" | "cancelled" | "processing" | "complete">): Status => ({
@@ -74,7 +75,7 @@ const decorateWithStatus = <M extends DecoratedWithStatus>(transactionId: string
 
 const getName = (action: StandardAction) => `${action.type}${action.meta.id ? `-${action.meta.id}`: ""}`;
 
-function* callAsyncWithCancel(action: StandardAction, done?: Done) {
+function* callAsyncWithCancel(action: StandardAction, done?: Done, ...args: any[]) {
     const transactionId = uuid.v4();
     const cancel = Cancel();
 
@@ -87,7 +88,9 @@ function* callAsyncWithCancel(action: StandardAction, done?: Done) {
             }, action.meta)
         });
 
-        const payload = yield action.payload(cancel);
+        const ret = action.payload(cancel);
+
+        const payload = yield (isFunction(ret) && ret(...args)) || ret;
 
         yield put({
             ...action,
@@ -112,7 +115,7 @@ function* callAsyncWithCancel(action: StandardAction, done?: Done) {
         action?.meta?.response && action?.meta?.response.reject(error);
     } finally {
         if (yield cancelled()) {
-            cancel.cancelled();
+            cancel[symbolCancelled]();
 
             yield put({
                 ...action,
@@ -141,12 +144,12 @@ const takeAsync = (saga: (...args: any[]) => any, ...args: any[]) => fork(functi
         }
 
         pending[name] = {
-            task: yield fork(saga, ...args.concat(action, done)),
+            task: yield fork(saga, ...[action, done, ...args]),
             action
         };
     }
 });
 
-export function* sagaAsyncAction() {
-    return yield takeAsync(callAsyncWithCancel);
+export function* sagaAsyncAction(...args: any[]) {
+    return yield takeAsync(callAsyncWithCancel, ...args);
 }

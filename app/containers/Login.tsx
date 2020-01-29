@@ -30,7 +30,7 @@ const Login = ({auth, onLogin}: LoginProps, ...props: any[]) => {
                 onClick={() => {
                     onLogin("clem@demo.com", "xxx")
                         .then(() => {
-                            from && history.replace(decodeURIComponent(from));
+                            history.replace((from && decodeURIComponent(from)) || "/");
                         });
                 }}
             >
