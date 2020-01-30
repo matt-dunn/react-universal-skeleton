@@ -2,36 +2,35 @@ import isEqual from "lodash/isEqual";
 import { get } from "lodash";
 import immutable from "object-path-immutable";
 
-import {Status, StatusTransaction, symbolActiveTransactions, symbolStatus} from "./status";
-import {getPendingState} from "./pendingTransactionState";
-import {Options, Path} from "./index";
+import {Status, MetaStatus, symbolActiveTransactions, symbolStatus} from "./status";
+import {Options, Path} from "./";
 
-export type UpdatedStatus<S, P> = {
+type UpdatedStatus<S, P> = {
     updatedState: S;
     originalState?: P | null;
     isCurrent?: boolean;
 }
 
-export const decorateStatus = (status: StatusTransaction, $status: Status = {} as Status, isCurrent = true): Status => {
-    const activeTransactions = { ...$status[symbolActiveTransactions] };
+export const decorateStatus = (metaStatus: MetaStatus, status: Status = {} as Status, isCurrent = true): Status => {
+    const activeTransactions = { ...status[symbolActiveTransactions] };
 
-    if (status.processing) {
-        activeTransactions[status.transactionId] = isCurrent;
+    if (metaStatus.processing) {
+        activeTransactions[metaStatus.transactionId] = isCurrent;
     } else {
-        delete activeTransactions[status.transactionId];
+        delete activeTransactions[metaStatus.transactionId];
     }
 
     const hasActiveTransactions = activeTransactions && Object.keys(activeTransactions).length > 0;
 
     const updatedStatus = Status({
-        ...status,
-        complete: hasActiveTransactions ? false : status.complete,
-        processing: activeTransactions[status.transactionId] === true,
+        ...metaStatus,
+        complete: !hasActiveTransactions,
+        processing: activeTransactions[metaStatus.transactionId] === true,
         [symbolActiveTransactions]: activeTransactions,
     });
 
-    if (isEqual(updatedStatus, $status)) {
-        return $status;
+    if (isEqual(updatedStatus, status)) {
+        return status;
     }
 
     return updatedStatus;
@@ -76,17 +75,9 @@ export const deserialize = (s: string): any => {
     });
 };
 
-export const getPayload = <S extends StatusTransaction, P>(status: S, payload: P, seedPayload?: P): P | undefined | null => {
-    if (status.isActive) {
-        return status.hasError ? seedPayload : payload || seedPayload;
-    } else if (status.hasError) {
-        return getPendingState(status.transactionId);
-    }
+export const getPayload = <S extends MetaStatus, P>(metaStatus: S, payload?: P): P | undefined => payload;
 
-    return status.complete ? payload : seedPayload;
-};
-
-export const getUpdatedState = <S, P, U extends StatusTransaction>(state: S, payload: P, status: U, path: Path, actionId?: string, options?: Options<P>): UpdatedStatus<S, P> => {
+export const getUpdatedState = <S, P, U extends MetaStatus>(state: S, payload: P | undefined | null, metaStatus: U, path: Path, actionId?: string, options?: Options<P>): UpdatedStatus<S, P> => {
     if (actionId) {
         const array = get(state, path);
 
@@ -98,7 +89,7 @@ export const getUpdatedState = <S, P, U extends StatusTransaction>(state: S, pay
                     const { getNewItemIndex } = options || {} as Options<P>;
 
                     return {
-                        updatedState: immutable.insert(state, path, Object.assign({}, payload, {[symbolStatus]: decorateStatus(status)}), getNewItemIndex ? getNewItemIndex(array, payload) : array.length),
+                        updatedState: immutable.insert(state, path, Object.assign({}, payload, {[symbolStatus]: decorateStatus(metaStatus)}), getNewItemIndex ? getNewItemIndex(array, payload) : array.length),
                         originalState: null // Ensure final payload is not set so this item can be removed from the array on failure
                     };
                 }
@@ -114,7 +105,7 @@ export const getUpdatedState = <S, P, U extends StatusTransaction>(state: S, pay
                     updatedState: immutable.update(
                         (payload && immutable.assign(state, [...path, index.toString()], payload as any)) || state,
                         [...path, index.toString(), symbolStatus as any],
-                        state => decorateStatus(status, state && state[symbolStatus])
+                        state => decorateStatus(metaStatus, state && state[symbolStatus])
                     ) as any,
                     originalState: get(state, [...path, index.toString()])
                 };

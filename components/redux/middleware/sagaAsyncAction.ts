@@ -1,21 +1,18 @@
 import {put, cancelled, fork, take, cancel, retry} from "redux-saga/effects";
 import uuid from "uuid";
 import {isFunction} from "lodash";
-
-import {ErrorLike} from "components/error";
 import {Task} from "@redux-saga/types";
+
+import {MetaStatus, ActionMeta} from "components/state-mutate-with-status";
 
 const symbolCancelled = Symbol("cancelled");
 
-type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
-type WithOptional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
-
-type StandardAction<P = any, M = any> = {
+type StandardAction<P = any, M extends ActionMeta = ActionMeta> = {
     type: string;
     payload?: P;
     meta?: M;
     error?: boolean;
-}
+};
 
 type Callback = {
     (): void;
@@ -24,19 +21,6 @@ type Callback = {
 export type Cancel = {
     (cb: Callback): Callback;
     [symbolCancelled]: () => void;
-}
-
-type Status = {
-    readonly transactionId: string;
-    readonly processing: boolean;
-    readonly complete: boolean;
-    readonly hasError? : boolean;
-    readonly error?: ErrorLike;
-    readonly cancelled?: boolean;
-}
-
-type DecoratedWithStatus = {
-    readonly $status?: Status;
 }
 
 type Pending = {
@@ -62,18 +46,12 @@ const Cancel = function(): Cancel {
     return canceller as Cancel;
 };
 
-const Status = (status: WithOptional<Status, "hasError" | "error" | "cancelled" | "processing" | "complete">): Status => ({
-    processing: false,
-    complete: false,
-    ...status
-});
-
-const decorateWithStatus = <M extends DecoratedWithStatus>(transactionId: string, status?: Partial<Status>, meta?: M): M & DecoratedWithStatus => ({
+const decorateMetaWithStatus = <M extends ActionMeta>(transactionId: string, status?: Partial<MetaStatus>, meta?: M): M & ActionMeta => ({
     ...meta || {} as M,
-    $status: Status({...status, transactionId})
+    $status: MetaStatus({...status, transactionId})
 });
 
-const getName = (action: StandardAction) => `${action.type}${action.meta.id ? `-${action.meta.id}`: ""}`;
+const getName = (action: StandardAction) => `${action.type}${action?.meta?.id ? `-${action.meta.id}`: ""}`;
 
 const payloadCreator = (response: any) => (...args: any[]) => (isFunction(response) && response(...args)) || response;
 
@@ -85,8 +63,9 @@ function* callAsyncWithCancel(action: StandardAction, done?: Done, ...args: any[
         yield put({
             ...action,
             payload: action?.meta?.seedPayload,
-            meta: decorateWithStatus(transactionId,{
-                processing: true
+            meta: decorateMetaWithStatus(transactionId,{
+                processing: true,
+                processedOnServer: !(process as any).browser,
             }, action.meta)
         });
 
@@ -96,8 +75,10 @@ function* callAsyncWithCancel(action: StandardAction, done?: Done, ...args: any[
         yield put({
             ...action,
             payload,
-            meta: decorateWithStatus(transactionId,{
-                complete: true
+            meta: decorateMetaWithStatus(transactionId,{
+                complete: true,
+                processedOnServer: !(process as any).browser,
+                lastUpdated: Date.now()
             }, action.meta)
         });
 
@@ -107,9 +88,10 @@ function* callAsyncWithCancel(action: StandardAction, done?: Done, ...args: any[
             ...action,
             payload: error,
             error: true,
-            meta: decorateWithStatus(transactionId,{
+            meta: decorateMetaWithStatus(transactionId,{
                 hasError: true,
-                error
+                error,
+                processedOnServer: !(process as any).browser
             }, action.meta)
         });
 
@@ -121,8 +103,9 @@ function* callAsyncWithCancel(action: StandardAction, done?: Done, ...args: any[
             yield put({
                 ...action,
                 payload: [],
-                meta: decorateWithStatus(transactionId,{
-                    cancelled: true
+                meta: decorateMetaWithStatus(transactionId,{
+                    cancelled: true,
+                    processedOnServer: !(process as any).browser
                 }, action.meta)
             });
         } else {

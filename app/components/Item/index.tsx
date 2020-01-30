@@ -4,7 +4,7 @@ import React, {useCallback} from "react";
 
 import Loading from "components/Loading";
 import {usePerformAction} from "components/actions";
-import {getStatus, DecoratedWithStatus} from "components/state-mutate-with-status/status";
+import {getStatus, DecoratedWithStatus} from "components/state-mutate-with-status";
 import PlaceHolderItem from "app/components/Placeholder/Item";
 
 import {ExampleItemState} from "../../reducers/__dummy__/example";

@@ -2,9 +2,8 @@
 import { FluxStandardAction } from "flux-standard-action";
 import {getType, createReducer} from "typesafe-actions";
 
-import { ActionMeta } from "components/state-mutate-with-status";
 // import nextState from 'components/state-mutate-with-status/immutable';
-import nextState from "components/state-mutate-with-status/frozen";
+import nextState, {ActionMeta} from "components/state-mutate-with-status/frozen";
 
 import {exampleActions as actions} from "../../actions";
 

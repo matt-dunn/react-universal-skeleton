@@ -7,7 +7,7 @@ import { Dispatch } from "redux";
 import TrackVisibility from "react-on-screen";
 import { useParams} from "react-router";
 
-import {DecoratedWithStatus, getStatus} from "components/state-mutate-with-status/status";
+import {DecoratedWithStatus, getStatus} from "components/state-mutate-with-status";
 import {AboveTheFold, ClientOnly} from "components/actions";
 import List from "app/components/List";
 import Item from "app/components/Item";

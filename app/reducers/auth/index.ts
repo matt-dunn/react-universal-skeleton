@@ -1,12 +1,9 @@
 import { FluxStandardAction } from "flux-standard-action";
 import { getType, createReducer } from "typesafe-actions";
 
-import { ActionMeta } from "components/state-mutate-with-status/index";
-
-import nextState from "components/state-mutate-with-status/index";
+import nextState, { ActionMeta, DecoratedWithStatus } from "components/state-mutate-with-status";
 
 import {authActions as actions} from "../../actions";
-import {DecoratedWithStatus} from "components/state-mutate-with-status/status";
 
 export type AuthenticatedUser = {
     id: string;

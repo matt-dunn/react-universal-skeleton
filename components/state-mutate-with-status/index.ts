@@ -2,23 +2,16 @@ import immutable from "object-path-immutable";
 import { get } from "lodash";
 import { FluxStandardAction } from "flux-standard-action";
 
-import { StatusTransaction, symbolStatus } from "./status";
-import {setPendingState} from "./pendingTransactionState";
+import { MetaStatus, ActionMeta, symbolStatus } from "./status";
 import {decorateStatus, getPayload, getUpdatedState} from "./utils";
 
 export type Path = ReadonlyArray<string>;
 
-export interface ActionMeta {
-  id?: string;
-  $status: StatusTransaction;
-  seedPayload?: any;
-}
-
-export interface GetNewItemIndex<P> {
+type GetNewItemIndex<P> = {
   (array: any[], payload: P): number;
 }
 
-export interface Options<P> {
+export type Options<P> = {
   path?: Path;
   getNewItemIndex?: GetNewItemIndex<P>;
 }
@@ -28,33 +21,33 @@ const updateState = <S, P>(state: S, { meta, error, payload }: FluxStandardActio
 
   const {
     id: actionId,
-    seedPayload,
-    $status: status = {
+    $status: metaStatus = {
       hasError: error || false,
       error: error && payload,
       complete: false,
       processing: false
-    } as unknown as StatusTransaction,
+    } as MetaStatus,
   } = meta || {} as ActionMeta;
 
-  const $status = get(state, [...path, symbolStatus]);
+  const status = get(state, [...path, symbolStatus]);
 
-  const {updatedState , originalState, isCurrent} = getUpdatedState(
+  const {updatedState, isCurrent} = getUpdatedState(
       state,
-      getPayload(status, payload, seedPayload),
-      status,
+      getPayload(metaStatus, payload),
+      metaStatus,
       path,
       actionId,
       options
   );
 
-  setPendingState(status, originalState);
-
   return immutable.set(
       updatedState,
       [...path, symbolStatus as any],
-      decorateStatus(status, $status, isCurrent === true)
+      decorateStatus(metaStatus, status, isCurrent === true)
   );
 };
 
 export default updateState;
+
+export * from "./status";
+export * from "./utils";

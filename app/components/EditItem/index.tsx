@@ -9,7 +9,7 @@ import {ExampleResponse} from "../api/__dummy__/example";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 import {withWireFrameAnnotation} from "components/Wireframe";
-import {getStatus, DecoratedWithStatus} from "components/state-mutate-with-status/status";
+import {getStatus, DecoratedWithStatus} from "components/state-mutate-with-status";
 
 export type EditItemProps = {
     item: ExampleItemState & DecoratedWithStatus;

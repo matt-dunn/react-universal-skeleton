@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import { BrowserRouter, withRouter } from "react-router-dom";
 import { loadableReady } from "@loadable/component";
 
-import {deserialize} from "components/state-mutate-with-status/utils";
+import {deserialize} from "components/state-mutate-with-status";
 
 import {FormDataState} from "components/actions/form";
 import {AsyncData} from "components/ssr/safePromise";

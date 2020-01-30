@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import {AuthState} from "../../reducers/auth";
 import {AppState} from "../../reducers";
 
-import {getStatus} from "components/state-mutate-with-status/status";
+import {getStatus} from "components/state-mutate-with-status";
 
 const AuthContext = React.createContext<AuthState | undefined>(undefined);
 

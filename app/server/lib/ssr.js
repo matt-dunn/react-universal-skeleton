@@ -8,7 +8,7 @@ import { StaticRouter } from "react-router-dom";
 import { ChunkExtractor } from "@loadable/server";
 import {set} from "lodash";
 
-import {serialize} from "components/state-mutate-with-status/utils";
+import {serialize} from "components/state-mutate-with-status";
 import {parseFormData} from "components/actions/form";
 import {getDataFromTree, AsyncData} from "components/ssr/safePromise";
 import {errorLike} from "components/error";
