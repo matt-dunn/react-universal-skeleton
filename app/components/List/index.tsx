@@ -96,15 +96,15 @@ const List = ({isShown = true, items, onExampleGetList, onExampleEditItem, activ
     usePerformAction(
         useCallback(() => {
             // onExampleGetList(0, 2);
-            return onExampleGetList(activePage, MAX_ITEMS)
-                .then(e => {
-                    console.log("DONE", e);
-                    return e;
-                })
-                .catch(ex => {
-                    console.log("ERROR", ex.message);
-                    throw ex;
-                });
+            return onExampleGetList(activePage, MAX_ITEMS);
+                // .then(e => {
+                //     console.log("DONE", e);
+                //     return e;
+                // })
+                // .catch(ex => {
+                //     console.log("ERROR", ex.message);
+                //     throw ex;
+                // });
         }, [onExampleGetList, activePage]),
         useCallback(() => isShown, [isShown])
     );

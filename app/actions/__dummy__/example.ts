@@ -8,6 +8,7 @@ import {API} from "../../components/api";
 const exampleGetList = createAction(
     "@__dummy__/EXAMPLE_GET_LIST",
     ({page, count}) => (cancel: Cancel) => ({api: {exampleApi: {exampleGetList}}}: API) => exampleGetList(page, count, cancel),
+    // ({page, count}) => ([{"id": "1", "name": "xxx"}]),
     () => ({
         hasRetry: true,
         // seedPayload: [{id: "123", name: "Clem"}]

@@ -1,23 +1,23 @@
-type Resolver = {
-    <P>(payload: P): any;
+type Resolver<P = any> = {
+    (payload: P): any;
 }
 
-type Rejector = {
-    <R>(reason: R): any;
+type Rejector<R = any> = {
+    (reason: R): any;
 }
 
-export type WrappedPromise = {
+export type WrappedPromise<P = any, R = any> = {
     promise: Promise<any>;
-    resolve: Resolver;
-    reject: Rejector;
+    resolve: Resolver<P>;
+    reject: Rejector<R>;
 }
 
-export const WrappedPromise = function(): WrappedPromise {
-    let callbackResolve: Resolver;
-    let callbackReject: Rejector;
+export const WrappedPromise = function<P, R>(): WrappedPromise<P, R> {
+    let callbackResolve: Resolver<P>;
+    let callbackReject: Rejector<R>;
 
     return {
-        promise: new Promise(((resolve, reject) => {
+        promise: new Promise<P>(((resolve, reject) => {
             callbackResolve = resolve;
             callbackReject = reject;
         })),
