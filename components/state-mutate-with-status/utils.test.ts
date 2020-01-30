@@ -20,8 +20,6 @@ describe("decorateStatus", () => {
             "processedOnServer": false
         });
 
-        expect(decoratedStatus).toStrictEqual(currentStatus);
-
         const decoratedStatusWithCurrentStatus = decorateStatus(status, currentStatus);
 
         expect(decoratedStatusWithCurrentStatus).toEqual({
@@ -35,8 +33,6 @@ describe("decorateStatus", () => {
             "lastUpdated": undefined,
             "processedOnServer": false
         });
-
-        expect(decoratedStatusWithCurrentStatus).toStrictEqual(currentStatus);
     });
 
     it("should mutate status", () => {

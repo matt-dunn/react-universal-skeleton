@@ -1,5 +1,5 @@
-import {errorLike, ErrorLike} from "components/error";
 import {WrappedPromise} from "components/wrappedPromise";
+import {errorLike, ErrorLike} from "../error";
 
 const symbolActiveTransactions = Symbol("activeTransactions");
 export const symbolStatus = Symbol("$status");
