@@ -7,6 +7,7 @@ import {deserialize} from "components/state-mutate-with-status";
 
 import {FormDataState} from "components/actions/form";
 import {AsyncData} from "components/ssr/safePromise";
+import {ErrorContext} from "components/actions/contexts";
 
 import getStore from "./store";
 
@@ -15,8 +16,8 @@ import App from "./App";
 
 type Global = {
     __PRELOADED_STATE__: any;
-    __ERROR_STATE__: any;
-    __PRELOADED_FORM_STATE__: any;
+    __ERROR_STATE__: ErrorContext;
+    __PRELOADED_FORM_STATE__: FormDataState;
     __ASYNC_DATA_STATE__: any;
     __LANGUAGE_PACK__: any;
 
