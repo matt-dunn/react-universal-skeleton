@@ -49,7 +49,7 @@ const getSymbolName = (symbol: symbol): string => {
     return `$$${symbol.toString()}`;
 };
 
-const stringifySymbols = (o: any) => {
+const convertStatusSymbolToString = (o: any) => {
     if (o && o[symbolStatus]) {
         const c = clone(o);
         c[getSymbolName(symbolStatus)] = o[symbolStatus];
@@ -61,7 +61,7 @@ const stringifySymbols = (o: any) => {
 
 export const serialize = (o: any): string => {
     return o && JSON.stringify(o, (key: string, v: any) => {
-        const value = stringifySymbols(v);
+        const value = convertStatusSymbolToString(v);
 
         if (Array.isArray(value)) {
             const keys = Object.keys(value);
@@ -85,7 +85,7 @@ export const serialize = (o: any): string => {
     });
 };
 
-const parseSymbols = (o: any) => {
+const convertStatusSymbolToSymbol = (o: any) => {
     if (o && o[getSymbolName(symbolStatus)]) {
         const c = clone(o);
         c[symbolStatus] = o[getSymbolName(symbolStatus)];
@@ -97,7 +97,7 @@ const parseSymbols = (o: any) => {
 
 export const deserialize = (s: string): any => {
     return s && JSON.parse(s, (key, v) => {
-        const value = parseSymbols(v);
+        const value = convertStatusSymbolToSymbol(v);
         if (value && value.$$arr) {
             const {$: array = [], _: values} = value.$$arr;
 
