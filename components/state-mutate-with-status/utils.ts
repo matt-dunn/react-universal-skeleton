@@ -1,5 +1,5 @@
 import isEqual from "lodash/isEqual";
-import { get } from "lodash";
+import { get, isObject } from "lodash";
 import immutable from "object-path-immutable";
 
 import {Status, MetaStatus, symbolActiveTransactions, symbolStatus} from "./status";
@@ -36,8 +36,29 @@ export const decorateStatus = (metaStatus: MetaStatus, status: Status = {} as St
     return updatedStatus;
 };
 
+const clone = (o: any) => {
+    if (Array.isArray(o)) {
+        return [...o];
+    } else if (isObject(o)) {
+        return {...o};
+    }
+    return o;
+};
+
+const stringifySymbols = (o: any) => {
+    if (o && o[symbolStatus]) {
+        const c = clone(o);
+        c[symbolStatus.toString()] = o[symbolStatus];
+        delete c[symbolStatus];
+        return c;
+    }
+    return o;
+};
+
 export const serialize = (o: any): string => {
-    return o && JSON.stringify(o, (key: string, value: any) => {
+    return o && JSON.stringify(o, (key: string, v: any) => {
+        const value = stringifySymbols(v);
+
         if (Array.isArray(value)) {
             const keys = Object.keys(value);
 
@@ -60,12 +81,23 @@ export const serialize = (o: any): string => {
     });
 };
 
+const parseSymbols = (o: any) => {
+    if (o && o[symbolStatus.toString()]) {
+        const c = clone(o);
+        c[symbolStatus] = o[symbolStatus.toString()];
+        delete c[symbolStatus.toString()];
+        return c;
+    }
+    return o;
+};
+
 export const deserialize = (s: string): any => {
-    return s && JSON.parse(s, (key, value) => {
+    return s && JSON.parse(s, (key, v) => {
+        const value = parseSymbols(v);
         if (value && value.$$arr) {
             const {$: array = [], _: values} = value.$$arr;
 
-            values && Object.keys(values).forEach(key => {
+            values && Object.getOwnPropertyNames(values).concat(Object.getOwnPropertySymbols(values) as unknown as string[]).forEach(key => {
                 array[key] = values[key];
             });
 
