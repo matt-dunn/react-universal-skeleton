@@ -1,7 +1,7 @@
 import {Cancel} from "components/redux/middleware/sagaAsyncAction";
 
 import {ExampleItemState} from "../../../reducers/__dummy__/example";
-// import {APIError} from "components/api";
+// import {APIError, APPError} from "components/api";
 
 export interface ExampleResponse {
     id: string;
@@ -40,7 +40,8 @@ export const exampleApi: ExampleApi = {
         // } else {
         //     retryCount = 0;
         // }
-        // throw new APIError("Authentication Failed", 123, 401)
+        // throw new APIError("Auth Error...", 123, 500)
+        // throw new APPError("APP Error...", 123);
         const t = setTimeout(() => {
             console.log("API CALL COMPLETE: exampleGetList");
             // reject(new Error("Error in exampleGetList"))

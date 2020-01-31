@@ -8,13 +8,13 @@ export enum Severity {
 }
 
 export type Notification = {
-    message: string,
-    severity?: Severity
+    message: string;
+    severity?: Severity;
     reference?: string;
 }
 
 type Notify = {
-    (notification: Notification): void
+    (notification: Notification): void;
 }
 
 export const notifyAction = createAction(
@@ -29,6 +29,6 @@ export const notifyAction = createAction(
 export function* sagaNotification(notify: Notify) {
     while (true) {
         const {payload} = yield take(getType(notifyAction));
-        notify(payload)
+        notify(payload);
     }
 }
