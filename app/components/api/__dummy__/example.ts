@@ -40,6 +40,9 @@ export const exampleApi: ExampleApi = {
         // } else {
         //     retryCount = 0;
         // }
+        if (page === 4) {
+            throw new Error("Error in exampleGetList");
+        }
         // throw new APIError("Auth Error...", 123, 500)
         // throw new APPError("APP Error...", 123);
         const t = setTimeout(() => {
