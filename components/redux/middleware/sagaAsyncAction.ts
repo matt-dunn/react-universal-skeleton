@@ -1,4 +1,4 @@
-import {put, cancelled, fork, take, cancel, retry} from "redux-saga/effects";
+import {put, cancelled, fork, take, cancel} from "redux-saga/effects";
 import uuid from "uuid";
 import {isFunction} from "lodash";
 import {Task} from "@redux-saga/types";
@@ -69,8 +69,9 @@ function* callAsyncWithCancel(action: StandardAction, done?: Done, ...args: any[
             }, action.meta)
         });
 
+        const payload = yield payloadCreator(action.payload(cancel))(...args);
         // TODO: refactor / allow configuration on retry
-        const payload = yield retry(5, 1000, payloadCreator(action.payload(cancel)), ...args);
+        // const payload = yield retry(5, 1000, payloadCreator(action.payload(cancel)), ...args);
 
         yield put({
             ...action,
