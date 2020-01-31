@@ -45,10 +45,14 @@ const clone = (o: any) => {
     return o;
 };
 
+const getSymbolName = (symbol: symbol): string => {
+    return `$$${symbol.toString()}`;
+};
+
 const stringifySymbols = (o: any) => {
     if (o && o[symbolStatus]) {
         const c = clone(o);
-        c[symbolStatus.toString()] = o[symbolStatus];
+        c[getSymbolName(symbolStatus)] = o[symbolStatus];
         delete c[symbolStatus];
         return c;
     }
@@ -82,10 +86,10 @@ export const serialize = (o: any): string => {
 };
 
 const parseSymbols = (o: any) => {
-    if (o && o[symbolStatus.toString()]) {
+    if (o && o[getSymbolName(symbolStatus)]) {
         const c = clone(o);
-        c[symbolStatus] = o[symbolStatus.toString()];
-        delete c[symbolStatus.toString()];
+        c[symbolStatus] = o[getSymbolName(symbolStatus)];
+        delete c[getSymbolName(symbolStatus)];
         return c;
     }
     return o;
