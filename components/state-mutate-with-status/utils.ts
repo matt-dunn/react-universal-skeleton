@@ -111,7 +111,7 @@ export const deserialize = (s: string): any => {
     });
 };
 
-export const getPayload = <S extends MetaStatus, P>(metaStatus: S, payload?: P): P | undefined => payload;
+export const getPayload = <S extends MetaStatus, P>(metaStatus: S, payload?: P): P | undefined => (!metaStatus.hasError && payload) || undefined;
 
 export const getUpdatedState = <S, P, U extends MetaStatus>(state: S, payload: P | undefined | null, metaStatus: U, path: Path, actionId?: string, options?: Options<P>): UpdatedStatus<S, P> => {
     if (actionId) {
