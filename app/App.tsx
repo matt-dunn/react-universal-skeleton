@@ -9,7 +9,7 @@ import Header from "./components/Header";
 import { GlobalStyles } from "./styles";
 import { ToastifyStyles } from "./styles/toasify";
 
-import ErrorHandler from "components/actions/ErrorHandler";
+import ErrorHandler, {CallHandler} from "components/actions/ErrorHandler";
 
 import AuthProvider from "./components/auth";
 import {ToastContainer} from "react-toastify";
@@ -27,7 +27,7 @@ const Dashboard = loadable(() => import(/* webpackPrefetch: true */ "./container
 
 import "./styles/react-responsive-ui.css";
 
-const handler = ({code, status, message}, location, history) => {
+const handler: CallHandler = ({code, status, message}, location, history) => {
     console.error("HANDLE ERROR", message, code, status, location);
 
     if (status === 401) {
@@ -38,6 +38,8 @@ const handler = ({code, status, message}, location, history) => {
     } else if (status === 404) {
         return <Error404/>;
     }
+
+    return false;
 };
 
 const App = () => {
