@@ -1,6 +1,10 @@
 import {take} from "redux-saga/effects";
 import {createAction, getType} from "typesafe-actions";
 
+type Action = {
+    type: string;
+}
+
 export enum Severity {
     info = "info",
     warning = "warning",
@@ -11,6 +15,7 @@ export type Notification = {
     message: string;
     severity?: Severity;
     reference?: string;
+    reason?: Action;
 }
 
 type Notify = {
@@ -19,10 +24,11 @@ type Notify = {
 
 export const notifyAction = createAction(
     "@notification/NOTIFY",
-    ({message, reference, severity = Severity.info}: Notification): Notification => ({
+    ({message, reference, reason, severity = Severity.info}: Notification): Notification => ({
         message,
         severity,
-        reference
+        reference,
+        reason
     })
 )();
 

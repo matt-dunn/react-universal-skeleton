@@ -87,7 +87,7 @@ function* callAsyncWithCancel(action: StandardAction, done?: Done, ...args: any[
         action?.meta?.response && action?.meta?.response.resolve(payload);
     } catch (error) {
         const {code, status} = error;
-        yield put(notifyAction({message: error.message, reference: code && [code, status].filter(value => value).join("-"), severity: Severity.error}));
+        yield put(notifyAction({message: error.message, reason: action, reference: code && [code, status].filter(value => value).join("-"), severity: Severity.error}));
 
         yield put({
             ...action,
