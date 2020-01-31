@@ -36,6 +36,10 @@ const Title = styled.h2`
     color: #ccc;
 `;
 
+const ModelOptions = styled.div`
+  margin: 10px 0 0 0;
+`;
+
 const DataItem = styled(EditItem)`
   margin: 50px auto;
   max-width: 300px;
@@ -47,7 +51,7 @@ const DataListItem = styled(EditItem)<{isImportant?: boolean}>`
 
 const importantIds = ["item-1", "item-2"];
 
-const WSButton = withWireFrameAnnotation(Button, {
+const WSButtons = withWireFrameAnnotation(ModelOptions, {
     title: <div>Open modal CTA</div>,
     description: <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam iaculis convallis ante, ac porttitor eros hendrerit non. Ut a hendrerit ligula. Praesent vestibulum, dui venenatis convallis condimentum, lorem magna rutrum erat, eget convallis odio purus sed ex. Suspendisse congue metus ac blandit vehicula. Suspendisse non elementum purus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
 });
@@ -145,19 +149,19 @@ const Data = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIte
                 API SSR Example (Lazy Loaded)
             </WSTitle>
 
-            <div style={{margin: "10px 0 0 0"}}>
-                <WSButton
+            <WSButtons>
+                <Button
                     onClick={openTest1}
                 >
                     Open SIMPLE modal
-                </WSButton>
+                </Button>
 
                 <Button
                     onClick={openTest2}
                 >
                     Open FULL modal
                 </Button>
-            </div>
+            </WSButtons>
 
             {modal()}
 

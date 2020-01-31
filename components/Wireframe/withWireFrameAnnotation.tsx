@@ -42,11 +42,11 @@ const CreateIdentifier = (Component: ComponentType<any>, options: WireFrameCompo
     ) || null;
 };
 
-export const withWireFrameAnnotation = function<T>(WrappedComponent: ComponentType<T> | string, options: WireFrameComponentOptions) {
+export const withWireFrameAnnotation = function<P>(WrappedComponent: ComponentType<P> | string, options: WireFrameComponentOptions) {
     const Component = (props: any) => <WrappedComponent {...props}/>;
     const ComponentIdentifier = CreateIdentifier(Component, options);
 
-    return function WireFrameAnnotation(props: T) {
+    return function WireFrameAnnotation(props: P) {
         const {highlightNote} = useContext(WireFrameAnnotationContext);
 
         const handleHighlightNote = useCallback(() => {
