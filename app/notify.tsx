@@ -18,17 +18,20 @@ const PrimaryButton = styled(Button)`
 export const notify = ({error: { message, code, status }, type, cancel, retry}) => {
     if (process.browser && (!status || status >= 500)) {
         let retrying = false;
+        const reference = code && [(code || type), status].filter(value => value).join("-");
 
         toast(
             <>
                 <p>
                     {message}
                 </p>
+                {reference &&
                 <p>
                     <small>
-                        {`REF: ${[(code || type), status].filter(value => value).join("-")}`}
+                        {`REF: ${reference}`}
                     </small>
                 </p>
+                }
                 <p
                     className="text-right"
                 >

@@ -1,8 +1,10 @@
 import { createStore, applyMiddleware, compose } from "redux";
 import createSagaMiddleware from "redux-saga";
+import {fork} from "redux-saga/effects";
 
 import {sagaAsyncAction} from "components/redux/middleware/sagaAsyncAction";
 import promiseDecorator from "components/redux/middleware/promiseDecorator";
+import {sagaNotification} from "components/redux/middleware/sagaNotification";
 
 import rootReducer from "./reducers";
 
@@ -13,7 +15,8 @@ const composeEnhancers = (typeof window !== "undefined" && window.__REDUX_DEVTOO
 const sagaMiddleware = createSagaMiddleware();
 
 const rootSaga = function* rootSaga() {
-    yield sagaAsyncAction(api);
+    yield fork(sagaNotification, notification => import("./notify").then(({notify}) => notify(notification)));
+    yield fork(sagaAsyncAction, api);
 };
 
 const getStore = (initialState = {}) => {

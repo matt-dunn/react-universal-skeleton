@@ -4,6 +4,7 @@ import {isFunction} from "lodash";
 import {Task} from "@redux-saga/types";
 
 import {MetaStatus, ActionMeta} from "components/state-mutate-with-status";
+import {notifyAction, Severity} from "components/redux/middleware/sagaNotification";
 
 const symbolCancelled = Symbol("cancelled");
 
@@ -85,6 +86,9 @@ function* callAsyncWithCancel(action: StandardAction, done?: Done, ...args: any[
 
         action?.meta?.response && action?.meta?.response.resolve(payload);
     } catch (error) {
+        const {code, status} = error;
+        yield put(notifyAction({message: error.message, reference: code && [code, status].filter(value => value).join("-"), severity: Severity.error}));
+
         yield put({
             ...action,
             payload: error,
