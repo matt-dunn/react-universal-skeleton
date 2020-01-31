@@ -6,7 +6,7 @@ import {ErrorLike} from "components/error";
 
 import {ErrorHandlerContext, ErrorContext} from "./contexts";
 
-type CallHandler = {
+export type CallHandler = {
     (error: ErrorLike, location: string, history: History, props: any): boolean | ReactElement;
 }
 

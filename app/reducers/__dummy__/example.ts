@@ -21,16 +21,12 @@ export interface ExampleState {
     item?: ExampleItemState;
 }
 
-const exampleGetList = (state: ExampleState, action: FluxStandardAction<string, any, ActionMeta>): ExampleState => nextState(state, action, {
+const exampleListReducer = (state: ExampleState, action: FluxStandardAction<string, any, ActionMeta>): ExampleState => nextState(state, action, {
     path: ["items"],
 });
 
-const exampleGetItem = (state: ExampleState, action: FluxStandardAction<string, any, ActionMeta>): ExampleState => nextState(state, action, {
+const exampleItemReducer = (state: ExampleState, action: FluxStandardAction<string, any, ActionMeta>): ExampleState => nextState(state, action, {
     path: ["item"],
-});
-
-const exampleEditItem = (state: ExampleState, action: FluxStandardAction<string, any, ActionMeta>): ExampleState => nextState(state, action, {
-    path: ["items"],
 });
 
 const initialState = {
@@ -39,7 +35,7 @@ const initialState = {
 } as ExampleState;
 
 export default createReducer(initialState, {
-    [getType(actions.exampleGetList)]: exampleGetList,
-    [getType(actions.exampleGetItem)]: exampleGetItem,
-    [getType(actions.exampleEditItem)]: exampleEditItem,
+    [getType(actions.exampleGetList)]: exampleListReducer,
+    [getType(actions.exampleEditItem)]: exampleListReducer,
+    [getType(actions.exampleGetItem)]: exampleItemReducer
 });
