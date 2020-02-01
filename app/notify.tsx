@@ -1,7 +1,7 @@
 import React from "react";
 import {toast} from "react-toastify";
 
-import {Notification} from "components/redux/middleware/sagaNotification";
+import {Notification} from "components/notification";
 
 export const notify = ({message, severity, reference}: Notification) => {
     if ((process as any).browser) {

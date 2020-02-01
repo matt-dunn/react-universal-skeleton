@@ -12,7 +12,7 @@ import {AboveTheFold, ClientOnly} from "components/actions";
 import {ModalFooter, ModalTitle, useModal} from "components/Modal";
 import {Button, ButtonSimple, ButtonSimplePrimary} from "components/Buttons";
 import {withWireFrameAnnotation} from "components/Wireframe";
-import {Notify, Notification, notifyAction} from "components/redux/middleware/sagaNotification";
+import {Notify, Notification, notifyAction} from "components/notification";
 
 import List from "app/components/List";
 import Item from "app/components/Item";

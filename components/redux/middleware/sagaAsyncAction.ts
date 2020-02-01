@@ -4,7 +4,7 @@ import {isFunction} from "lodash";
 import {Task} from "@redux-saga/types";
 
 import {MetaStatus, ActionMeta} from "components/state-mutate-with-status";
-import {notifyAction, Severity} from "components/redux/middleware/sagaNotification";
+import {notifyAction, Severity} from "components/notification";
 
 const symbolCancelled = Symbol("cancelled");
 
