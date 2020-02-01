@@ -3,7 +3,7 @@ import createSagaMiddleware from "redux-saga";
 import {fork} from "redux-saga/effects";
 
 import {sagaAsyncAction} from "components/redux/middleware/sagaAsyncAction";
-import promiseDecorator from "components/redux/middleware/promiseDecorator";
+import {promiseDecorator} from "components/redux/middleware/promiseDecorator";
 import {sagaNotification} from "components/redux/middleware/sagaNotification";
 
 import rootReducer from "./reducers";

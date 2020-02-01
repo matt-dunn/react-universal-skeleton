@@ -3,7 +3,7 @@ import {isFunction} from "lodash";
 
 import {WrappedPromise} from "components/wrappedPromise";
 
-const promiseDecorator = () => (next: Dispatch): Middleware => (action: any) => {
+export const promiseDecorator = () => (next: Dispatch): Middleware => (action: any) => {
     if (isFunction(action.payload)) {
         const response = WrappedPromise();
 
@@ -20,5 +20,3 @@ const promiseDecorator = () => (next: Dispatch): Middleware => (action: any) => 
 
     return next(action);
 };
-
-export default promiseDecorator;
