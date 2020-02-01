@@ -7,9 +7,8 @@ export const notify = ({message, severity, reference}: Notification) => {
     if ((process as any).browser) {
         toast(
             <>
-                <p>
-                    {message}
-                </p>
+                {message}
+
                 {reference &&
                 <p>
                     <small>

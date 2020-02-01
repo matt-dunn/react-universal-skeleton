@@ -1,5 +1,6 @@
 import {take} from "redux-saga/effects";
 import {createAction, getType} from "typesafe-actions";
+import {ReactNode} from "react";
 
 type Action = {
     type: string;
@@ -12,13 +13,13 @@ export enum Severity {
 }
 
 export type Notification = {
-    message: string;
+    message: ReactNode;
     severity?: Severity;
     reference?: string;
     reason?: Action;
 }
 
-type Notify = {
+export type Notify = {
     (notification: Notification): void;
 }
 

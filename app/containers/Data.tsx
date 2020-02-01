@@ -9,6 +9,11 @@ import { useParams} from "react-router";
 
 import {DecoratedWithStatus, getStatus} from "components/state-mutate-with-status";
 import {AboveTheFold, ClientOnly} from "components/actions";
+import {ModalFooter, ModalTitle, useModal} from "components/Modal";
+import {Button, ButtonSimple, ButtonSimplePrimary} from "components/Buttons";
+import {withWireFrameAnnotation} from "components/Wireframe";
+import {Notify, Notification, notifyAction} from "components/redux/middleware/sagaNotification";
+
 import List from "app/components/List";
 import Item from "app/components/Item";
 import EditItem from "app/components/EditItem";
@@ -20,9 +25,6 @@ import {ExampleItemState} from "../reducers/__dummy__/example";
 import {ExampleGetList, ExampleGetItem, ExampleEditItem} from "../components/api/__dummy__/example";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
-import {ModalFooter, ModalTitle, useModal} from "components/Modal";
-import {Button, ButtonSimple, ButtonSimplePrimary} from "components/Buttons";
-import {withWireFrameAnnotation} from "../../components/Wireframe";
 
 export type DataProps = {
     items: ExampleItemState[];
@@ -30,6 +32,7 @@ export type DataProps = {
     onExampleGetList: ExampleGetList;
     onExampleGetItem: ExampleGetItem;
     onExampleEditItem: ExampleEditItem;
+    notify: Notify;
 };
 
 const Title = styled.h2`
@@ -71,7 +74,7 @@ const WAModalSubmit = withWireFrameAnnotation(ButtonSimplePrimary, {
     description: <div>Only enabled once the data is available.</div>
 });
 
-const Data = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditItem}: DataProps) => {
+const Data = ({notify, items, item, onExampleGetList, onExampleGetItem, onExampleEditItem}: DataProps) => {
     const { page } = useParams();
 
     const renderListItem = useCallback(({item, disabled}) => {
@@ -99,6 +102,10 @@ const Data = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIte
         open(
             ({item, onExampleGetItem}) => {
                 const {complete} = getStatus(item);
+                const submit = () => {
+                    notify({message: "Submit..."});
+                    close();
+                };
 
                 return (
                     <>
@@ -117,7 +124,7 @@ const Data = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIte
                                 Cancel
                             </ButtonSimple>
                             <WAModalSubmit
-                                onClick={close}
+                                onClick={submit}
                                 disabled={!item || !complete}
                             >
                                 Submit
@@ -223,7 +230,8 @@ const mapDispatchToProps = (dispatch: Dispatch<actions.RootActions>) => {
     return {
         onExampleGetList,
         onExampleGetItem,
-        onExampleEditItem
+        onExampleEditItem,
+        notify: (notification: Notification) => dispatch(notifyAction(notification))
     };
 };
 
