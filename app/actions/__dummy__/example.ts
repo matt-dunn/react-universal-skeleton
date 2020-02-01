@@ -5,42 +5,44 @@ import {WithNotification} from "components/redux/middleware/sagaNotification";
 import {ActionMeta} from "components/state-mutate-with-status";
 // import {Severity} from "components/notification";
 
-import {ExampleItemsState, ExampleItemState} from "../../reducers/__dummy__/example";
-import {API} from "../../components/api";
+import {API, ExampleListResponse, ExampleResponse} from "../../components/api";
 
-const exampleGetList = createAction<string, any, ActionMeta & WithNotification<ExampleItemsState>>(
+const exampleGetList = createAction<string, (cancel: Cancel) => (dep: API) => Promise<ExampleListResponse>, ActionMeta<ExampleListResponse> & WithNotification<ExampleListResponse>>(
     "@__dummy__/EXAMPLE_GET_LIST",
-    ({page, count}) => (cancel: Cancel) => ({api: {exampleApi: {exampleGetList}}}: API) => exampleGetList(page, count, cancel),
+    ({page, count}) => cancel => ({api: {exampleApi: {exampleGetList}}}) => exampleGetList(page, count, cancel),
     // ({page, count}) => ([{"id": "1", "name": "xxx"}]),
-    () => ({
-        // seedPayload: [{id: "123", name: "Clem"}]
-        // notification: (payload, error) => {
-        //     console.error("@@@@", payload, error && error.message);
-        //     if (error) {
-        //         return {
-        //             message: "Error",
-        //             severity: Severity.error
-        //         };
-        //     } else if (payload) {
-        //         return {
-        //             message: `OK - got ${payload.length} items`
-        //         };
-        //     }
-        // }
-    })
+    // () => ({
+    //     // seedPayload: [{id: "123", name: "Clem"}],
+    //     notification: (payload, error) => {
+    //         if (error) {
+    //             return {
+    //                 message: "Error",
+    //                 severity: Severity.error
+    //             };
+    //         } else if (payload) {
+    //             return {
+    //                 message: `OK - got ${payload.length} items`
+    //             };
+    //         }
+    //     }
+    // })
 )();
 
-const exampleGetItem = createAction(
+const exampleGetItem = createAction<string, (cancel: Cancel) => (dep: API) => Promise<ExampleResponse>, ActionMeta<ExampleResponse> & WithNotification<ExampleResponse>>(
     "@__dummy__/EXAMPLE_GET_ITEM",
-    () => (cancel: Cancel) => ({api: {exampleApi: {exampleGetItem}}}: API) => exampleGetItem(cancel),
+    () => cancel => ({api: {exampleApi: {exampleGetItem}}}) => exampleGetItem(cancel),
     () => ({
+        notification: (payload) => (payload && {
+            message: "Got Item",
+            reference: payload.id
+        })
     })
 )();
 
-const exampleEditItem = createAction<string, any, ActionMeta & WithNotification<ExampleItemState>>(
+const exampleEditItem = createAction<string, (cancel: Cancel) => (dep: API) => Promise<ExampleResponse>, ActionMeta<ExampleResponse> & WithNotification<ExampleResponse>>(
     "@__dummy__/EXAMPLE_EDIT_ITEM",
-    (item) => (cancel: Cancel) => ({api: {exampleApi: {exampleEditItem}}}: API) => exampleEditItem(item, cancel),
-    (item: ExampleItemState) => ({
+    item => cancel => ({api: {exampleApi: {exampleEditItem}}}) => exampleEditItem(item, cancel),
+    item => ({
         id: item.id,
         seedPayload: item,
         notification: (payload) => (payload && {

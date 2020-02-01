@@ -15,3 +15,5 @@ export default {
     }
 } as API;
 
+export * from "./__dummy__/example";
+export * from "./auth";

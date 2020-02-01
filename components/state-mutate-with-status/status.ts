@@ -11,10 +11,10 @@ type ActiveTransactions<T = boolean> = {
   [id: string]: T;
 }
 
-export type ActionMeta = {
+export type ActionMeta<P = any> = {
   id?: string;
   $status?: MetaStatus;
-  seedPayload?: any;
+  seedPayload?: P;
   response?: WrappedPromise;
 }
 

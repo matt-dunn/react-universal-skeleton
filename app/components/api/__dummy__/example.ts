@@ -3,28 +3,28 @@ import {Cancel} from "components/redux/middleware/sagaAsyncAction";
 import {ExampleItemState} from "../../../reducers/__dummy__/example";
 // import {APIError, APPError} from "components/api";
 
-export interface ExampleResponse {
+export type ExampleResponse = {
     id: string;
     name: string;
 }
 
-interface ExampleListResponse {
+export type ExampleListResponse = {
     [index: number]: ExampleResponse;
-}
+} & Array<ExampleResponse>
 
-export interface ExampleGetList {
+export type ExampleGetList = {
     (page?: number, count?: number, cancel?: Cancel): Promise<ExampleListResponse>;
 }
 
-export interface ExampleGetItem {
+export type ExampleGetItem = {
     (cancel?: Cancel): Promise<ExampleResponse>;
 }
 
-export interface ExampleEditItem {
+export type ExampleEditItem = {
     (item: ExampleItemState, cancel?: Cancel): Promise<ExampleResponse>;
 }
 
-export interface ExampleApi {
+export type ExampleApi = {
     exampleGetList: ExampleGetList;
     exampleGetItem: ExampleGetItem;
     exampleEditItem: ExampleEditItem;
