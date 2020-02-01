@@ -13,7 +13,7 @@ type ActiveTransactions<T = boolean> = {
 
 export type ActionMeta = {
   id?: string;
-  $status: MetaStatus;
+  $status?: MetaStatus;
   seedPayload?: any;
   response?: WrappedPromise;
 }

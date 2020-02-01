@@ -8,16 +8,18 @@ import nextState, {ActionMeta} from "components/state-mutate-with-status/frozen"
 import {exampleActions as actions} from "../../actions";
 
 // export interface ExampleItemState extends Record<{
-export interface ExampleItemState {
+export type ExampleItemState = {
     id: string;
     name: string;
 }
 
+export type ExampleItemsState = ExampleItemState[];
+
 // export interface ExampleListState extends List<ExampleItemState>{}
 
 // export interface ExampleState extends Record<{
-export interface ExampleState {
-    items: ExampleItemState[];
+export type ExampleState = {
+    items: ExampleItemsState;
     item?: ExampleItemState;
 }
 
