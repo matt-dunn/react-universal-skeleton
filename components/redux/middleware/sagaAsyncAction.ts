@@ -103,7 +103,7 @@ function* callAsyncWithCancel(action: StandardAction, done?: Done, ...args: any[
 
             yield put({
                 ...action,
-                payload: [],
+                payload: undefined,
                 meta: decorateMetaWithStatus(transactionId,{
                     cancelled: true,
                     processedOnServer: !(process as any).browser
