@@ -10,6 +10,8 @@ export const global = css`
   .wf__annotations--show {
       [data-annotation] {
         &:hover {
+          z-index: 5000;
+          
           > * {
             box-shadow: 0 0 0 1px #4086f7 !important;
           }
