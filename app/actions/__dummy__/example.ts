@@ -1,15 +1,16 @@
 import { createAction } from "typesafe-actions";
 
-import {Cancel} from "components/redux/middleware/sagaAsyncAction";
 import {WithNotification} from "components/redux/middleware/sagaNotification";
 import {ActionMeta} from "components/state-mutate-with-status";
 // import {Severity} from "components/notification";
 
-import {API, ExampleListResponse, ExampleResponse} from "../../components/api";
+import {ExampleList, ExampleItem} from "../../components/api";
+import {APIPayloadCreator} from "../";
 
-const exampleGetList = createAction<string, (cancel: Cancel) => (dep: API) => Promise<ExampleListResponse>, ActionMeta<ExampleListResponse> & WithNotification<ExampleListResponse>>(
+const exampleGetList = createAction<string, APIPayloadCreator<Promise<ExampleList>>, ActionMeta<ExampleList> & WithNotification<ExampleList>>(
     "@__dummy__/EXAMPLE_GET_LIST",
-    ({page, count}) => cancel => ({api: {exampleApi: {exampleGetList}}}) => exampleGetList(page, count, cancel),
+    // ({page, count}) => cancel => Promise.resolve([{"id": "1", "name": "xxx"}]),
+    ({page, count}) => cancel => ({API: {ExampleApi: {exampleGetList}}}) => exampleGetList(page, count, cancel),
     // ({page, count}) => ([{"id": "1", "name": "xxx"}]),
     // () => ({
     //     // seedPayload: [{id: "123", name: "Clem"}],
@@ -28,9 +29,9 @@ const exampleGetList = createAction<string, (cancel: Cancel) => (dep: API) => Pr
     // })
 )();
 
-const exampleGetItem = createAction<string, (cancel: Cancel) => (dep: API) => Promise<ExampleResponse>, ActionMeta<ExampleResponse> & WithNotification<ExampleResponse>>(
+const exampleGetItem = createAction<string, APIPayloadCreator<Promise<ExampleItem>>, ActionMeta<ExampleItem> & WithNotification<ExampleItem>>(
     "@__dummy__/EXAMPLE_GET_ITEM",
-    () => cancel => ({api: {exampleApi: {exampleGetItem}}}) => exampleGetItem(cancel),
+    () => cancel => ({API: {ExampleApi: {exampleGetItem}}}) => exampleGetItem(cancel),
     () => ({
         notification: (payload) => (payload && {
             message: "Got Item",
@@ -39,9 +40,9 @@ const exampleGetItem = createAction<string, (cancel: Cancel) => (dep: API) => Pr
     })
 )();
 
-const exampleEditItem = createAction<string, (cancel: Cancel) => (dep: API) => Promise<ExampleResponse>, ActionMeta<ExampleResponse> & WithNotification<ExampleResponse>>(
+const exampleEditItem = createAction<string, APIPayloadCreator<Promise<ExampleItem>>, ActionMeta<ExampleItem> & WithNotification<ExampleItem>>(
     "@__dummy__/EXAMPLE_EDIT_ITEM",
-    item => cancel => ({api: {exampleApi: {exampleEditItem}}}) => exampleEditItem(item, cancel),
+    item => cancel => ({API: {ExampleApi: {exampleEditItem}}}) => exampleEditItem(item, cancel),
     item => ({
         id: item.id,
         seedPayload: item,

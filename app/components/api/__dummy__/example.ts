@@ -1,27 +1,24 @@
 import {Cancel} from "components/redux/middleware/sagaAsyncAction";
 
-import {ExampleItemState} from "../../../reducers/__dummy__/example";
 // import {APIError, APPError} from "components/api";
 
-export type ExampleResponse = {
+export type ExampleItem = {
     id: string;
     name: string;
 }
 
-export type ExampleListResponse = {
-    [index: number]: ExampleResponse;
-} & Array<ExampleResponse>
+export type ExampleList = ExampleItem[];
 
 export type ExampleGetList = {
-    (page?: number, count?: number, cancel?: Cancel): Promise<ExampleListResponse>;
+    (page?: number, count?: number, cancel?: Cancel): Promise<ExampleList>;
 }
 
 export type ExampleGetItem = {
-    (cancel?: Cancel): Promise<ExampleResponse>;
+    (cancel?: Cancel): Promise<ExampleItem>;
 }
 
 export type ExampleEditItem = {
-    (item: ExampleItemState, cancel?: Cancel): Promise<ExampleResponse>;
+    (item: ExampleItem, cancel?: Cancel): Promise<ExampleItem>;
 }
 
 export type ExampleApi = {
@@ -31,8 +28,8 @@ export type ExampleApi = {
 }
 
 // let retryCount = 10;
-export const exampleApi: ExampleApi = {
-    exampleGetList:(page = 0, count = 3, cancel) => new Promise<ExampleListResponse>((resolve/*, reject*/) => {
+export const ExampleApi: ExampleApi = {
+    exampleGetList:(page = 0, count = 3, cancel) => new Promise<ExampleList>((resolve/*, reject*/) => {
         console.log("API CALL: exampleGetList", page, count);
         // if (retryCount < 4) {
         //     retryCount++;
@@ -63,7 +60,7 @@ export const exampleApi: ExampleApi = {
             clearTimeout(t);
         });
     }),
-    exampleGetItem:(cancel) => new Promise<ExampleResponse>((resolve/*, reject*/) => {
+    exampleGetItem:(cancel) => new Promise<ExampleItem>((resolve/*, reject*/) => {
         console.log("API CALL: exampleGetItem");
         // throw new Error("Error in exampleGetItem")
         // if (typeof window === 'undefined' || !(window as any).authenticated) {
@@ -83,7 +80,7 @@ export const exampleApi: ExampleApi = {
             clearTimeout(t);
         });
     }),
-    exampleEditItem:(item, cancel) => new Promise<ExampleResponse>((resolve/*, reject*/) => {
+    exampleEditItem:(item, cancel) => new Promise<ExampleItem>((resolve/*, reject*/) => {
         console.log("API CALL: exampleEditItem", item.id);
         // throw new Error("Error in exampleEditItem")
 

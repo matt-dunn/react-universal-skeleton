@@ -8,8 +8,7 @@ import Loading from "components/Loading";
 import {usePerformAction} from "components/actions";
 import {ResponsiveGrid} from "components/Grid";
 
-import {ExampleItemState} from "../../reducers/__dummy__/example";
-import {ExampleEditItem, ExampleGetList} from "../api/__dummy__/example";
+import {ExampleEditItem, ExampleGetList, ExampleItem, ExampleList} from "../api";
 import PlaceHolderItem from "app/components/Placeholder/Item";
 
 import Item from "../EditItem";
@@ -17,15 +16,13 @@ import Item from "../EditItem";
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 import {withWireFrameAnnotation} from "components/Wireframe";
 
-type ExampleItemStateList<T> = Array<T> & DecoratedWithStatus;
-
 export type ListProps = {
-    items: ExampleItemStateList<ExampleItemState>;
+    items: ExampleList & DecoratedWithStatus;
     onExampleGetList: ExampleGetList;
     onExampleEditItem: ExampleEditItem;
     isShown?: boolean;
     activePage?: number;
-    children?: ({item, disabled}: {item: ExampleItemState; disabled: boolean}) => ReactElement<any>;
+    children?: ({item, disabled}: {item: ExampleItem; disabled: boolean}) => ReactElement;
 };
 
 const ListContainer = styled.div`
@@ -140,7 +137,7 @@ const List = ({isShown = true, items, onExampleGetList, onExampleEditItem, activ
                 }
             </Loading>
 
-            <WFPagination disabled={processing}>
+            <WFPagination>
                 {Array.from(Array(5).keys()).map(page => (
                     <Page
                         key={page}

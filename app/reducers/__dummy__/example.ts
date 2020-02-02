@@ -6,21 +6,11 @@ import {getType, createReducer} from "typesafe-actions";
 import nextState, {ActionMeta} from "components/state-mutate-with-status/frozen";
 
 import {exampleActions as actions} from "../../actions";
+import {ExampleItem, ExampleList} from "../../components/api";
 
-// export interface ExampleItemState extends Record<{
-export type ExampleItemState = {
-    id: string;
-    name: string;
-}
-
-export type ExampleItemsState = ExampleItemState[];
-
-// export interface ExampleListState extends List<ExampleItemState>{}
-
-// export interface ExampleState extends Record<{
 export type ExampleState = {
-    items: ExampleItemsState;
-    item?: ExampleItemState;
+    items: ExampleList;
+    item?: ExampleItem;
 }
 
 const exampleListReducer = (state: ExampleState, action: FluxStandardAction<string, any, ActionMeta>): ExampleState => nextState(state, action, {

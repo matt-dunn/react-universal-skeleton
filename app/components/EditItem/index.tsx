@@ -4,16 +4,15 @@ import {css} from "@emotion/core";
 
 import TextInput from "react-responsive-ui/modules/TextInput";
 
-import {ExampleItemState} from "../../reducers/__dummy__/example";
-import {ExampleResponse} from "../api/__dummy__/example";
+import {ExampleItem} from "../api";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 import {withWireFrameAnnotation} from "components/Wireframe";
 import {getStatus, DecoratedWithStatus} from "components/state-mutate-with-status";
 
 export type EditItemProps = {
-    item: ExampleItemState & DecoratedWithStatus;
-    onChange?: (item: ExampleItemState) => Promise<ExampleResponse>;
+    item: ExampleItem & DecoratedWithStatus;
+    onChange?: (item: ExampleItem) => Promise<ExampleItem>;
     type?: "primary" | "secondary";
     className?: string;
     disabled?: boolean;

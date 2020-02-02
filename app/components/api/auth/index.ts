@@ -1,23 +1,24 @@
 // import {APIError, APPError} from "components/api";
 
-export interface AuthUserResponse {
+export type User = {
     id: string;
     name: string;
     email: string;
 }
 
-export interface Login {
-    (username: string, password: string): Promise<AuthUserResponse>;
+export type Login = {
+    (username: string, password: string): Promise<User>;
 }
 
-export interface AuthApi {
+export type AuthApi = {
     login: Login;
 }
 
+// Debug:
 (typeof window !== "undefined") && ((window as any).authenticated = true);
 
-export const authApi: AuthApi = {
-    login:(username, password) => new Promise<AuthUserResponse>(resolve => {
+export const AuthApi: AuthApi = {
+    login:(username, password) => new Promise<User>(resolve => {
         console.log("API CALL: login", username, password);
         // throw new Error("Error in login")
         // throw new APIError("Authentication Failed", "auth", 401)

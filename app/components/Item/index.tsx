@@ -7,14 +7,13 @@ import {usePerformAction} from "components/actions";
 import {getStatus, DecoratedWithStatus} from "components/state-mutate-with-status";
 import PlaceHolderItem from "app/components/Placeholder/Item";
 
-import {ExampleItemState} from "../../reducers/__dummy__/example";
-import {ExampleGetItem} from "../api/__dummy__/example";
+import {ExampleGetItem, ExampleItem} from "../api";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 import {withWireFrameAnnotation} from "components/Wireframe";
 
 export type ItemProps = {
-    item?: ExampleItemState & DecoratedWithStatus;
+    item?: ExampleItem & DecoratedWithStatus;
     onExampleGetItem: ExampleGetItem;
     className?: string;
     isShown?: boolean;

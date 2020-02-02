@@ -1,19 +1,12 @@
-import {ExampleApi, exampleApi} from "./__dummy__/example";
-import {AuthApi, authApi} from "./auth";
+import {ExampleApi} from "./__dummy__/example";
+import {AuthApi} from "./auth";
 
-export type API = {
-    api: {
-        exampleApi: ExampleApi;
-        authApi: AuthApi;
-    };
-}
+export const API = {
+    ExampleApi,
+    AuthApi
+};
 
-export default {
-    api: {
-        exampleApi,
-        authApi
-    }
-} as API;
+export type API = typeof API;
 
 export * from "./__dummy__/example";
 export * from "./auth";

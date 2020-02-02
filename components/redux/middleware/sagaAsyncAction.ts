@@ -34,6 +34,19 @@ type Done = {
     (action: StandardAction): void;
 }
 
+export type PayloadCreator<A extends any[], R> =
+    R
+    |
+    {
+        (cancel: Cancel): {
+            (...args: A): R;
+        };
+    }
+    |
+    {
+        (cancel: Cancel): R;
+    }
+
 
 
 

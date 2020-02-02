@@ -21,14 +21,13 @@ import EditItem from "app/components/EditItem";
 import Page from "../styles/Page";
 import * as actions from "../actions";
 import {AppState} from "../reducers";
-import {ExampleItemState} from "../reducers/__dummy__/example";
-import {ExampleGetList, ExampleGetItem, ExampleEditItem} from "../components/api/__dummy__/example";
+import {ExampleGetList, ExampleGetItem, ExampleEditItem, ExampleList, ExampleItem} from "../components/api";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
 export type DataProps = {
-    items: ExampleItemState[];
-    item?: ExampleItemState & DecoratedWithStatus;
+    items: ExampleList;
+    item?: ExampleItem & DecoratedWithStatus;
     onExampleGetList: ExampleGetList;
     onExampleGetItem: ExampleGetItem;
     onExampleEditItem: ExampleEditItem;
@@ -225,7 +224,7 @@ const mapDispatchToProps = (dispatch: Dispatch<actions.RootActions>) => {
 
     const onExampleGetList: ExampleGetList = (page, count): any => dispatch(actions.exampleActions.exampleGetList({page, count}));
     const onExampleGetItem: ExampleGetItem = (): any => dispatch(actions.exampleActions.exampleGetItem());
-    const onExampleEditItem: ExampleEditItem = (item: ExampleItemState): any => dispatch(actions.exampleActions.exampleEditItem(item));
+    const onExampleEditItem: ExampleEditItem = (item: ExampleItem): any => dispatch(actions.exampleActions.exampleEditItem(item));
 
     return {
         onExampleGetList,
