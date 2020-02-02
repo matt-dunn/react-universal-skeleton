@@ -1,6 +1,6 @@
 import {Cancel} from "components/redux/middleware/sagaAsyncAction";
 
-// import {APIError, APPError} from "components/api";
+import {APIError, APPError} from "components/api";
 
 export type ExampleItem = {
     id: string;
@@ -31,6 +31,11 @@ export type ExampleApi = {
 export const ExampleApi: ExampleApi = {
     exampleGetList:(page = 0, count = 3, cancel) => new Promise<ExampleList>((resolve/*, reject*/) => {
         console.log("API CALL: exampleGetList", page, count);
+
+        if (typeof window === 'undefined' || !(window as any).authenticated) {
+            throw new APIError("Auth Error...", 123, 401)
+        }
+
         // if (retryCount < 4) {
         //     retryCount++;
         //     throw new Error("Error in exampleGetList");
@@ -38,7 +43,7 @@ export const ExampleApi: ExampleApi = {
         //     retryCount = 0;
         // }
         if (page === 4) {
-            throw new Error("Error in exampleGetList");
+            throw new APPError("Error in exampleGetList", 123);
         }
         // throw new APIError("Auth Error...", 123, 401)
         // throw new APPError("APP Error...", 123);

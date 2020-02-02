@@ -15,7 +15,7 @@ export type AuthApi = {
 }
 
 // Debug:
-(typeof window !== "undefined") && ((window as any).authenticated = true);
+// (typeof window !== "undefined") && ((window as any).authenticated = true);
 
 export const AuthApi: AuthApi = {
     login:(username, password) => new Promise<User>(resolve => {
@@ -24,7 +24,7 @@ export const AuthApi: AuthApi = {
         // throw new APIError("Authentication Failed", "auth", 401)
         setTimeout(() => {
             console.log("API CALL COMPLETE: login");
-            (typeof window === "undefined") && ((window as any).authenticated = true);
+            (typeof window !== "undefined") && ((window as any).authenticated = true);
             resolve({
                 id: "123",
                 name: "Clem Fandango",

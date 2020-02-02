@@ -24,6 +24,7 @@ export function* sagaNotification(notify: Notify) {
         } else if (error && $status?.error) {
             notify({
                 message: $status.error.message,
+                reference: $status.error.code,
                 severity: Severity.error
             });
         }

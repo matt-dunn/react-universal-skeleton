@@ -16,7 +16,7 @@ type ErrorHandlerProps = {
 }
 
 const callHandler = (ex: ErrorLike, handler: CallHandler, location: Location, history: History, props: any) => {
-    const {pathname, search, hash} = location;
+    const {pathname, search, hash} = (typeof window !== "undefined" && window.location) || location;
 
     return handler(
         ex,
