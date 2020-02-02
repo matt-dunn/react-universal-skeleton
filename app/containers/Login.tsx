@@ -41,15 +41,13 @@ const LoginContainer = ({auth, login}: LoginProps, ...props: any[]) => {
     );
 };
 
-const mapStateToProps = ({auth}: AppState) => ({auth});
-
-const mapDispatchToProps = (dispatch: Dispatch<actions.RootActions>) => ({
-    login: (username, password): any => dispatch(actions.authActions.login({username, password}))
-} as {login: Login});
-
 const container = connect(
-    mapStateToProps,
-    mapDispatchToProps
+    ({auth}: AppState) => ({auth}),
+    (dispatch: Dispatch<actions.RootActions>) => ({
+        login: (username, password): any => dispatch(actions.authActions.login({username, password}))
+    } as {
+        login: Login;
+    })
 )(LoginContainer);
 
 export default container;
