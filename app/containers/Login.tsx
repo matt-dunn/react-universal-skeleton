@@ -2,8 +2,10 @@ import React from "react";
 import { useParams, useHistory } from "react-router-dom";
 import {Dispatch} from "redux";
 import {connect} from "react-redux";
+import styled from "@emotion/styled";
 
 import {getStatus} from "components/state-mutate-with-status";
+import {ButtonPrimary} from "components/Buttons";
 
 import {AppState} from "../reducers";
 import * as actions from "../actions";
@@ -18,6 +20,11 @@ export type LoginProps = {
     login: Login;
 };
 
+const Title = styled.h2`
+    color: #ccc;
+    margin-bottom: 20px;
+`;
+
 const LoginContainer = ({auth, login}: LoginProps, ...props: any[]) => {
     const {from} = useParams() || "/";
     const history = useHistory();
@@ -27,9 +34,11 @@ const LoginContainer = ({auth, login}: LoginProps, ...props: any[]) => {
 
     return (
         <Page>
-            Login
+            <Title>
+                Login
+            </Title>
 
-            <button
+            <ButtonPrimary
                 disabled={processing}
                 onClick={() => {
                     login("clem@demo.com", "xxx")
@@ -39,7 +48,7 @@ const LoginContainer = ({auth, login}: LoginProps, ...props: any[]) => {
                 }}
             >
                 LOGIN
-            </button>
+            </ButtonPrimary>
         </Page>
     );
 };

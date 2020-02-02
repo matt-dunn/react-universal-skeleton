@@ -32,8 +32,8 @@ export const ExampleApi: ExampleApi = {
     exampleGetList:(page = 0, count = 3, cancel) => new Promise<ExampleList>((resolve/*, reject*/) => {
         console.log("API CALL: exampleGetList", page, count);
 
-        if (typeof window === 'undefined' || !(window as any).authenticated) {
-            throw new APIError("Auth Error...", 123, 401)
+        if (typeof window === "undefined" || !(window as any).authenticated) {
+            throw new APIError("Auth Error...", 123, 401);
         }
 
         // if (retryCount < 4) {

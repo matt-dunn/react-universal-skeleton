@@ -6,7 +6,6 @@ import {withWireFrameAnnotation} from "../../components/Wireframe";
 
 const Container = styled.nav`
   margin: 0 auto;
-  padding: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -16,9 +15,11 @@ const Container = styled.nav`
 
 const Brand = styled.header`
   font-size: var(--step-up-1);
+  margin: 5px 20px;
 `;
 
 const Menu = styled.ul`
+  padding: 20px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -28,6 +29,10 @@ const Menu = styled.ul`
 const MenuLink = styled.li`
   margin-left: 2em;
   text-decoration: none;
+`;
+
+const AuthenticatedUser = styled.div`
+  font-size: 0.65em;
 `;
 
 const WSHome = withWireFrameAnnotation(NavLink, {
@@ -55,7 +60,15 @@ const Header = () => {
 
     return (
         <Container>
-            <Brand>Universal App Example {authenticatedUser && authenticatedUser.name} {authenticatedUser && <small>{authenticatedUser.email}</small>} </Brand>
+            <Brand>
+                Universal App Example
+                {authenticatedUser &&
+                    <AuthenticatedUser>
+                        {authenticatedUser.name}
+                        <em>({authenticatedUser.email})</em>
+                    </AuthenticatedUser>
+                }
+            </Brand>
             <Menu>
                 <MenuLink>
                     <WSHome

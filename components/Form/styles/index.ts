@@ -35,24 +35,6 @@ export const FormContainer = styled.form`
     margin: 0 0 10px 0;
   }
   
-  button {
-    font-size: inherit;
-    padding: .375rem .75rem;
-    border: 1px solid #ccc;
-    background-color: #eee;
-    border-radius: .25rem;
-    
-    &.primary {
-      background-color: #0054AD;
-      border-color: #0054AD;
-      color: #fff;
-    }
-    
-    &[disabled] {
-      opacity: 0.5;
-    }
-  }
-  
   textarea,
   input[type] {
     padding: 9px 8px;
@@ -168,10 +150,6 @@ export const FormContainer = styled.form`
     
     &.left {
       text-align: left;
-    }
-    
-    button {
-      margin-right: 10px;
     }
     
     *:last-child {
