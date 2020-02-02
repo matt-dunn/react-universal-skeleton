@@ -18,8 +18,8 @@ import {withWireFrameAnnotation} from "components/Wireframe";
 
 export type ListProps = {
     items: ExampleList & DecoratedWithStatus;
-    onExampleGetList: ExampleGetList;
-    onExampleEditItem: ExampleEditItem;
+    exampleGetList: ExampleGetList;
+    exampleEditItem: ExampleEditItem;
     isShown?: boolean;
     activePage?: number;
     children?: ({item, disabled}: {item: ExampleItem; disabled: boolean}) => ReactElement;
@@ -87,13 +87,13 @@ const WFPagination = withWireFrameAnnotation(Pagination, {
     description: <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam iaculis convallis ante, ac porttitor eros hendrerit non. Ut a hendrerit ligula. Praesent vestibulum, dui venenatis convallis condimentum, lorem magna rutrum erat, eget convallis odio purus sed ex. Suspendisse congue metus ac blandit vehicula. Suspendisse non elementum purus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
 });
 
-const List = ({isShown = true, items, onExampleGetList, onExampleEditItem, activePage, children, ...props}: ListProps) => {
+const List = ({isShown = true, items, exampleGetList, exampleEditItem, activePage, children, ...props}: ListProps) => {
     const {processing, hasError, error, outstandingTransactionCount} = getStatus(items);
 
     usePerformAction(
         useCallback(() => {
-            // onExampleGetList(0, 2);
-            return onExampleGetList(activePage, MAX_ITEMS);
+            // exampleGetList(0, 2);
+            return exampleGetList(activePage, MAX_ITEMS);
                 // .then(e => {
                 //     console.log("DONE", e);
                 //     return e;
@@ -102,11 +102,11 @@ const List = ({isShown = true, items, onExampleGetList, onExampleEditItem, activ
                 //     console.log("ERROR", ex.message);
                 //     throw ex;
                 // });
-        }, [onExampleGetList, activePage]),
+        }, [exampleGetList, activePage]),
         useCallback(() => isShown, [isShown])
     );
 
-    useWhatChanged(List, { activePage, isShown, items, onExampleGetList, onExampleEditItem, children, usePerformAction, ...props });
+    useWhatChanged(List, { activePage, isShown, items, exampleGetList, exampleEditItem, children, usePerformAction, ...props });
 
     return (
         <ListContainer>
@@ -128,7 +128,7 @@ const List = ({isShown = true, items, onExampleGetList, onExampleEditItem, activ
                                 <Item
                                     item={item}
                                     disabled={processing}
-                                    onChange={onExampleEditItem}
+                                    onChange={exampleEditItem}
                                 />
                                 }
                             </ListItem>

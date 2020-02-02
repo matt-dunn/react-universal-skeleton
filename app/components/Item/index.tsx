@@ -14,7 +14,7 @@ import {withWireFrameAnnotation} from "components/Wireframe";
 
 export type ItemProps = {
     item?: ExampleItem & DecoratedWithStatus;
-    onExampleGetItem: ExampleGetItem;
+    exampleGetItem: ExampleGetItem;
     className?: string;
     isShown?: boolean;
 };
@@ -35,15 +35,15 @@ const ItemContainer = styled.div<{processing?: boolean}>`
 const PlaceHolderListItem = PlaceHolderItem(styled.div`color:#ddd`);
 
 
-const Item = ({className, isShown = true, item, onExampleGetItem, ...props}: ItemProps) => {
+const Item = ({className, isShown = true, item, exampleGetItem, ...props}: ItemProps) => {
     const {complete, processing, hasError, error} = getStatus(item);
 
-    useWhatChanged(Item, { className, isShown, item, onExampleGetItem, ...props });
+    useWhatChanged(Item, { className, isShown, item, exampleGetItem, ...props });
 
     const itemId = item && item.id;
 
     usePerformAction(
-        onExampleGetItem,
+        exampleGetItem,
         useCallback(() => isShown && !itemId, [isShown, itemId])
     );
 

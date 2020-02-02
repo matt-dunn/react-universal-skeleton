@@ -28,9 +28,9 @@ import useWhatChanged from "components/whatChanged/useWhatChanged";
 export type DataProps = {
     items: ExampleList;
     item?: ExampleItem & DecoratedWithStatus;
-    onExampleGetList: ExampleGetList;
-    onExampleGetItem: ExampleGetItem;
-    onExampleEditItem: ExampleEditItem;
+    exampleGetList: ExampleGetList;
+    exampleGetItem: ExampleGetItem;
+    exampleEditItem: ExampleEditItem;
     notify: Notify;
 };
 
@@ -73,23 +73,23 @@ const WAModalSubmit = withWireFrameAnnotation(ButtonSimplePrimary, {
     description: <div>Only enabled once the data is available.</div>
 });
 
-const Data = ({notify, items, item, onExampleGetList, onExampleGetItem, onExampleEditItem}: DataProps) => {
+const Data = ({notify, items, item, exampleGetList, exampleGetItem, exampleEditItem}: DataProps) => {
     const { page } = useParams();
 
     const renderListItem = useCallback(({item, disabled}) => {
         // return <div>ITEM - {item.name}</div>
-        return <DataListItem item={item} disabled={disabled} onChange={onExampleEditItem} type="primary" isImportant={importantIds.indexOf(item.id) !== -1}/>;
-    }, [onExampleEditItem]);
+        return <DataListItem item={item} disabled={disabled} onChange={exampleEditItem} type="primary" isImportant={importantIds.indexOf(item.id) !== -1}/>;
+    }, [exampleEditItem]);
 
-    const renderItem = useCallback(({ isVisible }) => <Item isShown={isVisible} item={item} onExampleGetItem={onExampleGetItem}/>, [item, onExampleGetItem]);
+    const renderItem = useCallback(({ isVisible }) => <Item isShown={isVisible} item={item} exampleGetItem={exampleGetItem}/>, [item, exampleGetItem]);
 
-    const [modal, open, close] = useModal<Pick<DataProps, "item" | "onExampleGetItem">>({item, onExampleGetItem});
+    const [modal, open, close] = useModal<Pick<DataProps, "item" | "exampleGetItem">>({item, exampleGetItem});
 
     const openTest1 = () => {
-        open(({item, onExampleGetItem}) => {
+        open(({item, exampleGetItem}) => {
             console.log("RENDER MODAL CHILDREN", item);
             return (
-                <Item isShown={true} item={item} onExampleGetItem={onExampleGetItem}/>
+                <Item isShown={true} item={item} exampleGetItem={exampleGetItem}/>
             );
         })
             .then(() => {
@@ -99,7 +99,7 @@ const Data = ({notify, items, item, onExampleGetList, onExampleGetItem, onExampl
 
     const openTest2 = () => {
         open(
-            ({item, onExampleGetItem}) => {
+            ({item, exampleGetItem}) => {
                 const {complete} = getStatus(item);
                 const submit = () => {
                     notify({message: "Submit..."});
@@ -115,7 +115,7 @@ const Data = ({notify, items, item, onExampleGetList, onExampleGetItem, onExampl
                                 Focusable element
                             </WAModalButton>
                         </address>
-                        <Item isShown={true} item={item} onExampleGetItem={onExampleGetItem}/>
+                        <Item isShown={true} item={item} exampleGetItem={exampleGetItem}/>
                         <ModalFooter>
                             <ButtonSimple
                                 onClick={close}
@@ -142,7 +142,7 @@ const Data = ({notify, items, item, onExampleGetList, onExampleGetItem, onExampl
             });
     };
 
-    useWhatChanged(Data, { modal, open, close, items, item, onExampleGetList, onExampleGetItem, onExampleEditItem, renderListItem, page});
+    useWhatChanged(Data, { modal, open, close, items, item, exampleGetList, exampleGetItem, exampleEditItem, renderListItem, page});
 
     return (
         <Page>
@@ -172,16 +172,16 @@ const Data = ({notify, items, item, onExampleGetList, onExampleGetItem, onExampl
             {modal()}
 
             <AboveTheFold>
-                {/*<List items={items} onExampleGetList={onExampleGetList} onExampleEditItem={onExampleEditItem} activePage={parseInt(page || "0", 10)}>*/}
+                {/*<List items={items} exampleGetList={exampleGetList} exampleEditItem={exampleEditItem} activePage={parseInt(page || "0", 10)}>*/}
                 {/*    /!*{(item: ExampleItemState) => {*!/*/}
                 {/*    /!*    return <div>ITEM - {item.name}</div>*!/*/}
                 {/*    /!*}}*!/*/}
                 {/*</List>*/}
                 {/*<TrackVisibility once={true} partialVisibility={true}>*/}
-                {/*    {({ isVisible }) => <List isShown={isVisible} items={items} onExampleGetList={onExampleGetList} onExampleEditItem={onExampleEditItem}/>}*/}
+                {/*    {({ isVisible }) => <List isShown={isVisible} items={items} exampleGetList={exampleGetList} exampleEditItem={exampleEditItem}/>}*/}
                 {/*</TrackVisibility>*/}
 
-                <List items={items} onExampleGetList={onExampleGetList} onExampleEditItem={onExampleEditItem} activePage={parseInt(page || "0", 10)}>
+                <List items={items} exampleGetList={exampleGetList} exampleEditItem={exampleEditItem} activePage={parseInt(page || "0", 10)}>
                     {renderListItem}
                 </List>
 
@@ -191,17 +191,17 @@ const Data = ({notify, items, item, onExampleGetList, onExampleGetItem, onExampl
 
             {/*<TrackVisibility once={true} partialVisibility={true}>*/}
             {/*    {({ isVisible }) =>*/}
-            {/*        <List isShown={isVisible} items={items} onExampleGetList={onExampleGetList} onExampleEditItem={onExampleEditItem} activePage={parseInt(page || "0", 10)}>*/}
+            {/*        <List isShown={isVisible} items={items} exampleGetList={exampleGetList} exampleEditItem={exampleEditItem} activePage={parseInt(page || "0", 10)}>*/}
             {/*            {renderListItem}*/}
             {/*        </List>*/}
             {/*    }*/}
             {/*</TrackVisibility>*/}
 
             {/*<TrackVisibility once={true} partialVisibility={true}>*/}
-            {/*    {({ isVisible }) => items && items[0] && items[0].id && <EditItem item={items[0]} onChange={onExampleEditItem}/>}*/}
+            {/*    {({ isVisible }) => items && items[0] && items[0].id && <EditItem item={items[0]} onChange={exampleEditItem}/>}*/}
             {/*</TrackVisibility>*/}
 
-            {items && items[0] && items[0].id && <DataItem item={items[0]} onChange={onExampleEditItem}/>}
+            {items && items[0] && items[0].id && <DataItem item={items[0]} onChange={exampleEditItem}/>}
 
             <div style={{height: "110vh"}}/>
 
@@ -214,22 +214,21 @@ const Data = ({notify, items, item, onExampleGetList, onExampleGetItem, onExampl
     );
 };
 
-const mapStateToProps = (state: AppState) => {
-    const item = state.example.item;
-    const items = state.example.items;
-    return { item, items };
-};
+const mapStateToProps = ({example: {item, items}}: AppState) => ({
+    item,
+    items
+});
 
 const mapDispatchToProps = (dispatch: Dispatch<actions.RootActions>) => {
 
-    const onExampleGetList: ExampleGetList = (page, count): any => dispatch(actions.exampleActions.exampleGetList({page, count}));
-    const onExampleGetItem: ExampleGetItem = (): any => dispatch(actions.exampleActions.exampleGetItem());
-    const onExampleEditItem: ExampleEditItem = (item: ExampleItem): any => dispatch(actions.exampleActions.exampleEditItem(item));
+    const exampleGetList: ExampleGetList = (page, count): any => dispatch(actions.exampleActions.exampleGetList({page, count}));
+    const exampleGetItem: ExampleGetItem = (): any => dispatch(actions.exampleActions.exampleGetItem());
+    const exampleEditItem: ExampleEditItem = (item: ExampleItem): any => dispatch(actions.exampleActions.exampleEditItem(item));
 
     return {
-        onExampleGetList,
-        onExampleGetItem,
-        onExampleEditItem,
+        exampleGetList,
+        exampleGetItem,
+        exampleEditItem,
         notify: (notification: Notification) => dispatch(notifyAction(notification))
     };
 };

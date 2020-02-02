@@ -12,14 +12,14 @@ import {AuthState} from "../reducers/auth";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
-export type LoginProps = { auth: AuthState; onLogin: (username: string, password: string) => any };
+export type LoginProps = { auth: AuthState; login: (username: string, password: string) => any };
 
-const Login = ({auth, onLogin}: LoginProps, ...props: any[]) => {
+const Login = ({auth, login}: LoginProps, ...props: any[]) => {
     const {from} = useParams() || "/";
     const history = useHistory();
     const {processing} = getStatus(auth.authenticatedUser);
 
-    useWhatChanged(Login, { auth, onLogin, ...props });
+    useWhatChanged(Login, { auth, login, ...props });
 
     return (
         <Page>
@@ -28,7 +28,7 @@ const Login = ({auth, onLogin}: LoginProps, ...props: any[]) => {
             <button
                 disabled={processing}
                 onClick={() => {
-                    onLogin("clem@demo.com", "xxx")
+                    login("clem@demo.com", "xxx")
                         .then(() => {
                             history.replace((from && decodeURIComponent(from)) || "/");
                         });
@@ -43,7 +43,7 @@ const Login = ({auth, onLogin}: LoginProps, ...props: any[]) => {
 const mapStateToProps = ({auth}: AppState) => ({auth});
 
 const mapDispatchToProps = (dispatch: Dispatch<actions.RootActions>) => ({
-    onLogin: (username: string, password: string): any => dispatch(actions.authActions.login({username, password}))
+    login: (username: string, password: string): any => dispatch(actions.authActions.login({username, password}))
 });
 
 const container = connect(
