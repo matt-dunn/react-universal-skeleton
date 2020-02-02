@@ -12,7 +12,7 @@ import {AboveTheFold, ClientOnly} from "components/actions";
 import {ModalFooter, ModalTitle, useModal} from "components/Modal";
 import {Button, ButtonSimple, ButtonSimplePrimary} from "components/Buttons";
 import {withWireFrameAnnotation} from "components/Wireframe";
-import {Notify, Notification, notifyAction} from "components/notification";
+import {Notify, notifyAction} from "components/notification";
 
 import List from "app/components/List";
 import Item from "app/components/Item";
@@ -214,28 +214,22 @@ const Data = ({notify, items, item, exampleGetList, exampleGetItem, exampleEditI
     );
 };
 
-const mapStateToProps = ({example: {item, items}}: AppState) => ({
-    item,
-    items
-});
-
-const mapDispatchToProps = (dispatch: Dispatch<actions.RootActions>) => {
-
-    const exampleGetList: ExampleGetList = (page, count): any => dispatch(actions.exampleActions.exampleGetList({page, count}));
-    const exampleGetItem: ExampleGetItem = (): any => dispatch(actions.exampleActions.exampleGetItem());
-    const exampleEditItem: ExampleEditItem = (item: ExampleItem): any => dispatch(actions.exampleActions.exampleEditItem(item));
-
-    return {
-        exampleGetList,
-        exampleGetItem,
-        exampleEditItem,
-        notify: (notification: Notification) => dispatch(notifyAction(notification))
-    };
-};
-
 const container = connect(
-    mapStateToProps,
-    mapDispatchToProps
+    ({example: {item, items}}: AppState) => ({
+        item,
+        items
+    }),
+    (dispatch: Dispatch<actions.RootActions>) => ({
+        exampleGetList: (page, count): any => dispatch(actions.exampleActions.exampleGetList({page, count})),
+        exampleGetItem: (): any => dispatch(actions.exampleActions.exampleGetItem()),
+        exampleEditItem: (item): any => dispatch(actions.exampleActions.exampleEditItem(item)),
+        notify: (notification) => dispatch(notifyAction(notification))
+    } as {
+        exampleGetList: ExampleGetList;
+        exampleGetItem: ExampleGetItem;
+        exampleEditItem: ExampleEditItem;
+        notify: Notify;
+    })
 )(Data);
 
 export default container;
