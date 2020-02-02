@@ -218,18 +218,13 @@ const container = connect(
     ({example: {item, items}}: AppState) => ({
         item,
         items
-    }),
+    } as DataProps),
     (dispatch: Dispatch<actions.RootActions>) => ({
         exampleGetList: (page, count): any => dispatch(actions.exampleActions.exampleGetList({page, count})),
         exampleGetItem: (): any => dispatch(actions.exampleActions.exampleGetItem()),
         exampleEditItem: (item): any => dispatch(actions.exampleActions.exampleEditItem(item)),
         notify: (notification) => dispatch(notifyAction(notification))
-    } as {
-        exampleGetList: ExampleGetList;
-        exampleGetItem: ExampleGetItem;
-        exampleEditItem: ExampleEditItem;
-        notify: Notify;
-    })
+    } as Partial<DataProps>)
 )(Data);
 
 export default container;

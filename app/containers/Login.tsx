@@ -13,7 +13,10 @@ import {Login} from "../components/api";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
-export type LoginProps = { auth: AuthState; login: (username: string, password: string) => any };
+export type LoginProps = {
+    auth: AuthState;
+    login: Login;
+};
 
 const LoginContainer = ({auth, login}: LoginProps, ...props: any[]) => {
     const {from} = useParams() || "/";
@@ -45,9 +48,7 @@ const container = connect(
     ({auth}: AppState) => ({auth}),
     (dispatch: Dispatch<actions.RootActions>) => ({
         login: (username, password): any => dispatch(actions.authActions.login({username, password}))
-    } as {
-        login: Login;
-    })
+    } as LoginProps)
 )(LoginContainer);
 
 export default container;
