@@ -61,7 +61,7 @@ const Header = () => {
     return (
         <Container>
             <Brand>
-                Universal App Example
+                Universal Skeleton Stack
                 {authenticatedUser &&
                     <AuthenticatedUser>
                         {authenticatedUser.name}
