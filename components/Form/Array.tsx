@@ -31,6 +31,7 @@ function Array<T, P, S>({field, path, children, className}: ArrayProps<T, P, S>)
             render={arrayHelpers => {
                 const AddOption = ((!max || itemsCount < max) && (
                     <button
+                        className="btn"
                         disabled={isSubmitting}
                         name="@@ADD_ITEM"
                         value={path}
@@ -61,6 +62,7 @@ function Array<T, P, S>({field, path, children, className}: ArrayProps<T, P, S>)
                             const itemFullPath = `${path}.${index}`;
                             const RemoveOption = (itemsCount > min && (
                                 <button
+                                    className="btn"
                                     disabled={isSubmitting}
                                     name="@@REMOVE_ITEM"
                                     value={itemFullPath}
@@ -76,6 +78,7 @@ function Array<T, P, S>({field, path, children, className}: ArrayProps<T, P, S>)
 
                             const InsertOption = ((!max || itemsCount < max) && (
                                 <button
+                                    className="btn"
                                     disabled={isSubmitting}
                                     name="@@INSERT_ITEM"
                                     value={itemFullPath}

@@ -9,7 +9,7 @@ const ButtonBase = styled.button`
     opacity: 0.5;
   }
 
-  +button {
+  ~ button {
     margin-left: 10px;
   }
 `;
