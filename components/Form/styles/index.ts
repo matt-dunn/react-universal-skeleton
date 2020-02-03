@@ -162,7 +162,7 @@ export const FormContainer = styled.form`
     }
   }
   
-  aside.options {
+  .options {
     margin: 10px 0 0 0;
     text-align: right;
     

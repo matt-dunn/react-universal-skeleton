@@ -1,5 +1,11 @@
 import styled from "@emotion/styled";
 
+export const ButtonGroup = styled.div`
+  > * ~ * {
+    margin-left: 10px;
+  }
+`;
+
 const ButtonBase = styled.button`
   &:not([disabled]) {
     cursor: pointer;
@@ -7,10 +13,6 @@ const ButtonBase = styled.button`
 
   &[disabled] {
     opacity: 0.5;
-  }
-
-  ~ button {
-    margin-left: 10px;
   }
 `;
 

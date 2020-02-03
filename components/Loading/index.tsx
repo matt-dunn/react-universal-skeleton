@@ -9,6 +9,7 @@ type Loader = {
 
 type LoadingProps = {
     children?: ReactNode | ReactNode[];
+    className?: string;
     loader?: Loader;
     loading?: boolean;
     timeout?: number;
@@ -16,9 +17,9 @@ type LoadingProps = {
     inline?: boolean;
 };
 
-const Container = styled.div<{height: number}>`
+const Container = styled.div<{minHeight: number}>`
   position: relative;
-  min-height: ${({height}) => `${height}px`};
+  min-height: ${({minHeight}) => `${minHeight}px`};
 `;
 
 const LoaderContainer = styled.div<{height: number}>`
@@ -45,7 +46,7 @@ const LoaderContainerInline = styled.span`
   line-height: 1;
 `;
 
-const Loading = ({children, loading = true, loader, timeout = 500, height = 50, inline = false}: LoadingProps) => {
+const Loading = ({children, className, loading = true, loader, timeout = 500, height = 50, inline = false}: LoadingProps) => {
     const [show, setShow] = useState(false);
     const t = useRef<number>();
 
@@ -66,14 +67,14 @@ const Loading = ({children, loading = true, loader, timeout = 500, height = 50, 
 
     if (inline) {
         return (
-            <ContainerInline>
+            <ContainerInline className={className}>
                 {children}
                 {show && loading && <LoaderContainerInline>{LoadingLoader}</LoaderContainerInline>}
             </ContainerInline>
         );
     } else {
         return (
-            <Container height={height}>
+            <Container minHeight={height} className={className}>
                 {children}
                 {show && loading && <LoaderContainer height={height}>{LoadingLoader}</LoaderContainer>}
             </Container>

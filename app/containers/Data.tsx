@@ -9,7 +9,7 @@ import { useParams} from "react-router";
 import {DecoratedWithStatus, getStatus} from "components/state-mutate-with-status";
 import {AboveTheFold, ClientOnly} from "components/actions";
 import {ModalFooter, ModalTitle, useModal} from "components/Modal";
-import {Button, ButtonSimple, ButtonSimplePrimary} from "components/Buttons";
+import {Button, ButtonGroup, ButtonSimple, ButtonSimplePrimary} from "components/Buttons";
 import {withWireFrameAnnotation} from "components/Wireframe";
 import {Notify, notifyAction} from "components/notification";
 
@@ -37,7 +37,7 @@ const Title = styled.h2`
     color: #ccc;
 `;
 
-const ModelOptions = styled.div`
+const ModelOptions = styled(ButtonGroup)`
   margin: 10px 0 0 0;
 `;
 
@@ -116,17 +116,19 @@ const Data = ({notify, items, item, exampleGetList, exampleGetItem, exampleEditI
                         </address>
                         <Item isShown={true} item={item} exampleGetItem={exampleGetItem}/>
                         <ModalFooter>
-                            <ButtonSimple
-                                onClick={close}
-                            >
-                                Cancel
-                            </ButtonSimple>
-                            <WAModalSubmit
-                                onClick={submit}
-                                disabled={!item || !complete}
-                            >
-                                Submit
-                            </WAModalSubmit>
+                            <ButtonGroup>
+                                <ButtonSimple
+                                    onClick={close}
+                                >
+                                    Cancel
+                                </ButtonSimple>
+                                <WAModalSubmit
+                                    onClick={submit}
+                                    disabled={!item || !complete}
+                                >
+                                    Submit
+                                </WAModalSubmit>
+                            </ButtonGroup>
                         </ModalFooter>
                         <ModalTitle hasClose={true}>Test Modal With Data</ModalTitle>
                         More content...

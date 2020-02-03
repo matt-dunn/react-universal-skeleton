@@ -21,10 +21,14 @@ export type ItemProps = {
 
 const ItemContainer = styled.div<{processing?: boolean}>`
     max-width: 400px;
+    min-height: 80px;
     border: 1px solid #ccc;
     margin: 10px auto;
+    display: flex;
+    flex-direction: column;
 
     .item {
+      flex-grow: 1;
       ${({processing}) => processing && css`
         background-color: rgba(210,210,210,0.1);
       `};
@@ -53,11 +57,11 @@ const Item = ({className, isShown = true, item, exampleGetItem, ...props}: ItemP
                 [{processing ? "UPDATING": "DONE"}]
                 {hasError && `Error occurred: ${error && error.message}`}
             </div>
-            <Loading loading={processing}>
+            <Loading loading={processing} className="item">
                 {!complete ?
-                    <PlaceHolderListItem className="item"/>
+                    <PlaceHolderListItem/>
                     :
-                    <div className="item">{item && item.name}</div>
+                    <div>{item && item.name}</div>
                 }
             </Loading>
         </ItemContainer>

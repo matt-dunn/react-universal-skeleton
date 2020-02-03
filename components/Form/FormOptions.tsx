@@ -1,6 +1,6 @@
 import React from "react";
 import {useFormikContext} from "formik";
-import {ButtonPrimary, ButtonSimple} from "components/Buttons";
+import {ButtonGroup, ButtonPrimary, ButtonSimple} from "components/Buttons";
 
 import {typedMemo} from "./types";
 
@@ -15,7 +15,7 @@ function FormOptions<T>({i18n}: FormOptionsProps) {
     const {handleReset, dirty, isSubmitting, isValid, isInitialValid} = useFormikContext<T>();
 
     return (
-        <aside className="options main">
+        <ButtonGroup className="options main">
             <ButtonSimple
                 type="button"
                 onClick={handleReset}
@@ -31,7 +31,7 @@ function FormOptions<T>({i18n}: FormOptionsProps) {
             >
                 {(i18n && i18n.submit) || "Submit"} {(isValid && isInitialValid) && "✔"}
             </ButtonPrimary>
-        </aside>
+        </ButtonGroup>
     );
 }
 
