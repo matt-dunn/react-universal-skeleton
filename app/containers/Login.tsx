@@ -1,6 +1,5 @@
 import React from "react";
 import { useParams, useHistory } from "react-router-dom";
-import {Dispatch} from "redux";
 import {connect} from "react-redux";
 import styled from "@emotion/styled";
 
@@ -35,7 +34,7 @@ const LoginContainer = ({auth, login}: LoginProps, ...props: any[]) => {
     return (
         <Page>
             <Title>
-                Login
+                Simple Login
             </Title>
 
             <ButtonPrimary
@@ -54,10 +53,12 @@ const LoginContainer = ({auth, login}: LoginProps, ...props: any[]) => {
 };
 
 const container = connect(
-    ({auth}: AppState) => ({auth}),
-    (dispatch: Dispatch<actions.RootActions>) => ({
-        login: (username, password): any => dispatch(actions.authActions.login({username, password}))
-    } as LoginProps)
+    ({auth}: AppState) => ({
+        auth
+    } as LoginProps),
+    {
+        login: actions.authActions.login
+    }
 )(LoginContainer);
 
 export default container;

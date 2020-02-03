@@ -3,7 +3,6 @@ import {Helmet} from "react-helmet-async";
 import styled from "@emotion/styled";
 import {css} from "@emotion/core";
 import { connect } from "react-redux";
-import { Dispatch } from "redux";
 import TrackVisibility from "react-on-screen";
 import { useParams} from "react-router";
 
@@ -219,12 +218,12 @@ const container = connect(
         item,
         items
     } as DataProps),
-    (dispatch: Dispatch<actions.RootActions>) => ({
-        exampleGetList: (page, count): any => dispatch(actions.exampleActions.exampleGetList({page, count})),
-        exampleGetItem: (): any => dispatch(actions.exampleActions.exampleGetItem()),
-        exampleEditItem: (item): any => dispatch(actions.exampleActions.exampleEditItem(item)),
-        notify: (notification) => dispatch(notifyAction(notification))
-    } as Partial<DataProps>)
+    {
+        exampleGetList: actions.exampleActions.exampleGetList,
+        exampleGetItem: actions.exampleActions.exampleGetItem,
+        exampleEditItem: actions.exampleActions.exampleEditItem,
+        notify: notifyAction
+    }
 )(Data);
 
 export default container;

@@ -9,7 +9,7 @@ import {APIPayloadCreator} from "../";
 
 const login = createAction<string, APIPayloadCreator<Promise<User>>, ActionMeta<User> & WithNotification<User>>(
     "@auth/LOGIN",
-    ({username, password}) => () => ({API: {AuthApi: {login}}}) => login(username, password)
+    (username, password) => () => ({API: {AuthApi: {login}}}) => login(username, password)
 )();
 
 export { login };
