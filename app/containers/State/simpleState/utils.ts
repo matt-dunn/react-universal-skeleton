@@ -36,6 +36,8 @@ type PayloadCreator<P = any, M = any, A extends any[] = any[]> = {
     (...args: A): P;
 }
 
+export type UnwrappedActionCreator<T> = T extends ActionCreator<infer U, any, infer A> ? (...args: A) => U : never
+
 export const createAction = <P, M, A extends any[] = any[]>(type: string, payloadCreator: PayloadCreator<P, M, A>): ActionCreator<P, M, A> => {
     const action = (...args: A): StandardAction<P, M> => ({
         type,

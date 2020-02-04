@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 
 import Page from "../../styles/Page";
 
-import {createAction, createReducer, getType, getStore, StandardAction, simplePromiseDecorator, connect, StoreProvider, logger} from "./simpleState";
+import {createAction, createReducer, getType, getStore, StandardAction, UnwrappedActionCreator, simplePromiseDecorator, connect, StoreProvider, logger} from "./simpleState";
 
 import {TestComponent} from "./TestComponent";
 
@@ -23,7 +23,7 @@ type RootState = {
 
 // - Example action creators --------------------------------------------------------------------------------------------------------------------
 
-const simpleAsyncAction = createAction(
+export const simpleAsyncAction = createAction(
     "SIMPLE_ASYNC_ACTION",
     (id: string) => new Promise<ExamplePayload>((resolve, reject) => {
         setTimeout(() => {
@@ -36,7 +36,7 @@ const simpleAsyncAction = createAction(
     })
 );
 
-const simpleSyncAction = createAction(
+export const simpleSyncAction = createAction(
     "SIMPLE_SYNC_ACTION",
     (id: string) => ({
         id,
@@ -75,8 +75,6 @@ const initialState: RootState = {};
 
 const myStore = getStore(initialState, rootReducer, [
     simplePromiseDecorator,
-    // simpleAsyncDecorator,
-    // simpleDecorator
     logger
 ]);
 
@@ -86,8 +84,8 @@ const ConnectedTestComponent = connect(
         syncData: state.someData?.syncData
     }),
     {
-        getAsyncData: simpleAsyncAction,
-        getSyncData: simpleSyncAction
+        getAsyncData: simpleAsyncAction as unknown as UnwrappedActionCreator<typeof simpleAsyncAction>,
+        getSyncData: simpleSyncAction as unknown as UnwrappedActionCreator<typeof simpleSyncAction>
     }
 )(TestComponent);
 
