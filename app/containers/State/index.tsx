@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 
 import Page from "../../styles/Page";
 
-import {createAction, createReducer, getType, getStore, StandardAction, simplePromiseDecorator, connect, StoreProvider} from "./simpleState";
+import {createAction, createReducer, getType, getStore, StandardAction, simplePromiseDecorator, connect, StoreProvider, logger} from "./simpleState";
 
 import {TestComponent} from "./TestComponent";
 
@@ -77,6 +77,7 @@ const myStore = getStore(initialState, rootReducer, [
     simplePromiseDecorator,
     // simpleAsyncDecorator,
     // simpleDecorator
+    logger
 ]);
 
 const ConnectedTestComponent = connect(

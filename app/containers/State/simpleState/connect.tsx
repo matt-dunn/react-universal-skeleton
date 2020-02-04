@@ -23,11 +23,11 @@ type MapDispatchToProps<S> = S & DispatchMap
 
 type MapDispatch<S> = MapDispatchToProps<S> | MapDispatchToPropsFunction<S>
 
-const StoreContext = React.createContext<GetStore<any, any>>({} as GetStore<any>);
-
 type DispatchMap = {
     [key: string]: (...args: any[]) => any;
 }
+
+const StoreContext = React.createContext<GetStore<any>>({} as GetStore<any>);
 
 function isMapDispatchToPropsFunction<T>(arg: any): arg is MapDispatchToPropsFunction<T> {
     return isFunction(arg);
@@ -62,10 +62,10 @@ export function connect<TOwnProps = {}, TStateProps = {}, TDispatchProps = {}, T
         useEffect(() => {
             const cb = (state: TState) => setProps(mapStateToProps(state));
 
-            store.register(cb);
+            store.subscribe(cb);
 
             return () => {
-                store.unregister(cb);
+                store.unsubscribe(cb);
             };
         }, [store]);
 
