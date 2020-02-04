@@ -27,13 +27,6 @@ export type InferableComponentEnhancerWithProps<TInjectedProps, TNeedsProps> =
 
 export type ConnectedComponent<C extends ComponentType<any>, P> = ComponentType<P>
 
-export type ErrorLike = {
-    message: string;
-    name?: string;
-    code?: string;
-    status?: number;
-}
-
 type ActionCreator<P = any, M = any, A extends any[] = any[]> = {
     (...args: A): StandardAction<P, M>;
     type: string;
@@ -42,15 +35,6 @@ type ActionCreator<P = any, M = any, A extends any[] = any[]> = {
 type PayloadCreator<P = any, M = any, A extends any[] = any[]> = {
     (...args: A): P;
 }
-
-export const errorLike = (error: ErrorLike & {[index: string]: any}): ErrorLike => {
-    const {stack, ...rest} = Object.getOwnPropertyNames(error).reduce((o: any, key: string) => { // eslint-disable-line @typescript-eslint/no-unused-vars
-        o[key] = error[key];
-        return o;
-    }, {});
-
-    return rest;
-};
 
 export const createAction = <P, M, A extends any[] = any[]>(type: string, payloadCreator: PayloadCreator<P, M, A>): ActionCreator<P, M, A> => {
     const action = (...args: A): StandardAction<P, M> => ({

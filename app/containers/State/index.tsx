@@ -84,10 +84,10 @@ const ConnectedTestComponent = connect(
         asyncData: state.someData?.asyncData,
         syncData: state.someData?.syncData
     }),
-    dispatch => ({
-        getAsyncData: (id: string) => dispatch(simpleAsyncAction(id)),
-        getSyncData: (id: string) => dispatch(simpleSyncAction(id))
-    })
+    {
+        getAsyncData: simpleAsyncAction,
+        getSyncData: simpleSyncAction
+    }
 )(TestComponent);
 
 const Title = styled.h2`

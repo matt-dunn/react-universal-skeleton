@@ -1,7 +1,7 @@
 import isPromise from "is-promise";
 
 import {Middleware} from "../getStore";
-import {errorLike, ErrorLike} from "../utils";
+import {errorLike, ErrorLike} from "components/error";
 
 const $status = Symbol("$status");
 

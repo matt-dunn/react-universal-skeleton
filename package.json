@@ -160,7 +160,7 @@
   },
   "scripts": {
     "dev:client": "cross-env PUBLIC_PATH=https://localhost:1234/ cross-env NODE_ENV=development webpack-dev-server --config ./app/webpack/client.config.js --progress",
-    "dev:server": "cross-env PUBLIC_PATH=https://localhost:1234/ cross-env PORT=12345 cross-env NODE_ENV=development babel-node --icu-data-dir=node_modules/full-icu --presets @babel/env app/webpack/index.js",
+    "dev:server": "cross-env PUBLIC_PATH=https://localhost:1234/ cross-env PORT=12345 cross-env NODE_ENV=development babel-node --max_old_space_size=4096 --icu-data-dir=node_modules/full-icu --presets @babel/env app/webpack/index.js",
     "build:client": "cross-env BABEL_ENV=client cross-env PWA=false webpack --config ./app/webpack/client.config.js",
     "build:server": "cross-env BABEL_ENV=server webpack --config ./app/webpack/server.config.js",
     "build:all": "concurrently \"yarn build:client\" \"yarn build:server\"",
