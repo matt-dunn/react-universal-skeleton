@@ -17,12 +17,8 @@ export type Dispatcher<A extends StandardAction = StandardAction> = {
     (action: A): void;
 };
 
-type MiddlewareNext<A extends StandardAction = StandardAction> = {
-    (next: Dispatcher<A>): Dispatcher<A>;
-}
-
 export type Middleware<S extends {} = {}, A extends StandardAction = StandardAction, Store extends GetStore<S, A> = GetStore<S, A>> = {
-    (store: Store): MiddlewareNext<A>;
+    (store: Store): (next: Dispatcher<A>) => Dispatcher<A>;
 }
 
 type Callback<S> = {
@@ -44,9 +40,10 @@ export type GetStore<S extends {}, A extends StandardAction = StandardAction> = 
 
 const middlewareExecutor = <S extends {}, A extends StandardAction, Store extends GetStore<S, A>>(middleware: Middleware<S, A, Store>[]) =>
     (store: Store, action: A, done: Dispatcher<A>) =>
-        [...middleware].reverse().reduce((dispatch, middleware) => {
-            return action => middleware(store)(action => dispatch(action))(action);
-        }, done)(action);
+        [...middleware].reverse().reduce((dispatch, middleware) =>
+            action => middleware(store)(action => dispatch(action))(action),
+            done
+        )(action);
 
 export const getStore = <S extends {}, A extends StandardAction, Store extends GetStore<S, A>>(initialState: S, reducers: Reducers, middleware: Middleware<S, A, Store>[] = []): Store => {
     const execMiddleware = middlewareExecutor(middleware);
