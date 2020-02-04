@@ -10,19 +10,19 @@ Example skeleton app using Webpack for build with SSR support and server side as
 - Typescript / ES6+ linting using **eslint** and plugins
 - **React** with functional components and hooks
 - Testing + coverage with junit reports using **Jest** and **Enzyme**
-- **Redux** with status decoration for async data state
+- **Redux** with status decoration for async action creators using **Redux-Saga**
 - **React router** with error hooks and auth redirection
-- Styling **SASS** / **CSS** / styled components using **Emotion** with source maps
+- Styling with **SASS** / **CSS** / styled components using **Emotion** with source maps
 - SSR
     * **@loadable** for lazy loading
     * **HTTPS**
     * **HTTP/2**
-    * statically generated and served by express
+    * Serve statically generated compressed assets if available
     * **Helmet** for securing server
     * Routing
     * Async data fetching and processing
 - PWA service worker using **workbox** for offline (configured ```passing env.PWA=true```), manifest generation using ebpack
-- Progressive enhanced schema generated forms (extending *Formik*), processed and validated (using *Yup*) on the client and server
+- Progressive enhanced schema generated forms (extending *Formik*), processed and validated on the client and server (using *Yup*)
 - i18n / l10n
     * *react-intl* with translation workflow using babel plugin
 - Responsive layouts
