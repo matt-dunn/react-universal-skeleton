@@ -13,7 +13,7 @@ type AboutProviderProps = {
 }
 
 const AuthProvider = ({children}: AboutProviderProps) => {
-    const auth = useSelector<AppState, any>(state => state && state.auth);
+    const auth = useSelector<AppState, AuthState>(state => state && state.auth);
 
     return (
         <AuthContext.Provider value={auth}>

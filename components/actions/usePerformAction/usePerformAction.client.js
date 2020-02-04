@@ -17,7 +17,7 @@ const usePerformAction = (action, test) => {
                 payload
                     .catch(ex => {
                         if (handleError && handleError(ex) === true) {   // Handled errors should not throw on client
-                            console.error(ex);
+                            // console.error(ex);
                             return;
                         }
 
