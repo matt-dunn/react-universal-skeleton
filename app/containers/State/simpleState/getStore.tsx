@@ -63,12 +63,12 @@ export const getStore = <S extends {}, A extends StandardAction, Store extends G
         dispatch: action => {
             execMiddleware(store, action, action => {
                 setState(Object.keys(reducers).reduce((state, key) => {
-                    const nextState = reducers[key](state[key], action);
+                    const nextStateSlice = reducers[key](state[key], action);
 
-                    if (nextState !== state[key]) {
+                    if (nextStateSlice !== state[key]) {
                         return {
                             ...state,
-                            [key]: nextState
+                            [key]: nextStateSlice
                         };
                     }
 

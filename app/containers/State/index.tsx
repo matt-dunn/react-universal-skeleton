@@ -10,11 +10,11 @@ import {TestComponent} from "./TestComponent";
 
 // - Example types --------------------------------------------------------------------------------------------------------------------
 
-type ExamplePayload = {id: string; data: string; timestamp: number};
+type ExampleItem = {id: string; data: string; timestamp: number};
 
 type ExampleState = {
-    asyncData?: ExamplePayload;
-    syncData?: ExamplePayload;
+    asyncData?: ExampleItem;
+    syncData?: ExampleItem;
 }
 
 type RootState = {
@@ -25,7 +25,7 @@ type RootState = {
 
 export const simpleAsyncAction = createAction(
     "SIMPLE_ASYNC_ACTION",
-    (id: string) => new Promise<ExamplePayload>((resolve, reject) => {
+    (id: string) => new Promise<ExampleItem>((resolve, reject) => {
         setTimeout(() => {
             (id === "error" && reject(new Error("Oops"))) || resolve({
                 id,
@@ -47,15 +47,15 @@ export const simpleSyncAction = createAction(
 
 // - Example reducers --------------------------------------------------------------------------------------------------------------------
 
-const simpleAsyncReducer = (state: ExampleState, {payload}: StandardAction<ExamplePayload>): ExampleState => ({
+const simpleAsyncReducer = (state: ExampleState, {payload}: StandardAction<ExampleItem>): ExampleState => ({
     ...state,
     asyncData: {
         ...state?.asyncData,
         ...payload
-    } as ExamplePayload
+    } as ExampleItem
 });
 
-const simpleSyncReducer = (state: ExampleState, {payload}: StandardAction<ExamplePayload>): ExampleState => ({
+const simpleSyncReducer = (state: ExampleState, {payload}: StandardAction<ExampleItem>): ExampleState => ({
     ...state,
     syncData: payload
 });
