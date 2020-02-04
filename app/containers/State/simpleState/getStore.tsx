@@ -55,26 +55,28 @@ export const getStore = <S extends {}, A extends StandardAction, Store extends G
 
     let state: State<S> = {...initialState};
 
+    const setState = (nextState: State<S>) => {
+        if (nextState !== state) {
+            callbacks.forEach(cb => cb(nextState as S, state as S));
+            state = nextState;
+        }
+    };
+
     const store = {
         dispatch: action => {
             execMiddleware(store, action, action => {
-                const nextState = Object.keys(reducers).reduce((state, key) => {
+                setState(Object.keys(reducers).reduce((state, key) => {
                     const nextState = reducers[key](state[key], action);
 
                     if (nextState !== state[key]) {
-                        state = {
+                        return {
                             ...state,
                             [key]: nextState
                         };
                     }
 
                     return state;
-                }, state);
-
-                if (nextState !== state) {
-                    callbacks.forEach(cb => cb(nextState as S, state as S));
-                    state = nextState;
-                }
+                }, state));
             });
 
             return action.payload;
