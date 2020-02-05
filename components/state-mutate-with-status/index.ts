@@ -2,25 +2,20 @@ import immutable from "object-path-immutable";
 import { get } from "lodash";
 import { FluxStandardAction } from "flux-standard-action";
 
-import { IStatusTransaction } from "./status";
-import {setPendingState} from "./pendingTransactionState";
+import { MetaStatus, ActionMeta, symbolStatus } from "./status";
 import {decorateStatus, getPayload, getUpdatedState} from "./utils";
 
 export type Path = ReadonlyArray<string>;
 
-export interface ActionMeta {
-  id?: string;
-  $status: IStatusTransaction;
-  seedPayload?: any;
-}
-
-export interface GetNewItemIndex<P> {
+type GetNewItemIndex<P> = {
   (array: any[], payload: P): number;
 }
 
-export interface Options<P> {
+export type Options<P> = {
   path?: Path;
   getNewItemIndex?: GetNewItemIndex<P>;
+  autoInsert?: boolean;
+  autoDelete?: boolean;
 }
 
 const updateState = <S, P>(state: S, { meta, error, payload }: FluxStandardAction<string, P, ActionMeta>, options?: Options<P>): S => {
@@ -28,33 +23,33 @@ const updateState = <S, P>(state: S, { meta, error, payload }: FluxStandardActio
 
   const {
     id: actionId,
-    seedPayload,
-    $status: status = {
+    $status: metaStatus = {
       hasError: error || false,
       error: error && payload,
-      complete: true,
+      complete: false,
       processing: false
-    } as unknown as IStatusTransaction,
+    } as MetaStatus,
   } = meta || {} as ActionMeta;
 
-  const $status = get(state, [...path, "$status"]);
+  const status = get(state, [...path, symbolStatus]);
 
-  const {updatedState , originalState, isCurrent} = getUpdatedState(
+  const {updatedState, isCurrent} = getUpdatedState(
       state,
-      getPayload(status, payload, seedPayload),
-      status,
+      getPayload(metaStatus, payload),
+      metaStatus,
       path,
       actionId,
       options
   );
 
-  setPendingState(status, originalState);
-
   return immutable.set(
       updatedState,
-      [...path, "$status"],
-      decorateStatus(status, $status, isCurrent === true)
-  ) as any;
+      [...path, symbolStatus as any],
+      decorateStatus(metaStatus, status, isCurrent === true)
+  );
 };
 
 export default updateState;
+
+export * from "./status";
+export * from "./utils";

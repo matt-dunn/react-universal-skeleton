@@ -1,63 +1,64 @@
 import React from "react";
-
 import { useParams, useHistory } from "react-router-dom";
-import {Dispatch} from "redux";
 import {connect} from "react-redux";
+import styled from "@emotion/styled";
+
+import {getStatus} from "components/state-mutate-with-status";
+import {ButtonPrimary} from "components/Buttons";
 
 import {AppState} from "../reducers";
 import * as actions from "../actions";
 import Page from "../styles/Page";
 import {AuthState} from "../reducers/auth";
-import Status from "components/state-mutate-with-status/status";
+import {Login} from "../components/api";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
-export type LoginProps = { auth: AuthState; onLogin: (username: string, password: string) => any };
+export type LoginProps = {
+    auth: AuthState;
+    login: Login;
+};
 
-const Login = ({auth, onLogin}: LoginProps, ...props: any[]) => {
+const Title = styled.h2`
+    color: #ccc;
+    margin-bottom: 20px;
+`;
+
+const LoginContainer = ({auth, login}: LoginProps, ...props: any[]) => {
     const {from} = useParams() || "/";
     const history = useHistory();
-    const {processing} = Status(auth.authenticatedUser && auth.authenticatedUser.$status);
+    const {processing} = getStatus(auth.authenticatedUser);
 
-    useWhatChanged(Login, { auth, onLogin, ...props });
+    useWhatChanged(LoginContainer, { auth, login, ...props });
 
     return (
         <Page>
-            Login
+            <Title>
+                Simple Login
+            </Title>
 
-            <button
+            <ButtonPrimary
                 disabled={processing}
                 onClick={() => {
-                    onLogin("clem@demo.com", "xxx")
+                    login("clem@demo.com", "xxx")
                         .then(() => {
-                            from && history.replace(decodeURIComponent(from));
+                            history.replace((from && decodeURIComponent(from)) || "/");
                         });
                 }}
             >
                 LOGIN
-            </button>
+            </ButtonPrimary>
         </Page>
     );
 };
 
-const mapStateToProps = (state: AppState) => {
-    const auth = state.auth;
-
-    return { auth };
-};
-
-const mapDispatchToProps = (dispatch: Dispatch<actions.RootActions>) => {
-
-    const onLogin = (username: string, password: string): any => dispatch(actions.authActions.login({username, password}));
-
-    return {
-        onLogin
-    };
-};
-
 const container = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(Login);
+    ({auth}: AppState) => ({
+        auth
+    } as LoginProps),
+    {
+        login: actions.authActions.login
+    }
+)(LoginContainer);
 
 export default container;

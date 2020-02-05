@@ -3,7 +3,8 @@ import styled from "@emotion/styled";
 
 import Loading from "components/Loading";
 
-import {DecoratedWithStatus, getStatus} from "./simpleState";
+import {DecoratedWithStatus, getStatus, UnwrappedActionCreator} from "./simpleState";
+import {simpleAsyncAction, simpleSyncAction} from "./index";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
@@ -36,14 +37,20 @@ type ExampleData = {id: string; data: string; timestamp: number};
 export type TestComponentProps = {
     asyncData?: ExampleData & DecoratedWithStatus;
     syncData?: ExampleData;
-    getAsyncData: (id: string) => any;
-    getSyncData: (id: string) => any;
+    getAsyncData: UnwrappedActionCreator<typeof simpleAsyncAction>;
+    getSyncData: UnwrappedActionCreator<typeof simpleSyncAction>;
     description?: ReactNode;
 }
 
 export const TestComponent = ({asyncData, syncData, getAsyncData, getSyncData, description}: TestComponentProps) => {
-    const handleGetAsyncData = () => getAsyncData("1234");
-    const handleGetAsyncDataWithError = () => getAsyncData("error");
+    const handleGetAsyncData = () => getAsyncData("1234")
+        .then(p => console.error("DONE", p))
+        .catch(ex => console.error("ERROR", ex));
+
+    const handleGetAsyncDataWithError = () => getAsyncData("error")
+        .then(p => console.error("DONE", p))
+        .catch(ex => console.error("ERROR", ex));
+
     const handleGetSyncData = () => getSyncData("5678");
 
     useWhatChanged(TestComponent, {asyncData, syncData, getAsyncData, getSyncData});

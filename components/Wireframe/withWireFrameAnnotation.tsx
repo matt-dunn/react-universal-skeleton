@@ -1,4 +1,4 @@
-import React, {ComponentType, useContext, useEffect, useState} from "react";
+import React, {ComponentType, useCallback, useContext, useEffect, useState} from "react";
 import styled from "@emotion/styled";
 
 import {WireFrameComponentOptions} from "./api";
@@ -16,7 +16,7 @@ const Wrapper = styled.span`
   }
 `;
 
-const Identifier = styled(IdentifierBase)`
+const IdentifierContainer = styled(IdentifierBase)`
   position: absolute;
   top: -1em;
   left: -1em;
@@ -25,28 +25,37 @@ const Identifier = styled(IdentifierBase)`
   transition: opacity 250ms, visibility 250ms;
 `;
 
-export const withWireFrameAnnotation = function<T>(WrappedComponent: ComponentType<T> | string, options: WireFrameComponentOptions) {
+const CreateIdentifier = (Component: ComponentType<any>, options: WireFrameComponentOptions) => function Identifier() {
+    const {register, unregister} = useContext(WireFrameAnnotationContext);
+    const [annotation, setAnnotation] = useState();
+
+    useEffect(() => {
+        setAnnotation(register(Component, options));
+
+        return () => {
+            unregister(Component);
+        };
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+    return (
+        annotation && <IdentifierContainer data-annotation-identifier>{annotation.id}</IdentifierContainer>
+    ) || null;
+};
+
+export const withWireFrameAnnotation = function<P>(WrappedComponent: ComponentType<P> | string, options: WireFrameComponentOptions) {
     const Component = (props: any) => <WrappedComponent {...props}/>;
+    const ComponentIdentifier = CreateIdentifier(Component, options);
 
-    return function WireFrameAnnotation(props: T) {
-        const {register, unregister, highlightNote} = useContext(WireFrameAnnotationContext);
-        const [annotation, setAnnotation] = useState();
+    return function WireFrameAnnotation(props: P) {
+        const {highlightNote} = useContext(WireFrameAnnotationContext);
 
-        useEffect(() => {
-            setAnnotation(register(Component, options));
-
-            return () => {
-                unregister(Component);
-            };
-        }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-        const handleHighlightNote = () => {
+        const handleHighlightNote = useCallback(() => {
             highlightNote(Component);
-        };
+        }, [highlightNote]);
 
-        const handleHighlightNoteReset = () => {
+        const handleHighlightNoteReset = useCallback(() => {
             highlightNote(undefined);
-        };
+        }, [highlightNote]);
 
         return (
             <Wrapper
@@ -54,7 +63,7 @@ export const withWireFrameAnnotation = function<T>(WrappedComponent: ComponentTy
                 onMouseOver={handleHighlightNote}
                 onMouseLeave={handleHighlightNoteReset}
             >
-                {annotation && <Identifier data-annotation-identifier>{annotation.id}</Identifier>}
+                <ComponentIdentifier/>
                 <Component {...props}/>
             </Wrapper>
         );

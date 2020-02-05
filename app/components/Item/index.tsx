@@ -4,28 +4,31 @@ import React, {useCallback} from "react";
 
 import Loading from "components/Loading";
 import {usePerformAction} from "components/actions";
-import Status, {IStatus} from "components/state-mutate-with-status/status";
+import {getStatus, DecoratedWithStatus} from "components/state-mutate-with-status";
 import PlaceHolderItem from "app/components/Placeholder/Item";
 
-import {ExampleItemState} from "../../reducers/__dummy__/example";
-import {ExampleGetItem} from "../api/__dummy__/example";
+import {ExampleGetItem, ExampleItem} from "../api";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 import {withWireFrameAnnotation} from "components/Wireframe";
 
 export type ItemProps = {
-    item?: ExampleItemState;
-    onExampleGetItem: ExampleGetItem;
+    item?: ExampleItem & DecoratedWithStatus;
+    exampleGetItem: ExampleGetItem;
     className?: string;
     isShown?: boolean;
 };
 
 const ItemContainer = styled.div<{processing?: boolean}>`
     max-width: 400px;
+    min-height: 80px;
     border: 1px solid #ccc;
     margin: 10px auto;
+    display: flex;
+    flex-direction: column;
 
     .item {
+      flex-grow: 1;
       ${({processing}) => processing && css`
         background-color: rgba(210,210,210,0.1);
       `};
@@ -36,15 +39,15 @@ const ItemContainer = styled.div<{processing?: boolean}>`
 const PlaceHolderListItem = PlaceHolderItem(styled.div`color:#ddd`);
 
 
-const Item = ({className, isShown = true, item, onExampleGetItem, ...props}: ItemProps) => {
-    const {complete, processing, hasError, error} = (item && Status(item.$status)) || {} as IStatus;
+const Item = ({className, isShown = true, item, exampleGetItem, ...props}: ItemProps) => {
+    const {complete, processing, hasError, error} = getStatus(item);
 
-    useWhatChanged(Item, { className, isShown, item, onExampleGetItem, ...props });
+    useWhatChanged(Item, { className, isShown, item, exampleGetItem, ...props });
 
     const itemId = item && item.id;
 
     usePerformAction(
-        onExampleGetItem,
+        exampleGetItem,
         useCallback(() => isShown && !itemId, [isShown, itemId])
     );
 
@@ -54,11 +57,11 @@ const Item = ({className, isShown = true, item, onExampleGetItem, ...props}: Ite
                 [{processing ? "UPDATING": "DONE"}]
                 {hasError && `Error occurred: ${error && error.message}`}
             </div>
-            <Loading loading={processing}>
+            <Loading loading={processing} className="item">
                 {!complete ?
-                    <PlaceHolderListItem className="item"/>
+                    <PlaceHolderListItem/>
                     :
-                    <div className="item">{item && item.name}</div>
+                    <div>{item && item.name}</div>
                 }
             </Loading>
         </ItemContainer>

@@ -35,7 +35,7 @@ export const FormContainer = styled.form`
     margin: 0 0 10px 0;
   }
   
-  button {
+  button.btn {
     font-size: inherit;
     padding: .375rem .75rem;
     border: 1px solid #ccc;
@@ -162,7 +162,7 @@ export const FormContainer = styled.form`
     }
   }
   
-  aside.options {
+  .options {
     margin: 10px 0 0 0;
     text-align: right;
     
@@ -170,7 +170,7 @@ export const FormContainer = styled.form`
       text-align: left;
     }
     
-    button {
+    button.btn {
       margin-right: 10px;
     }
     

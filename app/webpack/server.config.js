@@ -31,7 +31,7 @@ module.exports = merge(
     partialAssets(metadata),
     partialCode(metadata),
     {
-        entry: "./server/index.js",
+        entry: "./server/index",
         target: "node",
         externals: [nodeExternals()],
         output: {

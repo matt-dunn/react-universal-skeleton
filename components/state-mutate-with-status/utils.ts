@@ -1,44 +1,68 @@
 import isEqual from "lodash/isEqual";
-import { get } from "lodash";
+import { get, isObject } from "lodash";
 import immutable from "object-path-immutable";
 
-import Status, {IStatus, IStatusTransaction, symbolActiveTransactions} from "./status";
-import {getPendingState} from "./pendingTransactionState";
-import {Options, Path} from "./index";
+import {Status, MetaStatus, symbolActiveTransactions, symbolStatus} from "./status";
+import {Options, Path} from "./";
 
-export type UpdatedStatus<S, P> = {
+type UpdatedStatus<S, P> = {
     updatedState: S;
     originalState?: P | null;
     isCurrent?: boolean;
 }
 
-export const decorateStatus = (status: IStatusTransaction, $status: IStatus = {} as IStatus, isCurrent = true): IStatus => {
-    const activeTransactions = { ...$status[symbolActiveTransactions] };
+export const decorateStatus = (metaStatus: MetaStatus, status: Status = {} as Status, isCurrent = true): Status => {
+    const activeTransactions = { ...status[symbolActiveTransactions] };
 
-    if (status.processing) {
-        activeTransactions[status.transactionId] = isCurrent;
+    if (metaStatus.processing) {
+        activeTransactions[metaStatus.transactionId] = isCurrent;
     } else {
-        delete activeTransactions[status.transactionId];
+        delete activeTransactions[metaStatus.transactionId];
     }
 
     const hasActiveTransactions = activeTransactions && Object.keys(activeTransactions).length > 0;
 
     const updatedStatus = Status({
-        ...status,
-        complete: hasActiveTransactions ? false : status.complete,
-        processing: activeTransactions[status.transactionId] === true,
+        ...metaStatus,
+        complete: isCurrent ? !hasActiveTransactions : true,
+        processing: activeTransactions[metaStatus.transactionId] === true,
         [symbolActiveTransactions]: activeTransactions,
     });
 
-    if (isEqual(updatedStatus, $status)) {
-        return $status;
+    if (isEqual(updatedStatus, status)) {
+        return status;
     }
 
     return updatedStatus;
 };
 
+const clone = (o: any) => {
+    if (Array.isArray(o)) {
+        return [...o];
+    } else if (isObject(o)) {
+        return {...o};
+    }
+    return o;
+};
+
+const getSymbolName = (symbol: symbol): string => {
+    return `$$${symbol.toString()}`;
+};
+
+const convertStatusSymbolToString = (o: any) => {
+    if (o && o[symbolStatus]) {
+        const c = clone(o);
+        c[getSymbolName(symbolStatus)] = o[symbolStatus];
+        delete c[symbolStatus];
+        return c;
+    }
+    return o;
+};
+
 export const serialize = (o: any): string => {
-    return o && JSON.stringify(o, (key: string, value: any) => {
+    return o && JSON.stringify(o, (key: string, v: any) => {
+        const value = convertStatusSymbolToString(v);
+
         if (Array.isArray(value)) {
             const keys = Object.keys(value);
 
@@ -61,12 +85,23 @@ export const serialize = (o: any): string => {
     });
 };
 
+const convertStatusSymbolToSymbol = (o: any) => {
+    if (o && o[getSymbolName(symbolStatus)]) {
+        const c = clone(o);
+        c[symbolStatus] = o[getSymbolName(symbolStatus)];
+        delete c[getSymbolName(symbolStatus)];
+        return c;
+    }
+    return o;
+};
+
 export const deserialize = (s: string): any => {
-    return s && JSON.parse(s, (key, value) => {
+    return s && JSON.parse(s, (key, v) => {
+        const value = convertStatusSymbolToSymbol(v);
         if (value && value.$$arr) {
             const {$: array = [], _: values} = value.$$arr;
 
-            values && Object.keys(values).forEach(key => {
+            values && Object.getOwnPropertyNames(values).concat(Object.getOwnPropertySymbols(values) as unknown as string[]).forEach(key => {
                 array[key] = values[key];
             });
 
@@ -76,33 +111,25 @@ export const deserialize = (s: string): any => {
     });
 };
 
-export const getPayload = <S extends IStatusTransaction, P>(status: S, payload: P, seedPayload?: P): P | undefined | null => {
-    if (status.isActive) {
-        return status.hasError ? seedPayload : payload || seedPayload;
-    } else if (status.hasError) {
-        return getPendingState(status.transactionId);
-    }
+export const getPayload = <S extends MetaStatus, P>(metaStatus: S, payload?: P): P | undefined => (!metaStatus.hasError && payload) || undefined;
 
-    return status.complete ? payload : seedPayload;
-};
-
-export const getUpdatedState = <S, P, U extends IStatusTransaction>(state: S, payload: P, status: U, path: Path, actionId?: string, options?: Options<P>): UpdatedStatus<S, P> => {
+export const getUpdatedState = <S, P, U extends MetaStatus>(state: S, payload: P | undefined | null, metaStatus: U, path: Path, actionId?: string, options?: Options<P>): UpdatedStatus<S, P> => {
     if (actionId) {
         const array = get(state, path);
 
         if (Array.isArray(array)) {
             const index = array.findIndex(item => item.id === actionId);
 
-            if (index === -1) {
+            if (index === -1 && options?.autoInsert !== false) {
                 if (payload) {
                     const { getNewItemIndex } = options || {} as Options<P>;
 
                     return {
-                        updatedState: immutable.insert(state, path, Object.assign({}, payload, {$status: decorateStatus(status)}), getNewItemIndex ? getNewItemIndex(array, payload) : array.length),
+                        updatedState: immutable.insert(state, path, Object.assign({}, payload, {[symbolStatus]: decorateStatus(metaStatus)}), getNewItemIndex ? getNewItemIndex(array, payload) : array.length),
                         originalState: null // Ensure final payload is not set so this item can be removed from the array on failure
                     };
                 }
-            } else if (payload === null) {
+            } else if (payload === null && options?.autoDelete !== false) {
                 return {
                     updatedState: immutable.del(
                         state,
@@ -113,8 +140,8 @@ export const getUpdatedState = <S, P, U extends IStatusTransaction>(state: S, pa
                 return {
                     updatedState: immutable.update(
                         (payload && immutable.assign(state, [...path, index.toString()], payload as any)) || state,
-                        [...path, index.toString(), "$status"],
-                        state => decorateStatus(status, state && state.$status)
+                        [...path, index.toString(), symbolStatus as any],
+                        state => decorateStatus(metaStatus, state && state[symbolStatus])
                     ) as any,
                     originalState: get(state, [...path, index.toString()])
                 };

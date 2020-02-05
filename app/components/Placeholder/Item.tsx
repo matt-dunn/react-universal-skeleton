@@ -1,13 +1,13 @@
-import {ComponentType} from "react";
+import React, {ComponentType} from "react";
 import styled from "@emotion/styled";
 
-const PlaceHolderItem = (Component: ComponentType<any>) => styled(Component)`
+const PlaceHolderItem = styled.div`
   position: relative;
   min-height: calc(1.75em + 5px);
 
   &:before {
     position: absolute;
-    left: 10px;
+    left: 0;
     top: 10px;
     background-color: currentColor;
     opacity: 0.4;
@@ -19,7 +19,7 @@ const PlaceHolderItem = (Component: ComponentType<any>) => styled(Component)`
 
   &:after {
     position: absolute;
-    left: 10px;
+    left: 0;
     top: 10px;
     margin-top: 1.1em;
     background-color: currentColor;
@@ -31,4 +31,12 @@ const PlaceHolderItem = (Component: ComponentType<any>) => styled(Component)`
   }
 `;
 
-export default PlaceHolderItem;
+export default (Component: ComponentType<any>) => {
+    return function Placeholder() {
+        return (
+            <Component>
+                <PlaceHolderItem/>
+            </Component>
+        );
+    };
+};

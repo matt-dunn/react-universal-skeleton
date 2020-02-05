@@ -1,7 +1,7 @@
 import isPromise from "is-promise";
 
 import {Middleware} from "../getStore";
-import {errorLike, ErrorLike} from "../utils";
+import {errorLike, ErrorLike} from "components/error";
 
 const $status = Symbol("$status");
 
@@ -28,7 +28,7 @@ const decorateWithStatus = <P extends DecoratedWithStatus>(status?: Partial<Stat
 
 export const getStatus = <P extends DecoratedWithStatus>(payload?: P): Status => (payload && payload[$status]) || Status();
 
-export const simplePromiseDecorator: Middleware = async (action, next) => {
+export const simplePromiseDecorator: Middleware = () => next => async action => {
     if (isPromise(action.payload)) {
         try {
             next({

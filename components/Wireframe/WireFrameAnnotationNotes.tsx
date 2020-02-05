@@ -44,9 +44,9 @@ const IdentifierNote = styled(IdentifierBase)`
 export const WireFrameAnnotationsNotes = ({components, highlightedNote}: WireFrameAnnotationsNotesProps) => {
     return (
         <WireFrameAnnotationsNotesContainer id="wf-annotations">
-            {components.map(component => (
+            {components.map((component, index) => (
                 <li
-                    key={component.id}
+                    key={index}
                     id={`wf-annotation-${component.id}`}
                     className={(highlightedNote === component && "highlight") || ""}
                 >

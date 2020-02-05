@@ -3,12 +3,16 @@ import {Helmet} from "react-helmet-async";
 import styled from "@emotion/styled";
 import {css} from "@emotion/core";
 import { connect } from "react-redux";
-import { Dispatch } from "redux";
 import TrackVisibility from "react-on-screen";
 import { useParams} from "react-router";
 
-import { IStatus } from "components/state-mutate-with-status/status";
+import {DecoratedWithStatus, getStatus} from "components/state-mutate-with-status";
 import {AboveTheFold, ClientOnly} from "components/actions";
+import {ModalFooter, ModalTitle, useModal} from "components/Modal";
+import {Button, ButtonGroup, ButtonSimple, ButtonSimplePrimary} from "components/Buttons";
+import {withWireFrameAnnotation} from "components/Wireframe";
+import {Notify, notifyAction} from "components/notification";
+
 import List from "app/components/List";
 import Item from "app/components/Item";
 import EditItem from "app/components/EditItem";
@@ -16,25 +20,25 @@ import EditItem from "app/components/EditItem";
 import Page from "../styles/Page";
 import * as actions from "../actions";
 import {AppState} from "../reducers";
-import {ExampleItemState} from "../reducers/__dummy__/example";
-import {ExampleGetList, ExampleGetItem, ExampleEditItem} from "../components/api/__dummy__/example";
+import {ExampleGetList, ExampleGetItem, ExampleEditItem, ExampleList, ExampleItem} from "../components/api";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
-import {ModalFooter, ModalTitle, useModal} from "components/Modal";
-import {Button, ButtonSimple, ButtonSimplePrimary} from "components/Buttons";
-import {withWireFrameAnnotation} from "../../components/Wireframe";
 
 export type DataProps = {
-    items: ExampleItemState[];
-    item?: ExampleItemState;
-    onExampleGetList: ExampleGetList;
-    onExampleGetItem: ExampleGetItem;
-    onExampleEditItem: ExampleEditItem;
-    $status?: IStatus;
+    items: ExampleList;
+    item?: ExampleItem & DecoratedWithStatus;
+    exampleGetList: ExampleGetList;
+    exampleGetItem: ExampleGetItem;
+    exampleEditItem: ExampleEditItem;
+    notify: Notify;
 };
 
 const Title = styled.h2`
     color: #ccc;
+`;
+
+const ModelOptions = styled(ButtonGroup)`
+  margin: 10px 0 0 0;
 `;
 
 const DataItem = styled(EditItem)`
@@ -48,7 +52,7 @@ const DataListItem = styled(EditItem)<{isImportant?: boolean}>`
 
 const importantIds = ["item-1", "item-2"];
 
-const WSButton = withWireFrameAnnotation(Button, {
+const WSButtons = withWireFrameAnnotation(ModelOptions, {
     title: <div>Open modal CTA</div>,
     description: <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam iaculis convallis ante, ac porttitor eros hendrerit non. Ut a hendrerit ligula. Praesent vestibulum, dui venenatis convallis condimentum, lorem magna rutrum erat, eget convallis odio purus sed ex. Suspendisse congue metus ac blandit vehicula. Suspendisse non elementum purus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
 });
@@ -68,23 +72,23 @@ const WAModalSubmit = withWireFrameAnnotation(ButtonSimplePrimary, {
     description: <div>Only enabled once the data is available.</div>
 });
 
-const Data = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditItem, $status}: DataProps) => {
+const Data = ({notify, items, item, exampleGetList, exampleGetItem, exampleEditItem}: DataProps) => {
     const { page } = useParams();
 
     const renderListItem = useCallback(({item, disabled}) => {
         // return <div>ITEM - {item.name}</div>
-        return <DataListItem item={item} disabled={disabled} onChange={onExampleEditItem} type="primary" isImportant={importantIds.indexOf(item.id) !== -1}/>;
-    }, [onExampleEditItem]);
+        return <DataListItem item={item} disabled={disabled} onChange={exampleEditItem} type="primary" isImportant={importantIds.indexOf(item.id) !== -1}/>;
+    }, [exampleEditItem]);
 
-    const renderItem = useCallback(({ isVisible }) => <Item isShown={isVisible} item={item} onExampleGetItem={onExampleGetItem}/>, [item, onExampleGetItem]);
+    const renderItem = useCallback(({ isVisible }) => <Item isShown={isVisible} item={item} exampleGetItem={exampleGetItem}/>, [item, exampleGetItem]);
 
-    const [modal, open, close] = useModal<Pick<DataProps, "item" | "onExampleGetItem">>({item, onExampleGetItem});
+    const [modal, open, close] = useModal<Pick<DataProps, "item" | "exampleGetItem">>({item, exampleGetItem});
 
     const openTest1 = () => {
-        open(({item, onExampleGetItem}) => {
+        open(({item, exampleGetItem}) => {
             console.log("RENDER MODAL CHILDREN", item);
             return (
-                <Item isShown={true} item={item} onExampleGetItem={onExampleGetItem}/>
+                <Item isShown={true} item={item} exampleGetItem={exampleGetItem}/>
             );
         })
             .then(() => {
@@ -94,33 +98,43 @@ const Data = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIte
 
     const openTest2 = () => {
         open(
-            ({item, onExampleGetItem}) => (
-                <>
-                    <address>
-                        Some content...{" "}
-                        <WAModalButton
-                        >
-                            Focusable element
-                        </WAModalButton>
-                    </address>
-                    <Item isShown={true} item={item} onExampleGetItem={onExampleGetItem}/>
-                    <ModalFooter>
-                        <ButtonSimple
-                            onClick={close}
-                        >
-                            Cancel
-                        </ButtonSimple>
-                        <WAModalSubmit
-                            onClick={close}
-                            disabled={!item || !item.$status.complete}
-                        >
-                            Submit
-                        </WAModalSubmit>
-                    </ModalFooter>
-                    <ModalTitle hasClose={true}>Test Modal With Data</ModalTitle>
-                    More content...
-                </>
-            ),
+            ({item, exampleGetItem}) => {
+                const {complete} = getStatus(item);
+                const submit = () => {
+                    notify({message: "Submit..."});
+                    close();
+                };
+
+                return (
+                    <>
+                        <address>
+                            Some content...{" "}
+                            <WAModalButton
+                            >
+                                Focusable element
+                            </WAModalButton>
+                        </address>
+                        <Item isShown={true} item={item} exampleGetItem={exampleGetItem}/>
+                        <ModalFooter>
+                            <ButtonGroup>
+                                <ButtonSimple
+                                    onClick={close}
+                                >
+                                    Cancel
+                                </ButtonSimple>
+                                <WAModalSubmit
+                                    onClick={submit}
+                                    disabled={!item || !complete}
+                                >
+                                    Submit
+                                </WAModalSubmit>
+                            </ButtonGroup>
+                        </ModalFooter>
+                        <ModalTitle hasClose={true}>Test Modal With Data</ModalTitle>
+                        More content...
+                    </>
+                );
+            },
             {
                 isStatic: true
             })
@@ -129,7 +143,7 @@ const Data = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIte
             });
     };
 
-    useWhatChanged(Data, { modal, open, close, items, item, onExampleGetList, onExampleGetItem, onExampleEditItem, $status, renderListItem, page});
+    useWhatChanged(Data, { modal, open, close, items, item, exampleGetList, exampleGetItem, exampleEditItem, renderListItem, page});
 
     return (
         <Page>
@@ -142,33 +156,33 @@ const Data = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIte
                 API SSR Example (Lazy Loaded)
             </WSTitle>
 
-            <div style={{margin: "10px 0 0 0"}}>
-                <WSButton
+            <WSButtons>
+                <Button
                     onClick={openTest1}
                 >
                     Open SIMPLE modal
-                </WSButton>
+                </Button>
 
                 <Button
                     onClick={openTest2}
                 >
                     Open FULL modal
                 </Button>
-            </div>
+            </WSButtons>
 
             {modal()}
 
             <AboveTheFold>
-                {/*<List items={items} onExampleGetList={onExampleGetList} onExampleEditItem={onExampleEditItem} activePage={parseInt(page || "0", 10)}>*/}
+                {/*<List items={items} exampleGetList={exampleGetList} exampleEditItem={exampleEditItem} activePage={parseInt(page || "0", 10)}>*/}
                 {/*    /!*{(item: ExampleItemState) => {*!/*/}
                 {/*    /!*    return <div>ITEM - {item.name}</div>*!/*/}
                 {/*    /!*}}*!/*/}
                 {/*</List>*/}
                 {/*<TrackVisibility once={true} partialVisibility={true}>*/}
-                {/*    {({ isVisible }) => <List isShown={isVisible} items={items} onExampleGetList={onExampleGetList} onExampleEditItem={onExampleEditItem}/>}*/}
+                {/*    {({ isVisible }) => <List isShown={isVisible} items={items} exampleGetList={exampleGetList} exampleEditItem={exampleEditItem}/>}*/}
                 {/*</TrackVisibility>*/}
 
-                <List items={items} onExampleGetList={onExampleGetList} onExampleEditItem={onExampleEditItem} activePage={parseInt(page || "0", 10)}>
+                <List items={items} exampleGetList={exampleGetList} exampleEditItem={exampleEditItem} activePage={parseInt(page || "0", 10)}>
                     {renderListItem}
                 </List>
 
@@ -178,17 +192,17 @@ const Data = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIte
 
             {/*<TrackVisibility once={true} partialVisibility={true}>*/}
             {/*    {({ isVisible }) =>*/}
-            {/*        <List isShown={isVisible} items={items} onExampleGetList={onExampleGetList} onExampleEditItem={onExampleEditItem} activePage={parseInt(page || "0", 10)}>*/}
+            {/*        <List isShown={isVisible} items={items} exampleGetList={exampleGetList} exampleEditItem={exampleEditItem} activePage={parseInt(page || "0", 10)}>*/}
             {/*            {renderListItem}*/}
             {/*        </List>*/}
             {/*    }*/}
             {/*</TrackVisibility>*/}
 
             {/*<TrackVisibility once={true} partialVisibility={true}>*/}
-            {/*    {({ isVisible }) => items && items[0] && items[0].id && <EditItem item={items[0]} onChange={onExampleEditItem}/>}*/}
+            {/*    {({ isVisible }) => items && items[0] && items[0].id && <EditItem item={items[0]} onChange={exampleEditItem}/>}*/}
             {/*</TrackVisibility>*/}
 
-            {items && items[0] && items[0].id && <DataItem item={items[0]} onChange={onExampleEditItem}/>}
+            {items && items[0] && items[0].id && <DataItem item={items[0]} onChange={exampleEditItem}/>}
 
             <div style={{height: "110vh"}}/>
 
@@ -201,29 +215,17 @@ const Data = ({items, item, onExampleGetList, onExampleGetItem, onExampleEditIte
     );
 };
 
-const mapStateToProps = (state: AppState) => {
-    const item = state.example.item;
-    const items = state.example.items;
-    const $status = state.example.$status;
-    return { item, items, $status };
-};
-
-const mapDispatchToProps = (dispatch: Dispatch<actions.RootActions>) => {
-
-    const onExampleGetList: ExampleGetList = (page, count): any => dispatch(actions.exampleActions.exampleGetList({page, count}));
-    const onExampleGetItem: ExampleGetItem = (): any => dispatch(actions.exampleActions.exampleGetItem());
-    const onExampleEditItem: ExampleEditItem = (item: ExampleItemState): any => dispatch(actions.exampleActions.exampleEditItem(item));
-
-    return {
-        onExampleGetList,
-        onExampleGetItem,
-        onExampleEditItem
-    };
-};
-
 const container = connect(
-    mapStateToProps,
-    mapDispatchToProps
+    ({example: {item, items}}: AppState) => ({
+        item,
+        items
+    } as DataProps),
+    {
+        exampleGetList: actions.exampleActions.exampleGetList,
+        exampleGetItem: actions.exampleActions.exampleGetItem,
+        exampleEditItem: actions.exampleActions.exampleEditItem,
+        notify: notifyAction
+    }
 )(Data);
 
 export default container;

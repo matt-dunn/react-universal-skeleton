@@ -1,22 +1,13 @@
 import { FluxStandardAction } from "flux-standard-action";
 import { getType, createReducer } from "typesafe-actions";
 
-import { ActionMeta } from "components/state-mutate-with-status/index";
-
-import nextState from "components/state-mutate-with-status/index";
+import nextState, {ActionMeta, DecoratedWithStatus} from "components/state-mutate-with-status";
 
 import {authActions as actions} from "../../actions";
-import {IStatus} from "components/state-mutate-with-status/status";
+import {User} from "../../components/api/auth";
 
-export interface AuthenticatedUser {
-    id: string;
-    name: string;
-    email: string;
-    $status: IStatus;
-}
-
-export interface AuthState {
-    authenticatedUser?: AuthenticatedUser;
+export type AuthState = {
+    authenticatedUser?: User & DecoratedWithStatus;
 }
 
 const login = (state: AuthState, action: FluxStandardAction<string, any, ActionMeta>): AuthState => nextState(state, action, {

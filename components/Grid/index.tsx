@@ -23,13 +23,11 @@ const calculateMaxChildren = (length: number, dimensions?: ViewportDimensions, m
 const calculateChildStyle = (length: number, dimensions?: ViewportDimensions, minItemWidth?: number, totalPaddingWidth?: number) => {
     const maxLength = calculateMaxChildren(length, dimensions, minItemWidth);
     const width = `${100 / maxLength}%`;
+
     return css`
           ${(minItemWidth && `min-width: ${minItemWidth - (totalPaddingWidth || 0)}px`) || ""};
           ${!dimensions && "flex-grow: 1"};
           width: ${(totalPaddingWidth && `calc(${width} - ${totalPaddingWidth}px)`) || width};
-          ${dimensions && `&:nth-of-type(${maxLength}n) {
-            border-right: none;`
-          }
       `;
 };
 

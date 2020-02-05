@@ -1,66 +1,64 @@
 import { decorateStatus } from "./utils";
-import Status, {IStatusTransaction, IStatus, symbolActiveTransactions, IActiveTransactions} from "./status";
+import {Status, MetaStatus, symbolActiveTransactions} from "./status";
 
 describe("decorateStatus", () => {
     it("should return default status", () => {
-        const status: IStatusTransaction = {} as IStatusTransaction;
-        const currentStatus = Status({} as IStatus);
+        const status: MetaStatus = {} as MetaStatus;
+        const currentStatus = Status();
 
         const decoratedStatus = decorateStatus(status);
 
         expect(decoratedStatus).toEqual({
-            "complete": false,
+            "cancelled": false,
+            "complete": true,
             "error": undefined,
             "hasError": false,
-            "isActive": false,
             "outstandingTransactionCount": 0,
             "processing": false,
+            "updatingChildren": false,
             [symbolActiveTransactions]: {},
             "lastUpdated": undefined,
             "processedOnServer": false
         });
-
-        expect(decoratedStatus).toStrictEqual(currentStatus);
 
         const decoratedStatusWithCurrentStatus = decorateStatus(status, currentStatus);
 
         expect(decoratedStatusWithCurrentStatus).toEqual({
-            "complete": false,
+            "cancelled": false,
+            "complete": true,
             "error": undefined,
             "hasError": false,
-            "isActive": false,
             "outstandingTransactionCount": 0,
+            "updatingChildren": false,
             "processing": false,
             [symbolActiveTransactions]: {},
             "lastUpdated": undefined,
             "processedOnServer": false
         });
-
-        expect(decoratedStatusWithCurrentStatus).toStrictEqual(currentStatus);
     });
 
     it("should mutate status", () => {
-        const status: IStatusTransaction = {
+        const status: MetaStatus = {
             transactionId: "4",
             processing: true
-        } as IStatusTransaction;
+        } as MetaStatus;
         const currentStatus = Status({
             processing: true,
             [symbolActiveTransactions]: {
                 "1": true,
                 "2": true,
                 "3": true
-            } as IActiveTransactions
-        } as IStatus);
+            }
+        });
 
         expect(decorateStatus(status, currentStatus)).not.toStrictEqual(currentStatus);
     });
 
     it("should not mutate status", () => {
-        const status: IStatusTransaction = {
+        const status: MetaStatus = {
             transactionId: "4",
             processing: true
-        } as IStatusTransaction;
+        } as MetaStatus;
         const currentStatus = Status({
             processing: true,
             [symbolActiveTransactions]: {
@@ -68,25 +66,26 @@ describe("decorateStatus", () => {
                 "2": true,
                 "3": true,
                 "4": true
-            } as IActiveTransactions
-        } as IStatus);
+            }
+        });
 
         expect(decorateStatus(status, currentStatus)).toStrictEqual(currentStatus);
     });
 
     it("should return correct transaction state when processing", () => {
-        const status: IStatusTransaction = {
+        const status: MetaStatus = {
             transactionId: "1",
             processing: true
-        } as IStatusTransaction;
-        const currentStatus = Status({} as IStatus);
+        } as MetaStatus;
+        const currentStatus = Status();
 
         expect(decorateStatus(status, currentStatus)).toEqual({
+            "cancelled": false,
             "complete": false,
             "error": undefined,
             "hasError": false,
-            "isActive": false,
             "outstandingTransactionCount": 1,
+            "updatingChildren": false,
             "processing": true,
             [symbolActiveTransactions]: {
                 "1": true
@@ -97,24 +96,25 @@ describe("decorateStatus", () => {
     });
 
     it("should return correct transactions state when processing", () => {
-        const status: IStatusTransaction = {
+        const status: MetaStatus = {
             transactionId: "4",
             processing: true
-        } as IStatusTransaction;
+        } as MetaStatus;
         const currentStatus = Status({
             [symbolActiveTransactions]: {
                 "1": true,
                 "2": true,
                 "3": true
-            } as IActiveTransactions
-        } as IStatus);
+            }
+        });
 
         expect(decorateStatus(status, currentStatus)).toEqual({
+            "cancelled": false,
             "complete": false,
             "error": undefined,
             "hasError": false,
-            "isActive": false,
             "outstandingTransactionCount": 4,
+            "updatingChildren": false,
             "processing": true,
             [symbolActiveTransactions]: {
                 "1": true,

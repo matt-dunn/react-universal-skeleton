@@ -4,18 +4,15 @@ import {css} from "@emotion/core";
 
 import TextInput from "react-responsive-ui/modules/TextInput";
 
-// import Status from "components/state-mutate-with-status/status";
-import useAutosave from "components/hooks/useAutosave";
-
-import {ExampleItemState} from "../../reducers/__dummy__/example";
-import {ExampleResponse} from "../api/__dummy__/example";
+import {ExampleItem} from "../api";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 import {withWireFrameAnnotation} from "components/Wireframe";
+import {getStatus, DecoratedWithStatus} from "components/state-mutate-with-status";
 
-export type ItemProps = {
-    item: ExampleItemState;
-    onChange?: (item: ExampleItemState) => Promise<ExampleResponse>;
+export type EditItemProps = {
+    item: ExampleItem & DecoratedWithStatus;
+    onChange?: (item: ExampleItem) => Promise<ExampleItem>;
     type?: "primary" | "secondary";
     className?: string;
     disabled?: boolean;
@@ -41,12 +38,11 @@ const Saving = styled.div`
   font-size: 10px;
 `;
 
-const Item = ({item, onChange, type, className, disabled}: ItemProps) => {
-    const {name/*, $status*/} = item;
-    // const {complete, isActive, processing, hasError, error, lastUpdated} = Status($status);
+const EditItem = ({item, onChange, type, className, disabled}: EditItemProps) => {
+    const {name} = item;
+    const {processing} = getStatus(item);
 
     const [value, setValue] = useState(name);
-    const [saving, setSaving] = useState(false);
 
     useEffect(() => {
         setValue(name);
@@ -54,24 +50,18 @@ const Item = ({item, onChange, type, className, disabled}: ItemProps) => {
 
     const inputEl = useRef<HTMLInputElement>(null);
 
-    const save = useAutosave(onChange, {
-        onSaving: () => setSaving(true),
-        onComplete: () => setSaving(false),
-    });
-
     const handleChange = useCallback(
         newValue => {
             if (newValue !== value) {
                 setValue(newValue);
 
-                save && save({...item, name: newValue})
-                    .then(a => console.log("SAVE COMPLETE", a.name));
+                onChange && onChange({...item, name: newValue});
             }
         },
-        [item, save, value]
+        [item, onChange, value]
     );
 
-    useWhatChanged(Item, {saving, inputEl, item, onChange, value, handleChange, disabled, save}, {idProp: "item.id"});
+    useWhatChanged(EditItem, {inputEl, item, onChange, value, handleChange, disabled}, {idProp: "item.id"});
 
     return (
         <div className={className}>
@@ -84,7 +74,7 @@ const Item = ({item, onChange, type, className, disabled}: ItemProps) => {
                     onChange={handleChange}
                 />
             </Container>
-            {saving &&
+            {processing &&
                 <Saving>
                     Saving...
                 </Saving>
@@ -93,11 +83,9 @@ const Item = ({item, onChange, type, className, disabled}: ItemProps) => {
     );
 };
 
-Item.displayName = "Items.Item";
+// export default React.memo<EditItemProps>(EditItem);
 
-// export default React.memo<ItemProps>(Item);
-
-export default React.memo<ItemProps>(withWireFrameAnnotation<ItemProps>(Item, {
+export default React.memo<EditItemProps>(withWireFrameAnnotation<EditItemProps>(EditItem, {
     title: <div><strong>Edit</strong> item</div>,
     description: <div>Maecenas eget turpis sit amet orci dictum faucibus pretium eu sapien. Proin rhoncus risus id mollis aliquet. Praesent pellentesque urna et ante rhoncus scelerisque. Proin eget pellentesque quam, non finibus eros. Quisque id arcu eget leo hendrerit vehicula. Suspendisse potenti.</div>
 }));

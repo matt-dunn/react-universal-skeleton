@@ -17,8 +17,8 @@ export type Dispatcher<A extends StandardAction = StandardAction> = {
     (action: A): void;
 };
 
-export type Middleware<P = any, M = any, A extends StandardAction<P, M> = any> = {
-    (action: A, next: Dispatcher<A>): void;
+export type Middleware<S extends {} = {}, A extends StandardAction = StandardAction, Store extends GetStore<S, A> = GetStore<S, A>> = {
+    (store: Store): (next: Dispatcher<A>) => Dispatcher<A>;
 }
 
 type Callback<S> = {
@@ -29,61 +29,63 @@ type State<S> = {
     [key: string]: Partial<S>;
 }
 
-export type GetStore<S, A extends StandardAction = StandardAction> = {
+export type GetStore<S extends {}, A extends StandardAction = StandardAction> = {
     dispatch: Dispatcher<A>;
-    register: (cb: Callback<S>) => void;
-    unregister: (cb: Callback<S>) => void;
+    subscribe: (cb: Callback<S>) => void;
+    unsubscribe: (cb: Callback<S>) => void;
     getState: () => S;
 }
 
 
 
-const middlewareExecutor = <P, M, S, A extends StandardAction<P, M>>(middleware: Middleware[]) =>
-    (action: A, done: Dispatcher<A>) =>
-        [...middleware].reverse().reduce((dispatch, middleware) => {
-            return action => middleware(action, action => {
-                console.log(`%c${middleware.name}`, "color:#000;background-color:orange;padding: 2px 4px;border-radius:1em;", action);
-                return dispatch(action);
-            });
-        }, done)(action);
+const middlewareExecutor = <S extends {}, A extends StandardAction, Store extends GetStore<S, A>>(middleware: Middleware<S, A, Store>[]) =>
+    (store: Store, action: A, done: Dispatcher<A>) =>
+        [...middleware].reverse().reduce((dispatch, middleware) =>
+            action => middleware(store)(action => dispatch(action))(action),
+            done
+        )(action);
 
-export const getStore = <S extends {}, P, M, A extends StandardAction<P, M>>(initialState: S, reducers: Reducers, middleware: Middleware[] = []): GetStore<S, A> => {
+export const getStore = <S extends {}, A extends StandardAction, Store extends GetStore<S, A>>(initialState: S, reducers: Reducers, middleware: Middleware<S, A, Store>[] = []): Store => {
     const execMiddleware = middlewareExecutor(middleware);
 
     let callbacks: Callback<S>[] = [];
 
     let state: State<S> = {...initialState};
 
-    return {
-        dispatch: action => {
-            execMiddleware(action, action => {
-                const nextState = Object.keys(reducers).reduce((state, key) => {
-                    const nextState = reducers[key](state[key], action);
+    const setState = (nextState: State<S>) => {
+        if (nextState !== state) {
+            callbacks.forEach(cb => cb(nextState as S, state as S));
+            state = nextState;
+        }
+    };
 
-                    if (nextState !== state[key]) {
-                        state = {
+    const store = {
+        dispatch: action => {
+            execMiddleware(store, action, action => {
+                setState(Object.keys(reducers).reduce((state, key) => {
+                    const nextStateSlice = reducers[key](state[key], action);
+
+                    if (nextStateSlice !== state[key]) {
+                        return {
                             ...state,
-                            [key]: nextState
+                            [key]: nextStateSlice
                         };
                     }
 
                     return state;
-                }, state);
-
-                if (nextState !== state) {
-                    callbacks.forEach(cb => cb(nextState as S, state as S));
-                    state = nextState;
-                }
+                }, state));
             });
 
             return action.payload;
         },
-        register: cb => {
+        subscribe: cb => {
             callbacks = [...callbacks, cb];
         },
-        unregister: cb => {
+        unsubscribe: cb => {
             callbacks = callbacks.filter(callback => callback !== cb);
         },
         getState: () => state as S
-    };
+    } as Store;
+
+    return store;
 };

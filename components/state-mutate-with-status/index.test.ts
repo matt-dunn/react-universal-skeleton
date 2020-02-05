@@ -1,6 +1,6 @@
 import { FluxStandardAction } from "flux-standard-action";
 
-import nextState from "./index";
+import nextState, {symbolStatus} from "./";
 
 describe("next state", () => {
     describe("Object state", () => {
@@ -23,7 +23,7 @@ describe("next state", () => {
             };
         });
 
-        it("should not update payload when not complete", () => {
+        it("should update payload when not complete", () => {
             const actionProcessing: FluxStandardAction<string, any, any> = {
                 type: "TEST",
                 payload: { text: "item 1 updated"},
@@ -39,8 +39,8 @@ describe("next state", () => {
                 path: ["item"]
             })).toMatchObject({
                 item: {
-                    text: "item 1",
-                    $status: {
+                    text: "item 1 updated",
+                    [symbolStatus]: {
                         complete: false,
                         processing: true
                     }
@@ -65,7 +65,7 @@ describe("next state", () => {
             })).toMatchObject({
                 item: {
                     text: "item 1 updated",
-                    $status: {
+                    [symbolStatus]: {
                         complete: true,
                         processing: false
                     }
@@ -83,16 +83,12 @@ describe("next state", () => {
                 path: ["item"]
             })).toMatchObject({
                 item: {
-                    text: "item 1 updated",
-                    $status: {
-                        complete: true,
-                        processing: false
-                    }
+                    text: "item 1 updated"
                 }
             });
         });
 
-        it("should not update nested payload when not complete", () => {
+        it("should update nested payload when not complete", () => {
             const actionNestedState: FluxStandardAction<string, any, any> = {
                 type: "TEST",
                 payload: { text: "item 1 updated"},
@@ -110,8 +106,8 @@ describe("next state", () => {
                 nested: {
                     deep: {
                         item: {
-                            text: "item 1",
-                            $status: {
+                            text: "item 1 updated",
+                            [symbolStatus]: {
                                 complete: false,
                                 processing: true,
                             }
@@ -140,7 +136,7 @@ describe("next state", () => {
                     deep: {
                         item: {
                             text: "item 1 updated",
-                            $status: {
+                            [symbolStatus]: {
                                 complete: true,
                                 processing: false
                             }
@@ -165,7 +161,7 @@ describe("next state", () => {
             };
         });
 
-        it("should not update payload when not complete", () => {
+        it("should update payload when not complete", () => {
             const actionProcessing: FluxStandardAction<string, any, any> = {
                 type: "TEST",
                 payload: { text: "item 1 updated"},
@@ -182,7 +178,7 @@ describe("next state", () => {
                 path: ["items"]
             }).items]).toMatchObject([
                 {
-                    text: "item 1",
+                    text: "item 1 updated",
                 }
             ]);
         });
@@ -205,7 +201,7 @@ describe("next state", () => {
             }).items]).toMatchObject([
                 {
                     text: "item 1 updated",
-                    $status: {
+                    [symbolStatus]: {
                         complete: true,
                         processing: false
                     }
@@ -295,7 +291,7 @@ describe("next state", () => {
 
             expect([...updatedState.items]).toMatchObject([
                 {
-                    text: "item 1",
+                    text: "item 1 updated",
                 }
             ]);
 
@@ -316,7 +312,7 @@ describe("next state", () => {
                 path: ["items"]
             }).items]).toMatchObject([
                 {
-                    text: "item 1",
+                    text: "item 1 updated",
                 }
             ]);
         });

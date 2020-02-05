@@ -14,7 +14,7 @@ const {
     fontSize_h5_unit,
     fontSize_h6_unit,
     lineHeightBase
-} = typography(1.4);
+} = typography(1.6);
 
 export const Container = styled.article`
     @font-face {

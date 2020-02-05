@@ -41,7 +41,7 @@ module.exports = merge(
     partialAssets(metadata),
     partialCode(metadata),
     {
-        entry: "./index.js",
+        entry: "./index",
         output: {
             path: target,
 

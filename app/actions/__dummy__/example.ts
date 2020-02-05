@@ -1,31 +1,55 @@
 import { createAction } from "typesafe-actions";
 
-import {ExampleItemState} from "../../reducers/__dummy__/example";
-import {ExampleApi} from "../../components/api/__dummy__/example";
+import {WithNotification} from "components/redux/middleware/sagaNotification";
+import {ActionMeta} from "components/state-mutate-with-status";
+// import {Severity} from "components/notification";
 
-const exampleGetList = createAction(
+import {ExampleList, ExampleItem} from "../../components/api";
+import {APIPayloadCreator} from "../";
+
+const exampleGetList = createAction<string, APIPayloadCreator<Promise<ExampleList>>, ActionMeta<ExampleList> & WithNotification<ExampleList>>(
     "@__dummy__/EXAMPLE_GET_LIST",
-    ({page, count}: {page?: number; count?: number}) => ({ services }: {services: ExampleApi}) => services.exampleGetList(page, count),
-    () => ({
-        hasRetry: true
-    })
+    // ({page, count}) => cancel => Promise.resolve([{"id": "1", "name": "xxx"}]),
+    (page, count) => cancel => ({API: {ExampleApi: {exampleGetList}}}) => exampleGetList(page, count, cancel),
+    // ({page, count}) => ([{"id": "1", "name": "xxx"}]),
+    // () => ({
+    //     // seedPayload: [{id: "123", name: "Clem"}],
+    //     notification: (payload, error) => {
+    //         if (error) {
+    //             return {
+    //                 message: "Error",
+    //                 severity: Severity.error
+    //             };
+    //         } else if (payload) {
+    //             return {
+    //                 message: `OK - got ${payload.length} items`
+    //             };
+    //         }
+    //     }
+    // })
 )();
 
-const exampleGetItem = createAction(
+const exampleGetItem = createAction<string, APIPayloadCreator<Promise<ExampleItem>>, ActionMeta<ExampleItem> & WithNotification<ExampleItem>>(
     "@__dummy__/EXAMPLE_GET_ITEM",
-    () => ({ services }: {services: ExampleApi}) => services.exampleGetItem(),
+    () => cancel => ({API: {ExampleApi: {exampleGetItem}}}) => exampleGetItem(cancel),
     () => ({
-        hasRetry: true
+        notification: (payload) => (payload && {
+            message: "Got Item",
+            reference: payload.id
+        })
     })
 )();
 
-const exampleEditItem = createAction(
+const exampleEditItem = createAction<string, APIPayloadCreator<Promise<ExampleItem>>, ActionMeta<ExampleItem> & WithNotification<ExampleItem>>(
     "@__dummy__/EXAMPLE_EDIT_ITEM",
-    (item: ExampleItemState) => ({ services }: {services: ExampleApi}) => services.exampleEditItem(item),
-    (item: ExampleItemState) => ({
-        hasRetry: true,
+    item => cancel => ({API: {ExampleApi: {exampleEditItem}}}) => exampleEditItem(item, cancel),
+    item => ({
         id: item.id,
-        seedPayload: item
+        seedPayload: item,
+        notification: (payload) => (payload && {
+            message: "Item saved",
+            reference: payload.id
+        })
     })
 )();
 

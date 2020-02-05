@@ -3,13 +3,12 @@ import styled from "@emotion/styled";
 import {css} from "@emotion/core";
 import { Link } from "react-router-dom";
 
-import Status, {IStatus} from "components/state-mutate-with-status/status";
+import {getStatus, DecoratedWithStatus} from "components/state-mutate-with-status";
 import Loading from "components/Loading";
 import {usePerformAction} from "components/actions";
 import {ResponsiveGrid} from "components/Grid";
 
-import {ExampleItemState} from "../../reducers/__dummy__/example";
-import {ExampleEditItem, ExampleGetList} from "../api/__dummy__/example";
+import {ExampleEditItem, ExampleGetList, ExampleItem, ExampleList} from "../api";
 import PlaceHolderItem from "app/components/Placeholder/Item";
 
 import Item from "../EditItem";
@@ -17,17 +16,13 @@ import Item from "../EditItem";
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 import {withWireFrameAnnotation} from "components/Wireframe";
 
-interface ExampleItemStateList<T> extends Array<T> {
-    $status?: IStatus;
-}
 export type ListProps = {
-    items: ExampleItemStateList<ExampleItemState>;
-    onExampleGetList: ExampleGetList;
-    onExampleEditItem: ExampleEditItem;
-    $status?: IStatus;
+    items: ExampleList & DecoratedWithStatus;
+    exampleGetList: ExampleGetList;
+    exampleEditItem: ExampleEditItem;
     isShown?: boolean;
     activePage?: number;
-    children?: ({item, disabled}: {item: ExampleItemState; disabled: boolean}) => ReactElement<any>;
+    children?: ({item, disabled}: {item: ExampleItem; disabled: boolean}) => ReactElement;
 };
 
 const ListContainer = styled.div`
@@ -42,9 +37,19 @@ const ListItems = styled(ResponsiveGrid("ol"))`
 
 const ListItem = styled.li`
     padding: 10px;
-    border-right: 1px solid #eee;
     border-bottom: 1px solid #eee;
-    margin: 0 -1px -1px 0;
+    margin: 0 0 -1px 0;
+    position: relative;
+    
+    &:after {
+        content: " ";
+        border-right: 1px solid #eee;
+        position: absolute;
+        top: 0;
+        right: -1px;
+        height: 100%;
+        z-index: -1;
+    }
 `;
 
 const Placeholder = styled(ListItems)`
@@ -92,12 +97,13 @@ const WFPagination = withWireFrameAnnotation(Pagination, {
     description: <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam iaculis convallis ante, ac porttitor eros hendrerit non. Ut a hendrerit ligula. Praesent vestibulum, dui venenatis convallis condimentum, lorem magna rutrum erat, eget convallis odio purus sed ex. Suspendisse congue metus ac blandit vehicula. Suspendisse non elementum purus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
 });
 
-const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditItem, activePage, children, ...props}: ListProps) => {
-    const {processing, hasError, error, outstandingTransactionCount} = Status(items.$status);
+const List = ({isShown = true, items, exampleGetList, exampleEditItem, activePage, children, ...props}: ListProps) => {
+    const {processing, hasError, error, updatingChildren, complete} = getStatus(items);
 
     usePerformAction(
         useCallback(() => {
-            return onExampleGetList(activePage, MAX_ITEMS)
+            // exampleGetList(0, 2);
+            return exampleGetList(activePage, MAX_ITEMS)
                 .then(e => {
                     console.log("DONE", e);
                     return e;
@@ -106,25 +112,22 @@ const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditIt
                     console.log("ERROR", ex.message);
                     throw ex;
                 });
-        }, [onExampleGetList, activePage]),
+        }, [exampleGetList, activePage]),
         useCallback(() => isShown, [isShown])
     );
 
-    useWhatChanged(List, { activePage, isShown, items, $status, onExampleGetList, onExampleEditItem, children, usePerformAction, ...props });
+    useWhatChanged(List, { activePage, isShown, items, exampleGetList, exampleEditItem, children, usePerformAction, ...props });
 
     return (
         <ListContainer>
             <div style={{color: "#aaa", fontSize: "9px", padding: "4px", borderBottom: "1px solid #eee"}}>
-                [{!processing && outstandingTransactionCount > 0 ? "CHILDREN UPDATING": "CHILDREN DONE"}]
                 [{processing ? "UPDATING": "DONE"}]
+                [{complete ? "COMPLETE": "INCOMPLETE"}]
+                [{updatingChildren ? "CHILDREN UPDATING": "CHILDREN DONE"}]
                 {hasError && `Error occurred: ${error && error.message}`}
             </div>
             <Loading loading={processing}>
-                {(!items || items.length === 0) ?
-                    <Placeholder minItemWidth={200} totalPaddingWidth={20}>
-                        {Array.from(Array(MAX_ITEMS).keys()).map(i => <PlaceHolderListItem key={i}/>)}
-                    </Placeholder>
-                    :
+                {complete && !error ?
                     <ListItems minItemWidth={200} totalPaddingWidth={20}>
                         {items.map(item => (
                             <ListItem key={item.id}>
@@ -132,16 +135,20 @@ const List = ({isShown = true, items, $status, onExampleGetList, onExampleEditIt
                                 <Item
                                     item={item}
                                     disabled={processing}
-                                    onChange={onExampleEditItem}
+                                    onChange={exampleEditItem}
                                 />
                                 }
                             </ListItem>
                         ))}
                     </ListItems>
+                    :
+                    <Placeholder minItemWidth={200} totalPaddingWidth={20}>
+                        {Array.from(Array(MAX_ITEMS).keys()).map(i => <PlaceHolderListItem key={i}/>)}
+                    </Placeholder>
                 }
             </Loading>
 
-            <WFPagination disabled={processing}>
+            <WFPagination>
                 {Array.from(Array(5).keys()).map(page => (
                     <Page
                         key={page}

@@ -1,5 +1,10 @@
 import styled from "@emotion/styled";
-import { darken } from "polished";
+
+export const ButtonGroup = styled.div`
+  > *:not(style) ~ *:not(style) {
+    margin-left: 10px;
+  }
+`;
 
 const ButtonBase = styled.button`
   &:not([disabled]) {
@@ -9,10 +14,6 @@ const ButtonBase = styled.button`
   &[disabled] {
     opacity: 0.5;
   }
-
-  +button {
-    margin-left: 10px;
-  }
 `;
 
 export const Button = styled(ButtonBase)`
@@ -21,13 +22,8 @@ export const Button = styled(ButtonBase)`
   line-height: 1.2;
   background-color: #fff;
   color: #555;
-  border-radius: 3px;
+  border-radius: .25rem;
   font-size: 1.4rem;
-  
-  &:hover,
-  &:focus {
-    color: ${darken(0.2, "#555")};
-  }
 `;
 
 export const ButtonDanger = styled(Button)`
@@ -52,11 +48,6 @@ export const ButtonSimple = styled(ButtonBase)`
   font-weight: bold;
   color: #3498DB;
   border: none;
-
-  &:hover,
-  &:focus {
-    color: ${darken(0.2, "#3498DB")};
-  }
 `;
 
 export const ButtonSimpleDanger = styled(ButtonSimple)`

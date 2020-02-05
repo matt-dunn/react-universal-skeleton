@@ -1,47 +1,82 @@
+import {WrappedPromise} from "components/wrappedPromise";
 import {errorLike, ErrorLike} from "../error";
 
 const symbolActiveTransactions = Symbol("activeTransactions");
+export const symbolStatus = Symbol("$status");
 
-export type IActiveTransactions<T = boolean> = {
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+type WithOptional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+
+type ActiveTransactions<T = boolean> = {
   [id: string]: T;
 }
 
-export type IStatus = {
-  readonly lastUpdated?: number;
-  readonly complete: boolean;
-  readonly processedOnServer: boolean;
-  readonly processing: boolean;
-  readonly hasError: boolean;
-  readonly error?: ErrorLike;
-  readonly isActive: boolean;
-  readonly outstandingTransactionCount: number;
-  readonly [symbolActiveTransactions]: IActiveTransactions;
+export type ActionMeta<P = any> = {
+  id?: string;
+  $status?: MetaStatus;
+  seedPayload?: P;
+  response?: WrappedPromise;
 }
 
-export type IStatusTransaction = {
-  readonly transactionId: string;
-} & IStatus
+type StatusBase = {
+  readonly processing: boolean;
+  readonly complete: boolean;
+  readonly processedOnServer: boolean;
+  readonly lastUpdated?: number;
+  readonly hasError? : boolean;
+  readonly error?: ErrorLike;
+  readonly cancelled?: boolean;
+}
 
-const Status = (status: IStatus = {} as IStatus): IStatus => {
+export type MetaStatus = {
+  readonly transactionId: string;
+} & StatusBase;
+
+export type MetaStatusPartial = WithOptional<MetaStatus, "processing" | "complete" | "processedOnServer">;
+
+export type Status = {
+  readonly updatingChildren: boolean;
+  readonly outstandingTransactionCount: number;
+  readonly [symbolActiveTransactions]: ActiveTransactions;
+} & StatusBase;
+
+export type StatusPartial = WithOptional<Status, "hasError" | "error" | "cancelled" | "processing" | "complete" | "processedOnServer" | "outstandingTransactionCount" | "updatingChildren">;
+
+export type DecoratedWithStatus = {
+  readonly [symbolStatus]?: Status;
+}
+
+export const Status = (status: StatusPartial = {} as Status): Status => {
   const {
-    lastUpdated, complete = false, processing = false, hasError = false, error, isActive = false, processedOnServer = false
+    lastUpdated, complete = false, processing = false, hasError = false, error, processedOnServer = false, cancelled = false
   } = status;
 
   const activeTransactions = status[symbolActiveTransactions] || {};
+  const outstandingTransactionCount = Object.keys(activeTransactions).length;
 
   return {
     lastUpdated,
     complete,
     processing,
     hasError,
-    isActive,
+    cancelled,
     processedOnServer,
     error: error && errorLike(error),
-    outstandingTransactionCount: Object.keys(activeTransactions).length,
+
+    outstandingTransactionCount,
+    updatingChildren: !processing && outstandingTransactionCount > 0,
     [symbolActiveTransactions]: { ...activeTransactions },
   };
 };
 
+export const MetaStatus = (status: MetaStatusPartial): MetaStatus => ({
+  processing: false,
+  complete: false,
+  processedOnServer: false,
+  ...status
+});
+
+export const getStatus = <P extends DecoratedWithStatus>(payload?: P): Status => (payload && payload[symbolStatus]) || Status();
+
 export { symbolActiveTransactions };
 
-export default Status;

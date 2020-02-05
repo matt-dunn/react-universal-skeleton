@@ -1,15 +1,15 @@
 import { createAction } from "typesafe-actions";
 
-import {AuthApi} from "../../components/api/auth";
+import {ActionMeta} from "components/state-mutate-with-status";
+import {WithNotification} from "components/redux/middleware/sagaNotification";
 
-export interface Login {
-    username: string;
-    password: string;
-}
+import {User} from "../../components/api";
 
-const login = createAction(
+import {APIPayloadCreator} from "../";
+
+const login = createAction<string, APIPayloadCreator<Promise<User>>, ActionMeta<User> & WithNotification<User>>(
     "@auth/LOGIN",
-    ({username, password}: Login) => ({ services }: {services: AuthApi}) => services.login(username, password)
+    (username, password) => () => ({API: {AuthApi: {login}}}) => login(username, password)
 )();
 
 export { login };

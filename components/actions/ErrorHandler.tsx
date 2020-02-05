@@ -6,7 +6,7 @@ import {ErrorLike} from "components/error";
 
 import {ErrorHandlerContext, ErrorContext} from "./contexts";
 
-type CallHandler = {
+export type CallHandler = {
     (error: ErrorLike, location: string, history: History, props: any): boolean | ReactElement;
 }
 
@@ -16,7 +16,7 @@ type ErrorHandlerProps = {
 }
 
 const callHandler = (ex: ErrorLike, handler: CallHandler, location: Location, history: History, props: any) => {
-    const {pathname, search, hash} = location;
+    const {pathname, search, hash} = (typeof window !== "undefined" && window.location) || location;
 
     return handler(
         ex,
