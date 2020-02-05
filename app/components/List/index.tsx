@@ -37,9 +37,19 @@ const ListItems = styled(ResponsiveGrid("ol"))`
 
 const ListItem = styled.li`
     padding: 10px;
-    border-right: 1px solid #eee;
     border-bottom: 1px solid #eee;
-    margin: 0 -1px -1px 0;
+    margin: 0 0 -1px 0;
+    position: relative;
+    
+    &:after {
+        content: " ";
+        border-right: 1px solid #eee;
+        position: absolute;
+        top: 0;
+        right: -1px;
+        height: 100%;
+        z-index: -1;
+    }
 `;
 
 const Placeholder = styled(ListItems)`
@@ -88,20 +98,20 @@ const WFPagination = withWireFrameAnnotation(Pagination, {
 });
 
 const List = ({isShown = true, items, exampleGetList, exampleEditItem, activePage, children, ...props}: ListProps) => {
-    const {processing, hasError, error, outstandingTransactionCount} = getStatus(items);
+    const {processing, hasError, error, updatingChildren, complete} = getStatus(items);
 
     usePerformAction(
         useCallback(() => {
             // exampleGetList(0, 2);
-            return exampleGetList(activePage, MAX_ITEMS);
-                // .then(e => {
-                //     console.log("DONE", e);
-                //     return e;
-                // })
-                // .catch(ex => {
-                //     console.log("ERROR", ex.message);
-                //     throw ex;
-                // });
+            return exampleGetList(activePage, MAX_ITEMS)
+                .then(e => {
+                    console.log("DONE", e);
+                    return e;
+                })
+                .catch(ex => {
+                    console.log("ERROR", ex.message);
+                    throw ex;
+                });
         }, [exampleGetList, activePage]),
         useCallback(() => isShown, [isShown])
     );
@@ -111,16 +121,13 @@ const List = ({isShown = true, items, exampleGetList, exampleEditItem, activePag
     return (
         <ListContainer>
             <div style={{color: "#aaa", fontSize: "9px", padding: "4px", borderBottom: "1px solid #eee"}}>
-                [{!processing && outstandingTransactionCount > 0 ? "CHILDREN UPDATING": "CHILDREN DONE"}]
                 [{processing ? "UPDATING": "DONE"}]
+                [{complete ? "COMPLETE": "INCOMPLETE"}]
+                [{updatingChildren ? "CHILDREN UPDATING": "CHILDREN DONE"}]
                 {hasError && `Error occurred: ${error && error.message}`}
             </div>
             <Loading loading={processing}>
-                {(!items || items.length === 0) ?
-                    <Placeholder minItemWidth={200} totalPaddingWidth={20}>
-                        {Array.from(Array(MAX_ITEMS).keys()).map(i => <PlaceHolderListItem key={i}/>)}
-                    </Placeholder>
-                    :
+                {complete && !error ?
                     <ListItems minItemWidth={200} totalPaddingWidth={20}>
                         {items.map(item => (
                             <ListItem key={item.id}>
@@ -134,6 +141,10 @@ const List = ({isShown = true, items, exampleGetList, exampleEditItem, activePag
                             </ListItem>
                         ))}
                     </ListItems>
+                    :
+                    <Placeholder minItemWidth={200} totalPaddingWidth={20}>
+                        {Array.from(Array(MAX_ITEMS).keys()).map(i => <PlaceHolderListItem key={i}/>)}
+                    </Placeholder>
                 }
             </Loading>
 

@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 
 export const ButtonGroup = styled.div`
-  > * ~ * {
+  > *:not(style) ~ *:not(style) {
     margin-left: 10px;
   }
 `;

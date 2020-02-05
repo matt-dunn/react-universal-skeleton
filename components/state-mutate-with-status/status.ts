@@ -35,11 +35,12 @@ export type MetaStatus = {
 export type MetaStatusPartial = WithOptional<MetaStatus, "processing" | "complete" | "processedOnServer">;
 
 export type Status = {
+  readonly updatingChildren: boolean;
   readonly outstandingTransactionCount: number;
   readonly [symbolActiveTransactions]: ActiveTransactions;
 } & StatusBase;
 
-export type StatusPartial = WithOptional<Status, "hasError" | "error" | "cancelled" | "processing" | "complete" | "processedOnServer" | "outstandingTransactionCount">;
+export type StatusPartial = WithOptional<Status, "hasError" | "error" | "cancelled" | "processing" | "complete" | "processedOnServer" | "outstandingTransactionCount" | "updatingChildren">;
 
 export type DecoratedWithStatus = {
   readonly [symbolStatus]?: Status;
@@ -51,6 +52,7 @@ export const Status = (status: StatusPartial = {} as Status): Status => {
   } = status;
 
   const activeTransactions = status[symbolActiveTransactions] || {};
+  const outstandingTransactionCount = Object.keys(activeTransactions).length;
 
   return {
     lastUpdated,
@@ -60,7 +62,9 @@ export const Status = (status: StatusPartial = {} as Status): Status => {
     cancelled,
     processedOnServer,
     error: error && errorLike(error),
-    outstandingTransactionCount: Object.keys(activeTransactions).length,
+
+    outstandingTransactionCount,
+    updatingChildren: !processing && outstandingTransactionCount > 0,
     [symbolActiveTransactions]: { ...activeTransactions },
   };
 };

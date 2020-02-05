@@ -24,7 +24,7 @@ export const decorateStatus = (metaStatus: MetaStatus, status: Status = {} as St
 
     const updatedStatus = Status({
         ...metaStatus,
-        complete: !hasActiveTransactions,
+        complete: isCurrent ? !hasActiveTransactions : true,
         processing: activeTransactions[metaStatus.transactionId] === true,
         [symbolActiveTransactions]: activeTransactions,
     });
