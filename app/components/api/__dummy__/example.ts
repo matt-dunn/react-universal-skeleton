@@ -32,21 +32,23 @@ export const ExampleApi: ExampleApi = {
     exampleGetList:(page = 0, count = 3, cancel) => new Promise<ExampleList>((resolve/*, reject*/) => {
         console.log("API CALL: exampleGetList", page, count);
 
-        if (typeof window === "undefined" || !(window as any).authenticated) {
-            throw new APIError("Auth Error...", 123, 401);
-        }
-
         // if (retryCount < 4) {
         //     retryCount++;
         //     throw new Error("Error in exampleGetList");
         // } else {
         //     retryCount = 0;
         // }
+
         if (page === 4) {
+            if (typeof window === "undefined" || !(window as any).authenticated) {
+                throw new APIError("Auth Error...", 123, 401);
+            }
             throw new APPError("Error in exampleGetList", 123);
         }
+
         // throw new APIError("Auth Error...", 123, 401)
         // throw new APPError("APP Error...", 123);
+
         const t = setTimeout(() => {
             console.log("API CALL COMPLETE: exampleGetList");
             // reject(new Error("Error in exampleGetList"))

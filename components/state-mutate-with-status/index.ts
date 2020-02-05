@@ -14,6 +14,8 @@ type GetNewItemIndex<P> = {
 export type Options<P> = {
   path?: Path;
   getNewItemIndex?: GetNewItemIndex<P>;
+  autoInsert?: boolean;
+  autoDelete?: boolean;
 }
 
 const updateState = <S, P>(state: S, { meta, error, payload }: FluxStandardAction<string, P, ActionMeta>, options?: Options<P>): S => {

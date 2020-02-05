@@ -120,7 +120,7 @@ export const getUpdatedState = <S, P, U extends MetaStatus>(state: S, payload: P
         if (Array.isArray(array)) {
             const index = array.findIndex(item => item.id === actionId);
 
-            if (index === -1) {
+            if (index === -1 && options?.autoInsert !== false) {
                 if (payload) {
                     const { getNewItemIndex } = options || {} as Options<P>;
 
@@ -129,7 +129,7 @@ export const getUpdatedState = <S, P, U extends MetaStatus>(state: S, payload: P
                         originalState: null // Ensure final payload is not set so this item can be removed from the array on failure
                     };
                 }
-            } else if (payload === null) {
+            } else if (payload === null && options?.autoDelete !== false) {
                 return {
                     updatedState: immutable.del(
                         state,

@@ -15,6 +15,7 @@ describe("decorateStatus", () => {
             "hasError": false,
             "outstandingTransactionCount": 0,
             "processing": false,
+            "updatingChildren": false,
             [symbolActiveTransactions]: {},
             "lastUpdated": undefined,
             "processedOnServer": false
@@ -28,6 +29,7 @@ describe("decorateStatus", () => {
             "error": undefined,
             "hasError": false,
             "outstandingTransactionCount": 0,
+            "updatingChildren": false,
             "processing": false,
             [symbolActiveTransactions]: {},
             "lastUpdated": undefined,
@@ -83,6 +85,7 @@ describe("decorateStatus", () => {
             "error": undefined,
             "hasError": false,
             "outstandingTransactionCount": 1,
+            "updatingChildren": false,
             "processing": true,
             [symbolActiveTransactions]: {
                 "1": true
@@ -111,6 +114,7 @@ describe("decorateStatus", () => {
             "error": undefined,
             "hasError": false,
             "outstandingTransactionCount": 4,
+            "updatingChildren": false,
             "processing": true,
             [symbolActiveTransactions]: {
                 "1": true,
