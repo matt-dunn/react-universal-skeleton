@@ -67,7 +67,9 @@ const phaseManage = (config, {defaultMessages, report, sourceDefaultMessages}) =
                     );
 
                     return langRet;
-                }
+                },
+                getMessages: () => updatedMessages,
+                getReport: () => langReport,
             };
 
             return langRet;
