@@ -59,9 +59,9 @@ const Cancel = function(): Cancel {
     return canceller as Cancel;
 };
 
-const decorateMetaWithStatus = <M extends ActionMeta>(transactionId: string, status?: Partial<MetaStatus>, meta?: M): M & ActionMeta => ({
+const decorateMetaWithStatus = <M extends ActionMeta>(transactionId: string, status: Partial<Omit<MetaStatus, "transactionId">>, meta?: M): M & ActionMeta => ({
     ...meta || {} as M,
-    $status: MetaStatus({...status, transactionId})
+    $status: MetaStatus({complete: false, processing: false, processedOnServer: false, ...status, transactionId})
 });
 
 const getName = (action: StandardAction) => `${action.type}${action?.meta?.id ? `-${action.meta.id}`: ""}`;
@@ -103,7 +103,6 @@ function* callAsyncWithCancel(action: StandardAction, done?: Done, ...args: any[
             payload: error,
             error: true,
             meta: decorateMetaWithStatus(transactionId,{
-                hasError: true,
                 error,
                 processedOnServer: !(process as any).browser
             }, action.meta)

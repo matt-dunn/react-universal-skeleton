@@ -2,8 +2,7 @@ import isEqual from "lodash/isEqual";
 import { get, isObject } from "lodash";
 import immutable from "object-path-immutable";
 
-import {Status, MetaStatus, symbolActiveTransactions, symbolStatus} from "./status";
-import {Options, Path} from "./";
+import {Options, Path, Status, MetaStatus, symbolActiveTransactions, symbolStatus} from "./";
 
 type UpdatedStatus<S, P> = {
     updatedState: S;
@@ -20,12 +19,9 @@ export const decorateStatus = (metaStatus: MetaStatus, status: Status = {} as St
         delete activeTransactions[metaStatus.transactionId];
     }
 
-    const hasActiveTransactions = activeTransactions && Object.keys(activeTransactions).length > 0;
-
     const updatedStatus = Status({
+        error: status.error,
         ...metaStatus,
-        complete: isCurrent ? !hasActiveTransactions : true,
-        processing: activeTransactions[metaStatus.transactionId] === true,
         [symbolActiveTransactions]: activeTransactions,
     });
 
@@ -111,7 +107,7 @@ export const deserialize = (s: string): any => {
     });
 };
 
-export const getPayload = <S extends MetaStatus, P>(metaStatus: S, payload?: P): P | undefined => (!metaStatus.hasError && payload) || undefined;
+export const getPayload = <S extends MetaStatus, P>(metaStatus: S, payload?: P): P | undefined => (!metaStatus.error && payload) || undefined;
 
 export const getUpdatedState = <S, P, U extends MetaStatus>(state: S, payload: P | undefined | null, metaStatus: U, path: Path, actionId?: string, options?: Options<P>): UpdatedStatus<S, P> => {
     if (actionId) {

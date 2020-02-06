@@ -14,6 +14,7 @@ describe("decorateStatus", () => {
             "error": undefined,
             "hasError": false,
             "outstandingTransactionCount": 0,
+            "outstandingCurrentTransactionCount": 0,
             "processing": false,
             "updatingChildren": false,
             [symbolActiveTransactions]: {},
@@ -29,6 +30,7 @@ describe("decorateStatus", () => {
             "error": undefined,
             "hasError": false,
             "outstandingTransactionCount": 0,
+            "outstandingCurrentTransactionCount": 0,
             "updatingChildren": false,
             "processing": false,
             [symbolActiveTransactions]: {},
@@ -43,7 +45,7 @@ describe("decorateStatus", () => {
             processing: true
         } as MetaStatus;
         const currentStatus = Status({
-            processing: true,
+            processedOnServer: false,
             [symbolActiveTransactions]: {
                 "1": true,
                 "2": true,
@@ -60,7 +62,7 @@ describe("decorateStatus", () => {
             processing: true
         } as MetaStatus;
         const currentStatus = Status({
-            processing: true,
+            processedOnServer: false,
             [symbolActiveTransactions]: {
                 "1": true,
                 "2": true,
@@ -85,6 +87,7 @@ describe("decorateStatus", () => {
             "error": undefined,
             "hasError": false,
             "outstandingTransactionCount": 1,
+            "outstandingCurrentTransactionCount": 1,
             "updatingChildren": false,
             "processing": true,
             [symbolActiveTransactions]: {
@@ -101,6 +104,7 @@ describe("decorateStatus", () => {
             processing: true
         } as MetaStatus;
         const currentStatus = Status({
+            processedOnServer: false,
             [symbolActiveTransactions]: {
                 "1": true,
                 "2": true,
@@ -114,6 +118,7 @@ describe("decorateStatus", () => {
             "error": undefined,
             "hasError": false,
             "outstandingTransactionCount": 4,
+            "outstandingCurrentTransactionCount": 4,
             "updatingChildren": false,
             "processing": true,
             [symbolActiveTransactions]: {

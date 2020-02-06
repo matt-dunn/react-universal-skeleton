@@ -48,6 +48,7 @@ export const simplePromiseDecorator: Middleware = () => next => async action => 
             next({
                 ...action,
                 payload: decorateWithStatus({
+                    complete: true,
                     error: errorLike(error)
                 }),
                 error: true

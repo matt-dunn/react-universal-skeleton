@@ -4,9 +4,6 @@ import {errorLike, ErrorLike} from "../error";
 const symbolActiveTransactions = Symbol("activeTransactions");
 export const symbolStatus = Symbol("$status");
 
-type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
-type WithOptional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
-
 type ActiveTransactions<T = boolean> = {
   [id: string]: T;
 }
@@ -23,7 +20,6 @@ type StatusBase = {
   readonly complete: boolean;
   readonly processedOnServer: boolean;
   readonly lastUpdated?: number;
-  readonly hasError? : boolean;
   readonly error?: ErrorLike;
   readonly cancelled?: boolean;
 }
@@ -32,15 +28,15 @@ export type MetaStatus = {
   readonly transactionId: string;
 } & StatusBase;
 
-export type MetaStatusPartial = WithOptional<MetaStatus, "processing" | "complete" | "processedOnServer">;
-
 export type Status = {
+  readonly hasError? : boolean;
   readonly updatingChildren: boolean;
   readonly outstandingTransactionCount: number;
+  readonly outstandingCurrentTransactionCount: number;
   readonly [symbolActiveTransactions]: ActiveTransactions;
 } & StatusBase;
 
-export type StatusPartial = WithOptional<Status, "hasError" | "error" | "cancelled" | "processing" | "complete" | "processedOnServer" | "outstandingTransactionCount" | "updatingChildren">;
+export type StatusPartial = Omit<Status, "complete" | "processing" | "outstandingTransactionCount" | "outstandingCurrentTransactionCount" | "updatingChildren" | "hasError">;
 
 export type DecoratedWithStatus = {
   readonly [symbolStatus]?: Status;
@@ -48,28 +44,29 @@ export type DecoratedWithStatus = {
 
 export const Status = (status: StatusPartial = {} as Status): Status => {
   const {
-    lastUpdated, complete = false, processing = false, hasError = false, error, processedOnServer = false, cancelled = false
+    lastUpdated, error, processedOnServer = false, cancelled = false, [symbolActiveTransactions]: activeTransactions = {}
   } = status;
 
-  const activeTransactions = status[symbolActiveTransactions] || {};
   const outstandingTransactionCount = Object.keys(activeTransactions).length;
+  const outstandingCurrentTransactionCount = Object.values(activeTransactions).filter(current => current === true).length;
 
   return {
     lastUpdated,
-    complete,
-    processing,
-    hasError,
     cancelled,
     processedOnServer,
     error: error && errorLike(error),
-
-    outstandingTransactionCount,
-    updatingChildren: !processing && outstandingTransactionCount > 0,
     [symbolActiveTransactions]: { ...activeTransactions },
+
+    hasError: (error && true) || false,
+    complete: outstandingCurrentTransactionCount === 0,
+    processing: outstandingCurrentTransactionCount > 0,
+    outstandingTransactionCount,
+    outstandingCurrentTransactionCount,
+    updatingChildren: outstandingTransactionCount - outstandingCurrentTransactionCount > 0,
   };
 };
 
-export const MetaStatus = (status: MetaStatusPartial): MetaStatus => ({
+export const MetaStatus = (status: MetaStatus): MetaStatus => ({
   processing: false,
   complete: false,
   processedOnServer: false,

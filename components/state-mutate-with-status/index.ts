@@ -24,7 +24,6 @@ const updateState = <S, P>(state: S, { meta, error, payload }: FluxStandardActio
   const {
     id: actionId,
     $status: metaStatus = {
-      hasError: error || false,
       error: error && payload,
       complete: false,
       processing: false
