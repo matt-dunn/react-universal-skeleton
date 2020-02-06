@@ -1,6 +1,6 @@
 import isEqual from "lodash/isEqual";
 import { get, isObject } from "lodash";
-import immutable from "object-path-immutable";
+import {wrap} from "object-path-immutable";
 
 import {Options, Path, Status, MetaStatus, symbolActiveTransactions, symbolStatus} from "./";
 
@@ -115,9 +115,9 @@ export const deserialize = (s: string): any => {
     });
 };
 
-export const getPayload = <S extends MetaStatus, P>(metaStatus: S, payload?: P): P | undefined => (!metaStatus.error && payload) || undefined;
+export const getPayload = <TMetaStatus extends MetaStatus, P>(metaStatus: TMetaStatus, payload?: P): P | undefined => (!metaStatus.error && payload) || undefined;
 
-export const getUpdatedState = <S, P, U extends MetaStatus>(state: S, payload: P | undefined | null, metaStatus: U, path: Path, actionId?: string, options?: Options<P>): UpdatedStatus<S, P> => {
+export const getUpdatedState = <S, P extends S, TMetaStatus extends MetaStatus>(state: S, payload: P | undefined | null, metaStatus: TMetaStatus, path: Path, actionId?: string, options?: Options<P>): UpdatedStatus<S, P> => {
     if (actionId) {
         const array = get(state, path);
 
@@ -129,24 +129,26 @@ export const getUpdatedState = <S, P, U extends MetaStatus>(state: S, payload: P
                     const { getNewItemIndex } = options || {} as Options<P>;
 
                     return {
-                        updatedState: immutable.insert(state, path, Object.assign({}, payload, {[symbolStatus]: decorateStatus(metaStatus)}), getNewItemIndex ? getNewItemIndex(array, payload) : array.length),
+                        updatedState: wrap(state).insert(path, Object.assign({}, payload, {[symbolStatus]: decorateStatus(metaStatus)}), getNewItemIndex ? getNewItemIndex(array, payload) : array.length).value(),
                         originalState: null // Ensure final payload is not set so this item can be removed from the array on failure
                     };
                 }
             } else if (payload === null && options?.autoDelete === true) {
                 return {
-                    updatedState: immutable.del(
-                        state,
-                        [...path, index.toString()]
-                    ) as any
+                    updatedState: wrap(state)
+                        .del(
+                            [...path, index.toString()]
+                        )
+                        .value()
                 };
             } else {
                 return {
-                    updatedState: immutable.update(
-                        (payload && immutable.assign(state, [...path, index.toString()], payload as any)) || state,
-                        [...path, index.toString(), symbolStatus as any],
-                        state => decorateStatus(metaStatus, state && state[symbolStatus])
-                    ) as any,
+                    updatedState: wrap((payload && wrap(state).assign([...path, index.toString()], payload).value()) || state)
+                        .update(
+                            [...path, index.toString(), symbolStatus as any],
+                            state => decorateStatus(metaStatus, state && state[symbolStatus])
+                        )
+                        .value(),
                     originalState: get(state, [...path, index.toString()])
                 };
             }
@@ -159,7 +161,7 @@ export const getUpdatedState = <S, P, U extends MetaStatus>(state: S, payload: P
         };
     } else {
         return {
-            updatedState: (payload && immutable.assign(state, path, payload as any)) || state,
+            updatedState: (payload && wrap(state).assign(path, payload).value()) || state,
             originalState: get(state, path),
             isCurrent: true
         };
