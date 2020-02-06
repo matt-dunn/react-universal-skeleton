@@ -34,13 +34,13 @@ const Value = styled(TextInput)`
   }
 `;
 
-const Saving = styled.div`
+const Message = styled.div`
   font-size: 10px;
 `;
 
 const EditItem = ({item, onChange, type, className, disabled}: EditItemProps) => {
     const {name} = item;
-    const {processing} = getStatus(item);
+    const {processing, error} = getStatus(item);
 
     const [value, setValue] = useState(name);
 
@@ -74,10 +74,17 @@ const EditItem = ({item, onChange, type, className, disabled}: EditItemProps) =>
                     onChange={handleChange}
                 />
             </Container>
+
             {processing &&
-                <Saving>
-                    Saving...
-                </Saving>
+            <Message>
+                Saving...
+            </Message>
+            }
+
+            {error &&
+            <Message>
+                {error.message}
+            </Message>
             }
         </div>
     );

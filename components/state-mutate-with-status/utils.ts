@@ -10,6 +10,14 @@ type UpdatedStatus<S, P> = {
     isCurrent?: boolean;
 }
 
+const getError = (metaStatus: MetaStatus, status: Status = {} as Status, isCurrent = true) => {
+    if (isCurrent) {
+        return (metaStatus.processing && status.error) || metaStatus.error;
+    }
+
+    return status.error;
+};
+
 export const decorateStatus = (metaStatus: MetaStatus, status: Status = {} as Status, isCurrent = true): Status => {
     const activeTransactions = { ...status[symbolActiveTransactions] };
 
@@ -20,8 +28,8 @@ export const decorateStatus = (metaStatus: MetaStatus, status: Status = {} as St
     }
 
     const updatedStatus = Status({
-        error: status.error,
         ...metaStatus,
+        error: getError(metaStatus, status, isCurrent),
         [symbolActiveTransactions]: activeTransactions,
     });
 
@@ -116,7 +124,7 @@ export const getUpdatedState = <S, P, U extends MetaStatus>(state: S, payload: P
         if (Array.isArray(array)) {
             const index = array.findIndex(item => item.id === actionId);
 
-            if (index === -1 && options?.autoInsert !== false) {
+            if (index === -1 && options?.autoInsert === true) {
                 if (payload) {
                     const { getNewItemIndex } = options || {} as Options<P>;
 
@@ -125,7 +133,7 @@ export const getUpdatedState = <S, P, U extends MetaStatus>(state: S, payload: P
                         originalState: null // Ensure final payload is not set so this item can be removed from the array on failure
                     };
                 }
-            } else if (payload === null && options?.autoDelete !== false) {
+            } else if (payload === null && options?.autoDelete === true) {
                 return {
                     updatedState: immutable.del(
                         state,

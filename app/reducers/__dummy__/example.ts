@@ -14,9 +14,7 @@ export type ExampleState = {
 }
 
 const exampleListReducer = (state: ExampleState, action: FluxStandardAction<string, any, ActionMeta>): ExampleState => nextState(state, action, {
-    path: ["items"],
-    autoInsert: false,
-    autoDelete: false
+    path: ["items"]
 });
 
 const exampleItemReducer = (state: ExampleState, action: FluxStandardAction<string, any, ActionMeta>): ExampleState => nextState(state, action, {

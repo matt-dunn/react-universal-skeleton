@@ -56,7 +56,7 @@ export const ExampleApi: ExampleApi = {
             resolve(Array.from(Array(count).keys()).map(index => {
                 const i = index + (page * count);
                 return {
-                    id: `item-${i}`,
+                    id: `item-${i + 1}`,
                     name: `Item ${i + 1}`
                 };
             }));
@@ -87,11 +87,17 @@ export const ExampleApi: ExampleApi = {
             clearTimeout(t);
         });
     }),
-    exampleEditItem:(item, cancel) => new Promise<ExampleItem>((resolve/*, reject*/) => {
+    exampleEditItem:(item, cancel) => new Promise<ExampleItem>((resolve, reject) => {
         console.log("API CALL: exampleEditItem", item.id);
-        // throw new Error("Error in exampleEditItem")
+
+        if (item.name.toLocaleLowerCase() === "item") {
+            throw new Error("Error in exampleEditItem");
+        }
 
         const t = setTimeout(() => {
+            if (item.name.toLocaleLowerCase() === "items") {
+                reject(new Error("Error in exampleEditItem"));
+            }
             console.log("API CALL COMPLETE: exampleEditItem", item.id);
             // reject(new Error("Error in exampleEditItem"))
             // reject(new APIError("Authentication Failed", "auth", 403))

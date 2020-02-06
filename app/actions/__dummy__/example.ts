@@ -2,7 +2,7 @@ import { createAction } from "typesafe-actions";
 
 import {WithNotification} from "components/redux/middleware/sagaNotification";
 import {ActionMeta} from "components/state-mutate-with-status";
-// import {Severity} from "components/notification";
+import {Severity} from "components/notification";
 
 import {ExampleList, ExampleItem} from "../../components/api";
 import {APIPayloadCreator} from "../";
@@ -46,10 +46,14 @@ const exampleEditItem = createAction<string, APIPayloadCreator<Promise<ExampleIt
     item => ({
         id: item.id,
         seedPayload: item,
-        notification: (payload) => (payload && {
+        notification: (payload, error, meta) => (payload && {
             message: "Item saved",
-            reference: payload.id
-        })
+            reference: meta.id
+        }) || {
+            message: "Unable to save item",
+            severity: Severity.error,
+            reference: meta.id
+        }
     })
 )();
 

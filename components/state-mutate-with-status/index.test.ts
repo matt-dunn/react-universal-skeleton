@@ -223,7 +223,9 @@ describe("next state", () => {
             };
 
             expect([...nextState(state, actionCompleteNewItem, {
-                path: ["items"]
+                path: ["items"],
+                autoDelete: true,
+                autoInsert: true
             }).items]).toMatchObject([
                 {
                     text: "item 1"
@@ -249,6 +251,8 @@ describe("next state", () => {
 
             expect([...nextState(state, actionCompleteNewItemFirst, {
                 path: ["items"],
+                autoDelete: true,
+                autoInsert: true,
                 getNewItemIndex: (/*items, item*/) => 0,
             }).items]).toMatchObject([
                 {
