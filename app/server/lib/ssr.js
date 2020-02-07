@@ -27,7 +27,24 @@ const availableLocales = process.env.AVAILABLE_LOCALES;
 export default async (req, res) => {
     try {
         const t1 = Date.now();
-        const store = getStore();
+
+        let initialState = {};
+
+        // Auth mocking
+        if (req.originalUrl.indexOf("/login") !== -1) {
+            process.authenticated = undefined;
+        }
+
+        if (process.authenticated) {
+            initialState = {
+                ...initialState,
+                auth: {
+                    authenticatedUser: process.authenticated
+                }
+            };
+        }
+
+        const store = getStore(initialState);
 
         const context = {};
         const helmetContext = {};
@@ -116,6 +133,7 @@ export default async (req, res) => {
                             this.queue(closeApp);
                             this.queue(
                                 `<script>
+                                    window.authenticated = ${process.authenticated ? "true" : "false"};
                                     window.__PRELOADED_STATE__ = ${serialize(store.getState()).replace(
                                     /</g,
                                     "\\u003c")}

@@ -1,6 +1,7 @@
 import {Cancel} from "components/redux/middleware/sagaAsyncAction";
 
 import {APIError, APPError} from "components/api";
+import {isAuthenticated} from "../auth";
 
 export type ExampleItem = {
     id: string;
@@ -40,7 +41,7 @@ export const ExampleApi: ExampleApi = {
         // }
 
         if (page === 4) {
-            if (typeof window === "undefined" || !(window as any).authenticated) {
+            if (!isAuthenticated()) {
                 throw new APIError("Auth Error...", 123, 401);
             }
             throw new APPError("Error in exampleGetList", 123);
