@@ -21,7 +21,7 @@ export function* sagaNotification(notify: Notify) {
             n && notify(n);
         } else if ($status?.complete && notification) {
             notify(notification);
-        } else if (error && $status.error && $status.error.status !== 401) {
+        } else if (error && $status.error && $status.error.status !== 401 && $status.error.status !== 403) {
             notify({
                 message: $status.error.message,
                 reference: $status.error.code,
