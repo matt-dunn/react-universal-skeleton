@@ -65,13 +65,13 @@ const App = () => {
             <ErrorHandler handler={handler}>
                 <Switch>
                     <Route exact path="/" component={Home} />
-                    <Route exact path="/data/:page?" component={Data} />
-                    <Route exact path="/forms" component={Forms} />
-                    <Route exact path="/mystyled" component={MyStyled} />
-                    <Route exact path="/locale" component={Locale} />
-                    <Route exact path="/state" component={State} />
-                    <Route exact path="/dashboard" component={Dashboard} />
-                    <Route path="/login/:from?" component={Login} />
+                    <Route exact path="/data/:page?/" component={Data} />
+                    <Route exact path="/forms/" component={Forms} />
+                    <Route exact path="/mystyled/" component={MyStyled} />
+                    <Route exact path="/locale/" component={Locale} />
+                    <Route exact path="/state/" component={State} />
+                    <Route exact path="/dashboard/" component={Dashboard} />
+                    <Route path="/login/:from?/" component={Login} />
                     <Route component={Error404} />
                     {/*<Redirect to="/" />*/}
                 </Switch>

@@ -156,7 +156,7 @@ const List = ({isShown = true, items, exampleGetList, exampleEditItem, activePag
                     >
                         <PageLink
                             className={(page === activePage && "active") || ""}
-                            to={`/data/${page}`}
+                            to={`/data/${page}/`}
                         >
                             {page + 1}
                         </PageLink>
