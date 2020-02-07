@@ -27,12 +27,20 @@ const Dashboard = loadable(() => import(/* webpackPrefetch: true */ "./container
 
 import "./styles/react-responsive-ui.css";
 
+import LoginModal from "./components/Login/Modal";
+
 const handler: CallHandler = ({code, status, message}, location, history) => {
     console.error("HANDLE ERROR", message, code, status, location);
 
     if (status === 401) {
-        history.push(generatePath("/login/:from?", {from: location}));
-        return true;
+        if ((process as any).browser) {
+            return {
+                childComponent: <LoginModal/>
+            };
+        } else {
+            history.push(generatePath("/login/:from?", {from: location}));
+            return true;
+        }
     } else if (status === 403) {
         return <Error403/>;
     } else if (status === 404) {
