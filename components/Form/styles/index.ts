@@ -28,7 +28,7 @@ export const FormContainer = styled.form`
   background-color: #fdfdfd;
   border-radius: 4px;
   padding: 10px;
-  margin: 0;
+  margin: 0 0 20px 0;
   box-sizing: border-box;
   
   section {

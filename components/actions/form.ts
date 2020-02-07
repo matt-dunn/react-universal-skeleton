@@ -120,7 +120,7 @@ export const useCurrentFormData = <T = any, Payload = any, Context = any>(formId
     }
 };
 
-export interface MapDataToAction<T, Payload, Context> {
+export interface MapDataToAction<T, Payload, Context = any> {
     (data: T, context: Context): Promise<Payload>;
 }
 

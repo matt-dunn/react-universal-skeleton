@@ -120,7 +120,7 @@ function Form<S, Payload, Context>({id, schema, onSubmit, children, className, c
                 }}
             </Formik>
 
-            <pre style={{whiteSpace: "normal"}}>{JSON.stringify(formData.state)}</pre>
+            {/*<pre style={{whiteSpace: "normal"}}>{JSON.stringify(formData.state)}</pre>*/}
         </FormContext.Provider>
     );
 }
