@@ -6,10 +6,11 @@ import * as Yup from "yup";
 import {ValidationError} from "yup";
 
 import {getStatus} from "components/state-mutate-with-status";
-import {ButtonGroup, ButtonPrimary} from "components/Buttons";
+import {ButtonGroup} from "components/Buttons";
 import {MapDataToAction} from "components/actions/form";
 import {Collections, Form, FormContainer} from "components/Form";
 import {Submit} from "components/Form/FormOptions/Submit";
+import Loading from "components/Loading";
 
 import {AppState} from "../reducers";
 import * as actions from "../actions";
@@ -29,13 +30,17 @@ const Title = styled.h2`
     margin-bottom: 20px;
 `;
 
-const LoginForm = styled(FormContainer)`
+const Main = styled(Loading)`
   max-width: 300px;
+  margin: 10px auto;
 `;
+
+const LoginForm = styled(FormContainer)``;
 
 const loginSchema = Yup.object().shape({
     username: Yup.string()
-        .label("Username")
+        .label("Email")
+        .email()
         .required()
         .ensure(),
     password: Yup.string()
@@ -80,37 +85,27 @@ const LoginContainer = ({auth, login}: LoginProps, ...props: any[]) => {
                 Simple Login
             </Title>
 
-            <Form
-                id="login"
-                as={LoginForm}
-                schema={loginSchema}
-                context={formState}
-                onSubmit={handleSubmit}
-            >
-                {({fieldsetMap}) => (
-                    <>
-                        <Collections fieldsetMap={fieldsetMap}/>
+            <Main loading={processing}>
+                <Form
+                    id="login"
+                    as={LoginForm}
+                    schema={loginSchema}
+                    context={formState}
+                    onSubmit={handleSubmit}
+                >
+                    {({fieldsetMap}) => (
+                        <>
+                            <Collections fieldsetMap={fieldsetMap}/>
 
-                        <ButtonGroup className="options main">
-                            <Submit>
-                                Login
-                            </Submit>
-                        </ButtonGroup>
-                    </>
-                )}
-            </Form>
-
-            <ButtonPrimary
-                disabled={processing}
-                onClick={() => {
-                    login("clem@demo.com", "xxx")
-                        .then(() => {
-                            history.replace((from && decodeURIComponent(from)) || "/");
-                        });
-                }}
-            >
-                LOGIN
-            </ButtonPrimary>
+                            <ButtonGroup className="options main">
+                                <Submit>
+                                    Login
+                                </Submit>
+                            </ButtonGroup>
+                        </>
+                    )}
+                </Form>
+            </Main>
         </Page>
     );
 };
