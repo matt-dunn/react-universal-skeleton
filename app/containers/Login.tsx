@@ -3,7 +3,6 @@ import { useParams, useHistory } from "react-router-dom";
 import {connect} from "react-redux";
 import styled from "@emotion/styled";
 import * as Yup from "yup";
-import {ValidationError} from "yup";
 
 import {getStatus} from "components/state-mutate-with-status";
 import {ButtonGroup} from "components/Buttons";
@@ -63,19 +62,11 @@ const LoginContainer = ({auth, login}: LoginProps, ...props: any[]) => {
     const history = useHistory();
     const {processing} = getStatus(auth.authenticatedUser);
 
-    const handleSubmit: MapDataToAction<Yup.InferType<typeof loginSchema>, User, typeof formState> = values => {
-        if (values.username.toLowerCase() === "clem") {
-            throw new ValidationError("Invalid password", "", "password.secret");
-        } else if (values.username.toLowerCase() === "pat") {
-            throw new Error("Incorrect details");
-        }
-
-        return login(values.username, values.password)
-            .then((user) => {
-                history.replace((from && decodeURIComponent(from)) || "/");
-                return user;
-            });
-    };
+    const handleSubmit: MapDataToAction<Yup.InferType<typeof loginSchema>, User, typeof formState> = values => login(values.username, values.password)
+        .then((user) => {
+            history.replace((from && decodeURIComponent(from)) || "/");
+            return user;
+        });
 
     useWhatChanged(LoginContainer, { auth, login, ...props });
 

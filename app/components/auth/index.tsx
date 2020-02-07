@@ -24,9 +24,9 @@ const AuthProvider = ({children}: AboutProviderProps) => {
 
 export const useAuthenticatedUser = () => {
     const {authenticatedUser} = useContext(AuthContext) || {};
-    const {complete} = getStatus(authenticatedUser);
+    const {complete, hasError} = getStatus(authenticatedUser);
 
-    return complete && authenticatedUser;
+    return complete && !hasError && authenticatedUser;
 };
 
 export default AuthProvider;

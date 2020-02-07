@@ -1,4 +1,4 @@
-// import {APIError, APPError} from "components/api";
+import {APIError} from "components/api";
 
 export type User = {
     id: string;
@@ -20,23 +20,27 @@ export const isAuthenticated = () => {
 };
 
 export const AuthApi: AuthApi = {
-    login:(username, password) => new Promise<User>(resolve => {
+    login:(username, password) => new Promise<User>((resolve, reject) => {
         console.log("API CALL: login", username, password);
         // throw new Error("Error in login")
         // throw new APIError("Authentication Failed", "auth", 401)
         setTimeout(() => {
-            console.log("API CALL COMPLETE: login");
-            const user = {
-                id: "123",
-                name: "Clem Fandango",
-                email: username
-            };
+            if (password.length < 2) {
+                reject(new APIError("Invalid username or password", 123, 401));
+            } else {
+                console.log("API CALL COMPLETE: login");
+                const user = {
+                    id: "123",
+                    name: "Clem Fandango",
+                    email: username
+                };
 
-            // Auth mocking
-            (typeof window !== "undefined") && ((window as any).authenticated = true);
-            (typeof process !== "undefined") && ((process as any).authenticated = user);
+                // Auth mocking
+                (typeof window !== "undefined") && ((window as any).authenticated = true);
+                (typeof process !== "undefined") && ((process as any).authenticated = user);
 
-            resolve(user);
+                resolve(user);
+            }
         }, 1500);
     })
 };
