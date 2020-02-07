@@ -1,4 +1,4 @@
-import React, {useCallback, useContext, useState} from "react";
+import React, {useCallback, useContext, useEffect, useRef, useState} from "react";
 import {ValidationError} from "yup";
 import {get, isObject} from "lodash";
 
@@ -138,6 +138,15 @@ export const useForm = <T, Payload = any, Schema = any, Context = any>(
 ): [FormDataState<T, Payload | undefined, Context>, (data: T) => Promise<Payload>] => {
     const formDataContext = useCurrentFormData<T, Payload, Context>(formId, context);
     const [formData, setFormData] = useState<FormDataState<T, Payload | undefined>>(formDataContext);
+    const isMounted = useRef(false);
+
+    useEffect(() => {
+        isMounted.current = true;
+
+        return () => {
+            isMounted.current = false;
+        };
+    }, []);
 
     const submit = useCallback(async(data: T) => {
         setFormData(formData => FormDataState({...formData, error: undefined, innerFormErrors: undefined}));
@@ -148,7 +157,9 @@ export const useForm = <T, Payload = any, Schema = any, Context = any>(
             formDataContext.payload = payload;
             formDataContext.isComplete = true;
 
-            setFormData(formData => FormDataState({...formData, isProcessed: true, isComplete: true, error: undefined, payload: payload, data}));
+            if (isMounted.current) {    // Still mounted after async?
+                setFormData(formData => FormDataState({...formData, isProcessed: true, isComplete: true, error: undefined, payload: payload, data}));
+            }
 
             return payload;
         } catch(reason) {
