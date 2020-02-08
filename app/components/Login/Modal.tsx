@@ -2,15 +2,22 @@ import React, {useEffect} from "react";
 
 import {ModalTitle, useModal} from "components/Modal";
 
+import {User} from "../api/auth";
+
 import LoginComponent from "./";
 
-const LoginModal = () => {
+type LoginModalProps = {
+    onLogin?: (user: User) => void;
+}
+
+const LoginModal = ({onLogin}: LoginModalProps) => {
     const [modal, open, close] = useModal({});
 
     useEffect(() => {
-        const handleLogin = () => {
+        const handleLogin = (user: User) => {
             close();
-            // TODO: Reload the component tree / window.reload?
+
+            onLogin && onLogin(user);
         };
 
         open(() => {
@@ -23,7 +30,7 @@ const LoginModal = () => {
         }, {
             isStatic: true
         });
-    }, [close, open]);
+    }, [close, onLogin, open]);
 
     return <div>{modal()}</div>;
 };

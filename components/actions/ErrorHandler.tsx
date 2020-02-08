@@ -6,8 +6,12 @@ import {ErrorLike} from "components/error";
 
 import {ErrorHandlerContext, ErrorContext} from "./contexts";
 
+type Update = {
+    (): void;
+}
+
 export type HandleError = {
-    (error: ErrorLike, location: string, history: History, props: any): ReactElement | undefined;
+    (error: ErrorLike, location: string, history: History, props: any, update?: Update): ReactElement | undefined;
 }
 
 type ErrorHandlerProps = {
@@ -15,14 +19,15 @@ type ErrorHandlerProps = {
     children: ReactNode | ReactNode[];
 }
 
-const callHandler = (ex: ErrorLike, handler: HandleError, location: Location, history: History, props: any) => {
+const callHandler = (ex: ErrorLike, handler: HandleError, location: Location, history: History, props: any, update?: Update) => {
     const {pathname, search, hash} = (typeof window !== "undefined" && window.location) || location;
 
     return handler(
         ex,
         `${pathname}${(search && `?${encodeURIComponent(search.substr(1))}`) || ""}${(hash && `#${encodeURIComponent(hash.substr(1))}`) || ""}`,
         history,
-        props
+        props,
+        update
     );
 };
 
@@ -32,6 +37,7 @@ const ErrorHandler = ({handler, ...props}: ErrorHandlerProps) => {
     const unlisten = useRef<UnregisterCallback>();
     const errorContext = useContext(ErrorContext);
     const [component, setComponent] = useState(errorContext && errorContext.error && callHandler(errorContext.error, handler, location, history, props));
+    const [key, setKey] = useState(0);
 
     useEffect(() => {
         unlisten.current = history.listen(() => {
@@ -46,7 +52,9 @@ const ErrorHandler = ({handler, ...props}: ErrorHandlerProps) => {
 
     const handleError = useRef<ErrorHandlerContext>({
         handleError: ex => {
-            const ret = callHandler(ex, handler, location, history, props);
+            const ret = callHandler(ex, handler, location, history, props, () => {
+                setKey(value => ++value);
+            });
             setComponent(ret);
             return ret !== undefined;
         }
@@ -55,7 +63,7 @@ const ErrorHandler = ({handler, ...props}: ErrorHandlerProps) => {
     const {children} = props;
 
     return (
-        <ErrorHandlerContext.Provider value={handleError.current}>
+        <ErrorHandlerContext.Provider value={handleError.current} key={key}>
             {component || children}
         </ErrorHandlerContext.Provider>
     );

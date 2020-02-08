@@ -29,14 +29,14 @@ import "./styles/react-responsive-ui.css";
 
 import LoginModal from "./components/Login/Modal";
 
-const handler: HandleError = ({code, status, message}, location, history, {children}) => {
+const handler: HandleError = ({code, status, message}, location, history, {children}, update) => {
     console.error("HANDLE ERROR", message, code, status, location);
 
     if (status === 401) {
         if ((process as any).browser) {
             return (
                 <>
-                    <LoginModal/>
+                    <LoginModal onLogin={update}/>
                     {children}
                 </>
             );
