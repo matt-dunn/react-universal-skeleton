@@ -21,8 +21,8 @@ type LoginProps = {
 };
 
 const Main = styled(Loading)`
-  max-width: 300px;
-  margin: 10px auto;
+  //max-width: 300px;
+  //margin: 10px auto;
 `;
 
 const LoginForm = styled(FormContainer)``;

@@ -6,16 +6,16 @@ import {ErrorLike} from "components/error";
 
 import {ErrorHandlerContext, ErrorContext} from "./contexts";
 
-export type CallHandler = {
-    (error: ErrorLike, location: string, history: History, props: any): boolean | ReactElement | {childComponent: ReactElement};
+export type HandleError = {
+    (error: ErrorLike, location: string, history: History, props: any): ReactElement | undefined;
 }
 
 type ErrorHandlerProps = {
-    handler: CallHandler;
-    children: ReactNode;
+    handler: HandleError;
+    children: ReactNode | ReactNode[];
 }
 
-const callHandler = (ex: ErrorLike, handler: CallHandler, location: Location, history: History, props: any): boolean | ReactElement | {childComponent: ReactElement} => {
+const callHandler = (ex: ErrorLike, handler: HandleError, location: Location, history: History, props: any) => {
     const {pathname, search, hash} = (typeof window !== "undefined" && window.location) || location;
 
     return handler(
@@ -26,18 +26,12 @@ const callHandler = (ex: ErrorLike, handler: CallHandler, location: Location, hi
     );
 };
 
-const getInitialComponent = (ex: ErrorLike, handler: CallHandler, location: Location, history: History, props: any): boolean | ReactElement | {childComponent: ReactElement} => {
-    const ret = callHandler(ex, handler, location, history, props);
-
-    return (ret !== false && ret !== true && ret && ret);
-};
-
-const ErrorHandler = ({handler, children, ...props}: ErrorHandlerProps) => {
+const ErrorHandler = ({handler, ...props}: ErrorHandlerProps) => {
     const history = useHistory();
     const location = useLocation();
     const unlisten = useRef<UnregisterCallback>();
     const errorContext = useContext(ErrorContext);
-    const [component, setComponent] = useState<undefined | boolean | ReactElement | {childComponent: ReactElement}>(errorContext && errorContext.error && getInitialComponent(errorContext.error, handler, location, history, props));
+    const [component, setComponent] = useState(errorContext && errorContext.error && callHandler(errorContext.error, handler, location, history, props));
 
     useEffect(() => {
         unlisten.current = history.listen(() => {
@@ -53,18 +47,16 @@ const ErrorHandler = ({handler, children, ...props}: ErrorHandlerProps) => {
     const handleError = useRef<ErrorHandlerContext>({
         handleError: ex => {
             const ret = callHandler(ex, handler, location, history, props);
-
-            if (ret !== false && ret !== true && ret) {
-                setComponent(ret);
-            }
-
+            setComponent(ret);
             return ret;
         }
     });
 
+    const {children} = props;
+
     return (
         <ErrorHandlerContext.Provider value={handleError.current}>
-            {(component && component.childComponent && <>{component.childComponent} | {children}</>) || component || children}
+            {component || children}
         </ErrorHandlerContext.Provider>
     );
 };

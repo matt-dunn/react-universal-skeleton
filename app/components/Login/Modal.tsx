@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 
-import {useModal} from "components/Modal";
+import {ModalTitle, useModal} from "components/Modal";
 
 import LoginComponent from "./";
 
@@ -15,7 +15,10 @@ const LoginModal = () => {
 
         open(() => {
             return (
-                <LoginComponent onLogin={handleLogin}/>
+                <>
+                    <LoginComponent onLogin={handleLogin}/>
+                    <ModalTitle hasClose={true}>Login</ModalTitle>
+                </>
             );
         });
     }, [close, open]);

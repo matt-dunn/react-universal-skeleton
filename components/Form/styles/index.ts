@@ -24,11 +24,11 @@ export const formStyles: FormStyles = {
 export const FormContainer = styled.form`
   --invalid-color: #e20020;
 
-  border: 1px solid #ccc;
-  background-color: #fdfdfd;
-  border-radius: 4px;
-  padding: 10px;
-  margin: 0 0 20px 0;
+  //border: 1px solid #ccc;
+  //background-color: #fdfdfd;
+  //border-radius: 4px;
+  //padding: 10px;
+  //margin: 0 0 20px 0;
   box-sizing: border-box;
   
   section {

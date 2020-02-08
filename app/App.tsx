@@ -9,7 +9,7 @@ import Header from "./components/Header";
 import { GlobalStyles } from "./styles";
 import { ToastifyStyles } from "./styles/toasify";
 
-import ErrorHandler, {CallHandler} from "components/actions/ErrorHandler";
+import ErrorHandler, {HandleError} from "components/actions/ErrorHandler";
 
 import AuthProvider from "./components/auth";
 import {ToastContainer} from "react-toastify";
@@ -29,25 +29,25 @@ import "./styles/react-responsive-ui.css";
 
 import LoginModal from "./components/Login/Modal";
 
-const handler: CallHandler = ({code, status, message}, location, history) => {
+const handler: HandleError = ({code, status, message}, location, history, {children}) => {
     console.error("HANDLE ERROR", message, code, status, location);
 
     if (status === 401) {
         if ((process as any).browser) {
-            return {
-                childComponent: <LoginModal/>
-            };
+            return (
+                <>
+                    <LoginModal/>
+                    {children}
+                </>
+            );
         } else {
             history.push(generatePath("/login/:from?", {from: location}));
-            return true;
         }
     } else if (status === 403) {
         return <Error403/>;
     } else if (status === 404) {
         return <Error404/>;
     }
-
-    return false;
 };
 
 const App = () => {
