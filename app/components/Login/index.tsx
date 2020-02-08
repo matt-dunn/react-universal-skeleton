@@ -1,4 +1,4 @@
-import React from "react";
+import React, {ReactNode} from "react";
 import {connect} from "react-redux";
 import styled from "@emotion/styled";
 import * as Yup from "yup";
@@ -19,6 +19,7 @@ type LoginProps = {
     login: Login;
     onLogin: (user: User) => void;
     className?: string;
+    children?: ReactNode;
 };
 
 const LoginForm = styled(FormContainer)``;
@@ -44,7 +45,7 @@ const formState = {
     authToken: "*****"
 };
 
-const LoginContainer = ({auth, login, onLogin, className}: LoginProps) => {
+const LoginContainer = ({auth, login, onLogin, className, children}: LoginProps) => {
     const {processing} = getStatus(auth.authenticatedUser);
 
     const handleSubmit: MapDataToAction<Yup.InferType<typeof loginSchema>, User, typeof formState> = ({username, password}) => login(username, password)
@@ -66,11 +67,13 @@ const LoginContainer = ({auth, login, onLogin, className}: LoginProps) => {
                     <>
                         <Collections fieldsetMap={fieldsetMap}/>
 
+                        {children ||
                         <ButtonGroup className="options main">
                             <Submit>
                                 Login
                             </Submit>
                         </ButtonGroup>
+                        }
                     </>
                 )}
             </Form>

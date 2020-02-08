@@ -40,7 +40,7 @@ const handler: HandleError = ({code, status, message}, location, history, props,
 
             };
         } else {
-            history.push(generatePath("/login/:from?", {from: location}));
+            history.push(generatePath("/login/:from?/", {from: location}));
         }
     } else if (status === 403) {
         return {

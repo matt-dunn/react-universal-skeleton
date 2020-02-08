@@ -36,11 +36,12 @@ type ModalCloseProps = {
 const ModalClose = ({onClose}: ModalCloseProps) => <ModalCloseContainer aria-label="Close" onClick={onClose}>×</ModalCloseContainer>;
 
 const ModalTitleContainer = styled.div`
-  padding: 5px 15px;
+  padding: 8px 15px;
   background-color: #999;
+  border-radius: 10px 10px 0 0;
   color: #fff;
   flex-grow: 0;
-  font-size: 1.5em;
+  font-size: 1.25em;
   font-weight: lighter;
   display: flex;
   flex-wrap: nowrap;
@@ -119,7 +120,6 @@ const ModalDialog = styled.div`
   margin: 3em auto;
   max-width: 100%;
   border-radius: 10px;
-  border: 2px solid #999;
   display: flex;
   flex-direction: column;
 `;
