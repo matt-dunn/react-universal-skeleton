@@ -58,6 +58,7 @@ const ErrorHandler = ({handler, ...props}: ErrorHandlerProps) => {
     const handleError = useRef<ErrorHandlerContext>({
         handleError: ex => {
             const ret = callHandler(ex, handler, location, history, props, () => {
+                setComponentMeta(undefined);
                 setKey(value => ++value);
             });
             setComponentMeta(ret);
