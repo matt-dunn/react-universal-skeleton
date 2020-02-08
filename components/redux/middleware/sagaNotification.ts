@@ -10,6 +10,8 @@ export type WithNotification<P = any> = {
     notification?: Notification | {(payload: P | undefined, error: ErrorLike | undefined, meta: ActionMeta): Notification | undefined | void};
 }
 
+const ErrorStatusBlacklist = [401, 403, 404];
+
 export function* sagaNotification(notify: Notify) {
     while (true) {
         const {type, error, payload, meta: {$status, notification, ...restMeta} = {} as ActionMeta & WithNotification} = yield take("*");
@@ -21,7 +23,7 @@ export function* sagaNotification(notify: Notify) {
             n && notify(n);
         } else if ($status?.complete && notification) {
             notify(notification);
-        } else if (error && $status.error && $status.error.status !== 401 && $status.error.status !== 403) {
+        } else if (error && $status.error && ErrorStatusBlacklist.indexOf($status.error.status) === -1) {
             notify({
                 message: $status.error.message,
                 reference: $status.error.code,
