@@ -1,4 +1,4 @@
-import React, {ReactElement, ReactNode, useContext, useEffect, useRef, useState} from "react";
+import React, {ReactNode, useContext, useEffect, useRef, useState} from "react";
 import {useHistory, useLocation} from "react-router";
 import {History, Location, UnregisterCallback} from "history";
 
@@ -10,8 +10,13 @@ type Update = {
     (): void;
 }
 
+type  HandleErrorMeta = {
+    component: ReactNode;
+    includeChildren?: boolean;
+};
+
 export type HandleError = {
-    (error: ErrorLike, location: string, history: History, props: any, update?: Update): ReactElement | undefined;
+    (error: ErrorLike, location: string, history: History, props: any, update?: Update): HandleErrorMeta | undefined;
 }
 
 type ErrorHandlerProps = {
@@ -36,12 +41,12 @@ const ErrorHandler = ({handler, ...props}: ErrorHandlerProps) => {
     const location = useLocation();
     const unlisten = useRef<UnregisterCallback>();
     const errorContext = useContext(ErrorContext);
-    const [component, setComponent] = useState(errorContext && errorContext.error && callHandler(errorContext.error, handler, location, history, props));
+    const [componentMeta, setComponentMeta] = useState(errorContext && errorContext.error && callHandler(errorContext.error, handler, location, history, props));
     const [key, setKey] = useState(0);
 
     useEffect(() => {
         unlisten.current = history.listen(() => {
-            setComponent(undefined);
+            setComponentMeta(undefined);
             errorContext && (errorContext.error = undefined);
         });
 
@@ -55,7 +60,7 @@ const ErrorHandler = ({handler, ...props}: ErrorHandlerProps) => {
             const ret = callHandler(ex, handler, location, history, props, () => {
                 setKey(value => ++value);
             });
-            setComponent(ret);
+            setComponentMeta(ret);
             return ret !== undefined;
         }
     });
@@ -64,7 +69,8 @@ const ErrorHandler = ({handler, ...props}: ErrorHandlerProps) => {
 
     return (
         <ErrorHandlerContext.Provider value={handleError.current} key={key}>
-            {component || children}
+            {componentMeta?.component}
+            {(!componentMeta?.component || componentMeta.includeChildren) && children}
         </ErrorHandlerContext.Provider>
     );
 };

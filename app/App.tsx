@@ -29,24 +29,27 @@ import "./styles/react-responsive-ui.css";
 
 import LoginModal from "./components/Login/Modal";
 
-const handler: HandleError = ({code, status, message}, location, history, {children}, update) => {
+const handler: HandleError = ({code, status, message}, location, history, props, update) => {
     console.error("HANDLE ERROR", message, code, status, location);
 
     if (status === 401) {
         if ((process as any).browser) {
-            return (
-                <>
-                    <LoginModal onLogin={update}/>
-                    {children}
-                </>
-            );
+            return {
+                component: <LoginModal onLogin={update}/>,
+                includeChildren: true,
+
+            };
         } else {
             history.push(generatePath("/login/:from?", {from: location}));
         }
     } else if (status === 403) {
-        return <Error403/>;
+        return {
+            component: <Error403/>
+        };
     } else if (status === 404) {
-        return <Error404/>;
+        return {
+            component: <Error404/>
+        };
     }
 };
 
