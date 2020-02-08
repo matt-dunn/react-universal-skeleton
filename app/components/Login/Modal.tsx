@@ -10,16 +10,18 @@ const LoginModal = () => {
     useEffect(() => {
         const handleLogin = () => {
             close();
-            // window.location.reload()
+            // TODO: Reload the component tree / window.reload?
         };
 
         open(() => {
             return (
                 <>
                     <LoginComponent onLogin={handleLogin}/>
-                    <ModalTitle hasClose={true}>Login</ModalTitle>
+                    <ModalTitle hasClose={false}>Login</ModalTitle>
                 </>
             );
+        }, {
+            isStatic: true
         });
     }, [close, open]);
 

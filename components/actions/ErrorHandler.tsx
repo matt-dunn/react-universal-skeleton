@@ -48,7 +48,7 @@ const ErrorHandler = ({handler, ...props}: ErrorHandlerProps) => {
         handleError: ex => {
             const ret = callHandler(ex, handler, location, history, props);
             setComponent(ret);
-            return ret;
+            return ret !== undefined;
         }
     });
 

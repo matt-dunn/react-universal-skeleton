@@ -74,10 +74,16 @@ export type MySimpleFormResponse = {
     newUsername: string;
 }
 
-const MyFormContainer = styled(FormContainer)`
-  border: 4px solid #ccc;
+const SimpleFormContainer = styled(FormContainer)`
+  border: 1px solid #ccc;
   padding: 15px 30px;
   background-color: inherit;
+  border-radius: 3px;
+  margin: 0 0 20px 0;
+`;
+
+const MyFormContainer = styled(SimpleFormContainer)`
+  border-width: 4px;
   border-radius: 15px;
 `;
 
@@ -129,6 +135,7 @@ const Forms = () => {
 
                 <Form
                     id="my-form2"
+                    as={SimpleFormContainer}
                     schema={schemaComplex}
                     onSubmit={handleSubmit}
                     context={formState}
@@ -161,6 +168,7 @@ const Forms = () => {
 
                 <Form
                     id="my-form3"
+                    as={SimpleFormContainer}
                     schema={simpleSchema}
                     onSubmit={handleSubmit2}
                     context={formState2}

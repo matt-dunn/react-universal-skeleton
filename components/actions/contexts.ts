@@ -11,7 +11,7 @@ export type ErrorContext = {
 }
 
 export type ErrorHandlerContext = {
-    handleError: (error: ErrorLike) => any;
+    handleError: (error: ErrorLike) => boolean;
 }
 
 export const FoldContext = React.createContext<FoldContext | undefined>(undefined);

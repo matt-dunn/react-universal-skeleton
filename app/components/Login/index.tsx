@@ -18,12 +18,8 @@ type LoginProps = {
     auth: AuthState;
     login: Login;
     onLogin: (user: User) => void;
+    className?: string;
 };
-
-const Main = styled(Loading)`
-  //max-width: 300px;
-  //margin: 10px auto;
-`;
 
 const LoginForm = styled(FormContainer)``;
 
@@ -48,7 +44,7 @@ const formState = {
     authToken: "*****"
 };
 
-const LoginContainer = ({auth, login, onLogin}: LoginProps) => {
+const LoginContainer = ({auth, login, onLogin, className}: LoginProps) => {
     const {processing} = getStatus(auth.authenticatedUser);
 
     const handleSubmit: MapDataToAction<Yup.InferType<typeof loginSchema>, User, typeof formState> = ({username, password}) => login(username, password)
@@ -58,7 +54,7 @@ const LoginContainer = ({auth, login, onLogin}: LoginProps) => {
         });
 
     return (
-        <Main loading={processing}>
+        <Loading loading={processing} className={className}>
             <Form
                 id="login"
                 as={LoginForm}
@@ -78,7 +74,7 @@ const LoginContainer = ({auth, login, onLogin}: LoginProps) => {
                     </>
                 )}
             </Form>
-        </Main>
+        </Loading>
     );
 };
 

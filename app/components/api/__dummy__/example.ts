@@ -42,7 +42,7 @@ export const ExampleApi: ExampleApi = {
 
         if (page === 4) {
             if (!isAuthenticated()) {
-                throw new APIError("Auth Error...", 123, 404);
+                throw new APIError("Auth Error...", 123, 401);
             }
             throw new APPError("Error in exampleGetList", 123);
         }

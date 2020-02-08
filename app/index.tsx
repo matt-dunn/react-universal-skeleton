@@ -7,7 +7,7 @@ import {deserialize} from "components/state-mutate-with-status";
 
 import {FormDataState} from "components/actions/form";
 import {AsyncData} from "components/ssr/safePromise";
-import {ErrorContext} from "components/actions/contexts";
+import {ErrorLike} from "components/error";
 
 import getStore from "./store";
 
@@ -16,7 +16,7 @@ import App from "./App";
 
 type Global = {
     __PRELOADED_STATE__: any;
-    __ERROR_STATE__: ErrorContext;
+    __ERROR_STATE__: ErrorLike;
     __PRELOADED_FORM_STATE__: FormDataState;
     __ASYNC_DATA_STATE__: any;
     __LANGUAGE_PACK__: any;
@@ -29,7 +29,7 @@ type Global = {
 const global = window as unknown as Global;
 
 const store = getStore(deserialize(JSON.stringify(global.__PRELOADED_STATE__)));
-const error = global.__ERROR_STATE__;
+const error = {error: global.__ERROR_STATE__};
 const formData = FormDataState(global.__PRELOADED_FORM_STATE__);
 const asyncData = new AsyncData(global.__ASYNC_DATA_STATE__);
 const languagePack = global.__LANGUAGE_PACK__;

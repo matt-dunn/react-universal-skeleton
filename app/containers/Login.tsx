@@ -13,6 +13,11 @@ const Title = styled.h2`
     margin-bottom: 20px;
 `;
 
+const LoginForm = styled(Login)`
+  max-width: 300px;
+  margin: 10px auto;
+`;
+
 const LoginContainer = () => {
     const {from} = useParams() || "/";
     const history = useHistory();
@@ -27,7 +32,7 @@ const LoginContainer = () => {
                 Simple Login
             </Title>
 
-            <Login onLogin={handleLogin}/>
+            <LoginForm onLogin={handleLogin}/>
         </Page>
     );
 };

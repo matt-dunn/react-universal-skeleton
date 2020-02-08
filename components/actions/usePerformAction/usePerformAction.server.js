@@ -20,14 +20,8 @@ const usePerformAction = action => {
                 payload
                     .catch(ex => {
                         if (handleError) {
-                            const ret = handleError(ex);
-
-                            if (ret !== false && ret !== true && ret) {
+                            if (handleError(ex) === true) {   // Handled errors should throw on the server so getDataFromTree will immediately bail
                                 errorContext.error = ex;
-                                throw ex;
-                            }
-
-                            if (ret === true) {   // Handled errors should throw on the server so getDataFromTree will immediately bail
                                 throw ex;
                             }
                         }
