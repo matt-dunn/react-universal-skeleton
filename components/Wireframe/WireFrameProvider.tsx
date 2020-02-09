@@ -1,11 +1,11 @@
-import React, {ReactNode, useContext, useEffect, useState, useCallback, useLayoutEffect} from "react";
+import React, {ReactNode, useContext, useEffect, useState, useCallback, useRef} from "react";
 import {Global} from "@emotion/core";
 import css from "@emotion/css";
 import styled from "@emotion/styled";
 import scrollIntoView from "scroll-into-view-if-needed";
 
 import {WireFrameAnnotationContext} from "./context";
-import {WireFrameComponent, WireFrameComponents} from "./api";
+import {APIOptions, WireFrameComponent, WireFrameComponents} from "./api";
 import {global} from "./styles";
 
 import useWhatChanged from "../whatChanged/useWhatChanged";
@@ -123,14 +123,35 @@ const WireFrameAnnotationsClose = styled.button`
   color: inherit;
 `;
 
-export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
+const useWireFrameAPI = ({updater, highlightNote}: APIOptions) => {
     const api = useContext(WireFrameAnnotationContext);
+    const initialised = useRef(false);
+
+    if (!initialised.current) {
+        initialised.current = true;
+        api.setOptions({
+            updater,
+            highlightNote
+        });
+    }
+
+    return api;
+};
+
+export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
+    const [isClient, setIsClient] = useState(true);
+
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
 
     const [components, setComponents] = useState<WireFrameComponents>();
     const [show, setShow] = useState(false);
     const [highlightedNote, setHighlightedNote] = useState<WireFrameComponent | undefined>(undefined);
 
     const highlightNote = useCallback(wireFrameComponent => show && setHighlightedNote(wireFrameComponent), [show]);
+
+    const api = useWireFrameAPI({updater: setComponents, highlightNote});
 
     const handleToggle = useCallback(() => {
         setShow(show => !show);
@@ -139,13 +160,6 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
     const handleClose = useCallback(() => {
         setShow(false);
     }, []);
-
-    useLayoutEffect(() => {
-        api.setOptions({
-            updater: setComponents,
-            highlightNote
-        });
-    }, [api, highlightNote]);
 
     useEffect(() => {
         if (show) {
@@ -182,6 +196,7 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
                 <WireFrameBody>
                     {children}
                 </WireFrameBody>
+                {isClient &&
                 <WireFrameAnnotationsContainer data-annotations-container>
                     <WireFrameAnnotations data-annotations>
                         <WireFrameAnnotationsToggle data-annotations-toggle aria-label="Toggle annotations" onClick={handleToggle}>
@@ -197,6 +212,7 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
                         />}
                     </WireFrameAnnotations>
                 </WireFrameAnnotationsContainer>
+                }
             </WireFrameContainer>
         </WireFrameAnnotationContext.Provider>
     );
