@@ -80,7 +80,6 @@ const WireFrameAnnotations = styled.div`
   z-index: 6000;
   
   > header {
-    margin-bottom: 1em;
     padding: 3px 10px;
     background-color: #555;
     color: #fff;
@@ -140,13 +139,13 @@ const useWireFrame = (show: boolean) => {
 };
 
 export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
-    const [isClient, setIsClient] = useState(true);
+    const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
         setIsClient(true);
     }, []);
 
-    const [show, setShow] = useState(true);
+    const [show, setShow] = useState(false);
 
     const {api, components, highlightedNote} = useWireFrame(show);
 

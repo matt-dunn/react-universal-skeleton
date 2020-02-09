@@ -8,6 +8,10 @@ import {IdentifierBase} from "./styles";
 const Wrapper = styled.span`
   position: relative;
   
+  [disabled] {
+    pointer-events: none;
+  }
+  
   &:hover {
       > [data-annotation-identifier] {
         transition: opacity 0ms, visibility 0ms;

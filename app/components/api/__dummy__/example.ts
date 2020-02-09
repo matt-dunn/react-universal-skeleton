@@ -1,6 +1,6 @@
 import {Cancel} from "components/redux/middleware/sagaAsyncAction";
 
-import {APIError, APPError} from "components/api";
+import {APIError} from "components/api";
 import {isAuthenticated} from "../auth";
 
 export type ExampleItem = {
