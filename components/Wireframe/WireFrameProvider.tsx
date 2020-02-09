@@ -1,11 +1,11 @@
-import React, {ReactNode, useContext, useEffect, useState, useCallback, useRef} from "react";
+import React, {ReactNode, useContext, useEffect, useState, useCallback, useMemo} from "react";
 import {Global} from "@emotion/core";
 import css from "@emotion/css";
 import styled from "@emotion/styled";
 import scrollIntoView from "scroll-into-view-if-needed";
 
 import {WireFrameAnnotationContext} from "./context";
-import {APIOptions, WireFrameComponent, WireFrameComponents} from "./api";
+import {WireFrameComponent, WireFrameComponents} from "./api";
 import {global} from "./styles";
 
 import useWhatChanged from "../whatChanged/useWhatChanged";
@@ -44,7 +44,7 @@ const WireFrameContainer = styled.div<{show: boolean}>`
               }
           `;
     }
-}};
+  }};
 `;
 
 const WireFrameBody = styled.div`
@@ -123,19 +123,20 @@ const WireFrameAnnotationsClose = styled.button`
   color: inherit;
 `;
 
-const useWireFrameAPI = ({updater, highlightNote}: APIOptions) => {
+const useWireFrame = (show: boolean) => {
     const api = useContext(WireFrameAnnotationContext);
-    const initialised = useRef(false);
 
-    if (!initialised.current) {
-        initialised.current = true;
+    const [components, setComponents] = useState<WireFrameComponents>();
+    const [highlightedNote, setHighlightedNote] = useState<WireFrameComponent | undefined>(undefined);
+
+    useMemo(() => {
         api.setOptions({
-            updater,
-            highlightNote
+            updater: setComponents,
+            highlightNote: wireFrameComponent => show && setHighlightedNote(wireFrameComponent)
         });
-    }
+    }, [api, show]);
 
-    return api;
+    return {api, components, highlightedNote};
 };
 
 export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
@@ -145,13 +146,9 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
         setIsClient(true);
     }, []);
 
-    const [components, setComponents] = useState<WireFrameComponents>();
-    const [show, setShow] = useState(false);
-    const [highlightedNote, setHighlightedNote] = useState<WireFrameComponent | undefined>(undefined);
+    const [show, setShow] = useState(true);
 
-    const highlightNote = useCallback(wireFrameComponent => show && setHighlightedNote(wireFrameComponent), [show]);
-
-    const api = useWireFrameAPI({updater: setComponents, highlightNote});
+    const {api, components, highlightedNote} = useWireFrame(show);
 
     const handleToggle = useCallback(() => {
         setShow(show => !show);
@@ -185,7 +182,7 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
         }
     }, [highlightedNote]);
 
-    useWhatChanged(WireFrameProvider, { api, handleToggle, handleClose, components, show, highlightedNote, highlightNote});
+    useWhatChanged(WireFrameProvider, { api, handleToggle, handleClose, components, show, highlightedNote});
 
     return (
         <WireFrameAnnotationContext.Provider value={api}>
