@@ -12,14 +12,14 @@ import {API} from "./components/api";
 
 const composeEnhancers = (typeof window !== "undefined" && (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
 
-const sagaMiddleware = createSagaMiddleware();
-
 const rootSaga = function* rootSaga() {
     yield fork(sagaNotification, notification => import("./notify").then(({notify}) => notify(notification)));
     yield fork(sagaAsyncAction, {API});
 };
 
 const getStore = (initialState = {}) => {
+    const sagaMiddleware = createSagaMiddleware();
+
     const store = createStore(
         rootReducer,
         initialState,
