@@ -6,7 +6,6 @@ import { useParams} from "react-router";
 
 import {DecoratedWithStatus} from "components/state-mutate-with-status";
 import {AboveTheFold} from "components/actions";
-import {Notify} from "components/notification";
 
 import List, {GetList, Items} from "app/components/List";
 import SimpleItem, {GetItem, Item} from "app/components/Item";
@@ -20,7 +19,6 @@ type ListsProps = {
     exampleGetList: GetList;
     exampleGetItem: GetItem;
     exampleEditItem: OnChange;
-    notify: Notify;
 };
 
 const DataListItem = styled(EditItem)<{isImportant?: boolean}>`
@@ -29,7 +27,7 @@ const DataListItem = styled(EditItem)<{isImportant?: boolean}>`
 
 const importantIds = ["item-1", "item-2"];
 
-const Lists = ({notify, items, item, exampleGetList, exampleGetItem, exampleEditItem}: ListsProps) => {
+const Lists = ({items, item, exampleGetList, exampleGetItem, exampleEditItem}: ListsProps) => {
     const { page } = useParams();
 
     useWhatChanged(Lists, { items, item, exampleGetList, exampleGetItem, exampleEditItem, page});
