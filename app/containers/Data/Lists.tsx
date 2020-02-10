@@ -1,0 +1,58 @@
+import React from "react";
+import styled from "@emotion/styled";
+import {css} from "@emotion/core";
+import TrackVisibility from "react-on-screen";
+import { useParams} from "react-router";
+
+import {DecoratedWithStatus} from "components/state-mutate-with-status";
+import {AboveTheFold} from "components/actions";
+import {Notify} from "components/notification";
+
+import List, {GetList, Items} from "app/components/List";
+import SimpleItem, {GetItem, Item} from "app/components/Item";
+import EditItem, {OnChange} from "app/components/EditItem";
+
+import useWhatChanged from "components/whatChanged/useWhatChanged";
+
+type ListsProps = {
+    items: Items;
+    item?: Item & DecoratedWithStatus;
+    exampleGetList: GetList;
+    exampleGetItem: GetItem;
+    exampleEditItem: OnChange;
+    notify: Notify;
+};
+
+const DataListItem = styled(EditItem)<{isImportant?: boolean}>`
+  ${({isImportant}) => isImportant && css`background-color: rgba(230, 230, 230, 0.5);`}
+`;
+
+const importantIds = ["item-1", "item-2"];
+
+const Lists = ({notify, items, item, exampleGetList, exampleGetItem, exampleEditItem}: ListsProps) => {
+    const { page } = useParams();
+
+    useWhatChanged(Lists, { items, item, exampleGetList, exampleGetItem, exampleEditItem, page});
+
+    return (
+        <>
+            <AboveTheFold>
+                <List items={items} getList={exampleGetList} editItem={exampleEditItem} activePage={parseInt(page || "0", 10)}>
+                    {({item, disabled}) => (
+                        <DataListItem item={item} disabled={disabled} onChange={exampleEditItem} type="primary" isImportant={importantIds.indexOf(item.id) !== -1}/>
+                    )}
+                </List>
+            </AboveTheFold>
+
+            <div style={{height: "110vh"}}/>
+
+            <TrackVisibility once={true} partialVisibility={true}>
+                {({ isVisible }) => <SimpleItem isShown={isVisible} item={item} getItem={exampleGetItem}/>}
+            </TrackVisibility>
+
+            <div style={{height: "10vh"}}/>
+        </>
+    );
+};
+
+export default Lists;

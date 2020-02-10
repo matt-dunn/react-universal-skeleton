@@ -1,29 +1,27 @@
 import React from "react";
 import {Helmet} from "react-helmet-async";
 import styled from "@emotion/styled";
-import {css} from "@emotion/core";
 import { connect } from "react-redux";
-import TrackVisibility from "react-on-screen";
 import { useParams} from "react-router";
 
 import {DecoratedWithStatus} from "components/state-mutate-with-status";
-import {AboveTheFold} from "components/actions";
 import {withWireFrameAnnotation} from "components/Wireframe";
 import {Notify, notifyAction} from "components/notification";
 
-import List, {GetList, Items} from "app/components/List";
-import SimpleItem, {GetItem, Item} from "app/components/Item";
-import EditItem, {OnChange} from "app/components/EditItem";
+import {GetList, Items} from "app/components/List";
+import {GetItem, Item} from "app/components/Item";
+import {OnChange} from "app/components/EditItem";
 
 import Page from "app/styles/Page";
 import * as actions from "app/actions";
 import {AppState} from "app/reducers";
 
 import Modals from "./Modals";
+import Lists from "./Lists";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
-export type DataProps = {
+type DataProps = {
     items: Items;
     item?: Item & DecoratedWithStatus;
     exampleGetList: GetList;
@@ -35,12 +33,6 @@ export type DataProps = {
 const Title = styled.h2`
     color: #ccc;
 `;
-
-const DataListItem = styled(EditItem)<{isImportant?: boolean}>`
-  ${({isImportant}) => isImportant && css`background-color: rgba(230, 230, 230, 0.5);`}
-`;
-
-const importantIds = ["item-1", "item-2"];
 
 const WSTitle = withWireFrameAnnotation(Title, {
     title: <div>Page title</div>,
@@ -66,21 +58,7 @@ const Data = ({notify, items, item, exampleGetList, exampleGetItem, exampleEditI
 
             <Modals getItem={exampleGetItem} notify={notify} item={item}/>
 
-            <AboveTheFold>
-                <List items={items} getList={exampleGetList} editItem={exampleEditItem} activePage={parseInt(page || "0", 10)}>
-                    {({item, disabled}) => (
-                        <DataListItem item={item} disabled={disabled} onChange={exampleEditItem} type="primary" isImportant={importantIds.indexOf(item.id) !== -1}/>
-                    )}
-                </List>
-            </AboveTheFold>
-
-            <div style={{height: "110vh"}}/>
-
-            <TrackVisibility once={true} partialVisibility={true}>
-                {({ isVisible }) => <SimpleItem isShown={isVisible} item={item} getItem={exampleGetItem}/>}
-            </TrackVisibility>
-
-            <div style={{height: "10vh"}}/>
+            <Lists items={items} exampleGetList={exampleGetList} exampleGetItem={exampleGetItem} exampleEditItem={exampleEditItem} notify={notify}/>
         </Page>
     );
 };
