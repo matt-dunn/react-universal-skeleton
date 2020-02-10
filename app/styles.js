@@ -49,7 +49,5 @@ body, h1, h2, h3, h4, h5, h6, p, ol, ul, input[type=text], input[type=email], bu
 }/* Links */
 a {
   text-decoration: underline;
-  color: inherit;&.active {
-    text-decoration: none;
-  }
+  color: inherit;
 }`;

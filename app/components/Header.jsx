@@ -11,6 +11,7 @@ const Container = styled.nav`
   align-items: center;
   border-bottom: 3px solid #eee;
   background-color: #f5f5f5;
+  min-height: 80px;
 `;
 
 const Brand = styled.header`
@@ -19,38 +20,57 @@ const Brand = styled.header`
 `;
 
 const Menu = styled.ul`
-  padding: 20px;
+  margin: 20px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  width: 50vw;
 `;
 
 const MenuLink = styled.li`
-  margin-left: 2em;
-  text-decoration: none;
+  margin-right: 0.5em;
+  
+  &:last-child {
+    margin-right: 0;
+  }
 `;
 
 const AuthenticatedUser = styled.div`
   font-size: 0.65em;
 `;
 
-const WSHome = withWireFrameAnnotation(NavLink, {
+const HeaderLink = styled(NavLink)`
+  padding: 8px 15px;
+  text-decoration: none;
+  border-radius: 1em;
+
+  &:focus,  
+  &:hover {
+    background-color: #ddd;
+  }
+  
+  &.active {
+    background-color: #555;
+    color: #fff;
+    pointer-events: none;
+  }
+`;
+
+const WSHome = withWireFrameAnnotation(HeaderLink, {
     title: <div>Home</div>,
     description: <div>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
 });
 
-const WSData = withWireFrameAnnotation(NavLink, {
+const WSData = withWireFrameAnnotation(HeaderLink, {
     title: <div>Data</div>,
     description: <div>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
 });
 
-const WSForms = withWireFrameAnnotation(NavLink, {
+const WSForms = withWireFrameAnnotation(HeaderLink, {
     title: <div>Forms</div>,
     description: <div>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
 });
 
-const WALocale = withWireFrameAnnotation(NavLink, {
+const WALocale = withWireFrameAnnotation(HeaderLink, {
     title: <div>Locale</div>,
     description: <div>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
 });
