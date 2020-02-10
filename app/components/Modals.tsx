@@ -45,7 +45,7 @@ const Modals = ({notify, item, getItem}: ModalsProps) => {
             });
     };
 
-    useWhatChanged(Modals, { modal, open, close, item, getItem});
+    useWhatChanged(Modals, { modal, open, item, getItem});
 
     return (
         <WSButtons>
