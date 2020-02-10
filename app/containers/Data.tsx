@@ -58,7 +58,7 @@ const Data = ({notify, items, item, exampleGetList, exampleGetItem, exampleEditI
 
             <Modals getItem={exampleGetItem} notify={notify} item={item}/>
 
-            <Lists items={items} exampleGetList={exampleGetList} exampleGetItem={exampleGetItem} exampleEditItem={exampleEditItem}/>
+            <Lists item={item} items={items} exampleGetList={exampleGetList} exampleGetItem={exampleGetItem} exampleEditItem={exampleEditItem}/>
         </Page>
     );
 };

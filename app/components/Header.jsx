@@ -73,25 +73,28 @@ const Header = () => {
                 <MenuLink>
                     <WSHome
                         to="/"
-                        exact activeClassName="active"
+                        exact
+                        activeClassName="active"
                     >Home</WSHome>
                 </MenuLink>
                 <MenuLink>
                     <WSData
                         to="/data/"
-                        exact activeClassName="active"
+                        activeClassName="active"
                     >API SSR Example</WSData>
                 </MenuLink>
                 <MenuLink>
                     <WSForms
                         to="/forms/"
-                        exact activeClassName="active"
+                        exact
+                        activeClassName="active"
                     >Schema Forms</WSForms>
                 </MenuLink>
                 <MenuLink>
                     <WALocale
                         to="/locale/"
-                        exact activeClassName="active"
+                        exact
+                        activeClassName="active"
                     >Locale Test</WALocale>
                 </MenuLink>
             </Menu>
