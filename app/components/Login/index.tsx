@@ -12,11 +12,16 @@ import Loading from "components/Loading";
 import {AppState} from "../../reducers";
 import * as actions from "../../actions";
 import {AuthState} from "../../reducers/auth";
-import {Login, User} from "../api/auth";
+
+export type User = {
+    id: string;
+    name: string;
+    email: string;
+}
 
 type LoginProps = {
     auth: AuthState;
-    login: Login;
+    login: (username: string, password: string) => Promise<User>;
     onLogin: (user: User) => void;
     className?: string;
     children?: ReactNode;

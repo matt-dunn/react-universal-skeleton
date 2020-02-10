@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 
 import {ModalTitle, useModal} from "components/Modal";
 
-import {User} from "../api/auth";
+import {User} from "./";
 
 import LoginComponent from "./";
 

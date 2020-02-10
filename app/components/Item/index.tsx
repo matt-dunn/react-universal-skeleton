@@ -7,14 +7,19 @@ import {usePerformAction} from "components/actions";
 import {getStatus, DecoratedWithStatus} from "components/state-mutate-with-status";
 import PlaceHolderItem from "app/components/Placeholder/Item";
 
-import {ExampleGetItem, ExampleItem} from "../api";
-
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 import {withWireFrameAnnotation} from "components/Wireframe";
 
-export type ItemProps = {
-    item?: ExampleItem & DecoratedWithStatus;
-    exampleGetItem: ExampleGetItem;
+export type Item = {
+    id: string;
+    name: string;
+}
+
+export type GetItem = () => Promise<Item>
+
+type ItemProps = {
+    item?: Item & DecoratedWithStatus;
+    getItem: GetItem;
     className?: string;
     isShown?: boolean;
 };
@@ -39,15 +44,15 @@ const ItemContainer = styled.div<{processing?: boolean}>`
 const PlaceHolderListItem = PlaceHolderItem(styled.div`color:#ddd`);
 
 
-const Item = ({className, isShown = true, item, exampleGetItem, ...props}: ItemProps) => {
+const Item = ({className, isShown = true, item, getItem, ...props}: ItemProps) => {
     const {complete, processing, hasError, error} = getStatus(item);
 
-    useWhatChanged(Item, { className, isShown, item, exampleGetItem, ...props });
+    useWhatChanged(Item, { className, isShown, item, getItem, ...props });
 
     const itemId = item && item.id;
 
     usePerformAction(
-        exampleGetItem,
+        getItem,
         useCallback(() => isShown && !itemId, [isShown, itemId])
     );
 

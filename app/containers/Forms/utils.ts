@@ -1,5 +1,5 @@
 import {ValidationError} from "yup";
-// import {APIError} from "../../../components/api";
+// import {APIError} from "components/api";
 
 export type MyFormResponse = {
     chosenFlavour: string;

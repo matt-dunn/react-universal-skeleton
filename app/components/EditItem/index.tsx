@@ -4,15 +4,20 @@ import {css} from "@emotion/core";
 
 import TextInput from "react-responsive-ui/modules/TextInput";
 
-import {ExampleItem} from "../api";
-
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 import {withWireFrameAnnotation} from "components/Wireframe";
 import {getStatus, DecoratedWithStatus} from "components/state-mutate-with-status";
 
-export type EditItemProps = {
-    item: ExampleItem & DecoratedWithStatus;
-    onChange?: (item: ExampleItem) => Promise<ExampleItem>;
+export type EditItem = {
+    id: string;
+    name: string;
+}
+
+export type OnChange = (item: EditItem) => Promise<EditItem>
+
+type EditItemProps = {
+    item: EditItem & DecoratedWithStatus;
+    onChange?: OnChange;
     type?: "primary" | "secondary";
     className?: string;
     disabled?: boolean;

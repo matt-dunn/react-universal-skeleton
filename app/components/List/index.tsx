@@ -8,21 +8,24 @@ import Loading from "components/Loading";
 import {usePerformAction} from "components/actions";
 import {ResponsiveGrid} from "components/Grid";
 
-import {ExampleEditItem, ExampleGetList, ExampleItem, ExampleList} from "../api";
 import PlaceHolderItem from "app/components/Placeholder/Item";
 
-import Item from "../EditItem";
+import Item, {EditItem, OnChange} from "../EditItem";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 import {withWireFrameAnnotation} from "components/Wireframe";
 
-export type ListProps = {
-    items: ExampleList & DecoratedWithStatus;
-    exampleGetList: ExampleGetList;
-    exampleEditItem: ExampleEditItem;
+export type Items = EditItem[];
+
+export type GetList = (page?: number, count?: number) => Promise<Items>
+
+type ListProps = {
+    items: Items & DecoratedWithStatus;
+    getList: GetList;
+    editItem: OnChange;
     isShown?: boolean;
     activePage?: number;
-    children?: ({item, disabled}: {item: ExampleItem; disabled: boolean}) => ReactElement;
+    children?: ({item, disabled}: {item: EditItem; disabled: boolean}) => ReactElement;
 };
 
 const ListContainer = styled.div`
@@ -97,13 +100,13 @@ const WFPagination = withWireFrameAnnotation(Pagination, {
     description: <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam iaculis convallis ante, ac porttitor eros hendrerit non. Ut a hendrerit ligula. Praesent vestibulum, dui venenatis convallis condimentum, lorem magna rutrum erat, eget convallis odio purus sed ex. Suspendisse congue metus ac blandit vehicula. Suspendisse non elementum purus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
 });
 
-const List = ({isShown = true, items, exampleGetList, exampleEditItem, activePage, children, ...props}: ListProps) => {
+const List = ({isShown = true, items, getList, editItem, activePage, children, ...props}: ListProps) => {
     const {processing, hasError, error, updatingChildren, complete} = getStatus(items);
 
     usePerformAction(
         useCallback(() => {
             // exampleGetList(0, 2);
-            return exampleGetList(activePage, MAX_ITEMS)
+            return getList(activePage, MAX_ITEMS)
                 .then(e => {
                     console.log("DONE", e);
                     return e;
@@ -112,11 +115,11 @@ const List = ({isShown = true, items, exampleGetList, exampleEditItem, activePag
                     console.log("ERROR", ex.message);
                     throw ex;
                 });
-        }, [exampleGetList, activePage]),
+        }, [getList, activePage]),
         useCallback(() => isShown, [isShown])
     );
 
-    useWhatChanged(List, { activePage, isShown, items, exampleGetList, exampleEditItem, children, usePerformAction, ...props });
+    useWhatChanged(List, { activePage, isShown, items, getList, editItem, children, usePerformAction, ...props });
 
     return (
         <ListContainer>
@@ -135,7 +138,7 @@ const List = ({isShown = true, items, exampleGetList, exampleEditItem, activePag
                                 <Item
                                     item={item}
                                     disabled={processing}
-                                    onChange={exampleEditItem}
+                                    onChange={editItem}
                                 />
                                 }
                             </ListItem>

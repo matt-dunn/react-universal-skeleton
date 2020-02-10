@@ -13,23 +13,22 @@ import {Button, ButtonGroup, ButtonSimple, ButtonSimplePrimary} from "components
 import {withWireFrameAnnotation} from "components/Wireframe";
 import {Notify, notifyAction} from "components/notification";
 
-import List from "app/components/List";
-import Item from "app/components/Item";
-import EditItem from "app/components/EditItem";
+import List, {GetList, Items} from "app/components/List";
+import SimpleItem, {GetItem, Item} from "app/components/Item";
+import EditItem, {OnChange} from "app/components/EditItem";
 
 import Page from "../styles/Page";
 import * as actions from "../actions";
 import {AppState} from "../reducers";
-import {ExampleGetList, ExampleGetItem, ExampleEditItem, ExampleList, ExampleItem} from "../components/api";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
 export type DataProps = {
-    items: ExampleList;
-    item?: ExampleItem & DecoratedWithStatus;
-    exampleGetList: ExampleGetList;
-    exampleGetItem: ExampleGetItem;
-    exampleEditItem: ExampleEditItem;
+    items: Items;
+    item?: Item & DecoratedWithStatus;
+    exampleGetList: GetList;
+    exampleGetItem: GetItem;
+    exampleEditItem: OnChange;
     notify: Notify;
 };
 
@@ -80,7 +79,7 @@ const Data = ({notify, items, item, exampleGetList, exampleGetItem, exampleEditI
         return <DataListItem item={item} disabled={disabled} onChange={exampleEditItem} type="primary" isImportant={importantIds.indexOf(item.id) !== -1}/>;
     }, [exampleEditItem]);
 
-    const renderItem = useCallback(({ isVisible }) => <Item isShown={isVisible} item={item} exampleGetItem={exampleGetItem}/>, [item, exampleGetItem]);
+    const renderItem = useCallback(({ isVisible }) => <SimpleItem isShown={isVisible} item={item} getItem={exampleGetItem}/>, [item, exampleGetItem]);
 
     const [modal, open, close] = useModal<Pick<DataProps, "item" | "exampleGetItem">>({item, exampleGetItem});
 
@@ -88,7 +87,7 @@ const Data = ({notify, items, item, exampleGetList, exampleGetItem, exampleEditI
         open(({item, exampleGetItem}) => {
             console.log("RENDER MODAL CHILDREN", item);
             return (
-                <Item isShown={true} item={item} exampleGetItem={exampleGetItem}/>
+                <SimpleItem isShown={true} item={item} getItem={exampleGetItem}/>
             );
         })
             .then(() => {
@@ -114,7 +113,7 @@ const Data = ({notify, items, item, exampleGetList, exampleGetItem, exampleEditI
                                 Focusable element
                             </WAModalButton>
                         </address>
-                        <Item isShown={true} item={item} exampleGetItem={exampleGetItem}/>
+                        <SimpleItem isShown={true} item={item} getItem={exampleGetItem}/>
                         <ModalFooter>
                             <ButtonGroup>
                                 <ButtonSimple
@@ -182,7 +181,7 @@ const Data = ({notify, items, item, exampleGetList, exampleGetItem, exampleEditI
                 {/*    {({ isVisible }) => <List isShown={isVisible} items={items} exampleGetList={exampleGetList} exampleEditItem={exampleEditItem}/>}*/}
                 {/*</TrackVisibility>*/}
 
-                <List items={items} exampleGetList={exampleGetList} exampleEditItem={exampleEditItem} activePage={parseInt(page || "0", 10)}>
+                <List items={items} getList={exampleGetList} editItem={exampleEditItem} activePage={parseInt(page || "0", 10)}>
                     {renderListItem}
                 </List>
 

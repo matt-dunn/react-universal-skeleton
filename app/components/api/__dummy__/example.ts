@@ -11,22 +11,22 @@ export type ExampleItem = {
 
 export type ExampleList = ExampleItem[];
 
-export type ExampleGetList = {
+type ExampleGetList = WrapCancelable<{
     (page?: number, count?: number): Promise<ExampleList>;
-}
+}>
 
-export type ExampleGetItem = {
+type ExampleGetItem = WrapCancelable<{
     (): Promise<ExampleItem>;
-}
+}>
 
-export type ExampleEditItem = {
+type ExampleEditItem = WrapCancelable<{
     (item: ExampleItem): Promise<ExampleItem>;
-}
+}>
 
 export type ExampleApi = {
-    exampleGetList: WrapCancelable<ExampleGetList>;
-    exampleGetItem: WrapCancelable<ExampleGetItem>;
-    exampleEditItem: WrapCancelable<ExampleEditItem>;
+    exampleGetList: ExampleGetList;
+    exampleGetItem: ExampleGetItem;
+    exampleEditItem: ExampleEditItem;
 }
 
 // let retryCount = 10;
