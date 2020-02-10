@@ -16,8 +16,8 @@ import Page from "app/styles/Page";
 import * as actions from "app/actions";
 import {AppState} from "app/reducers";
 
-import Modals from "./Modals";
-import Lists from "./Lists";
+import Modals from "app/components/Modals";
+import Lists from "app/components/Lists";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
