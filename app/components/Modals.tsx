@@ -1,4 +1,5 @@
 import React, {useMemo} from "react";
+import styled from "@emotion/styled";
 
 import {DecoratedWithStatus} from "components/state-mutate-with-status";
 import {useModal} from "components/Modal";
@@ -17,7 +18,11 @@ type ModalsProps = {
     notify: Notify;
 };
 
-const WSButtons = withWireFrameAnnotation(ButtonGroup, {
+const ModalOptions = styled(ButtonGroup)`
+  margin: 20px 0;
+`;
+
+const WSButtons = withWireFrameAnnotation(ModalOptions, {
     title: <div>Open modal CTA</div>,
     description: <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam iaculis convallis ante, ac porttitor eros hendrerit non. Ut a hendrerit ligula. Praesent vestibulum, dui venenatis convallis condimentum, lorem magna rutrum erat, eget convallis odio purus sed ex. Suspendisse congue metus ac blandit vehicula. Suspendisse non elementum purus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
 });
@@ -48,21 +53,22 @@ const Modals = ({notify, item, getItem}: ModalsProps) => {
     useWhatChanged(Modals, { modal, open, item, getItem});
 
     return (
-        <WSButtons>
-            <Button
-                onClick={openTest1}
-            >
-                Open SIMPLE modal
-            </Button>
+        <>
+            <WSButtons>
+                <Button
+                    onClick={openTest1}
+                >
+                    Open SIMPLE modal
+                </Button>
 
-            <Button
-                onClick={openTest2}
-            >
-                Open FULL modal
-            </Button>
-
+                <Button
+                    onClick={openTest2}
+                >
+                    Open FULL modal
+                </Button>
+            </WSButtons>
             {modal()}
-        </WSButtons>
+        </>
     );
 };
 
