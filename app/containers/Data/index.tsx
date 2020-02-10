@@ -17,9 +17,9 @@ import List, {GetList, Items} from "app/components/List";
 import SimpleItem, {GetItem, Item} from "app/components/Item";
 import EditItem, {OnChange} from "app/components/EditItem";
 
-import Page from "../styles/Page";
-import * as actions from "../actions";
-import {AppState} from "../reducers";
+import Page from "app/styles/Page";
+import * as actions from "app/actions";
+import {AppState} from "app/reducers";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
 
