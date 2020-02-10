@@ -1,10 +1,10 @@
 import styled from "@emotion/styled";
 import React, {
     cloneElement,
+    ComponentType,
     isValidElement,
     ReactElement,
     ReactNode,
-    ReactText,
     SyntheticEvent,
     useCallback,
     useEffect,
@@ -15,6 +15,7 @@ import React, {
 import {createPortal} from "react-dom";
 import {CSSTransition} from "react-transition-group";
 import FocusLock from "react-focus-lock";
+import {isFunction} from "lodash";
 
 const modalRoot = typeof document !== "undefined" && document.body;
 
@@ -218,11 +219,15 @@ type PromiseLike<T = any> = {
 type UseModalProps = ModalBaseProps & ModalOptions;
 
 type HandleOpen<T> = {
-    (content: (props: T) => ReactNode | ReactText, options?: ModalOptions): PromiseLike;
+    (Component: ComponentType<T & WithModalProps> | boolean | null | undefined, options?: ModalOptions): PromiseLike;
 }
 
 type HandleClose = {
     (): void;
+}
+
+export type WithModalProps = {
+    close: HandleClose;
 }
 
 type UseModal<T = any> = [
@@ -233,13 +238,13 @@ type UseModal<T = any> = [
 
 export function useModal<T>(props?: T): UseModal<T> {
     const [modalProps, setModalProps] = useState<UseModalProps>({open: false});
-    const [content, setContent] = useState();
+    const [Component, setComponent] = useState();
 
     const closed = useRef<() => any | undefined>();
 
-    const handleOpen = useCallback<HandleOpen<T>>((content, options) => {
+    const handleOpen = useCallback<HandleOpen<T>>((Component, options) => {
         closed.current = undefined;
-        setContent(() => content);
+        setComponent(() => Component);
         setModalProps({open: true, ...options});
 
         return {
@@ -259,9 +264,9 @@ export function useModal<T>(props?: T): UseModal<T> {
 
     const modal = useCallback(() =>
         <Modal {...modalProps} onClose={handleClose} onClosed={handleClosed}>
-            {content && content(props)}
+            {(Component && isFunction(Component) && Component({...props, close: handleClose})) || (Component && <Component {...props} close={handleClose}/>)}
         </Modal>,
-        [content, handleClose, handleClosed, modalProps, props]
+        [Component, handleClose, handleClosed, modalProps, props]
     );
 
     return [

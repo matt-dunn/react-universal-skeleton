@@ -9,7 +9,22 @@ import {APIPayloadCreator} from "../";
 
 const exampleGetList = createAction<string, APIPayloadCreator<Promise<ExampleList>>, ActionMeta<ExampleList> & WithNotification<ExampleList>>(
     "@__dummy__/EXAMPLE_GET_LIST",
-    // ({page, count}) => cancel => Promise.resolve([{"id": "1", "name": "xxx"}]),
+    // ({page, count}) => ([{"id": "1", "name": "xxx1"}]),
+    // ({page, count}) => () => ([{"id": "1", "name": "xxx1"}]),
+    // ({page, count}) => () => () => ([{"id": "1", "name": "xxx1"}]),
+    // ({page, count}) => (a) => (b) => (c) => (d) => (e) => (f) => {
+    //     console.error(a)
+    //     console.error(b)
+    //     console.error(c)
+    //     console.error(d)
+    //     console.error(e)
+    //     console.error(f)
+    //     return ([{"id": "1", "name": "xxx1.4"}])
+    // },
+    // ({page, count}) => Promise.resolve([{"id": "1", "name": "xxx2"}]),
+    // ({page, count}) => () => Promise.resolve([{"id": "1", "name": "xxx2"}]),
+    // ({page, count}) => () => () => Promise.resolve([{"id": "1", "name": "xxx2.3"}]),
+    // ({page, count}) => cancel => Promise.resolve([{"id": "1", "name": "xxx3"}]),
     (page, count) => cancel => ({API: {ExampleApi: {exampleGetList}}}) => exampleGetList(page, count)(cancel),
     // ({page, count}) => ([{"id": "1", "name": "xxx"}]),
     // () => ({

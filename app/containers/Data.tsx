@@ -8,7 +8,7 @@ import { useParams} from "react-router";
 
 import {DecoratedWithStatus, getStatus} from "components/state-mutate-with-status";
 import {AboveTheFold} from "components/actions";
-import {ModalFooter, ModalTitle, useModal} from "components/Modal";
+import {ModalFooter, ModalTitle, useModal, WithModalProps} from "components/Modal";
 import {Button, ButtonGroup, ButtonSimple, ButtonSimplePrimary} from "components/Buttons";
 import {withWireFrameAnnotation} from "components/Wireframe";
 import {Notify, notifyAction} from "components/notification";
@@ -62,72 +62,64 @@ const WAModalSubmit = withWireFrameAnnotation(ButtonSimplePrimary, {
     description: <div>Only enabled once the data is available.</div>
 });
 
+const Sss2 = ({notify, close, item, getItem}: {notify: Notify; item?: Item & DecoratedWithStatus; getItem: GetItem} & WithModalProps) => {
+    const {complete} = getStatus(item);
+    const submit = () => {
+        notify({message: "Submit..."});
+        close();
+    };
+
+    return (
+        <>
+            <address>
+                Some content...{" "}
+                <WAModalButton
+                >
+                    Focusable element
+                </WAModalButton>
+            </address>
+            <SimpleItem isShown={true} item={item} getItem={getItem}/>
+            <ModalFooter>
+                <ButtonGroup>
+                    <ButtonSimple
+                        onClick={close}
+                    >
+                        Cancel
+                    </ButtonSimple>
+                    <WAModalSubmit
+                        onClick={submit}
+                        disabled={!item || !complete}
+                    >
+                        Submit
+                    </WAModalSubmit>
+                </ButtonGroup>
+            </ModalFooter>
+            <ModalTitle hasClose={true}>Test Modal With Data</ModalTitle>
+            More content...
+        </>
+    );
+};
+
 const Data = ({notify, items, item, exampleGetList, exampleGetItem, exampleEditItem}: DataProps) => {
     const { page } = useParams();
 
     const modalProps = useMemo(() => {
         return {
             item,
-            exampleGetItem
+            getItem: exampleGetItem,
+            notify
         };
-    }, [item, exampleGetItem]);
+    }, [item, exampleGetItem, notify]);
 
     const [modal, open, close] = useModal(modalProps);
 
-    const openTest1 = () => {
-        open(({item, exampleGetItem}) => {
-            console.log("RENDER MODAL CHILDREN", item);
-            return (
-                <SimpleItem isShown={true} item={item} getItem={exampleGetItem}/>
-            );
-        })
-            .then(() => {
-                console.log("CLOSED 1...");
-            });
-    };
+    const openTest1 = () => open(SimpleItem)
+        .then(() => {
+            console.log("CLOSED 1...");
+        });
 
     const openTest2 = () => {
-        open(
-            ({item, exampleGetItem}) => {
-                const {complete} = getStatus(item);
-                const submit = () => {
-                    notify({message: "Submit..."});
-                    close();
-                };
-
-                return (
-                    <>
-                        <address>
-                            Some content...{" "}
-                            <WAModalButton
-                            >
-                                Focusable element
-                            </WAModalButton>
-                        </address>
-                        <SimpleItem isShown={true} item={item} getItem={exampleGetItem}/>
-                        <ModalFooter>
-                            <ButtonGroup>
-                                <ButtonSimple
-                                    onClick={close}
-                                >
-                                    Cancel
-                                </ButtonSimple>
-                                <WAModalSubmit
-                                    onClick={submit}
-                                    disabled={!item || !complete}
-                                >
-                                    Submit
-                                </WAModalSubmit>
-                            </ButtonGroup>
-                        </ModalFooter>
-                        <ModalTitle hasClose={true}>Test Modal With Data</ModalTitle>
-                        More content...
-                    </>
-                );
-            },
-            {
-                isStatic: true
-            })
+        open(Sss2, {isStatic: true})
             .then(() => {
                 console.log("CLOSED 2...");
             });
