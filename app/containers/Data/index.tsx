@@ -1,4 +1,4 @@
-import React, {useMemo} from "react";
+import React from "react";
 import {Helmet} from "react-helmet-async";
 import styled from "@emotion/styled";
 import {css} from "@emotion/core";
@@ -8,8 +8,6 @@ import { useParams} from "react-router";
 
 import {DecoratedWithStatus} from "components/state-mutate-with-status";
 import {AboveTheFold} from "components/actions";
-import {useModal} from "components/Modal";
-import {Button, ButtonGroup} from "components/Buttons";
 import {withWireFrameAnnotation} from "components/Wireframe";
 import {Notify, notifyAction} from "components/notification";
 
@@ -21,8 +19,9 @@ import Page from "app/styles/Page";
 import * as actions from "app/actions";
 import {AppState} from "app/reducers";
 
+import Modals from "./Modals";
+
 import useWhatChanged from "components/whatChanged/useWhatChanged";
-import SimpleModal from "./SimpleModal";
 
 export type DataProps = {
     items: Items;
@@ -43,11 +42,6 @@ const DataListItem = styled(EditItem)<{isImportant?: boolean}>`
 
 const importantIds = ["item-1", "item-2"];
 
-const WSButtons = withWireFrameAnnotation(ButtonGroup, {
-    title: <div>Open modal CTA</div>,
-    description: <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam iaculis convallis ante, ac porttitor eros hendrerit non. Ut a hendrerit ligula. Praesent vestibulum, dui venenatis convallis condimentum, lorem magna rutrum erat, eget convallis odio purus sed ex. Suspendisse congue metus ac blandit vehicula. Suspendisse non elementum purus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
-});
-
 const WSTitle = withWireFrameAnnotation(Title, {
     title: <div>Page title</div>,
     description: <div>Data page title. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
@@ -56,29 +50,7 @@ const WSTitle = withWireFrameAnnotation(Title, {
 const Data = ({notify, items, item, exampleGetList, exampleGetItem, exampleEditItem}: DataProps) => {
     const { page } = useParams();
 
-    const modalProps = useMemo(() => {
-        return {
-            item,
-            getItem: exampleGetItem,
-            notify
-        };
-    }, [item, exampleGetItem, notify]);
-
-    const [modal, open, close] = useModal(modalProps);
-
-    const openTest1 = () => open(SimpleItem)
-        .then(() => {
-            console.log("CLOSED 1...");
-        });
-
-    const openTest2 = () => {
-        open(SimpleModal, {isStatic: true})
-            .then(() => {
-                console.log("CLOSED 2...");
-            });
-    };
-
-    useWhatChanged(Data, { modal, open, close, items, item, exampleGetList, exampleGetItem, exampleEditItem, page});
+    useWhatChanged(Data, { items, item, exampleGetList, exampleGetItem, exampleEditItem, page});
 
     return (
         <Page>
@@ -92,21 +64,7 @@ const Data = ({notify, items, item, exampleGetList, exampleGetItem, exampleEditI
                 API SSR Example (Lazy Loaded)
             </WSTitle>
 
-            <WSButtons>
-                <Button
-                    onClick={openTest1}
-                >
-                    Open SIMPLE modal
-                </Button>
-
-                <Button
-                    onClick={openTest2}
-                >
-                    Open FULL modal
-                </Button>
-            </WSButtons>
-
-            {modal()}
+            <Modals getItem={exampleGetItem} notify={notify} item={item}/>
 
             <AboveTheFold>
                 <List items={items} getList={exampleGetList} editItem={exampleEditItem} activePage={parseInt(page || "0", 10)}>
