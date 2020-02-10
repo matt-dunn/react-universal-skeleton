@@ -231,7 +231,7 @@ type UseModal<T = any> = [
     HandleClose
 ]
 
-export function useModal<T>(props: T): UseModal<T> {
+export function useModal<T>(props?: T): UseModal<T> {
     const [modalProps, setModalProps] = useState<UseModalProps>({open: false});
     const [content, setContent] = useState();
 
@@ -257,11 +257,15 @@ export function useModal<T>(props: T): UseModal<T> {
         closed.current && closed.current();
     }, []);
 
+    const modal = useCallback(() =>
+        <Modal {...modalProps} onClose={handleClose} onClosed={handleClosed}>
+            {content && content(props)}
+        </Modal>,
+        [content, handleClose, handleClosed, modalProps, props]
+    );
+
     return [
-        () =>
-            <Modal {...modalProps} onClose={handleClose} onClosed={handleClosed}>
-                {content && content(props)}
-            </Modal>,
+        modal,
         handleOpen,
         handleClose
     ];
