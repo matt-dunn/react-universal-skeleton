@@ -1,27 +1,11 @@
 import {put, cancelled, fork, take, cancel} from "redux-saga/effects";
 import uuid from "uuid";
 import {isFunction} from "lodash";
+import isPromise from "is-promise";
 import {Task} from "@redux-saga/types";
 
-import {MetaStatus, ActionMeta} from "components/state-mutate-with-status";
-
-const symbolCancelled = Symbol("cancelled");
-
-type StandardAction<P = any, M extends ActionMeta = ActionMeta> = {
-    type: string;
-    payload?: P;
-    meta?: M;
-    error?: boolean;
-};
-
-type Callback = {
-    (): void;
-}
-
-export type Cancel = {
-    (cb: Callback): Callback;
-    [symbolCancelled]: () => void;
-}
+import {Cancellable, Cancel} from "components/api";
+import {StandardAction, MetaStatus, ActionMeta} from "components/state-mutate-with-status";
 
 type Pending = {
     [key: string]: {
@@ -49,16 +33,6 @@ export type PayloadCreator<A extends any[], R> =
 
 
 
-
-const Cancel = function(): Cancel {
-    let callback: Callback;
-
-    const canceller = (cb: Callback) => callback = cb;
-    (canceller as Cancel)[symbolCancelled] = () => callback && callback();
-
-    return canceller as Cancel;
-};
-
 const decorateMetaWithStatus = <M extends ActionMeta>(transactionId: string, status: Partial<Omit<MetaStatus, "transactionId">>, meta?: M): M & ActionMeta => ({
     ...meta || {} as M,
     $status: MetaStatus({complete: false, processing: false, processedOnServer: false, ...status, transactionId})
@@ -66,11 +40,23 @@ const decorateMetaWithStatus = <M extends ActionMeta>(transactionId: string, sta
 
 const getName = (action: StandardAction) => `${action.type}${action?.meta?.id ? `-${action.meta.id}`: ""}`;
 
-const payloadCreator = (response: any) => (...args: any[]) => (isFunction(response) && response(...args)) || response;
+const payloadCreator = (response: any) => (cancel: Cancel) => (...args: any[]) => {
+    if (isFunction(response)) {
+        const ret = response(cancel);
+
+        if (isFunction(ret)) {
+            return ret(...args);
+        } else {
+            return ret;
+        }
+    }
+
+    return response;
+};
 
 function* callAsyncWithCancel(action: StandardAction, done?: Done, ...args: any[]) {
     const transactionId = uuid.v4();
-    const cancel = Cancel();
+    const cancellable = Cancellable();
 
     try {
         yield put({
@@ -82,9 +68,9 @@ function* callAsyncWithCancel(action: StandardAction, done?: Done, ...args: any[
             }, action.meta)
         });
 
-        const payload = yield payloadCreator(action.payload(cancel))(...args);
+        const payload = yield payloadCreator(action.payload)(cancellable.canceller)(...args);
         // TODO: refactor / allow configuration on retry
-        // const payload = yield retry(5, 1000, payloadCreator(action.payload(cancel)), ...args);
+        // const payload = yield retry(5, 1000, payloadCreator(action.payload)(cancel)(...args);
 
         yield put({
             ...action,
@@ -111,7 +97,7 @@ function* callAsyncWithCancel(action: StandardAction, done?: Done, ...args: any[
         action?.meta?.response && action?.meta?.response.reject(error);
     } finally {
         if (yield cancelled()) {
-            cancel[symbolCancelled]();
+            cancellable.cancel();
 
             yield put({
                 ...action,
@@ -133,7 +119,7 @@ const takeAsync = (saga: (...args: any[]) => any, ...args: any[]) => fork(functi
     const done: Done = action => delete pending[getName(action)];
 
     while (true) {
-        const action = yield take((action: StandardAction) => isFunction(action.payload));
+        const action = yield take((action: StandardAction) => isFunction(action.payload) || isPromise(action.payload));
         const name = getName(action);
 
         if (pending[name] && name === getName(pending[name].action)) {

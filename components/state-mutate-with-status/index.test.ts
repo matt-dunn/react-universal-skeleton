@@ -1,4 +1,4 @@
-import { FluxStandardAction } from "flux-standard-action";
+import {StandardAction} from "./";
 
 import nextState, {symbolStatus} from "./";
 
@@ -24,11 +24,13 @@ describe("next state", () => {
         });
 
         it("should update payload when not complete", () => {
-            const actionProcessing: FluxStandardAction<string, any, any> = {
+            const actionProcessing: StandardAction = {
                 type: "TEST",
                 payload: { text: "item 1 updated"},
                 meta: {
                     $status: {
+                        transactionId: "123",
+                        processedOnServer: false,
                         complete: false,
                         processing: true
                     }
@@ -49,11 +51,13 @@ describe("next state", () => {
         });
 
         it("should update payload when complete", () => {
-            const actionComplete: FluxStandardAction<string, any, any> = {
+            const actionComplete: StandardAction = {
                 type: "TEST",
                 payload: { text: "item 1 updated"},
                 meta: {
                     $status: {
+                        transactionId: "123",
+                        processedOnServer: false,
                         complete: true,
                         processing: false
                     }
@@ -74,7 +78,7 @@ describe("next state", () => {
         });
 
         it("should update payload when using default status", () => {
-            const actionWithDefaultStatus: FluxStandardAction<string, any, any> = {
+            const actionWithDefaultStatus: StandardAction = {
                 type: "TEST",
                 payload: { text: "item 1 updated"}
             };
@@ -89,11 +93,13 @@ describe("next state", () => {
         });
 
         it("should update nested payload when not complete", () => {
-            const actionNestedState: FluxStandardAction<string, any, any> = {
+            const actionNestedState: StandardAction = {
                 type: "TEST",
                 payload: { text: "item 1 updated"},
                 meta: {
                     $status: {
+                        transactionId: "123",
+                        processedOnServer: false,
                         complete: false,
                         processing: true
                     }
@@ -118,11 +124,13 @@ describe("next state", () => {
         });
 
         it("should update nested payload when complete", () => {
-            const actionNestedStateComplete: FluxStandardAction<string, any, any> = {
+            const actionNestedStateComplete: StandardAction = {
                 type: "TEST",
                 payload: { text: "item 1 updated"},
                 meta: {
                     $status: {
+                        transactionId: "123",
+                        processedOnServer: false,
                         complete: true,
                         processing: false
                     }
@@ -154,7 +162,7 @@ describe("next state", () => {
             state = {
                 items: [
                     {
-                        id: 1,
+                        id: "1",
                         text: "item 1"
                     }
                 ]
@@ -162,12 +170,14 @@ describe("next state", () => {
         });
 
         it("should update payload when not complete", () => {
-            const actionProcessing: FluxStandardAction<string, any, any> = {
+            const actionProcessing: StandardAction = {
                 type: "TEST",
                 payload: { text: "item 1 updated"},
                 meta: {
-                    id: 1,
+                    id: "1",
                     $status: {
+                        transactionId: "123",
+                        processedOnServer: false,
                         complete: false,
                         processing: true
                     }
@@ -184,12 +194,14 @@ describe("next state", () => {
         });
 
         it("should update payload when complete", () => {
-            const actionComplete: FluxStandardAction<string, any, any> = {
+            const actionComplete: StandardAction = {
                 type: "TEST",
                 payload: { text: "item 1 updated"},
                 meta: {
-                    id: 1,
+                    id: "1",
                     $status: {
+                        transactionId: "123",
+                        processedOnServer: false,
                         complete: true,
                         processing: false
                     }
@@ -210,12 +222,14 @@ describe("next state", () => {
         });
 
         it("should add a new item to the end of the array by default when complete ", () => {
-            const actionCompleteNewItem: FluxStandardAction<string, any, any> = {
+            const actionCompleteNewItem: StandardAction = {
                 type: "TEST",
                 payload: { text: "item 2"},
                 meta: {
-                    id: 2,
+                    id: "2",
                     $status: {
+                        transactionId: "123",
+                        processedOnServer: false,
                         complete: true,
                         processing: false
                     }
@@ -237,12 +251,14 @@ describe("next state", () => {
         });
 
         it("should add a new item to the specified index in the array when complete ", () => {
-            const actionCompleteNewItemFirst: FluxStandardAction<string, any, any> = {
+            const actionCompleteNewItemFirst: StandardAction = {
                 type: "TEST",
                 payload: { text: "item 2 updated"},
                 meta: {
-                    id: 2,
+                    id: "2",
                     $status: {
+                        transactionId: "123",
+                        processedOnServer: false,
                         complete: true,
                         processing: false
                     }
@@ -270,19 +286,20 @@ describe("next state", () => {
             const state = {
                 items: [
                     {
-                        id: 1,
+                        id: "1",
                         text: "item 1"
                     }
                 ]
             };
 
-            const actionProcessingFirst: FluxStandardAction<string, any, any> = {
+            const actionProcessingFirst: StandardAction = {
                 type: "TEST",
                 payload: { text: "item 1 updated"},
                 meta: {
-                    id: 1,
+                    id: "1",
                     $status: {
                         transactionId: "1",
+                        processedOnServer: false,
                         complete: false,
                         processing: true
                     }
@@ -299,13 +316,14 @@ describe("next state", () => {
                 }
             ]);
 
-            const actionProcessingSecond: FluxStandardAction<string, any, any> = {
+            const actionProcessingSecond: StandardAction = {
                 type: "TEST",
                 payload: { text: "item 1 updated"},
                 meta: {
-                    id: 1,
+                    id: "1",
                     $status: {
                         transactionId: "2",
+                        processedOnServer: false,
                         complete: false,
                         processing: true
                     }

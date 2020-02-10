@@ -1,6 +1,7 @@
-import {Cancel} from "components/redux/middleware/sagaAsyncAction";
+import {WrapCancelable} from "components/api";
 
 import {APIError} from "components/api";
+
 import {isAuthenticated} from "../auth";
 
 export type ExampleItem = {
@@ -11,26 +12,26 @@ export type ExampleItem = {
 export type ExampleList = ExampleItem[];
 
 export type ExampleGetList = {
-    (page?: number, count?: number, cancel?: Cancel): Promise<ExampleList>;
+    (page?: number, count?: number): Promise<ExampleList>;
 }
 
 export type ExampleGetItem = {
-    (cancel?: Cancel): Promise<ExampleItem>;
+    (): Promise<ExampleItem>;
 }
 
 export type ExampleEditItem = {
-    (item: ExampleItem, cancel?: Cancel): Promise<ExampleItem>;
+    (item: ExampleItem): Promise<ExampleItem>;
 }
 
 export type ExampleApi = {
-    exampleGetList: ExampleGetList;
-    exampleGetItem: ExampleGetItem;
-    exampleEditItem: ExampleEditItem;
+    exampleGetList: WrapCancelable<ExampleGetList>;
+    exampleGetItem: WrapCancelable<ExampleGetItem>;
+    exampleEditItem: WrapCancelable<ExampleEditItem>;
 }
 
 // let retryCount = 10;
 export const ExampleApi: ExampleApi = {
-    exampleGetList:(page = 0, count = 3, cancel) => new Promise<ExampleList>((resolve/*, reject*/) => {
+    exampleGetList: (page = 0, count = 3) => cancel => new Promise<ExampleList>((resolve/*, reject*/) => {
         console.log("API CALL: exampleGetList", page, count);
 
         // if (retryCount < 4) {
@@ -68,7 +69,7 @@ export const ExampleApi: ExampleApi = {
             clearTimeout(t);
         });
     }),
-    exampleGetItem:(cancel) => new Promise<ExampleItem>((resolve/*, reject*/) => {
+    exampleGetItem:() => (cancel) => new Promise<ExampleItem>((resolve/*, reject*/) => {
         console.log("API CALL: exampleGetItem");
         // throw new Error("Error in exampleGetItem")
         // if (typeof window === 'undefined' || !(window as any).authenticated) {
@@ -88,7 +89,7 @@ export const ExampleApi: ExampleApi = {
             clearTimeout(t);
         });
     }),
-    exampleEditItem:(item, cancel) => new Promise<ExampleItem>((resolve, reject) => {
+    exampleEditItem:(item) => cancel => new Promise<ExampleItem>((resolve, reject) => {
         console.log("API CALL: exampleEditItem", item.id);
 
         if (item.name.toLocaleLowerCase() === "item") {

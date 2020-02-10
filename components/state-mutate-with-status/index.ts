@@ -1,9 +1,15 @@
 import {wrap} from "object-path-immutable";
 import { get } from "lodash";
-import { FluxStandardAction } from "flux-standard-action";
 
 import { MetaStatus, ActionMeta, symbolStatus } from "./status";
 import {decorateStatus, getPayload, getUpdatedState} from "./utils";
+
+export type StandardAction<P = any, M extends ActionMeta = ActionMeta> = {
+  type: string;
+  payload?: P;
+  meta?: M;
+  error?: boolean;
+};
 
 export type Path = ReadonlyArray<string>;
 
@@ -18,7 +24,7 @@ export type Options<P> = {
   autoDelete?: boolean;
 }
 
-const updateState = <S, P extends S>(state: S, { meta, error, payload }: FluxStandardAction<string, P, ActionMeta>, options?: Options<P>): S => {
+const updateState = <S, P extends S>(state: S, { meta, error, payload }: StandardAction<P>, options?: Options<P>): S => {
   const { path = [] } = options || {} as Options<P>;
 
   const {
