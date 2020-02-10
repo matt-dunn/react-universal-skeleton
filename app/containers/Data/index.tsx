@@ -6,10 +6,10 @@ import { connect } from "react-redux";
 import TrackVisibility from "react-on-screen";
 import { useParams} from "react-router";
 
-import {DecoratedWithStatus, getStatus} from "components/state-mutate-with-status";
+import {DecoratedWithStatus} from "components/state-mutate-with-status";
 import {AboveTheFold} from "components/actions";
-import {ModalFooter, ModalTitle, useModal, WithModalProps} from "components/Modal";
-import {Button, ButtonGroup, ButtonSimple, ButtonSimplePrimary} from "components/Buttons";
+import {useModal} from "components/Modal";
+import {Button, ButtonGroup} from "components/Buttons";
 import {withWireFrameAnnotation} from "components/Wireframe";
 import {Notify, notifyAction} from "components/notification";
 
@@ -22,6 +22,7 @@ import * as actions from "app/actions";
 import {AppState} from "app/reducers";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
+import SimpleModal from "./SimpleModal";
 
 export type DataProps = {
     items: Items;
@@ -52,54 +53,6 @@ const WSTitle = withWireFrameAnnotation(Title, {
     description: <div>Data page title. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
 });
 
-const WAModalButton = withWireFrameAnnotation(Button, {
-    title: <div>Focus modal button</div>,
-    description: <div>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
-});
-
-const WAModalSubmit = withWireFrameAnnotation(ButtonSimplePrimary, {
-    title: <div>Submit button</div>,
-    description: <div>Only enabled once the data is available.</div>
-});
-
-const Sss2 = ({notify, close, item, getItem}: {notify: Notify; item?: Item & DecoratedWithStatus; getItem: GetItem} & WithModalProps) => {
-    const {complete} = getStatus(item);
-    const submit = () => {
-        notify({message: "Submit..."});
-        close();
-    };
-
-    return (
-        <>
-            <address>
-                Some content...{" "}
-                <WAModalButton
-                >
-                    Focusable element
-                </WAModalButton>
-            </address>
-            <SimpleItem isShown={true} item={item} getItem={getItem}/>
-            <ModalFooter>
-                <ButtonGroup>
-                    <ButtonSimple
-                        onClick={close}
-                    >
-                        Cancel
-                    </ButtonSimple>
-                    <WAModalSubmit
-                        onClick={submit}
-                        disabled={!item || !complete}
-                    >
-                        Submit
-                    </WAModalSubmit>
-                </ButtonGroup>
-            </ModalFooter>
-            <ModalTitle hasClose={true}>Test Modal With Data</ModalTitle>
-            More content...
-        </>
-    );
-};
-
 const Data = ({notify, items, item, exampleGetList, exampleGetItem, exampleEditItem}: DataProps) => {
     const { page } = useParams();
 
@@ -119,7 +72,7 @@ const Data = ({notify, items, item, exampleGetList, exampleGetItem, exampleEditI
         });
 
     const openTest2 = () => {
-        open(Sss2, {isStatic: true})
+        open(SimpleModal, {isStatic: true})
             .then(() => {
                 console.log("CLOSED 2...");
             });
