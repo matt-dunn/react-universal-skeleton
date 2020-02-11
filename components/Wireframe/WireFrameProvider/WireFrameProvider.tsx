@@ -33,12 +33,6 @@ const WireFrameAnnotationsContainer = styled.div<{open: boolean}>`
         return css`
             width: 25%;
             min-width: 250px;
-
-            [data-annotations-toggle] {
-                span {
-                  transform: rotate(180deg);
-                }
-            }
         `;
     } else {
         return css`
@@ -84,7 +78,7 @@ const WireFrameAnnotations = styled.div`
   }
 `;
 
-const WireFrameAnnotationsToggle = styled.div`
+const WireFrameAnnotationsToggle = styled.div<{open: boolean}>`
   position: absolute;
   left: -1px;
   top: 50%;
@@ -93,14 +87,21 @@ const WireFrameAnnotationsToggle = styled.div`
   padding: 5px;
   border-radius: 5px 0 0 5px;
   transform: translate(-100%, -50%);
+  transition: opacity 100ms;
   min-height: 3em;
   display: flex;
   align-items: center;
   cursor: pointer;
+  opacity: ${({open}) => (open && 1) || 0.25};
+  
+  &:hover {
+    opacity: 1;
+  }
 
   span {
     transition: transform 250ms;
     display: block;
+    ${({open}) => open && css`transform: rotate(180deg);`}
   }
 `;
 
@@ -172,7 +173,7 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
                 {(components && isClient) &&
                 <WireFrameAnnotationsContainer open={open}>
                     <WireFrameAnnotations data-annotations>
-                        <WireFrameAnnotationsToggle data-annotations-toggle aria-label="Toggle annotations" onClick={handleToggle}>
+                        <WireFrameAnnotationsToggle open={open} aria-label="Toggle annotations" onClick={handleToggle}>
                             <span>⬅</span>
                         </WireFrameAnnotationsToggle>
 
