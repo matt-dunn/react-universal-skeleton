@@ -15,49 +15,44 @@ type WireFrameProviderProps = {
     children: ReactNode;
 }
 
-const WireFrameContainer = styled.div<{show: boolean}>`
+const WireFrameContainer = styled.div`
   display: flex;
-
-  ${({show = true}) => {
-    if (show) {
-        return css`
-              [data-annotations-container] {
-                  width: 25%;
-                  min-width: 250px;
-                  
-                  [data-annotations-toggle] {
-                    span {
-                      transform: rotate(180deg);
-                    }
-                  }
-              }
-          `;
-    } else {
-        return css`
-              [data-annotations-container] {
-                  width: 0;
-                  min-width: 0;
-                  
-                  [data-annotations] {
-                    transform: translateX(100%);
-                  }
-              }
-          `;
-    }
-  }};
 `;
 
 const WireFrameBody = styled.div`
   flex-grow: 1;
 `;
 
-const WireFrameAnnotationsContainer = styled.div`
+const WireFrameAnnotationsContainer = styled.div<{open: boolean}>`
   flex-grow: 0;
   flex-shrink: 0;
   max-width: 400px;
   padding: 0;
   transition: width 250ms, min-width 250ms;
 
+  ${({open = true}) => {
+    if (open) {
+        return css`
+            width: 25%;
+            min-width: 250px;
+
+            [data-annotations-toggle] {
+                span {
+                  transform: rotate(180deg);
+                }
+            }
+        `;
+    } else {
+        return css`
+            width: 0;
+            min-width: 0;
+            
+            [data-annotations] {
+              transform: translateX(100%);
+            }
+        `;
+    }
+}};
 `;
 
 const WireFrameAnnotations = styled.div`
@@ -122,7 +117,7 @@ const WireFrameAnnotationsClose = styled.button`
   color: inherit;
 `;
 
-const useWireFrame = (show: boolean) => {
+const useWireFrame = (open: boolean) => {
     const api = useContext(WireFrameAnnotationContext);
 
     const [components, setComponents] = useState<WireFrameComponents>();
@@ -131,9 +126,9 @@ const useWireFrame = (show: boolean) => {
     useMemo(() => {
         api.setOptions({
             updater: setComponents,
-            highlightNote: wireFrameComponent => show && setHighlightedNote(wireFrameComponent)
+            highlightNote: wireFrameComponent => open && setHighlightedNote(wireFrameComponent)
         });
-    }, [api, show]);
+    }, [api, open]);
 
     return {api, components, highlightedNote};
 };
@@ -145,12 +140,12 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
         setIsClient(true);
     }, []);
 
-    const [show, setShow] = useState(false);
+    const [open, setShow] = useState(false);
 
-    const {api, components, highlightedNote} = useWireFrame(show);
+    const {api, components, highlightedNote} = useWireFrame(open);
 
     const handleToggle = useCallback(() => {
-        setShow(show => !show);
+        setShow(open => !open);
     }, []);
 
     const handleClose = useCallback(() => {
@@ -158,16 +153,17 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
     }, []);
 
     useEffect(() => {
-        if (show) {
-            document.body.classList.add("wf__annotations--show");
+        // Add class to body instead of WireFrameContainer as that portals will also be affected
+        if (open) {
+            document.body.classList.add("wf__annotations--open");
         } else {
-            document.body.classList.remove("wf__annotations--show");
+            document.body.classList.remove("wf__annotations--open");
         }
 
         return () => {
-            document.body.classList.remove("wf__annotations--show");
+            document.body.classList.remove("wf__annotations--open");
         };
-    }, [show]);
+    }, [open]);
 
     useEffect(() => {
         if (highlightedNote) {
@@ -181,31 +177,34 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
         }
     }, [highlightedNote]);
 
-    useWhatChanged(WireFrameProvider, { api, handleToggle, handleClose, components, show, highlightedNote});
+    useWhatChanged(WireFrameProvider, { api, handleToggle, handleClose, components, open, highlightedNote});
 
     return (
         <WireFrameAnnotationContext.Provider value={api}>
             <Global
                 styles={global}
             />
-            <WireFrameContainer show={show}>
+            <WireFrameContainer>
                 <WireFrameBody>
                     {children}
                 </WireFrameBody>
-                {isClient &&
-                <WireFrameAnnotationsContainer data-annotations-container>
+
+                {(components && isClient) &&
+                <WireFrameAnnotationsContainer open={open}>
                     <WireFrameAnnotations data-annotations>
                         <WireFrameAnnotationsToggle data-annotations-toggle aria-label="Toggle annotations" onClick={handleToggle}>
                             <span>⬅</span>
                         </WireFrameAnnotationsToggle>
+
                         <header>
                             <h1>Annotations</h1>
                             <WireFrameAnnotationsClose aria-label="Close annotations" onClick={handleClose}>×</WireFrameAnnotationsClose>
                         </header>
-                        {components && <WireFrameAnnotationsNotes
+
+                        <WireFrameAnnotationsNotes
                             components={components}
                             highlightedNote={highlightedNote}
-                        />}
+                        />
                     </WireFrameAnnotations>
                 </WireFrameAnnotationsContainer>
                 }

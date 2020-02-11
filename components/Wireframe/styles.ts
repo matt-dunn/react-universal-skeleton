@@ -7,7 +7,7 @@ export const global = css`
     opacity: 0;
   }
 
-  .wf__annotations--show {
+  .wf__annotations--open {
       [data-annotation] {
         &:hover {
           z-index: 5000;
