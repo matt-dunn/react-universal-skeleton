@@ -36,7 +36,8 @@ module.exports = ({environment, root, context, target, targetRelativeClient, tar
                 "process.env.TARGET_CLIENT": JSON.stringify(targetRelativeClient),
                 "process.env.TARGET_SERVER": JSON.stringify(targetRelativeServer),
                 "process.env.PWA": JSON.stringify(process.env.PWA || false),
-                "process.env.AVAILABLE_LOCALES": JSON.stringify(availableLocales)
+                "process.env.AVAILABLE_LOCALES": JSON.stringify(availableLocales),
+                "process.env.WIREFRAME": JSON.stringify(process.env.WIREFRAME)
             })
         ];
 

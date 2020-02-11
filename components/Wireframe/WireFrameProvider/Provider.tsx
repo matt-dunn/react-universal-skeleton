@@ -3,11 +3,9 @@ import css from "@emotion/css";
 import styled from "@emotion/styled";
 import scrollIntoView from "scroll-into-view-if-needed";
 
-import {WireFrameAnnotationContext} from "./context";
-import {WireFrameComponent, WireFrameComponents} from "./api";
-
-import useWhatChanged from "../whatChanged/useWhatChanged";
-import {WireFrameAnnotationsNotes} from "./WireFrameAnnotationNotes";
+import {WireFrameAnnotationContext} from "../context";
+import {WireFrameComponent, WireFrameComponents} from "../api";
+import {WireFrameAnnotationsNotes} from "../WireFrameAnnotationNotes";
 
 type WireFrameProviderProps = {
     children: ReactNode;
@@ -163,8 +161,6 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
             });
         }
     }, [highlightedNote]);
-
-    useWhatChanged(WireFrameProvider, { api, handleToggle, handleClose, components, open, highlightedNote});
 
     return (
         <WireFrameAnnotationContext.Provider value={api}>

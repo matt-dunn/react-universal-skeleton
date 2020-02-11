@@ -94,6 +94,14 @@ Installs production dependencies and starts production build from tarball
 yarn start
 ```
 
+#### Include Wireframes in the build
+
+Prefix the command with ```WIREFRAME```, e.g.
+
+```bash
+WIREFRAME=true yarn dev:client
+```
+
 #### Other Tasks
 
 ##### Lint CSS/JS
