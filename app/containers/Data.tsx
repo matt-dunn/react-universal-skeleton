@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { useParams} from "react-router";
 
 import {DecoratedWithStatus} from "components/state-mutate-with-status";
-import {withWireFrameAnnotation} from "components/Wireframe";
+import {withWireFrameAnnotation} from "components/Wireframe/withWireFrameAnnotation";
 import {Notify, notifyAction} from "components/notification";
 
 import {GetList, Items} from "app/components/List";

@@ -9,7 +9,7 @@ import {FormDataProvider, FormDataState} from "components/actions/form";
 import {AsyncDataContextProvider} from "components/ssr/safePromise";
 import {AsyncDataContext} from "components/ssr/contexts";
 import {ErrorContext} from "components/actions/contexts";
-import {WireFrameProvider} from "../components/Wireframe";
+import {WireFrameProvider} from "components/Wireframe/WireFrameProvider";
 
 const availableLocales = process.env.AVAILABLE_LOCALES || [] as string[];
 

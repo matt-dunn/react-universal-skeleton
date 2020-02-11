@@ -5,7 +5,7 @@ import {Helmet} from "react-helmet-async";
 import loadable from "@loadable/component";
 
 import Page from "../styles/Page";
-import {withWireFrameAnnotation} from "../../components/Wireframe";
+import {withWireFrameAnnotation} from "components/Wireframe/withWireFrameAnnotation";
 
 // const Menu = styled.ul`
 //   margin: 50px auto;

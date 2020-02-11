@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 import {FormattedDate, FormattedMessage} from "react-intl";
 
 import Page from "../styles/Page";
-import {withWireFrameAnnotation} from "../../components/Wireframe";
+import {withWireFrameAnnotation} from "components/Wireframe/withWireFrameAnnotation";
 
 const Title = styled.h2`
     color: #ccc;

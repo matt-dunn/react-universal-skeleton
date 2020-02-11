@@ -8,7 +8,7 @@ import {getStatus, DecoratedWithStatus} from "components/state-mutate-with-statu
 import PlaceHolderItem from "app/components/Placeholder/Item";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
-import {withWireFrameAnnotation} from "components/Wireframe";
+import {withWireFrameAnnotation} from "components/Wireframe/withWireFrameAnnotation";
 
 export type Item = {
     id: string;

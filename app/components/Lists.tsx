@@ -12,7 +12,7 @@ import SimpleItem, {GetItem, Item} from "app/components/Item";
 import EditItem, {OnChange} from "app/components/EditItem";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
-import {withWireFrameAnnotation} from "components/Wireframe";
+import {withWireFrameAnnotation} from "components/Wireframe/withWireFrameAnnotation";
 
 type ListsProps = {
     items: Items;

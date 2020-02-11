@@ -7,7 +7,7 @@ import {ResponsiveGrid} from "components/Grid";
 import {FieldSet, FieldSetChildrenProps} from "components/Form";
 import {FormOptions} from "components/Form/FormOptions";
 
-import {withWireFrameAnnotation} from "components/Wireframe";
+import {withWireFrameAnnotation} from "components/Wireframe/withWireFrameAnnotation";
 
 const Markdown = loadable(() => import("components/markdown"));
 

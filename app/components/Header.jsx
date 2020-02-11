@@ -2,7 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import { NavLink } from "react-router-dom";
 import {useAuthenticatedUser} from "./auth";
-import {withWireFrameAnnotation} from "../../components/Wireframe";
+import {withWireFrameAnnotation} from "components/Wireframe/withWireFrameAnnotation";
 
 const Container = styled.nav`
   margin: 0 auto;
