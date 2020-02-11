@@ -1,12 +1,11 @@
 import React, {useCallback, useState, useRef, useEffect} from "react";
 import styled from "@emotion/styled";
 import {css} from "@emotion/core";
-
 import TextInput from "react-responsive-ui/modules/TextInput";
 
-import useWhatChanged from "components/whatChanged/useWhatChanged";
-import {withWireFrameAnnotation} from "components/Wireframe";
 import {getStatus, DecoratedWithStatus} from "components/state-mutate-with-status";
+
+import useWhatChanged from "components/whatChanged/useWhatChanged";
 
 export type EditItem = {
     id: string;
@@ -95,9 +94,4 @@ const EditItem = ({item, onChange, type, className, disabled}: EditItemProps) =>
     );
 };
 
-// export default React.memo<EditItemProps>(EditItem);
-
-export default React.memo<EditItemProps>(withWireFrameAnnotation<EditItemProps>(EditItem, {
-    title: <div><strong>Edit</strong> item</div>,
-    description: <div>Maecenas eget turpis sit amet orci dictum faucibus pretium eu sapien. Proin rhoncus risus id mollis aliquet. Praesent pellentesque urna et ante rhoncus scelerisque. Proin eget pellentesque quam, non finibus eros. Quisque id arcu eget leo hendrerit vehicula. Suspendisse potenti.</div>
-}));
+export default React.memo<EditItemProps>(EditItem);

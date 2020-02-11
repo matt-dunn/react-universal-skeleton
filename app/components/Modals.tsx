@@ -72,4 +72,4 @@ const Modals = ({notify, item, getItem}: ModalsProps) => {
     );
 };
 
-export default Modals;
+export default React.memo(Modals);
