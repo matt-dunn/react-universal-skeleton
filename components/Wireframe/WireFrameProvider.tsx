@@ -1,12 +1,10 @@
 import React, {ReactNode, useContext, useEffect, useState, useCallback, useMemo} from "react";
-import {Global} from "@emotion/core";
 import css from "@emotion/css";
 import styled from "@emotion/styled";
 import scrollIntoView from "scroll-into-view-if-needed";
 
 import {WireFrameAnnotationContext} from "./context";
 import {WireFrameComponent, WireFrameComponents} from "./api";
-import {global} from "./styles";
 
 import useWhatChanged from "../whatChanged/useWhatChanged";
 import {WireFrameAnnotationsNotes} from "./WireFrameAnnotationNotes";
@@ -23,12 +21,14 @@ const WireFrameBody = styled.div`
   flex-grow: 1;
 `;
 
+const transition = "250ms ease-in-out";
+
 const WireFrameAnnotationsContainer = styled.div<{open: boolean}>`
   flex-grow: 0;
   flex-shrink: 0;
   max-width: 400px;
   padding: 0;
-  transition: width 250ms, min-width 250ms;
+  transition: width ${transition}, min-width ${transition};
 
   ${({open = true}) => {
     if (open) {
@@ -71,7 +71,7 @@ const WireFrameAnnotations = styled.div`
   display: flex;
   flex-direction: column;
   font-size: 1.2rem;
-  transition: transform 250ms;
+  transition: transform ${transition};
   z-index: 6000;
   
   > header {
@@ -117,20 +117,22 @@ const WireFrameAnnotationsClose = styled.button`
   color: inherit;
 `;
 
-const useWireFrame = (open: boolean) => {
+const useWireFrame = () => {
     const api = useContext(WireFrameAnnotationContext);
 
     const [components, setComponents] = useState<WireFrameComponents>();
     const [highlightedNote, setHighlightedNote] = useState<WireFrameComponent | undefined>(undefined);
+    const [open, setShow] = useState(true);
 
     useMemo(() => {
         api.setOptions({
             updater: setComponents,
             highlightNote: wireFrameComponent => open && setHighlightedNote(wireFrameComponent)
         });
+        api.setOpen(open);
     }, [api, open]);
 
-    return {api, components, highlightedNote};
+    return {api, components, highlightedNote, open, setShow};
 };
 
 export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
@@ -140,30 +142,15 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
         setIsClient(true);
     }, []);
 
-    const [open, setShow] = useState(false);
-
-    const {api, components, highlightedNote} = useWireFrame(open);
+    const {api, components, highlightedNote, open, setShow} = useWireFrame();
 
     const handleToggle = useCallback(() => {
         setShow(open => !open);
-    }, []);
+    }, [setShow]);
 
     const handleClose = useCallback(() => {
         setShow(false);
-    }, []);
-
-    useEffect(() => {
-        // Add class to body instead of WireFrameContainer as that portals will also be affected
-        if (open) {
-            document.body.classList.add("wf__annotations--open");
-        } else {
-            document.body.classList.remove("wf__annotations--open");
-        }
-
-        return () => {
-            document.body.classList.remove("wf__annotations--open");
-        };
-    }, [open]);
+    }, [setShow]);
 
     useEffect(() => {
         if (highlightedNote) {
@@ -181,9 +168,6 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
 
     return (
         <WireFrameAnnotationContext.Provider value={api}>
-            <Global
-                styles={global}
-            />
             <WireFrameContainer>
                 <WireFrameBody>
                     {children}
