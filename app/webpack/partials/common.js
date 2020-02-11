@@ -43,13 +43,13 @@ module.exports = ({environment, root, context, target, targetRelativeClient, tar
         if (!process.env.WIREFRAME) {
             plugins.push(new webpack.NormalModuleReplacementPlugin(
                 /(.*)\/WireFrameProvider\.tsx/,
-                'WireFrameProvider.noop.tsx'
-            ))
+                "WireFrameProvider.noop.tsx"
+            ));
 
             plugins.push(new webpack.NormalModuleReplacementPlugin(
                 /(.*)\/withWireFrameAnnotation\.tsx/,
-                'withWireFrameAnnotation.noop.tsx'
-            ))
+                "withWireFrameAnnotation.noop.tsx"
+            ));
         }
 
         if (environment === "development") {
