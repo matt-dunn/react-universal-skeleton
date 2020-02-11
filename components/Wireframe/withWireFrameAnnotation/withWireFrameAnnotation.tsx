@@ -99,7 +99,8 @@ export const withWireFrameAnnotation = function<P>(WrappedComponent: ComponentTy
             };
         }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-        const handleHighlightNote = useCallback(() => {
+        const handleHighlightNote = useCallback(e => {
+            e.stopPropagation();
             highlightNote(Component);
         }, [highlightNote]);
 

@@ -24,10 +24,9 @@ const Login = loadable(() => import(/* webpackPrefetch: true */ "./containers/Lo
 const Locale = loadable(() => import(/* webpackPrefetch: true */ "./containers/Locale"));
 const State = loadable(() => import(/* webpackPrefetch: true */ "./containers/State"));
 const Dashboard = loadable(() => import(/* webpackPrefetch: true */ "./containers/Dashboard"));
+const LoginModal = loadable(() => import(/* webpackPrefetch: true */ "./components/Login/Modal"));
 
 import "./styles/react-responsive-ui.css";
-
-import LoginModal from "./components/Login/Modal";
 
 const handler: HandleError = ({code, status, message}, location, history, props, update) => {
     console.error("HANDLE ERROR", message, code, status, location);
