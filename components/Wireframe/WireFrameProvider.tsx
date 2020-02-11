@@ -122,7 +122,7 @@ const useWireFrame = () => {
 
     const [components, setComponents] = useState<WireFrameComponents>();
     const [highlightedNote, setHighlightedNote] = useState<WireFrameComponent | undefined>(undefined);
-    const [open, setShow] = useState(true);
+    const [open, setShow] = useState(false);
 
     useMemo(() => {
         api.setOptions({

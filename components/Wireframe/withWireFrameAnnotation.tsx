@@ -90,10 +90,11 @@ export const withWireFrameAnnotation = function<P>(WrappedComponent: ComponentTy
         const [show, setShow] = useState(isOpen());
 
         useEffect(() => {
-            onOpen(setShow);
+            const cb = onOpen(setShow);
             setAnnotation(register(Component, options));
 
             return () => {
+                cb.unregister();
                 unregister(Component);
             };
         }, []); // eslint-disable-line react-hooks/exhaustive-deps
