@@ -4,9 +4,9 @@ import css from "@emotion/css";
 import {CSSTransition} from "react-transition-group";
 import {isString} from "lodash";
 
-import {WireFrameComponent, WireFrameComponentOptions} from "./api";
-import {WireFrameAnnotationContext} from "./context";
-import {IdentifierBase} from "./styles";
+import {WireFrameComponent, WireFrameComponentOptions} from "../api";
+import {WireFrameAnnotationContext} from "../context";
+import {IdentifierBase} from "../styles";
 
 const Wrapper = styled.span<{show: boolean}>`
   position: relative;
