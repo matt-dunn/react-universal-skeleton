@@ -12,7 +12,7 @@ const exampleGetList = createAction<string, APIPayloadCreator<Promise<ExampleLis
     (page, count) => cancel => ({API: {ExampleApi: {exampleGetList}}}) => exampleGetList(page, count)(cancel),
 )();
 
-const exampleGetItem = createAction<string, APIPayloadCreator<Promise<ExampleItem>>, ActionMeta<ExampleItem> & WithNotification<ExampleItem>>(
+const exampleGetItem = createAction<string, APIPayloadCreator<Promise<ExampleItem>>, ActionMeta<ExampleItem> & WithNotification<ExampleItem>, []>(
     "@__dummy__/EXAMPLE_GET_ITEM",
     () => cancel => ({API: {ExampleApi: {exampleGetItem}}}) => exampleGetItem()(cancel),
     () => ({
