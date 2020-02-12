@@ -1,4 +1,6 @@
+import React from "react";
 import { createAction } from "typesafe-actions";
+import {FormattedMessage} from "react-intl";
 
 import {WithNotification} from "components/redux/middleware/sagaNotification";
 import {ActionMeta} from "components/state-mutate-with-status";
@@ -6,15 +8,6 @@ import {Severity} from "components/notification";
 
 import {ExampleList, ExampleItem} from "../../components/api";
 import {APIPayloadCreator} from "../";
-
-import {defineMessages} from "react-intl";
-
-const messages = defineMessages({
-    exampleGetItemNotificationSuccess: {
-        defaultMessage: "Got Item",
-        description: "Success message when getting an example item"
-    },
-});
 
 const exampleGetList = createAction<string, APIPayloadCreator<Promise<ExampleList>>, ActionMeta<ExampleList> & WithNotification<ExampleList>, [number?, number?]>(
     "@__dummy__/EXAMPLE_GET_LIST",
@@ -26,8 +19,11 @@ const exampleGetItem = createAction<string, APIPayloadCreator<Promise<ExampleIte
     () => cancel => ({API: {ExampleApi: {exampleGetItem}}}) => exampleGetItem()(cancel),
     () => ({
         notification: (payload) => (payload && {
-            message: messages.exampleGetItemNotificationSuccess,
-            reference: payload.id
+            message: <FormattedMessage
+                defaultMessage="Got Item"
+                description="Success message when getting an example item"
+            />,
+            reference: payload.id,
         })
     })
 )();
