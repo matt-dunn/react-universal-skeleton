@@ -22,13 +22,13 @@ export type PayloadCreator<A extends any[], R> =
     R
     |
     {
-        (cancel: Cancel): {
+        (cancel?: Cancel): {
             (...args: A): R;
         };
     }
     |
     {
-        (cancel: Cancel): R;
+        (cancel?: Cancel): R;
     }
 
 
@@ -40,7 +40,7 @@ const decorateMetaWithStatus = <M extends ActionMeta>(transactionId: string, sta
 
 const getName = (action: StandardAction) => `${action.type}${action?.meta?.id ? `-${action.meta.id}`: ""}`;
 
-const payloadCreator = (response: any) => (cancel: Cancel) => (...args: any[]) => {
+export const payloadCreator = <P extends PayloadCreator<any, any>>(response: P) => (cancel?: Cancel) => (...args: Parameters<P | any>) => {
     if (isFunction(response)) {
         const ret = response(cancel);
 

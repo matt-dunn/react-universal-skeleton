@@ -6,7 +6,7 @@ import {WithNotification} from "components/redux/middleware/sagaNotification";
 import {User} from "../../components/api";
 import {APIPayloadCreator} from "../";
 
-const login = createAction<string, APIPayloadCreator<Promise<User>>, ActionMeta<User> & WithNotification<User>>(
+const login = createAction<string, APIPayloadCreator<Promise<User>>, ActionMeta<User> & WithNotification<User>, [string, string]>(
     "@auth/LOGIN",
     (username, password) => () => ({API: {AuthApi: {login}}}) => login(username, password)
 )();

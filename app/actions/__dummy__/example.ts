@@ -7,7 +7,7 @@ import {Severity} from "components/notification";
 import {ExampleList, ExampleItem} from "../../components/api";
 import {APIPayloadCreator} from "../";
 
-const exampleGetList = createAction<string, APIPayloadCreator<Promise<ExampleList>>, ActionMeta<ExampleList> & WithNotification<ExampleList>>(
+const exampleGetList = createAction<string, APIPayloadCreator<Promise<ExampleList>>, ActionMeta<ExampleList> & WithNotification<ExampleList>, [number?, number?]>(
     "@__dummy__/EXAMPLE_GET_LIST",
     (page, count) => cancel => ({API: {ExampleApi: {exampleGetList}}}) => exampleGetList(page, count)(cancel),
 )();
@@ -23,7 +23,7 @@ const exampleGetItem = createAction<string, APIPayloadCreator<Promise<ExampleIte
     })
 )();
 
-const exampleEditItem = createAction<string, APIPayloadCreator<Promise<ExampleItem>>, ActionMeta<ExampleItem> & WithNotification<ExampleItem>>(
+const exampleEditItem = createAction<string, APIPayloadCreator<Promise<ExampleItem>>, ActionMeta<ExampleItem> & WithNotification<ExampleItem>, [ExampleItem]>(
     "@__dummy__/EXAMPLE_EDIT_ITEM",
     item => cancel => ({API: {ExampleApi: {exampleEditItem}}}) => exampleEditItem(item)(cancel),
     item => ({
