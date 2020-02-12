@@ -1,5 +1,4 @@
 module.exports = {
-  preset: "ts-jest/presets/js-with-babel",
   testEnvironment: "node",
   verbose: true,
   collectCoverageFrom: [
@@ -7,7 +6,8 @@ module.exports = {
     "components/**/*.{js,jsx,ts,tsx}",
     "!**/node_modules/**",
     "!**/dist/**",
-    "!**/test/**"
+    "!**/test/**",
+    "!**/*.d.ts"
   ],
   coverageDirectory: "./reports/coverage",
   setupFiles: ["./test/setupTests.js"],
