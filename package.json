@@ -1,6 +1,6 @@
 {
   "name": "universal-app",
-  "version": "1.0.245-dev.0",
+  "version": "1.0.247-dev.0",
   "main": "app/index.js",
   "private": true,
   "dependencies": {

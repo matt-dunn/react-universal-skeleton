@@ -28,7 +28,7 @@ describe("Example actions", () => {
             expect(typeof action.meta.notification).toBe("function");
 
             expect(isFunction(action.meta.notification) && action.meta.notification({id: "x", name: "x"}, undefined, {})).toMatchObject({
-                message: "Got Item",
+                message: expect.anything(),
                 reference: "x"
             });
 
