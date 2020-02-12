@@ -38,19 +38,15 @@
   ],
   "env": {
     "test": {
-      "plugins": [
-        [
-          "@babel/plugin-proposal-decorators",
-          {
-            "legacy": true
-          }
-        ],
-        "@babel/plugin-proposal-class-properties"
-      ],
       "presets": [
         [
           "@babel/preset-env",
           {
+            "useBuiltIns": "usage",
+            "corejs": {
+              "version": 3,
+              "proposals": true
+            },
             "debug": false,
             "targets": {
               "browsers": [
