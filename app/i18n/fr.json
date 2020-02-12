@@ -1,7 +1,8 @@
 {
-  "containers.1645138363": "Hello {name}. You have {unreadCount, number} {unreadCount, plural,\n                      one {message}\n                      other {messages}\n                    }",
-  "containers.2731101254": "The date today is {date}",
+  "actions.__dummy__.4128523562": "(fr) Got Item",
+  "containers.1645138363": "(fr) Hello {name}. You have {unreadCount, number} {unreadCount, plural,\n                      one {message}\n                      other {messages}\n                    }",
+  "containers.2731101254": "(fr) The date today is {date}",
   "containers.Forms.layouts.reset": "Réinitialisation",
   "containers.Forms.layouts.submit": "Soumettre",
-  "containers.Forms.title": "Forms (Lazy Loaded)"
+  "containers.Forms.title": "(fr) Forms (Lazy Loaded)"
 }

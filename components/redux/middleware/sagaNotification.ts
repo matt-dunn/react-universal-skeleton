@@ -7,7 +7,7 @@ import {Notify, notifyAction, Severity, Notification} from "components/notificat
 import {ActionMeta} from "components/state-mutate-with-status";
 
 export type WithNotification<P = any> = {
-    notification?: Notification | {(payload: P | undefined, error: ErrorLike | undefined, meta: ActionMeta): Notification | undefined | void};
+    notification: Notification | {(payload: P | undefined, error: ErrorLike | undefined, meta: ActionMeta): Notification | undefined | void};
 }
 
 const ErrorStatusBlacklist = [401, 403, 404];

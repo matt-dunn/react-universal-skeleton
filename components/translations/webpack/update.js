@@ -54,9 +54,9 @@ ReactIntlPlugin.prototype.apply = function(compiler) {
     });
 
     compiler.hooks.afterCompile.tap("ReactIntlPlugin", () => {
-        if (environment !== "development") {
-            translationsSealed = manageTranslations.seal({defaultMessages});
-        }
+        // if (environment !== "development") {
+        translationsSealed = manageTranslations.seal({defaultMessages});
+        // }
     });
 
     compiler.hooks.afterEmit.tap("ReactIntlPlugin", compilation => {
@@ -79,7 +79,9 @@ ReactIntlPlugin.prototype.apply = function(compiler) {
                     messages[module.resource].forEach(message => {
                         defaultMessages[message.id] = message;
 
-                        if (sourceDefaultMessages[message.id] && message.defaultMessage !== sourceDefaultMessages[message.id]) {
+                        if (!sourceDefaultMessages[message.id]) {
+                            changedMessages[message.id] = message;
+                        } else if (sourceDefaultMessages[message.id] && message.defaultMessage !== sourceDefaultMessages[message.id]) {
                             if (changedMessages[message.id] === sourceDefaultMessages[message.id]) {
                                 delete changedMessages[message.id];
                             } else {
@@ -95,7 +97,7 @@ ReactIntlPlugin.prototype.apply = function(compiler) {
 
         compilation.hooks.finishModules.tap("ReactIntlPlugin", modules => {
             modules.forEach(mod => {
-                if (environment !== "development" && mod.resource && languageFiles.filter(file => mod.resource.indexOf(file) !== -1).length > 0) {
+                if (mod.resource && languageFiles.filter(file => mod.resource.indexOf(file) !== -1).length > 0) {
                     const lang = path.parse(mod.resource).name;
 
                     const messages = (lang === "default" && transformHash(defaultMessages)) || translationsSealed.processLanguage(lang).getMessages();

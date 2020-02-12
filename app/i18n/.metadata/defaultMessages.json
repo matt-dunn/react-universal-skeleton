@@ -21,5 +21,10 @@
   {
     "defaultMessage": "Reset Form",
     "id": "containers.Forms.layouts.reset"
+  },
+  {
+    "defaultMessage": "Got Item",
+    "description": "Success message when getting an example item",
+    "id": "actions.__dummy__.4128523562"
   }
 ]
