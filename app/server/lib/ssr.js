@@ -161,7 +161,9 @@ export default async (req, res) => {
         }
     } catch (e) {
         log.error(e);
+        res.setHeader("Content-Type", "text/html; charset=utf-8");
         res.status(500);
+        res.send("TODO: A fatal error occurred");
         res.end();
     }
 };

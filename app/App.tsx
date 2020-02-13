@@ -14,6 +14,10 @@ import ErrorHandler, {HandleError} from "components/actions/ErrorHandler";
 import AuthProvider from "./components/auth";
 import {ToastContainer} from "react-toastify";
 
+import {ErrorBoundary} from "./components/ErrorBoundary";
+import {ErrorMain} from "./components/error/ErrorMain";
+import {ErrorGlobal} from "./components/error/ErrorGlobal";
+
 import Error403 from "./containers/403";
 import Error404 from "./containers/404";
 import Home from "./containers/Home";
@@ -54,39 +58,46 @@ const handler: HandleError = ({code, status, message}, location, history, props,
 
 const App = () => {
     return (
-        <AuthProvider>
-            <ToastContainer
-                hideProgressBar
-                pauseOnHover
-            />
+        <>
             <Global styles={GlobalStyles}/>
-            <Global styles={ToastifyStyles}/>
 
-            <Helmet
-                titleTemplate="%s - Universal App Example"
-            >
-                <title>Universal App Example</title>
-                <meta name="description" content="Universal App Form Page" />
-                <meta name="keywords" content="forms,..." />
-            </Helmet>
+            <ErrorBoundary ErrorComponent={ErrorGlobal}>
+                <AuthProvider>
+                    <ToastContainer
+                        hideProgressBar
+                        pauseOnHover
+                    />
+                    <Global styles={ToastifyStyles}/>
 
-            <Header/>
+                    <Helmet
+                        titleTemplate="%s - Universal App Example"
+                    >
+                        <title>Universal App Example</title>
+                        <meta name="description" content="Universal App Form Page"/>
+                        <meta name="keywords" content="forms,..."/>
+                    </Helmet>
 
-            <ErrorHandler handler={handler}>
-                <Switch>
-                    <Route exact path="/" component={Home} />
-                    <Route exact path="/data/:page?/" component={Data} />
-                    <Route exact path="/forms/" component={Forms} />
-                    <Route exact path="/mystyled/" component={MyStyled} />
-                    <Route exact path="/locale/" component={Locale} />
-                    <Route exact path="/state/" component={State} />
-                    <Route exact path="/dashboard/" component={Dashboard} />
-                    <Route path="/login/:from?/" component={Login} />
-                    <Route component={Error404} />
-                    {/*<Redirect to="/" />*/}
-                </Switch>
-            </ErrorHandler>
-        </AuthProvider>
+                    <Header/>
+
+                    <ErrorBoundary ErrorComponent={ErrorMain}>
+                        <ErrorHandler handler={handler}>
+                            <Switch>
+                                <Route exact path="/" component={Home}/>
+                                <Route exact path="/data/:page?/" component={Data}/>
+                                <Route exact path="/forms/" component={Forms}/>
+                                <Route exact path="/mystyled/" component={MyStyled}/>
+                                <Route exact path="/locale/" component={Locale}/>
+                                <Route exact path="/state/" component={State}/>
+                                <Route exact path="/dashboard/" component={Dashboard}/>
+                                <Route path="/login/:from?/" component={Login}/>
+                                <Route component={Error404}/>
+                                {/*<Redirect to="/" />*/}
+                            </Switch>
+                        </ErrorHandler>
+                    </ErrorBoundary>
+                </AuthProvider>
+            </ErrorBoundary>
+        </>
     );
 };
 
