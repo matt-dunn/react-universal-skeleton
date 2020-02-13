@@ -43,12 +43,10 @@ const Modals = ({notify, item, getItem}: ModalsProps) => {
             console.log("CLOSED 1...");
         });
 
-    const openTest2 = () => {
-        open(SimpleModal, {isStatic: true})
-            .then(() => {
-                console.log("CLOSED 2...");
-            });
-    };
+    const openTest2 = () => open(SimpleModal, {isStatic: true})
+        .then(() => {
+            console.log("CLOSED 2...");
+        });
 
     useWhatChanged(Modals, { modal, open, item, getItem});
 
