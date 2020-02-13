@@ -9,6 +9,7 @@ import {ActionType} from "../actions/form";
 import Select from "components/UniversalSelect/BasicSelect";
 import {Checkbox} from "./controls/Checkbox";
 import {Radio} from "./controls/Radio";
+import {FormikErrors, FormikValues} from "formik";
 
 export const FormContext = React.createContext<FormContextType<any, any, any> | undefined>(undefined);
 
@@ -198,4 +199,37 @@ export const getTypeProps = (schema: Field, additionalProps: any = {}): {Compone
         Component: Component || "input",
         props: typeProps
     };
+};
+
+export const buildId = (formId: string, fullPath: string) => `${formId}-${fullPath}`;
+
+type FormErrors = {
+    id: string;
+    message: string;
+}
+
+import {isObject} from "lodash";
+
+export const convertErrors = <T>(formId: string, errors: FormikErrors<T> & FormikValues) => {
+    const parse = (errors: FormikErrors<T> & FormikValues, path = "") => {
+        return Object.keys(errors).reduce((e, key) => {
+            if (key !== "undefined") {
+                const error = errors[key];
+                const fullPath = [path, key].filter(p => p).join(".");
+
+                if (isObject(error)) {
+                    e = e.concat(parse(error, fullPath));
+                } else {
+                    e.push({
+                        id: buildId(formId, fullPath),
+                        message: error
+                    });
+                }
+            }
+
+            return e;
+        }, [] as FormErrors[]);
+    };
+
+    return parse(errors);
 };

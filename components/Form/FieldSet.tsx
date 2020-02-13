@@ -4,7 +4,7 @@ import {ErrorMessage, getIn, Field, useFormikContext} from "formik";
 import {FormLabel} from "./Label";
 import {formStyles} from "./styles";
 import {Array} from "./Array";
-import {FormContext, getTypeProps, useFormContext} from "./utils";
+import {buildId, FormContext, getTypeProps, useFormContext} from "./utils";
 import {FieldMap, FieldSetChildren, typedMemo} from "./types";
 
 type FieldSetProps<T, P, S> = {
@@ -53,7 +53,7 @@ function FieldSet<T, P, S>({fields, children, className}: FieldSetProps<T, P, S>
                 const touch = getIn(touched, fullPath);
                 const isValid = !(error && touch);
                 const isRequired = field.tests.filter(test => test.OPTIONS.name === "required").length > 0;
-                const fieldId = `${formData.state.formId}-${fullPath}`;
+                const fieldId = buildId(formData.state.formId, fullPath);
                 const fieldIdError = `${fieldId}-error`;
                 const additionalProps = {
                     isValid,

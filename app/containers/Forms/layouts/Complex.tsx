@@ -5,7 +5,7 @@ import {defineMessages, useIntl} from "react-intl";
 
 import {ResponsiveGrid} from "components/Grid";
 import {FieldSet, FieldSetChildrenProps} from "components/Form";
-import {FormOptions} from "components/Form/FormOptions";
+import {FormOptions, FormErrors} from "components/Form";
 
 import {withWireFrameAnnotation} from "components/Wireframe/withWireFrameAnnotation";
 
@@ -77,6 +77,8 @@ function ComplexLayout<T, P, S>({fieldsetMap: {children, extra, otherLeft, other
 
     return (
         <>
+            <FormErrors className="no-js"/>
+
             <div style={{borderBottom: "1px solid #dfdfdf", margin: "0 0 20px 0", padding: "0 0 10px 0", display: "flex"}}>
                 <GridItems minItemWidth={150}>
                     <GridItem>
