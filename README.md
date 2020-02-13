@@ -4,35 +4,56 @@ Example skeleton app using Webpack for build with SSR support and server side as
 
 ## Features
 
-- Building with **Webpack 4**, app versioning and tarball
+- **Webpack 4**
+    * App versioning and tarball
     * **gzip** / **brotli** bundles statically generated
+    * Custom plugins for i18n
 - **es6+** (*babel*), **typescript**
-- Typescript / ES6+ linting using **eslint** and plugins
-- **React** with functional components and hooks
+- Static analysis
+    * Typescript / ES6+ linting using **eslint** and plugins
+    * Type checking
+- **React**
+    * Functional components
+    * Hooks
+    * Context
+    * Error boundaries
+    * Portals
+    * HMR
 - Testing + coverage with junit reports using **Jest** and **Enzyme**
-- **Redux** with action creators and status decoration for async action creators using **Redux-Saga**
-- **React router** with error hooks and rewrite and redirect and authentication
-- Styling with **SASS** / **CSS** / styled components using **Emotion** with source maps
+- **Redux**
+    * Typed action creators 
+    * Status decoration for async action creators using **Redux-Saga** with configurable auto-retry and cancellation
+- **React router**
+    * Error hooks
+    * Rewrite and redirect
+    * Authentication
+- Styling
+    * **SASS** / **CSS** (BEM + OOCSS)
+    * Styled components using **Emotion** with source maps
 - SSR
+    * Hot reload
     * **@loadable** for lazy loading and code splitting
     * Serve statically generated compressed assets if available
-    * **Helmet** for securing server
+    * Express
+        - **Helmet**
+        - 
     * Routing with rewrite and redirect
-    * Async data fetching and processing
+    * Authentication
+    * Async action support for data fetching and processing
     * **HTTPS**
     * **HTTP/2**
-    * Collect styles
-- PWA service worker using **workbox** for offline (configured ```passing env.PWA=true```), manifest generation using ebpack
+    * CSS styles collection
+- PWA
+    - Service worker using **workbox** for offline
+    - Manifest generation
 - Progressive enhanced schema generated forms (extending *Formik*), processed and validated on the client and server (using *Yup*)
-- i18n / l10n
-    * *react-intl* with translation workflow using babel plugin and custom webpack plugin and cli tools
+- i18n / l10n using *react-intl* with translation workflow using babel plugin and custom webpack plugin and cli tools
 - Responsive layouts
-- First class React portals
-    * Modals
-- Accessibility including semantic markup and aria
-- HMR (client) and HR (server) using custom plugins
-- Lazy loaded *Markdown* component integrated with *PrismJS* for code syntax highlighting
-- Example of [redux style](/state) state implementation
+- Accessibility (semantic markup, aria)
+- Examples
+    * Lazy loaded components including *Markdown* component integrated with *PrismJS* for code syntax highlighting
+    * [State management](/state/) implementation used for tutorials
+    * [Charting](/dashboard/) with Recharts
 
 
 
@@ -103,6 +124,14 @@ Prefix the command with ```WIREFRAME```, e.g.
 
 ```bash
 WIREFRAME=true yarn dev:client
+```
+
+#### PWA
+
+Prefix the command with ```PWA=true```, e.g.
+
+```bash
+PWA=true yarn build:client
 ```
 
 #### Other Tasks
