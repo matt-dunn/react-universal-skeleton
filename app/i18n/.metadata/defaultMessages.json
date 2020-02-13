@@ -1,5 +1,10 @@
 [
   {
+    "defaultMessage": "REF: {reference}",
+    "description": "Success message when getting an example item",
+    "id": "650704363"
+  },
+  {
     "defaultMessage": "Hello {name}. You have {unreadCount, number} {unreadCount, plural,\n                      one {message}\n                      other {messages}\n                    }",
     "description": "Main locale page title",
     "id": "containers.1645138363"

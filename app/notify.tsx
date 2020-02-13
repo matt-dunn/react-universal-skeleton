@@ -3,6 +3,7 @@ import {toast} from "react-toastify";
 import styled from "@emotion/styled";
 
 import {Notification, Severity} from "components/notification";
+import {FormattedMessage} from "react-intl";
 
 const Reference = styled.cite`
     margin: 10px 0 0 0;
@@ -21,7 +22,11 @@ export const notify = ({message, severity = Severity.info, reference}: Notificat
 
                 {reference &&
                 <Reference>
-                    {`REF: ${reference}`}
+                    <FormattedMessage
+                        defaultMessage="REF: {reference}"
+                        description="Success message when getting an example item"
+                        values={{reference}}
+                    />
                 </Reference>
                 }
             </>,
