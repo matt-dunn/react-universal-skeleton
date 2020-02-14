@@ -6,16 +6,14 @@ import {Main} from "app/styles/Components";
 
 const StatsI18n = loadable(() => import("app/components/dashboard/stats/i18n"));
 
-const Dashboard = () => {
-    return (
-        <Main>
-            <Helmet>
-                <title>Dashboard</title>
-            </Helmet>
+const Dashboard = () => (
+    <Main>
+        <Helmet>
+            <title>Dashboard</title>
+        </Helmet>
 
-            <StatsI18n/>
-        </Main>
-    );
-};
+        <StatsI18n/>
+    </Main>
+);
 
 export default Dashboard;

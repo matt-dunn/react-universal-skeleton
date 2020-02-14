@@ -44,51 +44,49 @@ const WAMarkdown = withWireFrameAnnotation(Markdown, {
     description: <div>Ut a hendrerit ligula. Praesent vestibulum, dui venenatis convallis condimentum, lorem magna rutrum erat, eget convallis odio purus sed ex. Suspendisse congue metus ac blandit vehicula. Suspendisse non elementum purus.</div>
 });
 
-const Home = () => {
-    return (
-        <Main>
-            <Helmet>
-                <title>Home Page</title>
-            </Helmet>
+const Home = () => (
+    <Main>
+        <Helmet>
+            <title>Home Page</title>
+        </Helmet>
 
-            {/*<Menu>*/}
-            {/*    <MenuLink>*/}
-            {/*        <NavLink*/}
-            {/*            to="/data"*/}
-            {/*            exact activeClassName="active"*/}
-            {/*        >*/}
-            {/*            <h2>*/}
-            {/*                API SSR Example*/}
-            {/*            </h2>*/}
-            {/*            <aside>*/}
-            {/*                Example of calling API endpoints on the client and server. Also demonstrates loading data for a component only when in the viewport.*/}
-            {/*            </aside>*/}
-            {/*        </NavLink>*/}
-            {/*    </MenuLink>*/}
-            {/*    <MenuLink>*/}
-            {/*        <NavLink*/}
-            {/*            to="/forms"*/}
-            {/*            exact activeClassName="active"*/}
-            {/*        >*/}
-            {/*            <h2>*/}
-            {/*                Schema Forms*/}
-            {/*            </h2>*/}
-            {/*            <aside>*/}
-            {/*                Example of dynamically building responsive forms from a Yup schema with server side validation and processing. Forms can be rendered in a custom layout.*/}
-            {/*            </aside>*/}
-            {/*        </NavLink>*/}
-            {/*    </MenuLink>*/}
-            {/*</Menu>*/}
+        {/*<Menu>*/}
+        {/*    <MenuLink>*/}
+        {/*        <NavLink*/}
+        {/*            to="/data"*/}
+        {/*            exact activeClassName="active"*/}
+        {/*        >*/}
+        {/*            <h2>*/}
+        {/*                API SSR Example*/}
+        {/*            </h2>*/}
+        {/*            <aside>*/}
+        {/*                Example of calling API endpoints on the client and server. Also demonstrates loading data for a component only when in the viewport.*/}
+        {/*            </aside>*/}
+        {/*        </NavLink>*/}
+        {/*    </MenuLink>*/}
+        {/*    <MenuLink>*/}
+        {/*        <NavLink*/}
+        {/*            to="/forms"*/}
+        {/*            exact activeClassName="active"*/}
+        {/*        >*/}
+        {/*            <h2>*/}
+        {/*                Schema Forms*/}
+        {/*            </h2>*/}
+        {/*            <aside>*/}
+        {/*                Example of dynamically building responsive forms from a Yup schema with server side validation and processing. Forms can be rendered in a custom layout.*/}
+        {/*            </aside>*/}
+        {/*        </NavLink>*/}
+        {/*    </MenuLink>*/}
+        {/*</Menu>*/}
 
-            <WAMarkdown content={import("../../README.md")} id={"md-1"}/>
-            {/*<Markdown content={import("mocks/content/test2.md")} id={"md-2"}/>*/}
-            {/*<Markdown content={import("mocks/content/test3.md")} id={"md-3"}/>*/}
+        <WAMarkdown content={import("../../README.md")} id={"md-1"}/>
+        {/*<Markdown content={import("mocks/content/test2.md")} id={"md-2"}/>*/}
+        {/*<Markdown content={import("mocks/content/test3.md")} id={"md-3"}/>*/}
 
-            {/*<Content>*/}
-            {/*    {(content) => <Markdown id="md-2" content={content.default || content}/>}*/}
-            {/*</Content>*/}
-        </Main>
-    );
-};
+        {/*<Content>*/}
+        {/*    {(content) => <Markdown id="md-2" content={content.default || content}/>}*/}
+        {/*</Content>*/}
+    </Main>
+);
 
 export default Home;
