@@ -38,33 +38,33 @@ const messages = defineMessages({
 });
 
 const WAMarkdown = withWireFrameAnnotation(Markdown, {
-    title: <div>Markdown</div>,
-    description: <div>Markdown can be used to embed content.</div>
+    title: "Markdown",
+    description: "Markdown can be used to embed content."
 });
 
 const WAMarkdownEmbedded = withWireFrameAnnotation(Markdown, {
-    title: <div>Person Markdown</div>,
-    description: <div>Markdown can be embedded for each item.</div>
+    title: "Person Markdown",
+    description: "Markdown can be embedded for each item."
 });
 
 const WAFieldSet1 = withWireFrameAnnotation(FieldSet, {
-    title: <div>Example form items</div>,
-    description: <div>Various form elements...</div>
+    title: "Example form items",
+    description: "Various form elements..."
 });
 
 const WAFieldSet2 = withWireFrameAnnotation(FieldSet, {
-    title: <div>SSR dropdown</div>,
-    description: <div>Fallback when JS is disabled.</div>
+    title: "SSR dropdown",
+    description: "Fallback when JS is disabled."
 });
 
 const WAFieldSet3 = withWireFrameAnnotation(FieldSet, {
-    title: <div>Notes</div>,
-    description: <div>Multiline notes.</div>
+    title: "Notes",
+    description: "Multiline notes."
 });
 
 const WAFieldSet4 = withWireFrameAnnotation(FormOptions, {
-    title: <div>Form actions</div>,
-    description: <div>Reset or submit form.</div>
+    title: "Form actions",
+    description: "Reset or submit form."
 });
 
 function ComplexLayout<T, P, S>({fieldsetMap: {children, extra, otherLeft, otherRight}}: Pick<FieldSetChildrenProps<T, P, S>, "fieldsetMap">) {

@@ -7,13 +7,13 @@ import {Main, Title} from "app/styles/Components";
 import {withWireFrameAnnotation} from "components/Wireframe/withWireFrameAnnotation";
 
 const WAMessageTitle = withWireFrameAnnotation(Title, {
-    title: <div>Page title</div>,
-    description: <div>Locale page title. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
+    title: "Page title",
+    description: "Locale page title. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
 });
 
 const WAMessageDate = withWireFrameAnnotation<JSX.IntrinsicElements["p"]>("p", {
-    title: <div>Localised date</div>,
-    description: <div>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
+    title: "Localised date",
+    description: "Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
 });
 
 const Locale = () => (

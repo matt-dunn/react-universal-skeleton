@@ -40,8 +40,8 @@ const Markdown = loadable(() => import("components/markdown"));
 // import content from "mocks/content/test3.md";
 
 const WAMarkdown = withWireFrameAnnotation(Markdown, {
-    title: <div>Markdown</div>,
-    description: <div>Ut a hendrerit ligula. Praesent vestibulum, dui venenatis convallis condimentum, lorem magna rutrum erat, eget convallis odio purus sed ex. Suspendisse congue metus ac blandit vehicula. Suspendisse non elementum purus.</div>
+    title: "Markdown",
+    description: "Ut a hendrerit ligula. Praesent vestibulum, dui venenatis convallis condimentum, lorem magna rutrum erat, eget convallis odio purus sed ex. Suspendisse congue metus ac blandit vehicula. Suspendisse non elementum purus."
 });
 
 const Home = () => (

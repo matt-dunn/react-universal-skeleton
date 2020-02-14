@@ -30,8 +30,8 @@ type DataProps = {
 };
 
 const WSTitle = withWireFrameAnnotation(Title, {
-    title: <div>Page title</div>,
-    description: <div>Data page title. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
+    title: "Page title",
+    description: "Data page title. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
 });
 
 const Data = ({notify, items, item, exampleGetList, exampleGetItem, exampleEditItem}: DataProps) => {

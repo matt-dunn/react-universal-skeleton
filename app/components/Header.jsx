@@ -56,23 +56,23 @@ const HeaderLink = styled(NavLink)`
 `;
 
 const WSHome = withWireFrameAnnotation(HeaderLink, {
-    title: <div>Home</div>,
-    description: <div>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
+    title: "Home",
+    description: "Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
 });
 
 const WSData = withWireFrameAnnotation(HeaderLink, {
-    title: <div>Data</div>,
-    description: <div>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
+    title: "Data",
+    description: "Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
 });
 
 const WSForms = withWireFrameAnnotation(HeaderLink, {
-    title: <div>Forms</div>,
-    description: <div>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
+    title: "Forms",
+    description: "Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
 });
 
 const WALocale = withWireFrameAnnotation(HeaderLink, {
-    title: <div>Locale</div>,
-    description: <div>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
+    title: "Locale",
+    description: "Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
 });
 
 const Header = () => {

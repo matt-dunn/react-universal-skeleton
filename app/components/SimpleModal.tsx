@@ -9,13 +9,13 @@ import {withWireFrameAnnotation} from "components/Wireframe/withWireFrameAnnotat
 import SimpleItem, {GetItem, Item} from "app/components/Item";
 
 const WAModalButton = withWireFrameAnnotation(Button, {
-    title: <div>Modal focusable item</div>,
-    description: <div>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
+    title: "Modal focusable item",
+    description: "Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
 });
 
 const WAModalSubmit = withWireFrameAnnotation(ButtonSimplePrimary, {
-    title: <div>Modal submit button</div>,
-    description: <div>Only enabled once the data is available.</div>
+    title: "Modal submit button",
+    description: "Only enabled once the data is available."
 });
 
 const SimpleModal = ({notify, close, item, getItem}: {notify: Notify; item?: Item & DecoratedWithStatus; getItem: GetItem} & WithModalProps) => {
