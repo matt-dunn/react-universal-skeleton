@@ -82,7 +82,7 @@ export const ExampleApi: ExampleApi = {
                 id: "4",
                 name: "Item 4",
             });
-        }, 3000);
+        }, (process as any).browser ? 3000 : 0);
 
         cancel && cancel(() => {
             console.error("@@@@@@CANCEL: exampleGetItem **************");

@@ -10,8 +10,9 @@ module.exports = {
     "!**/*.d.ts"
   ],
   coverageDirectory: "./reports/coverage",
-  setupFiles: ["./test/setupTests.js"],
-  snapshotSerializers: ["enzyme-to-json/serializer"],
+  // setupFiles: ["./test/setupTests.js"],
+  setupFilesAfterEnv: ["./test/setupTests.js"],
+  snapshotSerializers: ["enzyme-to-json/serializer", "jest-emotion"],
   reporters: [
     "default",
     ["jest-junit", { outputDirectory: "./reports" }],

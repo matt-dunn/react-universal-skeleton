@@ -1,0 +1,306 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Item renders correctly with item 1`] = `
+.emotion-2 {
+  max-width: 400px;
+  min-height: 80px;
+  border: 1px solid #ccc;
+  margin: 10px auto;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.emotion-2 .item {
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  padding: 10px;
+}
+
+.emotion-0 {
+  position: relative;
+  min-height: 50px;
+}
+
+<Item
+  getItem={[MockFunction]}
+  item={
+    Object {
+      "id": "item-1",
+      "name": "Item 1",
+    }
+  }
+>
+  <ItemContainer
+    processing={false}
+  >
+    <div
+      className="emotion-2 emotion-3"
+    >
+      <div
+        style={
+          Object {
+            "borderBottom": "1px solid #eee",
+            "color": "#aaa",
+            "fontSize": "9px",
+            "padding": "4px",
+          }
+        }
+      >
+        [
+        DONE
+        ]
+      </div>
+      <Loading
+        className="item"
+        loading={false}
+      >
+        <Container
+          className="item"
+          minHeight={50}
+        >
+          <div
+            className="item emotion-0 emotion-1"
+          >
+            <div
+              data-value={true}
+            >
+              Item 1
+            </div>
+          </div>
+        </Container>
+      </Loading>
+    </div>
+  </ItemContainer>
+</Item>
+`;
+
+exports[`Item renders correctly with no item 1`] = `
+.emotion-2 {
+  max-width: 400px;
+  min-height: 80px;
+  border: 1px solid #ccc;
+  margin: 10px auto;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.emotion-2 .item {
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  padding: 10px;
+}
+
+.emotion-0 {
+  position: relative;
+  min-height: 50px;
+}
+
+<Item
+  getItem={
+    [MockFunction] {
+      "calls": Array [
+        Array [],
+      ],
+      "results": Array [
+        Object {
+          "type": "return",
+          "value": undefined,
+        },
+      ],
+    }
+  }
+>
+  <ItemContainer
+    processing={false}
+  >
+    <div
+      className="emotion-2 emotion-3"
+    >
+      <div
+        style={
+          Object {
+            "borderBottom": "1px solid #eee",
+            "color": "#aaa",
+            "fontSize": "9px",
+            "padding": "4px",
+          }
+        }
+      >
+        [
+        DONE
+        ]
+      </div>
+      <Loading
+        className="item"
+        loading={false}
+      >
+        <Container
+          className="item"
+          minHeight={50}
+        >
+          <div
+            className="item emotion-0 emotion-1"
+          >
+            <div
+              data-value={true}
+            />
+          </div>
+        </Container>
+      </Loading>
+    </div>
+  </ItemContainer>
+</Item>
+`;
+
+exports[`Item renders correctly with processing item 1`] = `
+.emotion-4 {
+  position: relative;
+  min-height: 50px;
+}
+
+.emotion-6 {
+  max-width: 400px;
+  min-height: 80px;
+  border: 1px solid #ccc;
+  margin: 10px auto;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.emotion-6 .item {
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  background-color: rgba(210,210,210,0.1);
+  padding: 10px;
+}
+
+.emotion-2 {
+  color: #ddd;
+}
+
+.emotion-0 {
+  position: relative;
+  min-height: calc(1.75em + 5px);
+}
+
+.emotion-0:before {
+  position: absolute;
+  left: 0;
+  top: 10px;
+  background-color: currentColor;
+  opacity: 0.4;
+  border-radius: 0.25rem;
+  width: calc(55% - 20px);
+  height: 0.75em;
+  content: " ";
+}
+
+.emotion-0:after {
+  position: absolute;
+  left: 0;
+  top: 10px;
+  margin-top: 1.1em;
+  background-color: currentColor;
+  opacity: 0.4;
+  border-radius: 0.25rem;
+  width: calc(100% - 20px);
+  height: 1em;
+  content: " ";
+}
+
+<Item
+  getItem={[MockFunction]}
+  item={
+    Object {
+      "id": "item-1",
+      "name": "Item 1",
+      Symbol($status): Object {
+        "cancelled": false,
+        "complete": false,
+        "error": undefined,
+        "hasError": false,
+        "lastUpdated": undefined,
+        "outstandingCurrentTransactionCount": 1,
+        "outstandingTransactionCount": 1,
+        "processedOnServer": true,
+        "processing": true,
+        "updatingChildren": false,
+        Symbol(activeTransactions): Object {
+          "1": true,
+        },
+      },
+    }
+  }
+>
+  <ItemContainer
+    processing={true}
+  >
+    <div
+      className="emotion-6 emotion-7"
+    >
+      <div
+        style={
+          Object {
+            "borderBottom": "1px solid #eee",
+            "color": "#aaa",
+            "fontSize": "9px",
+            "padding": "4px",
+          }
+        }
+      >
+        [
+        UPDATING
+        ]
+      </div>
+      <Loading
+        className="item"
+        loading={true}
+      >
+        <Container
+          className="item"
+          minHeight={50}
+        >
+          <div
+            className="item emotion-4 emotion-5"
+          >
+            <Placeholder>
+              <PlaceHolderListItem>
+                <div
+                  className="emotion-2 emotion-3"
+                >
+                  <PlaceHolderItem>
+                    <div
+                      className="emotion-0 emotion-1"
+                    />
+                  </PlaceHolderItem>
+                </div>
+              </PlaceHolderListItem>
+            </Placeholder>
+          </div>
+        </Container>
+      </Loading>
+    </div>
+  </ItemContainer>
+</Item>
+`;

@@ -44,7 +44,7 @@ const ItemContainer = styled.div<{processing?: boolean}>`
 const PlaceHolderListItem = PlaceHolderItem(styled.div`color:#ddd`);
 
 
-const Item = ({className, isShown = true, item, getItem, ...props}: ItemProps) => {
+export const Item = ({className, isShown = true, item, getItem, ...props}: ItemProps) => {
     const {complete, processing, hasError, error} = getStatus(item);
 
     useWhatChanged(Item, { className, isShown, item, getItem, ...props });
@@ -66,7 +66,7 @@ const Item = ({className, isShown = true, item, getItem, ...props}: ItemProps) =
                 {!complete ?
                     <PlaceHolderListItem/>
                     :
-                    <div>{item && item.name}</div>
+                    <div data-value={true}>{item && item.name}</div>
                 }
             </Loading>
         </ItemContainer>

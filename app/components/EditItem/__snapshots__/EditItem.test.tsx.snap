@@ -1,0 +1,81 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EditItem Sets error message 1`] = `
+<div>
+  <Container>
+    <Value
+      indicateInvalid={true}
+      label="Item"
+      multiline={true}
+      onChange={[Function]}
+      value="Item 1"
+    />
+  </Container>
+  <Message>
+    Mock error
+  </Message>
+</div>
+`;
+
+exports[`EditItem Sets processing message 1`] = `
+<div>
+  <Container>
+    <Value
+      indicateInvalid={true}
+      label="Item"
+      multiline={true}
+      onChange={[Function]}
+      value="Item 1"
+    />
+  </Container>
+  <Message>
+    Saving...
+  </Message>
+</div>
+`;
+
+exports[`EditItem renders correctly 1`] = `
+<div>
+  <Container>
+    <Value
+      indicateInvalid={true}
+      label="Item"
+      multiline={true}
+      onChange={[Function]}
+      value="Item 1"
+    />
+  </Container>
+</div>
+`;
+
+exports[`EditItem sets type 'primary' 1`] = `
+<div>
+  <Container
+    type="primary"
+  >
+    <Value
+      indicateInvalid={true}
+      label="Item"
+      multiline={true}
+      onChange={[Function]}
+      value="Item 1"
+    />
+  </Container>
+</div>
+`;
+
+exports[`EditItem sets type 'secondary' 1`] = `
+<div>
+  <Container
+    type="secondary"
+  >
+    <Value
+      indicateInvalid={true}
+      label="Item"
+      multiline={true}
+      onChange={[Function]}
+      value="Item 1"
+    />
+  </Container>
+</div>
+`;

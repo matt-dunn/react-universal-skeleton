@@ -42,7 +42,7 @@ const Message = styled.div`
   font-size: 10px;
 `;
 
-const EditItem = ({item, onChange, type, className, disabled}: EditItemProps) => {
+export const EditItem = ({item, onChange, type, className, disabled}: EditItemProps) => {
     const {name} = item;
     const {processing, error} = getStatus(item);
 
