@@ -14,7 +14,7 @@ import ErrorHandler, {HandleError} from "components/actions/ErrorHandler";
 import AuthProvider from "./components/auth";
 import {ToastContainer} from "react-toastify";
 
-import {ErrorBoundary} from "./components/ErrorBoundary";
+import ErrorBoundary from "./components/ErrorBoundary";
 import {ErrorMain} from "./components/error/ErrorMain";
 import {ErrorGlobal} from "./components/error/ErrorGlobal";
 

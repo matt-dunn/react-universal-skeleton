@@ -1,4 +1,6 @@
 import React, {Component, ElementType} from "react";
+import { withRouter, RouteComponentProps } from "react-router";
+import {UnregisterCallback} from "history";
 
 import {ErrorLike} from "components/error";
 
@@ -8,15 +10,22 @@ type ErrorComponentProps = {
 
 type ErrorBoundaryProps = {
     ErrorComponent: ElementType<ErrorComponentProps>;
-}
+} & RouteComponentProps
 
 type ErrorBoundaryState = {
     error?: ErrorLike;
 }
 
-export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+    unlisten: UnregisterCallback;
+
     constructor(props: ErrorBoundaryProps) {
         super(props);
+
+        this.unlisten = props.history.listen(() => {
+            this.setState({error: undefined});
+        });
+
         this.state = { error: undefined };
     }
 
@@ -28,6 +37,10 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
         console.error(errorInfo);
     }
 
+    componentWillUnmount() {
+        this.unlisten();
+    }
+
     render() {
         const {error} = this.state;
         const {children, ErrorComponent} = this.props;
@@ -36,3 +49,4 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     }
 }
 
+export default withRouter(ErrorBoundary);
