@@ -50,4 +50,48 @@ body, h1, h2, h3, h4, h5, h6, p, ol, ul, input[type=text], input[type=email], bu
 a {
   text-decoration: underline;
   color: inherit;
-}`;
+}
+
+.react-expand-collapse__content {
+  position: relative;
+  overflow: hidden;
+}
+
+.react-expand-collapse__body {
+  display: inline;
+}
+
+/* expand-collapse button */
+.react-expand-collapse__button {
+  color: #22a7f0;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: #fff;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  line-height: 1;
+}
+
+.react-expand-collapse__button:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -20px;
+  width: 20px;
+  height: 100%;
+  background: linear-gradient(to right, transparent 0, #fff 100%);
+}
+
+/* expanded state */
+.react-expand-collapse--expanded .react-expand-collapse__button {
+  padding-left: 5px;
+  position: relative;
+  bottom: auto;
+  right: auto;
+}
+
+.react-expand-collapse--expanded .react-expand-collapse__button:before {
+  content: none;
+}
+`;

@@ -1,6 +1,9 @@
 import React from "react";
 import styled from "@emotion/styled";
 import { NavLink } from "react-router-dom";
+
+import ExpandCollapse from "react-expand-collapse";
+
 import {useAuthenticatedUser} from "./auth";
 import {withWireFrameAnnotation} from "components/Wireframe/withWireFrameAnnotation";
 
@@ -57,7 +60,12 @@ const HeaderLink = styled(NavLink)`
 
 const WSHome = withWireFrameAnnotation(HeaderLink, {
     title: "Home",
-    description: "Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
+    description:
+        <ExpandCollapse
+            previewHeight="88px"
+        >
+            Morbi tempor libero id accumsan sodales. Etiam maximus convallis faucibus. Nunc hendrerit sit amet ante in lobortis. Aliquam feugiat nibh sit amet nunc varius laoreet. Aliquam pharetra odio mi, sed convallis massa sagittis at. Nullam nibh tortor, commodo ac risus vitae, venenatis lobortis libero. Etiam ut sagittis velit, quis hendrerit nisi. Praesent interdum lacinia varius. Phasellus id felis non ex accumsan tempor. Nunc sit amet lobortis enim. Pellentesque lectus nulla, hendrerit dapibus efficitur id, imperdiet sit amet turpis. Maecenas venenatis suscipit finibus. Sed lorem nulla, dictum vel sollicitudin id, posuere eget nulla. Duis accumsan ante eget neque tincidunt pellentesque.
+        </ExpandCollapse>
 });
 
 const WSData = withWireFrameAnnotation(HeaderLink, {
