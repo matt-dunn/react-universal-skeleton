@@ -1,16 +1,13 @@
 import React from "react";
 import {Helmet} from "react-helmet-async";
-import styled from "@emotion/styled";
 
-import Page from "../../styles/Page";
+import {Main, Title} from "app/styles/Components";
+
 import TestMyStyled from "./TestMyStyled";
 
-const Title = styled.h2`
-    color: #ccc;
-`;
 const MyStyled = () => {
     return (
-        <Page>
+        <Main>
             <Helmet>
                 <title>MyStyled Test</title>
             </Helmet>
@@ -20,7 +17,7 @@ const MyStyled = () => {
             </Title>
 
             <TestMyStyled/>
-        </Page>
+        </Main>
     );
 };
 

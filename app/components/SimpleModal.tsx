@@ -34,7 +34,7 @@ const SimpleModal = ({notify, close, item, getItem}: {notify: Notify; item?: Ite
                     Focusable element
                 </WAModalButton>
             </address>
-            <SimpleItem isShown={true} item={item} getItem={getItem}/>
+            <SimpleItem item={item} getItem={getItem}/>
             <ModalFooter>
                 <ButtonGroup>
                     <ButtonSimple

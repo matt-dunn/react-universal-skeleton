@@ -1,14 +1,10 @@
 import React from "react";
 import {Helmet} from "react-helmet-async";
-import styled from "@emotion/styled";
 import {FormattedDate, FormattedMessage} from "react-intl";
 
-import Page from "../styles/Page";
-import {withWireFrameAnnotation} from "components/Wireframe/withWireFrameAnnotation";
+import {Main, Title} from "app/styles/Components";
 
-const Title = styled.h2`
-    color: #ccc;
-`;
+import {withWireFrameAnnotation} from "components/Wireframe/withWireFrameAnnotation";
 
 const WAMessageTitle = withWireFrameAnnotation(Title, {
     title: <div>Page title</div>,
@@ -22,7 +18,7 @@ const WAMessageDate = withWireFrameAnnotation<JSX.IntrinsicElements["p"]>("p", {
 
 const Locale = () => {
     return (
-        <Page>
+        <Main>
             <Helmet>
                 <title>Locale Test</title>
             </Helmet>
@@ -55,7 +51,7 @@ const Locale = () => {
                     description="The locale date now"
                 />
             </WAMessageDate>
-        </Page>
+        </Main>
     );
 };
 

@@ -4,7 +4,8 @@ import {Helmet} from "react-helmet-async";
 // import {NavLink} from "react-router-dom";
 import loadable from "@loadable/component";
 
-import Page from "../styles/Page";
+import {Main} from "app/styles/Components";
+
 import {withWireFrameAnnotation} from "components/Wireframe/withWireFrameAnnotation";
 
 // const Menu = styled.ul`
@@ -45,7 +46,7 @@ const WAMarkdown = withWireFrameAnnotation(Markdown, {
 
 const Home = () => {
     return (
-        <Page>
+        <Main>
             <Helmet>
                 <title>Home Page</title>
             </Helmet>
@@ -86,7 +87,7 @@ const Home = () => {
             {/*<Content>*/}
             {/*    {(content) => <Markdown id="md-2" content={content.default || content}/>}*/}
             {/*</Content>*/}
-        </Page>
+        </Main>
     );
 };
 

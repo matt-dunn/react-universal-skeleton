@@ -1,8 +1,7 @@
 import React from "react";
 import {Helmet} from "react-helmet-async";
-import styled from "@emotion/styled";
 
-import Page from "../../styles/Page";
+import {Main, Title} from "app/styles/Components";
 
 import {createAction, createReducer, getType, getStore, StandardAction, UnwrappedActionCreator, simplePromiseDecorator, connect, StoreProvider, logger} from "./simpleState";
 
@@ -89,15 +88,10 @@ const ConnectedTestComponent = connect(
     }
 )(TestComponent);
 
-const Title = styled.h2`
-    color: #ccc;
-    margin: 0 0 20px 0;
-`;
-
 const State = () => {
     return (
         <StoreProvider store={myStore}>
-            <Page>
+            <Main>
                 <Helmet>
                     <title>State Example</title>
                 </Helmet>
@@ -109,7 +103,7 @@ const State = () => {
                 <ConnectedTestComponent
                     description="Simple flux-style implementation of state management with async payload decoration."
                 />
-            </Page>
+            </Main>
         </StoreProvider>
     );
 };

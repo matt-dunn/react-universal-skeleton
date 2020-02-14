@@ -1,11 +1,11 @@
 import React from "react";
 
-import Page from "../styles/Page";
+import {Main, Title} from "app/styles/Components";
 
 const Error404 = () => (
-    <Page>
-        404!
-    </Page>
+    <Main>
+        <Title>Page not found</Title>
+    </Main>
 );
 
 export default Error404;

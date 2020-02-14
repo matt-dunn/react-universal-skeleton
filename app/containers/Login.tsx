@@ -3,15 +3,11 @@ import { useParams, useHistory } from "react-router-dom";
 import {connect} from "react-redux";
 import styled from "@emotion/styled";
 
-import {AppState} from "../reducers";
-import * as actions from "../actions";
-import Page from "../styles/Page";
-import Login from "app/components/Login";
+import {AppState} from "app/reducers";
+import * as actions from "app/actions";
+import {Main, Title} from "app/styles/Components";
 
-const Title = styled.h2`
-    color: #ccc;
-    margin-bottom: 20px;
-`;
+import Login from "app/components/Login";
 
 const LoginForm = styled(Login)`
   max-width: 300px;
@@ -27,13 +23,13 @@ const LoginContainer = () => {
     };
 
     return (
-        <Page>
+        <Main>
             <Title>
                 Simple Login
             </Title>
 
             <LoginForm onLogin={handleLogin}/>
-        </Page>
+        </Main>
     );
 };
 

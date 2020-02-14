@@ -2,19 +2,19 @@ import React from "react";
 import {Helmet} from "react-helmet-async";
 import loadable from "@loadable/component";
 
-import Page from "../styles/Page";
+import {Main} from "app/styles/Components";
 
 const StatsI18n = loadable(() => import("app/components/dashboard/stats/i18n"));
 
 const Dashboard = () => {
     return (
-        <Page>
+        <Main>
             <Helmet>
                 <title>Dashboard</title>
             </Helmet>
 
             <StatsI18n/>
-        </Page>
+        </Main>
     );
 };
 

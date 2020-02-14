@@ -1,6 +1,5 @@
 import React from "react";
 import {Helmet} from "react-helmet-async";
-import styled from "@emotion/styled";
 import { connect } from "react-redux";
 import { useParams} from "react-router";
 
@@ -12,7 +11,7 @@ import {GetList, Items} from "app/components/List";
 import {GetItem, Item} from "app/components/Item";
 import {OnChange} from "app/components/EditItem";
 
-import Page from "app/styles/Page";
+import {Main, Title} from "app/styles/Components";
 import * as actions from "app/actions";
 import {AppState} from "app/reducers";
 
@@ -30,10 +29,6 @@ type DataProps = {
     notify: Notify;
 };
 
-const Title = styled.h2`
-    color: #ccc;
-`;
-
 const WSTitle = withWireFrameAnnotation(Title, {
     title: <div>Page title</div>,
     description: <div>Data page title. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
@@ -45,7 +40,7 @@ const Data = ({notify, items, item, exampleGetList, exampleGetItem, exampleEditI
     useWhatChanged(Data, { items, item, exampleGetList, exampleGetItem, exampleEditItem, page});
 
     return (
-        <Page>
+        <Main>
             <Helmet>
                 <title>API SSR Example</title>
                 <meta name="description" content="Universal App Data Page" />
@@ -59,7 +54,7 @@ const Data = ({notify, items, item, exampleGetList, exampleGetItem, exampleEditI
             <Modals getItem={exampleGetItem} notify={notify} item={item}/>
 
             <Lists item={item} items={items} exampleGetList={exampleGetList} exampleGetItem={exampleGetItem} exampleEditItem={exampleEditItem}/>
-        </Page>
+        </Main>
     );
 };
 

@@ -6,7 +6,7 @@ import { Global } from "@emotion/core";
 
 import Header from "./components/Header";
 
-import { GlobalStyles } from "./styles";
+import { GlobalStyles } from "./styles/global";
 import { ToastifyStyles } from "./styles/toasify";
 
 import ErrorHandler, {HandleError} from "components/actions/ErrorHandler";

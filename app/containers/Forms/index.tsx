@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import {Collections, Form} from "components/Form/index";
 import {MapDataToAction} from "components/actions/form";
 
-import Page from "../../styles/Page";
+import {Main, Title} from "app/styles/Components";
 
 import {dummyApiCall, MyFormResponse} from "./utils";
 import schemaComplex from "./schemas/complex";
@@ -19,10 +19,6 @@ import {FormattedMessage} from "react-intl";
 
 // import {useFormikContext} from "formik";
 // import {formStyles} from "../../../components/Form/styles";
-
-const Title = styled.h2`
-    color: #ccc;
-`;
 
 const SubmissionFeedback = styled.section`
   padding: 20px 10px 10px 10px;
@@ -99,7 +95,7 @@ const Forms = () => {
     };
 
     return (
-        <Page>
+        <Main>
             <Helmet>
                 <title>Forms</title>
             </Helmet>
@@ -186,7 +182,7 @@ const Forms = () => {
                     }
                 />
             </div>
-        </Page>
+        </Main>
     );
 };
 

@@ -2,8 +2,13 @@ import React from "react";
 
 import {ErrorLike} from "components/error";
 
+import {Main, Title} from "app/styles/Components";
+
 export const ErrorGlobal = ({error}: {error: ErrorLike}) => {
     return (
-        <h1>TODO: An fatal error occurred - {error.message}</h1>
+        <Main>
+            <Title>TODO: An fatal error occurred</Title>
+            <p>{error.message}</p>
+        </Main>
     );
 };
