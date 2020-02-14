@@ -42,7 +42,7 @@ export type DecoratedWithStatus = {
   readonly [symbolStatus]?: Status;
 }
 
-export const Status = (status: StatusPartial = {} as Status): Status => {
+export const Status = (status: StatusPartial = {} as StatusPartial): Status => {
   const {
     lastUpdated, error, processedOnServer = false, cancelled = false, [symbolActiveTransactions]: activeTransactions = {}
   } = status;

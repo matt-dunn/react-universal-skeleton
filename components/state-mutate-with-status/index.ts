@@ -5,10 +5,10 @@ import { MetaStatus, ActionMeta, symbolStatus } from "./status";
 import {decorateStatus, getPayload, getUpdatedState} from "./utils";
 
 export type StandardAction<P = any, M extends ActionMeta = ActionMeta> = {
-  type: string;
-  payload?: P;
-  meta?: M;
-  error?: boolean;
+  readonly type: string;
+  readonly payload?: P;
+  readonly meta?: M;
+  readonly error?: boolean;
 };
 
 export type Path = ReadonlyArray<string>;
@@ -18,10 +18,10 @@ type GetNewItemIndex<P> = {
 }
 
 export type Options<P> = {
-  path?: Path;
-  getNewItemIndex?: GetNewItemIndex<P>;
-  autoInsert?: boolean;
-  autoDelete?: boolean;
+  readonly path?: Path;
+  readonly getNewItemIndex?: GetNewItemIndex<P>;
+  readonly autoInsert?: boolean;
+  readonly autoDelete?: boolean;
 }
 
 const updateState = <S, P extends S>(state: S, { meta, error, payload }: StandardAction<P>, options?: Options<P>): S => {

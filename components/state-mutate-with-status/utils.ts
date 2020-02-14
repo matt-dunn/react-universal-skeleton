@@ -5,9 +5,9 @@ import {wrap} from "object-path-immutable";
 import {Options, Path, Status, MetaStatus, symbolActiveTransactions, symbolStatus} from "./";
 
 type UpdatedStatus<S, P> = {
-    updatedState: S;
-    originalState?: P | null;
-    isCurrent?: boolean;
+    readonly updatedState: S;
+    readonly originalState?: P | null;
+    readonly isCurrent?: boolean;
 }
 
 const getError = (metaStatus: MetaStatus, status: Status = {} as Status, isCurrent = true) => {
