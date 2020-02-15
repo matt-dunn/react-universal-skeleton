@@ -1,4 +1,4 @@
-import React, {ReactNode, useContext, useEffect, useState, useCallback, useMemo} from "react";
+import React, {ReactNode, useContext, useEffect, useState, useCallback, useMemo, useRef} from "react";
 import css from "@emotion/css";
 import styled from "@emotion/styled";
 import scrollIntoView from "scroll-into-view-if-needed";
@@ -19,7 +19,8 @@ const WireFrameBody = styled.div`
   flex-grow: 1;
 `;
 
-const transition = "250ms ease-in-out";
+const transitionDuration = 250;
+const transition = `${transitionDuration}ms ease-in-out`;
 
 const WireFrameAnnotationsContainer = styled.div<{open: boolean}>`
   flex-grow: 0;
@@ -99,7 +100,7 @@ const WireFrameAnnotationsToggle = styled.div<{open: boolean}>`
   }
 
   span {
-    transition: transform 250ms;
+    transition: transform ${transitionDuration}ms;
     display: block;
     ${({open}) => open && css`transform: rotate(180deg);`}
   }
@@ -136,6 +137,8 @@ const useWireFrame = () => {
 
 export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
     const [isClient, setIsClient] = useState(false);
+    const [isOpened, setIsOpened] = useState(false);
+    const opening = useRef<number | undefined>();
 
     useEffect(() => {
         setIsClient(true);
@@ -150,6 +153,18 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
     const handleClose = useCallback(() => {
         setShow(false);
     }, [setShow]);
+
+    useEffect(() => {
+        clearTimeout(opening.current);
+
+        if (open) {
+            setIsOpened(true);
+        } else {
+            opening.current = setTimeout(() => {
+                setIsOpened(false);
+            }, transitionDuration);
+        }
+    }, [open]);
 
     useEffect(() => {
         if (highlightedNote) {
@@ -177,15 +192,24 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
                             <span>⬅</span>
                         </WireFrameAnnotationsToggle>
 
-                        <header>
-                            <h1>Annotations</h1>
-                            <WireFrameAnnotationsClose aria-label="Close annotations" onClick={handleClose}>×</WireFrameAnnotationsClose>
-                        </header>
+                        {isOpened &&
+                        <>
+                            <header>
+                                <h1>Annotations</h1>
+                                <WireFrameAnnotationsClose
+                                    aria-label="Close annotations"
+                                    onClick={handleClose}
+                                >
+                                    ×
+                                </WireFrameAnnotationsClose>
+                            </header>
 
-                        <WireFrameAnnotationsNotes
-                            components={components}
-                            highlightedNote={highlightedNote}
-                        />
+                            <WireFrameAnnotationsNotes
+                                components={components}
+                                highlightedNote={highlightedNote}
+                            />
+                        </>
+                        }
                     </WireFrameAnnotations>
                 </WireFrameAnnotationsContainer>
                 }

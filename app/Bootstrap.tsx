@@ -57,21 +57,21 @@ function Bootstrap<T>({languagePack, asyncData, formData, error, store, helmetCo
 
     if (lang) {
         return (
-            <WireFrameProvider>
-                <IntlProvider locale={lang.locale} messages={lang.messages}>
-                    <AsyncDataContextProvider value={asyncData}>
-                        <FormDataProvider value={formData}>
-                            <ErrorProvider value={error}>
-                                <HelmetProvider context={helmetContext}>
-                                    <Provider store={store}>
+            <IntlProvider locale={lang.locale} messages={lang.messages}>
+                <AsyncDataContextProvider value={asyncData}>
+                    <FormDataProvider value={formData}>
+                        <ErrorProvider value={error}>
+                            <HelmetProvider context={helmetContext}>
+                                <Provider store={store}>
+                                    <WireFrameProvider>
                                         {children}
-                                    </Provider>
-                                </HelmetProvider>
-                            </ErrorProvider>
-                        </FormDataProvider>
-                    </AsyncDataContextProvider>
-                </IntlProvider>
-            </WireFrameProvider>
+                                    </WireFrameProvider>
+                                </Provider>
+                            </HelmetProvider>
+                        </ErrorProvider>
+                    </FormDataProvider>
+                </AsyncDataContextProvider>
+            </IntlProvider>
         );
     }
 
