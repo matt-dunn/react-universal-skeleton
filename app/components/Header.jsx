@@ -31,6 +31,7 @@ const Menu = styled.ul`
 
 const MenuLink = styled.li`
   margin-right: 0.5em;
+  white-space: nowrap;
   
   &:last-child {
     margin-right: 0;

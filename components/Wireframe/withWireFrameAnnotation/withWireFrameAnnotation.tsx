@@ -80,8 +80,8 @@ const getDisplayName = (WrappedComponent: ComponentType<any> | string) => {
     return isString(WrappedComponent) ? WrappedComponent : WrappedComponent.displayName || WrappedComponent.name || "Component";
 };
 
-export const withWireFrameAnnotation = function<P>(WrappedComponent: ComponentType<P> | string, options: WireFrameComponentOptions) {
-    const Component = React.memo((props: any) => <WrappedComponent {...props}/>);
+export const withWireFrameAnnotation = function<P extends object>(WrappedComponent: ComponentType<P> | string, options: WireFrameComponentOptions) {
+    const Component = React.memo<P>((props: P) => <WrappedComponent {...props}/>);
     Component.displayName = `withWireFrameAnnotation(${getDisplayName(WrappedComponent)})`;
 
     return function WireFrameAnnotation(props: P) {
