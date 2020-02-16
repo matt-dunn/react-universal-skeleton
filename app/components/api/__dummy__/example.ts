@@ -1,4 +1,4 @@
-import {WrapCancelable} from "components/api";
+import {WrapWithAbortSignal} from "components/api";
 
 import {APIError} from "components/api";
 
@@ -11,15 +11,15 @@ export type ExampleItem = {
 
 export type ExampleList = ExampleItem[];
 
-type ExampleGetList = WrapCancelable<{
+type ExampleGetList = WrapWithAbortSignal<{
     (page?: number, count?: number): Promise<ExampleList>;
 }>
 
-type ExampleGetItem = WrapCancelable<{
+type ExampleGetItem = WrapWithAbortSignal<{
     (): Promise<ExampleItem>;
 }>
 
-type ExampleEditItem = WrapCancelable<{
+type ExampleEditItem = WrapWithAbortSignal<{
     (item: ExampleItem): Promise<ExampleItem>;
 }>
 
@@ -31,7 +31,7 @@ export type ExampleApi = {
 
 // let retryCount = 10;
 export const ExampleApi: ExampleApi = {
-    exampleGetList: (page = 0, count = 3) => cancel => new Promise<ExampleList>((resolve/*, reject*/) => {
+    exampleGetList: (page = 0, count = 3) => signal => new Promise<ExampleList>((resolve/*, reject*/) => {
         console.log("API CALL: exampleGetList", page, count);
 
         // if (retryCount < 4) {
@@ -64,12 +64,12 @@ export const ExampleApi: ExampleApi = {
             }));
         }, (process as any).browser ? 2000 : 0);
 
-        cancel && cancel(() => {
+        signal && (signal.onabort = () => {
             console.error("@@@@@@CANCEL: exampleGetList **************");
             clearTimeout(t);
         });
     }),
-    exampleGetItem:() => (cancel) => new Promise<ExampleItem>((resolve/*, reject*/) => {
+    exampleGetItem:() => signal => new Promise<ExampleItem>((resolve/*, reject*/) => {
         console.log("API CALL: exampleGetItem");
         // throw new Error("Error in exampleGetItem")
         // if (typeof window === 'undefined' || !(window as any).authenticated) {
@@ -84,12 +84,12 @@ export const ExampleApi: ExampleApi = {
             });
         }, (process as any).browser ? 3000 : 0);
 
-        cancel && cancel(() => {
+        signal && (signal.onabort = () => {
             console.error("@@@@@@CANCEL: exampleGetItem **************");
             clearTimeout(t);
         });
     }),
-    exampleEditItem:(item) => cancel => new Promise<ExampleItem>((resolve, reject) => {
+    exampleEditItem:(item) => signal => new Promise<ExampleItem>((resolve, reject) => {
         console.log("API CALL: exampleEditItem", item.id);
 
         if (item.name.toLocaleLowerCase() === "item") {
@@ -106,7 +106,7 @@ export const ExampleApi: ExampleApi = {
             resolve(item);
         }, 5000);
 
-        cancel && cancel(() => {
+        signal && (signal.onabort = () => {
             console.error("@@@@@@CANCEL: exampleEditItem **************", item.id);
             clearTimeout(t);
         });

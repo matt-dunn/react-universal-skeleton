@@ -3,4 +3,4 @@ import {APIError} from "./APIError";
 
 export {APPError, APIError};
 
-export * from "./Cancellable";
+export * from "./types";

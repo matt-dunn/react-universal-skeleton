@@ -4,7 +4,6 @@ import {isFunction} from "lodash";
 import isPromise from "is-promise";
 import {Task} from "@redux-saga/types";
 
-import {Cancellable, Cancel} from "components/api";
 import {StandardAction, MetaStatus, ActionMeta} from "components/state-mutate-with-status";
 
 type Pending = {
@@ -22,13 +21,13 @@ export type PayloadCreator<A extends any[], R> =
     R
     |
     {
-        (cancel?: Cancel): {
+        (signal?: AbortSignal): {
             (...args: A): R;
         };
     }
     |
     {
-        (cancel?: Cancel): R;
+        (signal?: AbortSignal): R;
     }
 
 
@@ -40,9 +39,9 @@ const decorateMetaWithStatus = <M extends ActionMeta>(transactionId: string, sta
 
 const getName = (action: StandardAction) => `${action.type}${action?.meta?.id ? `-${action.meta.id}`: ""}`;
 
-export const payloadCreator = <P extends PayloadCreator<any, any>>(response: P) => (cancel?: Cancel) => (...args: Parameters<P | any>) => {
+export const payloadCreator = <P extends PayloadCreator<any, any>>(response: P) => (signal?: AbortSignal) => (...args: Parameters<P | any>) => {
     if (isFunction(response)) {
-        const ret = response(cancel);
+        const ret = response(signal);
 
         if (isFunction(ret)) {
             return ret(...args);
@@ -56,7 +55,7 @@ export const payloadCreator = <P extends PayloadCreator<any, any>>(response: P) 
 
 function* callAsyncWithCancel(action: StandardAction, done?: Done, ...args: any[]) {
     const transactionId = uuid.v4();
-    const cancellable = Cancellable();
+    const controller = new AbortController();
 
     try {
         yield put({
@@ -68,9 +67,9 @@ function* callAsyncWithCancel(action: StandardAction, done?: Done, ...args: any[
             }, action.meta)
         });
 
-        const payload = yield payloadCreator(action.payload)(cancellable.canceller)(...args);
+        const payload = yield payloadCreator(action.payload)(controller.signal)(...args);
         // TODO: refactor / allow configuration on retry
-        // const payload = yield retry(5, 1000, payloadCreator(action.payload)(cancel)(...args);
+        // const payload = yield retry(5, 1000, payloadCreator(action.payload)(controller.signal)(...args);
 
         yield put({
             ...action,
@@ -97,7 +96,7 @@ function* callAsyncWithCancel(action: StandardAction, done?: Done, ...args: any[
         action?.meta?.response && action?.meta?.response.reject(error);
     } finally {
         if (yield cancelled()) {
-            cancellable.cancel();
+            controller.abort();
 
             yield put({
                 ...action,
