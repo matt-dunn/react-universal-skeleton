@@ -9,7 +9,7 @@ import {Severity} from "components/notification";
 import {ExampleList, ExampleItem} from "../../components/api";
 import {APIPayloadCreator} from "../";
 
-const exampleGetList = createAction<string, APIPayloadCreator<Promise<ExampleList>>, ActionMeta<ExampleList> & WithNotification<ExampleList>, [number?, number?]>(
+const exampleGetList = createAction<string, APIPayloadCreator<Promise<ExampleList>>, ActionMeta<ExampleList>, [number?, number?]>(
     "@__dummy__/EXAMPLE_GET_LIST",
     (page, count) => signal => ({API: {ExampleApi: {exampleGetList}}}) => exampleGetList(page, count)(signal),
 )();
