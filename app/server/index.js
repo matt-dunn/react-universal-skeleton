@@ -14,7 +14,7 @@ import helmet from "helmet";
 
 import key from "./ssl/private.key";
 import cert from "./ssl/private.crt";
-import "abort-controller/polyfill"
+import "abort-controller/polyfill";
 
 const {log} = console;
 
