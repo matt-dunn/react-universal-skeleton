@@ -19,7 +19,7 @@ describe("decorateStatus", () => {
             "updatingChildren": false,
             [symbolActiveTransactions]: {},
             "lastUpdated": undefined,
-            "processedOnServer": false
+            "processedOnServer": true
         });
 
         const decoratedStatusWithCurrentStatus = decorateStatus(status, currentStatus);
@@ -35,7 +35,7 @@ describe("decorateStatus", () => {
             "processing": false,
             [symbolActiveTransactions]: {},
             "lastUpdated": undefined,
-            "processedOnServer": false
+            "processedOnServer": true
         });
     });
 
@@ -45,7 +45,6 @@ describe("decorateStatus", () => {
             processing: true
         } as MetaStatus;
         const currentStatus = Status({
-            processedOnServer: false,
             [symbolActiveTransactions]: {
                 "1": true,
                 "2": true,
@@ -62,7 +61,6 @@ describe("decorateStatus", () => {
             processing: true
         } as MetaStatus;
         const currentStatus = Status({
-            processedOnServer: false,
             [symbolActiveTransactions]: {
                 "1": true,
                 "2": true,
@@ -94,7 +92,7 @@ describe("decorateStatus", () => {
                 "1": true
             },
             "lastUpdated": undefined,
-            "processedOnServer": false
+            "processedOnServer": true
         });
     });
 
@@ -104,7 +102,6 @@ describe("decorateStatus", () => {
             processing: true
         } as MetaStatus;
         const currentStatus = Status({
-            processedOnServer: false,
             [symbolActiveTransactions]: {
                 "1": true,
                 "2": true,
@@ -128,7 +125,7 @@ describe("decorateStatus", () => {
                 "4": true
             },
             "lastUpdated": undefined,
-            "processedOnServer": false
+            "processedOnServer": true
         });
     });
 });

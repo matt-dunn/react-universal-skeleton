@@ -63,8 +63,6 @@ describe("EditItem", () => {
                 $status: {
                     transactionId: "1",
                     processing: true,
-                    complete: false,
-                    processedOnServer: true
                 }
             }
         });
@@ -88,8 +86,6 @@ describe("EditItem", () => {
                 $status: {
                     transactionId: "1",
                     processing: false,
-                    complete: false,
-                    processedOnServer: true,
                     error: {
                         message: "Mock error"
                     }

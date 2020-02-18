@@ -30,8 +30,6 @@ describe("next state", () => {
                 meta: {
                     $status: {
                         transactionId: "123",
-                        processedOnServer: false,
-                        complete: false,
                         processing: true
                     }
                 }
@@ -57,8 +55,6 @@ describe("next state", () => {
                 meta: {
                     $status: {
                         transactionId: "123",
-                        processedOnServer: false,
-                        complete: true,
                         processing: false
                     }
                 }
@@ -99,8 +95,6 @@ describe("next state", () => {
                 meta: {
                     $status: {
                         transactionId: "123",
-                        processedOnServer: false,
-                        complete: false,
                         processing: true
                     }
                 }
@@ -130,8 +124,6 @@ describe("next state", () => {
                 meta: {
                     $status: {
                         transactionId: "123",
-                        processedOnServer: false,
-                        complete: true,
                         processing: false
                     }
                 }
@@ -177,8 +169,6 @@ describe("next state", () => {
                     id: "1",
                     $status: {
                         transactionId: "123",
-                        processedOnServer: false,
-                        complete: false,
                         processing: true
                     }
                 }
@@ -201,8 +191,6 @@ describe("next state", () => {
                     id: "1",
                     $status: {
                         transactionId: "123",
-                        processedOnServer: false,
-                        complete: true,
                         processing: false
                     }
                 }
@@ -229,8 +217,6 @@ describe("next state", () => {
                     id: "2",
                     $status: {
                         transactionId: "123",
-                        processedOnServer: false,
-                        complete: true,
                         processing: false
                     }
                 }
@@ -258,8 +244,6 @@ describe("next state", () => {
                     id: "2",
                     $status: {
                         transactionId: "123",
-                        processedOnServer: false,
-                        complete: true,
                         processing: false
                     }
                 }
@@ -299,8 +283,6 @@ describe("next state", () => {
                     id: "1",
                     $status: {
                         transactionId: "1",
-                        processedOnServer: false,
-                        complete: false,
                         processing: true
                     }
                 }
@@ -323,8 +305,6 @@ describe("next state", () => {
                     id: "1",
                     $status: {
                         transactionId: "2",
-                        processedOnServer: false,
-                        complete: false,
                         processing: true
                     }
                 }

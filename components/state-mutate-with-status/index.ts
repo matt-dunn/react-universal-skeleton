@@ -31,7 +31,6 @@ const updateState = <S, P extends S>(state: S, { meta, error, payload }: Standar
     id: actionId,
     $status: metaStatus = {
       error: error && payload,
-      complete: false,
       processing: false
     } as MetaStatus,
   } = meta || {} as ActionMeta;

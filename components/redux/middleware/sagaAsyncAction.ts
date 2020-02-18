@@ -34,7 +34,7 @@ export type PayloadCreator<A extends any[], R> =
 
 const decorateMetaWithStatus = <M extends ActionMeta>(transactionId: string, status: Partial<Omit<MetaStatus, "transactionId">>, meta?: M): M & ActionMeta => ({
     ...meta || {} as M,
-    $status: MetaStatus({complete: false, processing: false, processedOnServer: false, ...status, transactionId})
+    $status: MetaStatus({processing: false, ...status, transactionId})
 });
 
 const getName = (action: StandardAction) => `${action.type}${action?.meta?.id ? `-${action.meta.id}`: ""}`;
@@ -63,7 +63,6 @@ function* callAsyncWithCancel(action: StandardAction, done?: Done, ...args: any[
             payload: action?.meta?.seedPayload,
             meta: decorateMetaWithStatus(transactionId,{
                 processing: true,
-                processedOnServer: !(process as any).browser,
             }, action.meta)
         });
 
@@ -75,8 +74,6 @@ function* callAsyncWithCancel(action: StandardAction, done?: Done, ...args: any[
             ...action,
             payload,
             meta: decorateMetaWithStatus(transactionId,{
-                complete: true,
-                processedOnServer: !(process as any).browser,
                 lastUpdated: Date.now()
             }, action.meta)
         });
@@ -89,7 +86,6 @@ function* callAsyncWithCancel(action: StandardAction, done?: Done, ...args: any[
             error: true,
             meta: decorateMetaWithStatus(transactionId,{
                 error,
-                processedOnServer: !(process as any).browser
             }, action.meta)
         });
 
@@ -100,10 +96,9 @@ function* callAsyncWithCancel(action: StandardAction, done?: Done, ...args: any[
 
             yield put({
                 ...action,
-                payload: undefined,
+                payload: [],
                 meta: decorateMetaWithStatus(transactionId,{
                     cancelled: true,
-                    processedOnServer: !(process as any).browser
                 }, action.meta)
             });
         } else {
