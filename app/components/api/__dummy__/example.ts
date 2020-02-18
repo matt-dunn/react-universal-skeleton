@@ -31,7 +31,7 @@ export type ExampleApi = {
 
 // let retryCount = 10;
 export const ExampleApi: ExampleApi = {
-    exampleGetList: (page = 0, count = 3) => signal => new Promise<ExampleList>((resolve/*, reject*/) => {
+    exampleGetList: (page = 0, count = 3) => signal => new Promise<ExampleList>((resolve, reject) => {
         console.log("API CALL: exampleGetList", page, count);
 
         // if (retryCount < 4) {
@@ -67,9 +67,10 @@ export const ExampleApi: ExampleApi = {
         signal && (signal.onabort = () => {
             console.error("@@@@@@CANCEL: exampleGetList **************");
             clearTimeout(t);
+            reject(new Error("Cancelled"));
         });
     }),
-    exampleGetItem:() => signal => new Promise<ExampleItem>((resolve/*, reject*/) => {
+    exampleGetItem:() => signal => new Promise<ExampleItem>((resolve, reject) => {
         console.log("API CALL: exampleGetItem");
         // throw new Error("Error in exampleGetItem")
         // if (typeof window === 'undefined' || !(window as any).authenticated) {
@@ -87,6 +88,7 @@ export const ExampleApi: ExampleApi = {
         signal && (signal.onabort = () => {
             console.error("@@@@@@CANCEL: exampleGetItem **************");
             clearTimeout(t);
+            reject(new Error("Cancelled"));
         });
     }),
     exampleEditItem:(item) => signal => new Promise<ExampleItem>((resolve, reject) => {
@@ -109,6 +111,7 @@ export const ExampleApi: ExampleApi = {
         signal && (signal.onabort = () => {
             console.error("@@@@@@CANCEL: exampleEditItem **************", item.id);
             clearTimeout(t);
+            reject(new Error("Cancelled"));
         });
     })
 };
