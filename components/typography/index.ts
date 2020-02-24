@@ -1,14 +1,14 @@
-export const typography = (base = 1.6) => {
+export const typography = (base = 1) => {
     const fontSizeBase = base;
 
     const fontSizeLarge = (fontSizeBase * 1.25);
     const fontSizeSmall = (fontSizeBase * 0.85);
 
-    const fontSize_h1 = (fontSizeBase * 2.2);
-    const fontSize_h2 = (fontSizeBase * 1.85);
-    const fontSize_h3 = (fontSizeBase * 1.7);
-    const fontSize_h4 = (fontSizeBase * 1.25);
-    const fontSize_h5 = fontSizeBase;
+    const fontSize_h1 = (fontSizeBase * 1.85);
+    const fontSize_h2 = (fontSizeBase * 1.7);
+    const fontSize_h3 = (fontSizeBase * 1.26);
+    const fontSize_h4 = fontSizeBase;
+    const fontSize_h5 = (fontSizeBase * 0.85);
     const fontSize_h6 = (fontSizeBase * 0.85);
 
     const lineHeightBase = 1.428571429;

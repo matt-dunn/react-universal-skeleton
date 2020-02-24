@@ -63,7 +63,6 @@ const WireFrameAnnotations = styled.div`
   background-color: #fafafa;
   display: flex;
   flex-direction: column;
-  font-size: 1.2rem;
   transition: transform ${transition};
   z-index: 6000;
   
@@ -75,6 +74,7 @@ const WireFrameAnnotations = styled.div`
     
     h1 {
       flex-grow: 1;
+      font-size: 1.5em;
     }
   }
 `;
@@ -94,6 +94,7 @@ const WireFrameAnnotationsToggle = styled.div<{open: boolean}>`
   align-items: center;
   cursor: pointer;
   opacity: ${({open}) => (open && 1) || 0.25};
+  font-family: sans-serif;
   
   &:hover {
     opacity: 1;
@@ -110,7 +111,7 @@ const WireFrameAnnotationsClose = styled.button`
   flex-grow: 0;
   cursor: pointer;
   line-height: 1;
-  font-size: 2em;
+  font-size: 1.5em;
   background-color: transparent;
   border: none;
   padding: 0;

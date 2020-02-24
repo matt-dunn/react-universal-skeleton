@@ -10,6 +10,7 @@ type WireFrameAnnotationsNotesProps = {
 
 const WireFrameAnnotationsNotesContainer = styled.ul`
   overflow: auto;
+  font-size: 0.85em;
   
   li {
     padding: 6px 0;

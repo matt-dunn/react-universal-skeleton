@@ -7,6 +7,11 @@ export const ButtonGroup = styled.div`
 `;
 
 const ButtonBase = styled.button`
+  padding: .375rem .75rem;
+  min-height: 20px;
+  line-height: 1.2;
+  font-size: 1rem;
+
   &:not([disabled]) {
     cursor: pointer;
   }
@@ -17,13 +22,9 @@ const ButtonBase = styled.button`
 `;
 
 export const Button = styled(ButtonBase)`
-  padding: 6px 15px;
-  min-height: 20px;
-  line-height: 1.2;
   background-color: #fff;
   color: #555;
   border-radius: .25rem;
-  font-size: 1.4rem;
 `;
 
 export const ButtonDanger = styled(Button)`
@@ -41,11 +42,6 @@ export const ButtonPrimary = styled(Button)`
 `;
 
 export const ButtonSimple = styled(ButtonBase)`
-  padding: 6px 5px;
-  min-height: 20px;
-  line-height: 1.2;
-  font-size: 1.4rem;
-  font-weight: bold;
   color: #3498DB;
   border: none;
 `;

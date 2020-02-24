@@ -79,7 +79,7 @@ function ComplexLayout<T, P, S>({fieldsetMap: {children, extra, otherLeft, other
         <>
             <FormErrors className="no-js"/>
 
-            <div style={{borderBottom: "1px solid #dfdfdf", margin: "0 0 20px 0", padding: "0 0 10px 0", display: "flex"}}>
+            <div style={{borderBottom: "1px solid #dfdfdf", display: "flex"}}>
                 <GridItems minItemWidth={150}>
                     <GridItem>
                         <WAFieldSet1
@@ -91,7 +91,7 @@ function ComplexLayout<T, P, S>({fieldsetMap: {children, extra, otherLeft, other
                         <WAFieldSet2
                             fields={otherRight}
                         />
-                        <p style={{fontSize: "14px", backgroundColor: "#eee", padding: "10px", borderRadius: "10px", margin: "0 0 10px 0"}}>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                        <p style={{fontSize: "0.8em", backgroundColor: "#eee", padding: "10px", borderRadius: "10px", margin: "0 0 10px 0"}}>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
                         <WAFieldSet4 i18n={i18n}/>
                     </GridItem>
                 </GridItems>
@@ -125,7 +125,7 @@ function ComplexLayout<T, P, S>({fieldsetMap: {children, extra, otherLeft, other
                     </FieldSet>
                 </GridItem>
                 <GridItem>
-                    <p style={{fontSize: "14px", backgroundColor: "#eee", padding: "10px", borderRadius: "10px", margin: "0 0 10px 0"}}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    <p style={{fontSize: "0.8rem", backgroundColor: "#eee", padding: "10px", borderRadius: "10px", margin: "0 0 10px 0"}}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
                     <WAFieldSet3
                         fields={extra}
                     />

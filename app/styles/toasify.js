@@ -76,7 +76,7 @@ export const ToastifyStyles = css`
   cursor: pointer;
   direction: ltr;
   font-weight: 200;
-  font-size: 16px;
+  font-size: 1rem;
 }
 
 .Toastify__toast--rtl {
@@ -110,7 +110,7 @@ export const ToastifyStyles = css`
   flex: 1;
 
   h1 {
-    font-size: 20px;
+    font-size: 1.4em;
     margin: 0 0 10px 0;
   }
 
@@ -128,7 +128,9 @@ export const ToastifyStyles = css`
 .Toastify__close-button {
   color: #fff;
   font-weight: bold;
-  font-size: 14px;
+  font-size: 1rem;
+  font-family: arial, sans-serif;
+  line-height: 1;
   background: transparent;
   outline: none;
   border: none;

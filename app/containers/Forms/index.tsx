@@ -106,7 +106,7 @@ const Forms = () => {
                 />
             </Title>
 
-            <div style={{maxWidth: "800px", margin: "20px auto"}}>
+            <div style={{maxWidth: "50em", margin: "0 auto"}}>
                 <Form
                     id="my-form"
                     as={MyFormContainer}

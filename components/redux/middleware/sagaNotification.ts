@@ -18,7 +18,7 @@ export function* sagaNotification(notify: Notify) {
 
         if (type === getType(notifyAction)) {
             notify(payload);
-        } else if (($status?.complete || error) && notification && isFunction(notification)) {
+        } else if (($status?.lastUpdated || error) && notification && isFunction(notification)) {
             const n = notification((!error && payload) || undefined, (error && payload) || undefined, restMeta);
             n && notify(n);
         } else if ($status?.complete && notification) {

@@ -62,6 +62,7 @@ function* callAsyncWithCancel(action: StandardAction, done?: Done, ...args: any[
             ...action,
             payload: action?.meta?.seedPayload,
             meta: decorateMetaWithStatus(transactionId,{
+                lastUpdated: undefined,
                 processing: true,
             }, action.meta)
         });

@@ -34,6 +34,7 @@ const calculateChildStyle = (length: number, dimensions?: ViewportDimensions, mi
 const Container = styled.ol<{as: keyof JSX.IntrinsicElements | React.ComponentType<any>; length: number; totalPaddingWidth?: number; dimensions?: ViewportDimensions; minItemWidth?: number}>`
     display: flex;
     flex-wrap: wrap;
+    flex-grow: 1;
     
     > * {
       ${({length, totalPaddingWidth, dimensions, minItemWidth}) => calculateChildStyle(length, dimensions, minItemWidth, totalPaddingWidth)};

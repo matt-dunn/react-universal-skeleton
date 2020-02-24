@@ -1,13 +1,26 @@
 import { css } from "@emotion/core";
 
+import {typography} from "components/typography";
+
+const {
+    lineHeightComputed,
+    fontSize_h1_unit,
+    fontSize_h2_unit,
+    fontSize_h3_unit,
+    fontSize_h4_unit,
+    fontSize_h5_unit,
+    fontSize_h6_unit,
+} = typography();
+
 export const GlobalStyles = css`
-/* Base 10 typography scale courtesty of @wesbos 1.6rem === 16px */
 html {
-  font-size: 10px;
+  line-height: 1.15;
 }
 body {
-  font-size: 1.6rem;
-}/* Relative Type Scale */
+  font-size: 1rem;
+  line-height: 1.5;
+}
+/* Relative Type Scale */
 /* https://blog.envylabs.com/responsive-typographic-scales-in-css-b9f60431d1c4 */
 :root {
   --step-up-5: 2em;
@@ -26,19 +39,15 @@ body {
 }/* https://css-tricks.com/snippets/css/system-font-stack/ */
 /* Define the "system" font family */
 /* Fastest loading font - the one native to their device */
-@font-face {
-  font-family: system;
-  font-style: normal;
-  font-weight: 300;
-  src: local(".SFNSText-Light"), local(".HelveticaNeueDeskInterface-Light"), local(".LucidaGrandeUI"), local("Ubuntu Light"), local("Segoe UI Light"), local("Roboto-Light"), local("DroidSans"), local("Tahoma");
-}/* Modern CSS Reset */
+/* Modern CSS Reset */
 /* https://alligator.io/css/minimal-css-reset/ */
 body, h1, h2, h3, h4, h5, h6, p, ol, ul, input[type=text], input[type=email], button {
   margin: 0;
   padding: 0;
   font-weight: normal;
-}body, h1, h2, h3, h4, h5, h6, p, ol, ul, input[type=text], input[type=email], button { /* stylelint-disable-line no-duplicate-selectors */
-  font-family: "system", sans-serif;
+}body, h1, h2, h3, h4, h5, h6, p, ol, ul, input[type=text], input[type=email], select, button { /* stylelint-disable-line no-duplicate-selectors */
+  font-weight: 300;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
 }*, *:before, *:after {
   box-sizing: inherit;
 }ol, ul {
@@ -70,7 +79,6 @@ a {
   background-color: #fff;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
-  line-height: 1;
 }
 
 .react-expand-collapse__button:before {
@@ -93,5 +101,53 @@ a {
 
 .react-expand-collapse--expanded .react-expand-collapse__button:before {
   content: none;
+}
+
+article {
+    h1, h2, h3, h4, h5, h6 {
+      color: #555;
+    }
+    
+    h1,
+    h2,
+    h3 {
+      margin-bottom: ${lineHeightComputed / 2}rem;
+    }
+    
+    h2,
+    h3 {
+      margin-top: ${lineHeightComputed}rem;
+    }
+    
+    h4,
+    h5,
+    h6 {
+      margin-top: ${lineHeightComputed / 2}rem;
+      margin-bottom: ${lineHeightComputed / 2}rem;
+    }
+    
+    h1 {
+      font-size: ${fontSize_h1_unit};
+    }
+    h2 {
+      font-size: ${fontSize_h2_unit};
+    }
+    h3 {
+      font-size: ${fontSize_h3_unit};
+    }
+    h4 {
+      font-size: ${fontSize_h4_unit};
+    }
+    h5 {
+      font-size: ${fontSize_h5_unit};
+    }
+    h6 {
+      font-size: ${fontSize_h6_unit};
+    }
+
+    p {
+        margin-top: 0;
+        margin-bottom: 1rem;
+    }
 }
 `;

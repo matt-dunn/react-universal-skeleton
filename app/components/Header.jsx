@@ -45,7 +45,7 @@ const AuthenticatedUser = styled.div`
 const HeaderLink = styled(NavLink)`
   padding: 8px 15px;
   text-decoration: none;
-  border-radius: 1em;
+  border-radius: 2em;
 
   &:focus,  
   &:hover {
@@ -63,7 +63,7 @@ const WSHome = withWireFrameAnnotation(HeaderLink, {
     title: "Home",
     description:
         <ExpandCollapse
-            previewHeight="88px"
+            previewHeight="82px"
         >
             Morbi tempor libero id accumsan sodales. Etiam maximus convallis faucibus. Nunc hendrerit sit amet ante in lobortis. Aliquam feugiat nibh sit amet nunc varius laoreet. Aliquam pharetra odio mi, sed convallis massa sagittis at. Nullam nibh tortor, commodo ac risus vitae, venenatis lobortis libero. Etiam ut sagittis velit, quis hendrerit nisi. Praesent interdum lacinia varius. Phasellus id felis non ex accumsan tempor. Nunc sit amet lobortis enim. Pellentesque lectus nulla, hendrerit dapibus efficitur id, imperdiet sit amet turpis. Maecenas venenatis suscipit finibus. Sed lorem nulla, dictum vel sollicitudin id, posuere eget nulla. Duis accumsan ante eget neque tincidunt pellentesque.
         </ExpandCollapse>

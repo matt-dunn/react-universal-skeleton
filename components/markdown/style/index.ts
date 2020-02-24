@@ -1,92 +1,16 @@
 import styled from "@emotion/styled";
 
-import inconsolata from "./fonts/inconsolata-regular.ttf";
-
-import {typography} from "components/typography";
-
-const {
-    lineHeightComputed,
-    fontSizeBase_unit,
-    fontSize_h1_unit,
-    fontSize_h2_unit,
-    fontSize_h3_unit,
-    fontSize_h4_unit,
-    fontSize_h5_unit,
-    fontSize_h6_unit,
-    lineHeightBase
-} = typography(1.6);
-
 export const Container = styled.article`
-    @font-face {
-      font-family: 'Inconsolata';
-      src: url(${inconsolata}) format('truetype');
-      font-weight: normal;
-      font-style: normal;
-    }
-
     font-family: inherit;
-    line-height: ${lineHeightBase};
-    font-size: ${fontSizeBase_unit};
     color: #555;
     text-align: left;
     font-weight: normal;
-    //pointer-events: none;
-    
-    h1, h2, h3, h4, h5, h6 {
-      color: #555;
-    }
-    
-    h1,
-    h2,
-    h3 {
-      margin-bottom: ${lineHeightComputed / 2}rem;
-    }
-    
-    h2,
-    h3 {
-      margin-top: ${lineHeightComputed}rem;
-    }
-    
-    h4,
-    h5,
-    h6 {
-      margin-top: ${lineHeightComputed / 2}rem;
-      margin-bottom: ${lineHeightComputed / 2}rem;
-    }
-    
-    h1 {
-      font-size: ${fontSize_h1_unit};
-    }
-    h2 {
-      font-size: ${fontSize_h2_unit};
-    }
-    h3 {
-      font-size: ${fontSize_h3_unit};
-    }
-    h4 {
-      font-size: ${fontSize_h4_unit};
-    }
-    h5 {
-      font-size: ${fontSize_h5_unit};
-    }
-    h6 {
-      font-size: ${fontSize_h6_unit};
-    }
-    
-    p {
-      margin: 10px 0;
-    }
-    
-    a {
-      color: inherit;
-      text-decoration: underline;
-    }
     
     pre > [class*="language-"],
     pre,
     code {
       color: #555;
-      //font-family: "Inconsolata", "Courier New", monospace !important;
+      font-family: "Courier New", monospace !important;
     }
     
     pre {
@@ -138,6 +62,10 @@ export const Container = styled.article`
       display: block;
       width: 100%;
       overflow: auto;
+      
+      th {
+      font-weight: bold;
+      }
     
       tr:nth-of-type(2n) {
         background-color: #f6f8fa;
