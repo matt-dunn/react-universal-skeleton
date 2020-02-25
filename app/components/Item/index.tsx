@@ -63,10 +63,10 @@ export const Item = ({className, isShown = true, item, getItem, ...props}: ItemP
                 {hasError && `Error occurred: ${error && error.message}`}
             </div>
             <Loading loading={processing} className="item">
-                {!complete ?
-                    <PlaceHolderListItem/>
+                {item?.name ?
+                    <div data-value={true}>{item.name}</div>
                     :
-                    <div data-value={true}>{item && item.name}</div>
+                    <PlaceHolderListItem/>
                 }
             </Loading>
         </ItemContainer>

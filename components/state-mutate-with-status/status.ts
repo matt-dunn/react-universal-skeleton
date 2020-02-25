@@ -58,7 +58,7 @@ export const Status = (status: StatusPartial = {} as StatusPartial): Status => {
 
     processedOnServer: !(process as any).browser,
     hasError: (error && true) || false,
-    complete: (lastUpdated && outstandingCurrentTransactionCount === 0) || false,
+    complete: outstandingCurrentTransactionCount === 0,
     processing: outstandingCurrentTransactionCount > 0,
     outstandingTransactionCount,
     outstandingCurrentTransactionCount,
