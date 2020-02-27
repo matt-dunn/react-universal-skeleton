@@ -46,8 +46,7 @@ describe("Item", () => {
         const getItem = jest.fn();
 
         const item = nextState({
-            id: "item-1",
-            name: "Item 1"
+            id: "item-1"
         }, {
             type: "xx",
             meta: {

@@ -47,7 +47,7 @@ export type DecoratedWithStatus = {
 
 export const Status = (status: StatusUpdate = {} as StatusUpdate): Status => {
   const {
-    lastUpdated, error, complete = true, cancelled = false, [symbolActiveTransactions]: activeTransactions = {}
+    lastUpdated, error, complete = false, cancelled = false, [symbolActiveTransactions]: activeTransactions = {}
   } = status;
 
   const outstandingTransactionCount = Object.keys(activeTransactions).length;

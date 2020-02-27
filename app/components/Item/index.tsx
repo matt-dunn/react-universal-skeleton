@@ -12,7 +12,7 @@ import {withWireFrameAnnotation} from "components/Wireframe/withWireFrameAnnotat
 
 export type Item = {
     id: string;
-    name: string;
+    name?: string;
 }
 
 export type GetItem = () => Promise<Item>
@@ -45,7 +45,7 @@ const PlaceHolderListItem = PlaceHolderItem(styled.div`color:#ddd`);
 
 
 export const Item = ({className, isShown = true, item, getItem, ...props}: ItemProps) => {
-    const {complete, processing, hasError, error} = getStatus(item);
+    const {processing, hasError, error} = getStatus(item);
 
     useWhatChanged(Item, { className, isShown, item, getItem, ...props });
 
@@ -63,10 +63,10 @@ export const Item = ({className, isShown = true, item, getItem, ...props}: ItemP
                 {hasError && `Error occurred: ${error && error.message}`}
             </div>
             <Loading loading={processing} className="item">
-                {!complete ?
-                    <PlaceHolderListItem/>
-                    :
+                {item?.name ?
                     <div data-value={true}>{item && item.name}</div>
+                    :
+                    <PlaceHolderListItem/>
                 }
             </Loading>
         </ItemContainer>
