@@ -27,8 +27,11 @@ export const decorateStatus = (metaStatus: MetaStatus, status: Status = {} as St
         delete activeTransactions[metaStatus.transactionId];
     }
 
+    const outstandingCurrentTransactionCount = Object.values(activeTransactions).filter(current => current === true).length;
+
     const updatedStatus = Status({
         ...metaStatus,
+        complete: isCurrent ? outstandingCurrentTransactionCount === 0 : true,
         error: getError(metaStatus, status, isCurrent),
         [symbolActiveTransactions]: activeTransactions,
     });

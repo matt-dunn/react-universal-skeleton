@@ -53,7 +53,8 @@ describe("Item", () => {
             meta: {
                 $status: {
                     transactionId: "1",
-                    processing: true
+                    processing: true,
+                    complete: false
                 }
             }
         });

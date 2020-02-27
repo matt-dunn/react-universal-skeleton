@@ -16,6 +16,7 @@ export type ActionMeta<P = any> = {
 }
 
 type StatusBase = {
+  readonly complete: boolean;
   readonly processing: boolean;
   readonly lastUpdated?: number;
   readonly error?: ErrorLike;
@@ -26,25 +27,27 @@ export type MetaStatus = {
   readonly transactionId: string;
 } & StatusBase;
 
+type StatusActiveTransactions = {
+  readonly [symbolActiveTransactions]: ActiveTransactions;
+}
+
+type StatusUpdate = StatusActiveTransactions & Partial<StatusBase>
+
 export type Status = {
-  readonly complete: boolean;
   readonly hasError? : boolean;
   readonly updatingChildren: boolean;
   readonly outstandingTransactionCount: number;
   readonly outstandingCurrentTransactionCount: number;
-  readonly [symbolActiveTransactions]: ActiveTransactions;
   readonly processedOnServer: boolean;
-} & StatusBase;
-
-export type StatusPartial = Omit<Status, "complete" | "processing" | "outstandingTransactionCount" | "outstandingCurrentTransactionCount" | "updatingChildren" | "hasError" | "processedOnServer">;
+} & StatusActiveTransactions & StatusBase;
 
 export type DecoratedWithStatus = {
   readonly [symbolStatus]?: Status;
 }
 
-export const Status = (status: StatusPartial = {} as StatusPartial): Status => {
+export const Status = (status: StatusUpdate = {} as StatusUpdate): Status => {
   const {
-    lastUpdated, error, cancelled = false, [symbolActiveTransactions]: activeTransactions = {}
+    lastUpdated, error, complete = true, cancelled = false, [symbolActiveTransactions]: activeTransactions = {}
   } = status;
 
   const outstandingTransactionCount = Object.keys(activeTransactions).length;
@@ -55,10 +58,10 @@ export const Status = (status: StatusPartial = {} as StatusPartial): Status => {
     cancelled,
     error: error && errorLike(error),
     [symbolActiveTransactions]: { ...activeTransactions },
+    complete,
 
     processedOnServer: !(process as any).browser,
     hasError: (error && true) || false,
-    complete: outstandingCurrentTransactionCount === 0,
     processing: outstandingCurrentTransactionCount > 0,
     outstandingTransactionCount,
     outstandingCurrentTransactionCount,

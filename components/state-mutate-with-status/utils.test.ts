@@ -66,7 +66,8 @@ describe("decorateStatus", () => {
                 "2": true,
                 "3": true,
                 "4": true
-            }
+            },
+            complete: false
         });
 
         expect(decorateStatus(status, currentStatus)).toStrictEqual(currentStatus);

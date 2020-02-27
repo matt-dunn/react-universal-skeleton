@@ -34,7 +34,7 @@ export type PayloadCreator<A extends any[], R> =
 
 const decorateMetaWithStatus = <M extends ActionMeta>(transactionId: string, status: Partial<Omit<MetaStatus, "transactionId">>, meta?: M): M & ActionMeta => ({
     ...meta || {} as M,
-    $status: MetaStatus({processing: false, ...status, transactionId})
+    $status: MetaStatus({processing: false, complete: false, ...status, transactionId})
 });
 
 const getName = (action: StandardAction) => `${action.type}${action?.meta?.id ? `-${action.meta.id}`: ""}`;
@@ -62,7 +62,6 @@ function* callAsyncWithCancel(action: StandardAction, done?: Done, ...args: any[
             ...action,
             payload: action?.meta?.seedPayload,
             meta: decorateMetaWithStatus(transactionId,{
-                lastUpdated: undefined,
                 processing: true,
             }, action.meta)
         });
@@ -75,6 +74,7 @@ function* callAsyncWithCancel(action: StandardAction, done?: Done, ...args: any[
             ...action,
             payload,
             meta: decorateMetaWithStatus(transactionId,{
+                complete: true,
                 lastUpdated: Date.now()
             }, action.meta)
         });
