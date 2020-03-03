@@ -7,12 +7,14 @@ import ExpandCollapse from "react-expand-collapse";
 import {useAuthenticatedUser} from "./auth";
 import {withWireFrameAnnotation} from "components/Wireframe/withWireFrameAnnotation";
 
+type HeaderProps = {
+    className?: string;
+}
+
 const Container = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 3px solid #eee;
-  background-color: #f5f5f5;
   min-height: 80px;
 `;
 
@@ -83,7 +85,7 @@ const WALocale = withWireFrameAnnotation(HeaderLink, {
     description: "Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
 });
 
-const Header = ({className}) => {
+const Header = ({className}: HeaderProps) => {
     const authenticatedUser = useAuthenticatedUser();
 
     return (
