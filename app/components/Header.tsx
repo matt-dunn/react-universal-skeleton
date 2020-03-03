@@ -8,7 +8,6 @@ import {useAuthenticatedUser} from "./auth";
 import {withWireFrameAnnotation} from "components/Wireframe/withWireFrameAnnotation";
 
 const Container = styled.nav`
-  margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -84,11 +83,11 @@ const WALocale = withWireFrameAnnotation(HeaderLink, {
     description: "Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
 });
 
-const Header = () => {
+const Header = ({className}) => {
     const authenticatedUser = useAuthenticatedUser();
 
     return (
-        <Container>
+        <Container className={className}>
             <Brand>
                 Universal Skeleton Stack
                 {authenticatedUser &&

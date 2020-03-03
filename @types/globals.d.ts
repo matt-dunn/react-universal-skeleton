@@ -25,3 +25,5 @@ declare module "react-responsive-ui/modules/TextInput" {
 }
 
 declare module "simple-deep-freeze";
+
+declare module "react-expand-collapse";

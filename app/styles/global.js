@@ -150,4 +150,8 @@ article {
         margin-bottom: 1rem;
     }
 }
+
+.align-right {
+  text-align: right;
+}
 `;

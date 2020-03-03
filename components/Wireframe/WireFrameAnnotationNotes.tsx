@@ -10,7 +10,7 @@ type WireFrameAnnotationsNotesProps = {
 
 const WireFrameAnnotationsNotesContainer = styled.ul`
   overflow: auto;
-  font-size: 0.85em;
+  font-size: 0.85rem;
   
   li {
     padding: 6px 0;
@@ -29,6 +29,10 @@ const WireFrameAnnotationsNotesContainer = styled.ul`
       padding: 0 10px;
       margin-bottom: 5px;
       align-items: center;
+      
+      h2 {
+        font-size: 1.2rem;
+      }
     }
     
     article {
@@ -39,6 +43,9 @@ const WireFrameAnnotationsNotesContainer = styled.ul`
 
 const IdentifierNote = styled(IdentifierBase)`
   margin-right: 0.5em;
+  border-width: 1px;
+  border-style: solid;
+  font-size: 0.8em;
 `;
 
 export const WireFrameAnnotationsNotes = ({components, highlightedNote}: WireFrameAnnotationsNotesProps) => {

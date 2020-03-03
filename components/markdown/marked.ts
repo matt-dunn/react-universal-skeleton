@@ -5,18 +5,18 @@ type AdditionOptions = {
     highlightRaw?: boolean;
 }
 
+type Options = MarkedOptions & AdditionOptions;
+
 type MarkedAsync = {
-    (src: Promise<string> | string, options?: MarkedOptions & AdditionOptions): Promise<string>;
+    (src: Promise<string> | string, options?: Options): Promise<string>;
 };
 
-const escape = (html: string, encode: boolean) => {
-    return html
-        .replace(encode ? /&/g : /&(?!#?\w+;)/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#39;");
-};
+const escape = (html: string, encode: boolean) => html
+    .replace(encode ? /&/g : /&(?!#?\w+;)/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 
 // Override for adding classes to task list item
 marked.Renderer.prototype.listitem = function(this: any, text) {
@@ -64,6 +64,17 @@ marked.Renderer.prototype.code = function(code, lang, escaped) {
         + "\n</code></pre>\n";
 };
 
+const processAsync = (content: string, options?: Options) =>
+    new Promise<string>((resolve, reject) => {
+        marked(content, options, (error, content) => {
+            if (error) {
+                reject(error);
+            } else {
+                resolve(content);
+            }
+        });
+    });
+
 type Module = {
     default?: string;
 }
@@ -72,22 +83,16 @@ function isModule(arg: any): arg is Module {
     return Boolean(arg.default);
 }
 
-const getContentValue = (content: string | Module): string => {
-    return (isModule(content) ? content.default : content) || "";
-};
+const getContentValue = (content: string | Module) =>
+    (isModule(content) ? content.default : content) || "";
 
-const asyncMarked: MarkedAsync = (content, options) => {
-    return new Promise((resolve, reject) => {
-        ((isPromise(content) ? content : Promise.resolve(content)) as Promise<Module | string>).then(resolvedContent => {
-            marked(getContentValue(resolvedContent), options,(error, content) => {
-                if (error) {
-                    reject(error);
-                } else {
-                    resolve(content);
-                }
-            });
-        });
-    });
-};
+const wrappedPromise = (content: Promise<string> | string) =>
+    (isPromise(content) ? content : Promise.resolve(content)) as Promise<Module | string>;
 
-export default asyncMarked as MarkedAsync;
+const asyncMarked: MarkedAsync = async (content, options) =>
+    processAsync(
+        getContentValue(await wrappedPromise(content)),
+        options
+    );
+
+export default asyncMarked;

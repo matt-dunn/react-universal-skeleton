@@ -3,6 +3,7 @@ import {Helmet} from "react-helmet-async";
 import {Switch, Route, generatePath} from "react-router-dom";
 import loadable from "@loadable/component";
 import { Global } from "@emotion/core";
+import styled from "@emotion/styled";
 
 import Header from "./components/Header";
 
@@ -56,6 +57,34 @@ const handler: HandleError = ({code, status, message}, location, history, props,
     }
 };
 
+const Container = styled.section`
+  display: grid;
+  min-height: 100vh;
+  max-width: 100%;
+  grid-template-columns: 1fr;
+  grid-template-rows: min-content auto min-content;
+  grid-template-areas: "head" "main" "footer";
+`;
+
+const HeaderContainer = styled(Header)`
+  grid-area: head;
+  border-bottom: 3px solid #eee;
+  background-color: #f5f5f5;
+`;
+
+const MainContainer = styled(ErrorBoundary)`
+  grid-area: main;
+`;
+
+const FooterContainer = styled.footer`
+  grid-area: footer;
+  padding: 0.5rem 1rem;
+  border-top: 1px solid #eee;
+  color: #888;
+  background-color: #f5f5f5;
+  margin-top: 1rem;
+`;
+
 const App = () => {
     return (
         <>
@@ -77,24 +106,30 @@ const App = () => {
                         <meta name="keywords" content="forms,..."/>
                     </Helmet>
 
-                    <Header/>
+                    <Container>
+                        <HeaderContainer/>
 
-                    <ErrorBoundary ErrorComponent={ErrorMain}>
-                        <ErrorHandler handler={handler}>
-                            <Switch>
-                                <Route exact path="/" component={Home}/>
-                                <Route exact path="/data/:page?/" component={Data}/>
-                                <Route exact path="/forms/" component={Forms}/>
-                                <Route exact path="/mystyled/" component={MyStyled}/>
-                                <Route exact path="/locale/" component={Locale}/>
-                                <Route exact path="/state/" component={State}/>
-                                <Route exact path="/dashboard/" component={Dashboard}/>
-                                <Route path="/login/:from?/" component={Login}/>
-                                <Route component={Error404}/>
-                                {/*<Redirect to="/" />*/}
-                            </Switch>
-                        </ErrorHandler>
-                    </ErrorBoundary>
+                        <MainContainer ErrorComponent={ErrorMain}>
+                            <ErrorHandler handler={handler}>
+                                <Switch>
+                                    <Route exact path="/" component={Home}/>
+                                    <Route exact path="/data/:page?/" component={Data}/>
+                                    <Route exact path="/forms/" component={Forms}/>
+                                    <Route exact path="/mystyled/" component={MyStyled}/>
+                                    <Route exact path="/locale/" component={Locale}/>
+                                    <Route exact path="/state/" component={State}/>
+                                    <Route exact path="/dashboard/" component={Dashboard}/>
+                                    <Route path="/login/:from?/" component={Login}/>
+                                    <Route component={Error404}/>
+                                    {/*<Redirect to="/" />*/}
+                                </Switch>
+                            </ErrorHandler>
+                        </MainContainer>
+
+                        <FooterContainer className="align-right">
+                            <a href="mailto:matt.j.dunn@gmail.com">Matt Dunn</a>
+                        </FooterContainer>
+                    </Container>
                 </AuthProvider>
             </ErrorBoundary>
         </>
