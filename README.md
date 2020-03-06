@@ -49,11 +49,7 @@ Example skeleton app using Webpack for build with SSR support and server side as
 - Progressive enhanced schema generated forms (extending *Formik*), processed and validated on the client and server (using *Yup*)
 - i18n / l10n using *react-intl* with translation workflow using babel plugin and custom webpack plugin and cli tools
 - Responsive layouts
-- Accessibility (semantic markup, aria)
-- Examples
-    * Lazy loaded components including *Markdown* component integrated with *PrismJS* for code syntax highlighting
-    * [State management](/state/) implementation used for tutorials
-    * [Charting](/dashboard/) with Recharts
+- Accessibility (progressive enhancement, semantic markup, aria)
 
 
 
