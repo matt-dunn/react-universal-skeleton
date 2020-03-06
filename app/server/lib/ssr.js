@@ -12,7 +12,6 @@ import {serialize} from "components/state-mutate-with-status";
 import {parseFormData} from "components/actions/form";
 import {getDataFromTree, AsyncData} from "components/ssr/safePromise";
 import {errorLike} from "components/error";
-import StylesheetServer from "components/myStyled/server";
 
 import getStore from "app/store";
 import Bootstrap from "app/bootstrap";
@@ -86,13 +85,13 @@ export default async (req, res) => {
             </Bootstrap>
         );
 
-        const stylesheetServer = StylesheetServer();
+        await getDataFromTree(app);
 
-        await getDataFromTree(stylesheetServer.collectStyles(app));
+        // const stream = stylesheetServer.interleaveWithNodeStream(
+        //     renderToNodeStream(stylesheetServer.collectStyles(app))
+        // );
 
-        const stream = stylesheetServer.interleaveWithNodeStream(
-            renderToNodeStream(stylesheetServer.collectStyles(app))
-        );
+        const stream = renderToNodeStream(app);
 
         if (context.url) {
             console.log("REDIRECT:", context.url);
