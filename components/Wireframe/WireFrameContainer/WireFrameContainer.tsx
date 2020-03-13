@@ -11,7 +11,7 @@ type WireFrameProviderProps = {
     children: ReactNode;
 }
 
-const WireFrameContainer = styled.div`
+const WireFrameMainContainer = styled.div`
   display: flex;
 `;
 
@@ -136,7 +136,7 @@ const useWireFrame = () => {
     return {api, components, highlightedNote, open, setShow};
 };
 
-export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
+export const WireFrameContainer = ({children}: WireFrameProviderProps) => {
     const [isClient, setIsClient] = useState(false);
     const [isOpened, setIsOpened] = useState(false);
     const opening = useRef<number | undefined>();
@@ -181,7 +181,7 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
 
     return (
         <WireFrameAnnotationContext.Provider value={api}>
-            <WireFrameContainer>
+            <WireFrameMainContainer>
                 <WireFrameBody>
                     {children}
                 </WireFrameBody>
@@ -214,7 +214,7 @@ export const WireFrameProvider = ({children}: WireFrameProviderProps) => {
                     </WireFrameAnnotations>
                 </WireFrameAnnotationsContainer>
                 }
-            </WireFrameContainer>
+            </WireFrameMainContainer>
         </WireFrameAnnotationContext.Provider>
     );
 };

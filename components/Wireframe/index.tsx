@@ -1,2 +1,4 @@
 export * from "./withWireFrameAnnotation";
-export * from "./WireFrameProvider";
+export * from "./WireFrameContainer";
+export {WireFrameProvider} from "./context";
+
