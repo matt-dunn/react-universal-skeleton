@@ -8,7 +8,7 @@ export const WireFrameAnnotationContext = createContext<WireFrameAnnotationAPI>(
 
 type WireFrameProviderProps = {
   children: ReactNode;
-  api?: WireFrameAnnotationAPI;
+  api: WireFrameAnnotationAPI;
 }
 
 export const WireFrameProvider = ({children, api}: WireFrameProviderProps) => (
