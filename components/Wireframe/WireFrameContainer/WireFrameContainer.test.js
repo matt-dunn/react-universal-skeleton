@@ -109,4 +109,41 @@ describe("Wireframe: WireFrameContainer", () => {
 
     expect(wrapper).toMatchSnapshot();
   });
+
+  it("should highlight annotation", () => {
+    const wrapper = mount(Fragment);
+
+    act(() => {
+      api.register(MockedComponent1, {
+        title: "Test component 1",
+        description: "Test description 1"
+      });
+
+      api.register(MockedComponent2, {
+        title: "Test component 2",
+        description: "Test description 2"
+      });
+    });
+
+    wrapper.update();
+
+    // Toggle open
+    wrapper.find(WireFrameAnnotationsToggle).simulate("click");
+
+    act(() => {
+      api.highlightNote(MockedComponent1);
+    });
+
+    wrapper.update();
+
+    expect(wrapper).toMatchSnapshot();
+
+    act(() => {
+      api.highlightNote(MockedComponent2);
+    });
+
+    wrapper.update();
+
+    expect(wrapper).toMatchSnapshot();
+  });
 });
