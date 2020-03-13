@@ -103,7 +103,7 @@ describe("Wireframe: WireFrameContainer", () => {
 
     act(() => {
       jest.advanceTimersByTime(1000);
-    })
+    });
 
     wrapper.update();
 
