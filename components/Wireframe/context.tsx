@@ -1,7 +1,18 @@
-import {createContext} from "react";
+import React, {createContext, ReactNode} from "react";
 
 import {API, WireFrameAnnotationAPI} from "./api";
 
-export const WireFrameAnnotationContext = createContext<WireFrameAnnotationAPI>(API());
+const wireframeAPI = API();
 
-export const WireFrameProvider = WireFrameAnnotationContext.Provider;
+export const WireFrameAnnotationContext = createContext<WireFrameAnnotationAPI>(wireframeAPI);
+
+type WireFrameProviderProps = {
+  children: ReactNode;
+  api?: WireFrameAnnotationAPI;
+}
+
+export const WireFrameProvider = ({children, api}: WireFrameProviderProps) => (
+  <WireFrameAnnotationContext.Provider value={api || wireframeAPI}>
+    {children}
+  </WireFrameAnnotationContext.Provider>
+);

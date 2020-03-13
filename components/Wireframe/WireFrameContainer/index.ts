@@ -1,1 +1,1 @@
-export * from "./WireFrameProvider";
+export * from "./WireFrameContainer";
