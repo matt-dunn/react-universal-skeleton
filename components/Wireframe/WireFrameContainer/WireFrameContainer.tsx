@@ -79,7 +79,7 @@ const WireFrameAnnotations = styled.div`
   }
 `;
 
-const WireFrameAnnotationsToggle = styled.div<{open: boolean}>`
+export const WireFrameAnnotationsToggle = styled.div<{open: boolean}>`
   position: absolute;
   left: -1px;
   top: 50%;
