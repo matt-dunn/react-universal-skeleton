@@ -24,6 +24,7 @@ type OpenCallback = (isOpen: boolean) => void;
 
 export type WireFrameAnnotationAPI = {
     setOptions: (options: APIOptions) => APIOptions;
+    getComponents: () => WireFrameComponents;
     register: (Component: ComponentType<any>, options: WireFrameComponentOptions) => WireFrameComponent;
     unregister: (Component: ComponentType<any>) => void;
     highlightNote: (Component: ComponentType<any> | undefined) => void;
@@ -32,9 +33,9 @@ export type WireFrameAnnotationAPI = {
     isOpen: () => boolean;
 }
 
-export const API = function(): WireFrameAnnotationAPI {
+export const API = function(options?: APIOptions): WireFrameAnnotationAPI {
     let components: WireFrameComponents = [];
-    let apiOptions: APIOptions;
+    let apiOptions: APIOptions = options || {} as APIOptions;
 
     let openCallbacks: OpenCallback[] = [];
     let isOpen = false;
@@ -43,6 +44,7 @@ export const API = function(): WireFrameAnnotationAPI {
 
     return {
         setOptions: options => apiOptions = options,
+        getComponents: () =>components,
         register: (Component, options) => {
             const component = getComponent(Component);
 
