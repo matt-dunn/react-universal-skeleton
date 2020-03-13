@@ -84,7 +84,7 @@ export const withWireFrameAnnotation = function<P extends object>(WrappedCompone
     const Component = React.memo<P>((props: P) => <WrappedComponent {...props}/>);
     Component.displayName = `withWireFrameAnnotation(${getDisplayName(WrappedComponent)})`;
 
-    return function WireFrameAnnotation(props: P) {
+    function WireFrameAnnotation(props: P) {
         const {register, unregister, onOpen, isOpen, highlightNote} = useContext(WireFrameAnnotationContext);
         const [annotation, setAnnotation] = useState();
         const [show, setShow] = useState(isOpen());
@@ -119,5 +119,9 @@ export const withWireFrameAnnotation = function<P extends object>(WrappedCompone
                 <Component {...props}/>
             </Wrapper>
         );
-    };
+    }
+
+    WireFrameAnnotation.Component = Component;
+
+    return WireFrameAnnotation;
 };
