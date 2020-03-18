@@ -66,7 +66,7 @@ function Bootstrap<T>({languagePack, asyncData, formData, error, store, helmetCo
                             <HelmetProvider context={helmetContext}>
                                 <Provider store={store}>
                                     <WireFrameProvider api={wireframeAPI}>
-                                        <WireFrameContainer>
+                                        <WireFrameContainer defaultOpen={false}>
                                             {children}
                                         </WireFrameContainer>
                                     </WireFrameProvider>
