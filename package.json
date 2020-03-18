@@ -9,7 +9,7 @@
     "@emotion/styled": "^10.0.23",
     "@loadable/component": "^5.10.3",
     "@loadable/server": "^5.10.3",
-    "@matt-dunn/react-wireframes": "^1.0.24",
+    "@matt-dunn/react-wireframes": "^1.0.25",
     "abort-controller": "^3.0.0",
     "body-parser": "^1.19.0",
     "chalk": "^3.0.0",
@@ -165,8 +165,8 @@
     "workbox-webpack-plugin": "^4.3.1"
   },
   "scripts": {
-    "dev:client": "cross-env PUBLIC_PATH=https://localhost:1234/ cross-env NODE_ENV=development webpack-dev-server --config ./app/webpack/client.config.js --progress",
-    "dev:server": "cross-env PUBLIC_PATH=https://localhost:1234/ cross-env PORT=12345 cross-env NODE_ENV=development babel-node --max_old_space_size=4096 --icu-data-dir=node_modules/full-icu --presets @babel/env app/webpack/index.js",
+    "dev:client": "cross-env PUBLIC_PATH=https://127.0.0.1:1234/ cross-env NODE_ENV=development webpack-dev-server --config ./app/webpack/client.config.js --progress",
+    "dev:server": "cross-env PUBLIC_PATH=https://127.0.0.1:1234/ cross-env PORT=12345 cross-env NODE_ENV=development babel-node --max_old_space_size=4096 --icu-data-dir=node_modules/full-icu --presets @babel/env app/webpack/index.js",
     "build:client": "cross-env BABEL_ENV=client cross-env webpack --config ./app/webpack/client.config.js",
     "build:server": "cross-env BABEL_ENV=server webpack --config ./app/webpack/server.config.js",
     "build:all": "concurrently \"yarn build:client\" \"yarn build:server\"",
