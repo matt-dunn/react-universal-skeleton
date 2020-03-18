@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 import {DecoratedWithStatus} from "components/state-mutate-with-status";
 import {useModal} from "components/Modal";
 import {Button, ButtonGroup} from "components/Buttons";
-import {withWireFrameAnnotation} from "components/Wireframe/withWireFrameAnnotation";
+import {withWireFrameAnnotation} from "@matt-dunn/react-wireframes";
 import {Notify} from "components/notification";
 
 import SimpleItem, {GetItem, Item} from "app/components/Item";

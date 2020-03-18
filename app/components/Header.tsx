@@ -5,7 +5,7 @@ import { NavLink } from "react-router-dom";
 import ExpandCollapse from "react-expand-collapse";
 
 import {useAuthenticatedUser} from "./auth";
-import {withWireFrameAnnotation} from "components/Wireframe/withWireFrameAnnotation";
+import {withWireFrameAnnotation} from "@matt-dunn/react-wireframes";
 
 type HeaderProps = {
     className?: string;

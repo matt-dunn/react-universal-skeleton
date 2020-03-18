@@ -9,9 +9,11 @@ import {FormDataProvider, FormDataState} from "components/actions/form";
 import {AsyncDataContextProvider} from "components/ssr/safePromise";
 import {AsyncDataContext} from "components/ssr/contexts";
 import {ErrorContext} from "components/actions/contexts";
-import {WireFrameContainer} from "components/Wireframe";
+import {WireFrameContainer, WireFrameProvider, API} from "@matt-dunn/react-wireframes";
 
 const availableLocales = process.env.AVAILABLE_LOCALES || [] as string[];
+
+const wireframeAPI = API();
 
 type BootstrapProps<T> = {
     languagePack?: {
@@ -63,9 +65,11 @@ function Bootstrap<T>({languagePack, asyncData, formData, error, store, helmetCo
                         <ErrorProvider value={error}>
                             <HelmetProvider context={helmetContext}>
                                 <Provider store={store}>
-                                    <WireFrameContainer>
-                                        {children}
-                                    </WireFrameContainer>
+                                    <WireFrameProvider api={wireframeAPI}>
+                                        <WireFrameContainer>
+                                            {children}
+                                        </WireFrameContainer>
+                                    </WireFrameProvider>
                                 </Provider>
                             </HelmetProvider>
                         </ErrorProvider>

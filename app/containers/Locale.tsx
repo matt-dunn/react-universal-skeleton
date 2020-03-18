@@ -4,7 +4,7 @@ import {FormattedDate, FormattedMessage} from "react-intl";
 
 import {Main, Title} from "app/styles/Components";
 
-import {withWireFrameAnnotation} from "components/Wireframe/withWireFrameAnnotation";
+import {withWireFrameAnnotation} from "@matt-dunn/react-wireframes";
 
 const WAMessageTitle = withWireFrameAnnotation(Title, {
     title: "Page title",

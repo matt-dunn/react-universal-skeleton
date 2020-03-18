@@ -13,7 +13,7 @@ import PlaceHolderItem from "app/components/Placeholder/Item";
 import Item, {EditItem, OnChange} from "../EditItem";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
-import {withWireFrameAnnotation} from "components/Wireframe/withWireFrameAnnotation";
+import {withWireFrameAnnotation} from "@matt-dunn/react-wireframes";
 
 export type Items = EditItem[];
 

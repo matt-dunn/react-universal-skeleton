@@ -4,7 +4,7 @@ import {Notify} from "components/notification";
 import {DecoratedWithStatus, getStatus} from "components/state-mutate-with-status";
 import {ModalFooter, ModalTitle, WithModalProps} from "components/Modal";
 import {Button, ButtonGroup, ButtonSimple, ButtonSimplePrimary} from "components/Buttons";
-import {withWireFrameAnnotation} from "components/Wireframe/withWireFrameAnnotation";
+import {withWireFrameAnnotation} from "@matt-dunn/react-wireframes";
 
 import SimpleItem, {GetItem, Item} from "app/components/Item";
 

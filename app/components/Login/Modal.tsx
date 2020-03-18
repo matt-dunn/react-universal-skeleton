@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 
 import {ModalTitle, useModal} from "components/Modal";
-import {withWireFrameAnnotation} from "components/Wireframe/withWireFrameAnnotation";
+import {withWireFrameAnnotation} from "@matt-dunn/react-wireframes";
 
 import {User} from "./";
 

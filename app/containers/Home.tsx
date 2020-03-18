@@ -6,7 +6,7 @@ import loadable from "@loadable/component";
 
 import {Main} from "app/styles/Components";
 
-import {withWireFrameAnnotation} from "components/Wireframe/withWireFrameAnnotation";
+import {withWireFrameAnnotation} from "@matt-dunn/react-wireframes";
 
 // const Menu = styled.ul`
 //   margin: 50px auto;
