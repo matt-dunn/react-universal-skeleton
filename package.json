@@ -1,6 +1,6 @@
 {
   "name": "universal-app",
-  "version": "1.0.261-dev.0",
+  "version": "1.0.262-dev.0",
   "main": "app/index.js",
   "private": true,
   "dependencies": {
@@ -9,7 +9,7 @@
     "@emotion/styled": "^10.0.23",
     "@loadable/component": "^5.10.3",
     "@loadable/server": "^5.10.3",
-    "@matt-dunn/react-wireframes": "^1.0.25",
+    "@matt-dunn/react-wireframes": "^1.0.26",
     "abort-controller": "^3.0.0",
     "body-parser": "^1.19.0",
     "chalk": "^3.0.0",
