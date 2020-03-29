@@ -1528,9 +1528,9 @@
     mkdirp "^0.5.1"
 
 "@matt-dunn/react-wireframes@^1.1.5":
-  version "1.1.5"
-  resolved "https://registry.yarnpkg.com/@matt-dunn/react-wireframes/-/react-wireframes-1.1.5.tgz#9efed3494cf3be0001afe87fea65b7e534a80d6e"
-  integrity sha512-uJwrz1QWAjlu8p+RFnNs92Y5rLdW/CFJTqF1U5TbL4kNzicIkW6Zf8U4QxmcpiNV14gyiy7xSzdKpGjwlvn4fA==
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@matt-dunn/react-wireframes/-/react-wireframes-1.2.0.tgz#5944861b634f509c1a4ed771314bd2b1bd11e828"
+  integrity sha512-4M8vLkJ/2+zu1a6fn0yJfK8Ult5Cr7eaQ3voH7psGo7dtNhD2sgtlGVEafMRfbp3Xct5KBl+w75eXkCeYOgMBA==
   dependencies:
     "@emotion/core" "^10.0.28"
     "@emotion/css" "^10.0.27"
