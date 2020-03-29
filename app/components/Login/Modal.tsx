@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 
 import {ModalTitle, useModal} from "components/Modal";
-import {withWireFrameAnnotation} from "@matt-dunn/react-wireframes";
+import {withWireframeAnnotation} from "@matt-dunn/react-wireframes";
 
 import {User} from "./";
 
@@ -11,7 +11,7 @@ type LoginModalProps = {
     onLogin?: (user: User) => void;
 }
 
-const WALoginComponent = withWireFrameAnnotation(LoginComponent, {
+const WALoginComponent = withWireframeAnnotation(LoginComponent, {
     title: "Modal login",
     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam iaculis convallis ante, ac porttitor eros hendrerit non. Ut a hendrerit ligula. Praesent vestibulum, dui venenatis convallis condimentum, lorem magna rutrum erat, eget convallis odio purus sed ex. Suspendisse congue metus ac blandit vehicula. Suspendisse non elementum purus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
 });

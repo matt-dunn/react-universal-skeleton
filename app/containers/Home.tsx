@@ -6,7 +6,7 @@ import loadable from "@loadable/component";
 
 import {Main} from "app/styles/Components";
 
-import {withWireFrameAnnotation} from "@matt-dunn/react-wireframes";
+import {withWireframeAnnotation} from "@matt-dunn/react-wireframes";
 
 // const Menu = styled.ul`
 //   margin: 50px auto;
@@ -39,7 +39,7 @@ const Markdown = loadable(() => import("components/markdown"));
 // import Markdown from "../../components/markdown";
 // import content from "mocks/content/test3.md";
 
-const WAMarkdown = withWireFrameAnnotation(Markdown, {
+const WAMarkdown = withWireframeAnnotation(Markdown, {
     title: "Markdown",
     description: "Ut a hendrerit ligula. Praesent vestibulum, dui venenatis convallis condimentum, lorem magna rutrum erat, eget convallis odio purus sed ex. Suspendisse congue metus ac blandit vehicula. Suspendisse non elementum purus."
 });

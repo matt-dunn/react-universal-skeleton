@@ -7,7 +7,7 @@ import {ResponsiveGrid} from "components/Grid";
 import {FieldSet, FieldSetChildrenProps} from "components/Form";
 import {FormOptions, FormErrors} from "components/Form";
 
-import {withWireFrameAnnotation} from "@matt-dunn/react-wireframes";
+import {withWireframeAnnotation} from "@matt-dunn/react-wireframes";
 
 const Markdown = loadable(() => import("components/markdown"));
 
@@ -37,32 +37,32 @@ const messages = defineMessages({
     },
 });
 
-const WAMarkdown = withWireFrameAnnotation(Markdown, {
+const WAMarkdown = withWireframeAnnotation(Markdown, {
     title: "Markdown",
     description: "Markdown can be used to embed content."
 });
 
-const WAMarkdownEmbedded = withWireFrameAnnotation(Markdown, {
+const WAMarkdownEmbedded = withWireframeAnnotation(Markdown, {
     title: "Person Markdown",
     description: "Markdown can be embedded for each item."
 });
 
-const WAFieldSet1 = withWireFrameAnnotation(FieldSet, {
+const WAFieldSet1 = withWireframeAnnotation(FieldSet, {
     title: "Example form items",
     description: "Various form elements..."
 });
 
-const WAFieldSet2 = withWireFrameAnnotation(FieldSet, {
+const WAFieldSet2 = withWireframeAnnotation(FieldSet, {
     title: "SSR dropdown",
     description: "Fallback when JS is disabled."
 });
 
-const WAFieldSet3 = withWireFrameAnnotation(FieldSet, {
+const WAFieldSet3 = withWireframeAnnotation(FieldSet, {
     title: "Notes",
     description: "Multiline notes."
 });
 
-const WAFieldSet4 = withWireFrameAnnotation(FormOptions, {
+const WAFieldSet4 = withWireframeAnnotation(FormOptions, {
     title: "Form actions",
     description: "Reset or submit form."
 });

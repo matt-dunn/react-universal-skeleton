@@ -8,7 +8,7 @@ import {getStatus, DecoratedWithStatus} from "components/state-mutate-with-statu
 import PlaceHolderItem from "app/components/Placeholder/Item";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
-import {withWireFrameAnnotation} from "@matt-dunn/react-wireframes";
+import {withWireframeAnnotation} from "@matt-dunn/react-wireframes";
 
 export type Item = {
     id: string;
@@ -75,7 +75,7 @@ export const Item = ({className, isShown = true, item, getItem, ...props}: ItemP
 
 // export default React.memo<ItemProps>(Item);
 
-export default React.memo<ItemProps>(withWireFrameAnnotation<ItemProps>(Item, {
+export default React.memo<ItemProps>(withWireframeAnnotation<ItemProps>(Item, {
     title: <div><strong>Simple</strong> item</div>,
     description: <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam iaculis convallis ante, ac porttitor eros hendrerit non. Ut a hendrerit ligula. Praesent vestibulum, dui venenatis convallis condimentum, lorem magna rutrum erat, eget convallis odio purus sed ex. Suspendisse congue metus ac blandit vehicula. Suspendisse non elementum purus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</div>
 }));

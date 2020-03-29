@@ -5,7 +5,7 @@ import { NavLink } from "react-router-dom";
 import ExpandCollapse from "react-expand-collapse";
 
 import {useAuthenticatedUser} from "./auth";
-import {withWireFrameAnnotation} from "@matt-dunn/react-wireframes";
+import {withWireframeAnnotation} from "@matt-dunn/react-wireframes";
 
 type HeaderProps = {
     className?: string;
@@ -60,7 +60,7 @@ const HeaderLink = styled(NavLink)`
   }
 `;
 
-const WSHome = withWireFrameAnnotation(HeaderLink, {
+const WSHome = withWireframeAnnotation(HeaderLink, {
     title: "Home",
     description:
         <ExpandCollapse
@@ -70,17 +70,17 @@ const WSHome = withWireFrameAnnotation(HeaderLink, {
         </ExpandCollapse>
 });
 
-const WSData = withWireFrameAnnotation(HeaderLink, {
+const WSData = withWireframeAnnotation(HeaderLink, {
     title: "Data",
     description: "Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
 });
 
-const WSForms = withWireFrameAnnotation(HeaderLink, {
+const WSForms = withWireframeAnnotation(HeaderLink, {
     title: "Forms",
     description: "Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
 });
 
-const WALocale = withWireFrameAnnotation(HeaderLink, {
+const WALocale = withWireframeAnnotation(HeaderLink, {
     title: "Locale",
     description: "Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
 });

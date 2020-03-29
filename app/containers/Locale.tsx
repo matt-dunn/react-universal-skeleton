@@ -4,14 +4,14 @@ import {FormattedDate, FormattedMessage} from "react-intl";
 
 import {Main, Title} from "app/styles/Components";
 
-import {withWireFrameAnnotation} from "@matt-dunn/react-wireframes";
+import {withWireframeAnnotation} from "@matt-dunn/react-wireframes";
 
-const WAMessageTitle = withWireFrameAnnotation(Title, {
+const WAMessageTitle = withWireframeAnnotation(Title, {
     title: "Page title",
     description: "Locale page title. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
 });
 
-const WAMessageDate = withWireFrameAnnotation<JSX.IntrinsicElements["p"]>("p", {
+const WAMessageDate = withWireframeAnnotation<JSX.IntrinsicElements["p"]>("p", {
     title: "Localised date",
     description: "Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
 });

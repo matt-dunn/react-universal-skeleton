@@ -12,7 +12,7 @@ import SimpleItem, {GetItem, Item} from "app/components/Item";
 import EditItem, {OnChange} from "app/components/EditItem";
 
 import useWhatChanged from "components/whatChanged/useWhatChanged";
-import {withWireFrameAnnotation} from "@matt-dunn/react-wireframes";
+import {withWireframeAnnotation} from "@matt-dunn/react-wireframes";
 
 type ListsProps = {
     items: Items;
@@ -26,7 +26,7 @@ const DataListItem = styled(EditItem)<{isImportant?: boolean}>`
   ${({isImportant}) => isImportant && css`background-color: rgba(230, 230, 230, 0.5);`}
 `;
 
-const WFList = withWireFrameAnnotation(List, {
+const WFList = withWireframeAnnotation(List, {
     title: "Edit list",
     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam iaculis convallis ante, ac porttitor eros hendrerit non. Ut a hendrerit ligula. Praesent vestibulum, dui venenatis convallis condimentum, lorem magna rutrum erat, eget convallis odio purus sed ex. Suspendisse congue metus ac blandit vehicula. Suspendisse non elementum purus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
 });

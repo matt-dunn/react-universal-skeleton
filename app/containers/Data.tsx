@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { useParams} from "react-router";
 
 import {DecoratedWithStatus} from "components/state-mutate-with-status";
-import {withWireFrameAnnotation} from "@matt-dunn/react-wireframes";
+import {withWireframeAnnotation} from "@matt-dunn/react-wireframes";
 import {Notify, notifyAction} from "components/notification";
 
 import {GetList, Items} from "app/components/List";
@@ -29,7 +29,7 @@ type DataProps = {
     notify: Notify;
 };
 
-const WSTitle = withWireFrameAnnotation(Title, {
+const WSTitle = withWireframeAnnotation(Title, {
     title: "Page title",
     description: "Data page title. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
 });
