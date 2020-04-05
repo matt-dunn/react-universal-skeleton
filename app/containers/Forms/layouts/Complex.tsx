@@ -37,15 +37,15 @@ const messages = defineMessages({
     },
 });
 
-const WAMarkdown = withWireframeAnnotation(Markdown, {
+const WAMarkdown = withWireframeAnnotation({
     title: "Markdown",
     description: "Markdown can be used to embed content."
-});
+})(Markdown);
 
-const WAMarkdownEmbedded = withWireframeAnnotation(Markdown, {
+const WAMarkdownEmbedded = withWireframeAnnotation({
     title: "Person Markdown",
     description: "Markdown can be embedded for each item."
-});
+})(Markdown);
 
 const Container = styled.div`
   .row {
@@ -62,7 +62,7 @@ const Section = styled.div`
   margin: 0 5px 10px 5px;
 `;
 
-const WAFieldSet1 = withWireframeAnnotation(FieldSet, {
+const WAFieldSet1 = withWireframeAnnotation({
     title: "Example form items",
     description: (
       <Container>
@@ -82,22 +82,22 @@ const WAFieldSet1 = withWireframeAnnotation(FieldSet, {
           </div>
       </Container>
     )
-});
+})(FieldSet);
 
-const WAFieldSet2 = withWireframeAnnotation(FieldSet, {
+const WAFieldSet2 = withWireframeAnnotation({
     title: "SSR dropdown",
     description: "Fallback when JS is disabled."
-});
+})(FieldSet);
 
-const WAFieldSet3 = withWireframeAnnotation(FieldSet, {
+const WAFieldSet3 = withWireframeAnnotation({
     title: "Notes",
     description: "Multiline notes."
-});
+})(FieldSet);
 
-const WAFieldSet4 = withWireframeAnnotation(FormOptions, {
+const WAFieldSet4 = withWireframeAnnotation({
     title: "Form actions",
     description: "Reset or submit form."
-});
+})(FormOptions);
 
 function ComplexLayout<T, P, S>({fieldsetMap: {children, extra, otherLeft, otherRight}}: Pick<FieldSetChildrenProps<T, P, S>, "fieldsetMap">) {
     const intl = useIntl();

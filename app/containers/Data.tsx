@@ -29,10 +29,10 @@ type DataProps = {
     notify: Notify;
 };
 
-const WSTitle = withWireframeAnnotation(Title, {
+const WSTitle = withWireframeAnnotation({
     title: "Page title",
     description: "Data page title. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
-});
+})(Title);
 
 const Data = ({notify, items, item, exampleGetList, exampleGetItem, exampleEditItem}: DataProps) => {
     const { page } = useParams();

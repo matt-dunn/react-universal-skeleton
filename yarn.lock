@@ -1515,10 +1515,10 @@
   dependencies:
     mkdirp "^0.5.1"
 
-"@matt-dunn/react-wireframes@^1.1.5":
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/@matt-dunn/react-wireframes/-/react-wireframes-1.2.2.tgz#a7d58c032be21021a2850491342e7ce839cc0310"
-  integrity sha512-AYXn2YOVS2IKd0oiCiyr9id87ehmV7Jq+z6X0KuHiLQcahyzsUnxxhZdQ4f8Bynb4mPnCSfQgXp+2ndFrwBNgA==
+"@matt-dunn/react-wireframes@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@matt-dunn/react-wireframes/-/react-wireframes-2.0.0.tgz#10fae8503eb4270c8cc33e7e168b1d5763c45287"
+  integrity sha512-lVCXtQkjzyiDn6Da0RgjeMYUAVUx6kH6Nzv242tkERg6ymeOQdWj+OOPakRhgPxlVlXd7dkl/ACogqDA5WmJiQ==
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"

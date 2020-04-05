@@ -60,7 +60,7 @@ const HeaderLink = styled(NavLink)`
   }
 `;
 
-const WSHome = withWireframeAnnotation(HeaderLink, {
+const WSHome = withWireframeAnnotation({
     title: "Home",
     description:
         <ExpandCollapse
@@ -68,22 +68,22 @@ const WSHome = withWireframeAnnotation(HeaderLink, {
         >
             Morbi tempor libero id accumsan sodales. Etiam maximus convallis faucibus. Nunc hendrerit sit amet ante in lobortis. Aliquam feugiat nibh sit amet nunc varius laoreet. Aliquam pharetra odio mi, sed convallis massa sagittis at. Nullam nibh tortor, commodo ac risus vitae, venenatis lobortis libero. Etiam ut sagittis velit, quis hendrerit nisi. Praesent interdum lacinia varius. Phasellus id felis non ex accumsan tempor. Nunc sit amet lobortis enim. Pellentesque lectus nulla, hendrerit dapibus efficitur id, imperdiet sit amet turpis. Maecenas venenatis suscipit finibus. Sed lorem nulla, dictum vel sollicitudin id, posuere eget nulla. Duis accumsan ante eget neque tincidunt pellentesque.
         </ExpandCollapse>
-});
+})(HeaderLink);
 
-const WSData = withWireframeAnnotation(HeaderLink, {
+const WSData = withWireframeAnnotation({
     title: "Data",
     description: "Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
-});
+})(HeaderLink);
 
-const WSForms = withWireframeAnnotation(HeaderLink, {
+const WSForms = withWireframeAnnotation({
     title: "Forms",
     description: "Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
-});
+})(HeaderLink);
 
-const WALocale = withWireframeAnnotation(HeaderLink, {
+const WALocale = withWireframeAnnotation({
     title: "Locale",
     description: "Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
-});
+})(HeaderLink);
 
 const Header = ({className}: HeaderProps) => {
     const authenticatedUser = useAuthenticatedUser();

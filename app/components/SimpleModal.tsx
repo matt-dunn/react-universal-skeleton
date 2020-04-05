@@ -8,15 +8,15 @@ import {withWireframeAnnotation} from "@matt-dunn/react-wireframes";
 
 import SimpleItem, {GetItem, Item} from "app/components/Item";
 
-const WAModalButton = withWireframeAnnotation(Button, {
+const WAModalButton = withWireframeAnnotation({
     title: "Modal focusable item",
     description: "Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
-});
+})(Button);
 
-const WAModalSubmit = withWireframeAnnotation(ButtonSimplePrimary, {
+const WAModalSubmit = withWireframeAnnotation({
     title: "Modal submit button",
     description: "Only enabled once the data is available."
-});
+})(ButtonSimplePrimary);
 
 const SimpleModal = ({notify, close, item, getItem}: {notify: Notify; item?: Item & DecoratedWithStatus; getItem: GetItem} & WithModalProps) => {
     const {complete} = getStatus(item);

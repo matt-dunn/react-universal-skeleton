@@ -95,10 +95,10 @@ const PageLink = styled(Link)`
 
 const MAX_ITEMS = 4;
 
-const WFPagination = withWireframeAnnotation(Pagination, {
+const WFPagination = withWireframeAnnotation({
     title: "Pagination",
     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam iaculis convallis ante, ac porttitor eros hendrerit non. Ut a hendrerit ligula. Praesent vestibulum, dui venenatis convallis condimentum, lorem magna rutrum erat, eget convallis odio purus sed ex. Suspendisse congue metus ac blandit vehicula. Suspendisse non elementum purus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos."
-});
+})(Pagination);
 
 const List = ({isShown = true, items, getList, editItem, activePage, children, ...props}: ListProps) => {
     const {processing, hasError, error, updatingChildren, complete} = getStatus(items);
