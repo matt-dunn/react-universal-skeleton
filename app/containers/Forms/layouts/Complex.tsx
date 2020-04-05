@@ -47,9 +47,41 @@ const WAMarkdownEmbedded = withWireframeAnnotation(Markdown, {
     description: "Markdown can be embedded for each item."
 });
 
+const Container = styled.div`
+  .row {
+    display: flex;
+  }
+`;
+
+const Section = styled.div`
+  border: 1px solid #ccc;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+  padding: 10px;
+  flex-grow: 1;
+  margin: 0 5px 10px 5px;
+`;
+
 const WAFieldSet1 = withWireframeAnnotation(FieldSet, {
     title: "Example form items",
-    description: "Various form elements..."
+    description: (
+      <Container>
+          <p>
+              Various form elements...
+          </p>
+          <div className="row">
+              <Section>1</Section>
+              <Section>2</Section>
+          </div>
+          <div className="row">
+              <Section>3</Section>
+          </div>
+          <div className="row">
+              <Section>4</Section>
+              <Section>5</Section>
+          </div>
+      </Container>
+    )
 });
 
 const WAFieldSet2 = withWireframeAnnotation(FieldSet, {
