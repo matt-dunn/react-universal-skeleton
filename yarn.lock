@@ -1516,9 +1516,9 @@
     mkdirp "^0.5.1"
 
 "@matt-dunn/react-wireframes@^2.0.0":
-  version "2.0.5"
-  resolved "https://registry.yarnpkg.com/@matt-dunn/react-wireframes/-/react-wireframes-2.0.5.tgz#a903f2f6ca7de5bd3fec2ae2d936ec476f80cd0b"
-  integrity sha512-8CE5xgaXME0CZtR3UuDm/43SbWoCjG44ohg/7rzuVdLtA7uwmV4ei7E1Kemc12a8IRMGZzLyDTYhCYj2yBlIWQ==
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/@matt-dunn/react-wireframes/-/react-wireframes-2.0.7.tgz#eea8cc6be2b5b341682614199b88e69b30a267e8"
+  integrity sha512-NBQ7a5iRqUATOEAaXWteW3llO3ub3yyAlmjPI3NHLmYw2Dy4/Q5+dW9CjJvo6IEm5CgZhSoof5tdnydVXik/rQ==
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
