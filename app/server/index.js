@@ -8,13 +8,15 @@ import expressStaticGzip from "express-static-gzip";
 import shrinkRay from "shrink-ray-current";
 import trailingSlash from "express-trailing-slash";
 // import log from "llog";
-import ssr from "./lib/ssr";
 import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
 import helmet from "helmet";
 
 import key from "./ssl/private.key";
 import cert from "./ssl/private.crt";
 import "abort-controller/polyfill";
+
+import ssr from "./lib/ssr";
 
 const {log} = console;
 
@@ -45,6 +47,7 @@ app.use(pathname, expressStaticGzip(path.resolve(process.cwd(), process.env.TARG
 }));
 
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 app.use(bodyParser.urlencoded({extended: false}));
 
