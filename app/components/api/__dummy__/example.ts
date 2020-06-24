@@ -1,3 +1,5 @@
+import axios from "axios";
+
 import {WrapWithAbortSignal} from "components/api";
 
 import {APIError} from "components/api";
@@ -31,45 +33,62 @@ export type ExampleApi = {
 
 // let retryCount = 10;
 export const ExampleApi: ExampleApi = {
-    exampleGetList: (page = 0, count = 3) => signal => new Promise<ExampleList>((resolve, reject) => {
-        console.log("API CALL: exampleGetList", page, count);
+    exampleGetList: (page = 0, count = 3) => async signal => {
+        try {
+            const url = new URL("/api/list", "https://127.0.0.1:12345");
+            url.searchParams.set("page", page.toString());
+            url.searchParams.set("count", count.toString());
 
-        // if (retryCount < 4) {
-        //     retryCount++;
-        //     throw new Error("Error in exampleGetList");
-        // } else {
-        //     retryCount = 0;
-        // }
+            const response = await axios.get(url.toString(), {withCredentials: true});
 
-        if (page === 4) {
-            if (!isAuthenticated()) {
-                throw new APIError("Auth Error...", 123, 401);
+            return response.data;
+        } catch (e) {
+            if (e.response?.status === 401) {
+                throw new APIError("Invalid username or password", 123, 401);
             }
-            // throw new APPError("Error in exampleGetList", 123);
+
+            throw e;
         }
-
-        // throw new APIError("Auth Error...", 123, 401)
-        // throw new APPError("APP Error...", 123);
-
-        const t = setTimeout(() => {
-            console.log("API CALL COMPLETE: exampleGetList");
-            // reject(new Error("Error in exampleGetList"))
-
-            resolve(Array.from(Array(count).keys()).map(index => {
-                const i = index + (page * count);
-                return {
-                    id: `item-${i + 1}`,
-                    name: `Item ${i + 1}`
-                };
-            }));
-        }, (process as any).browser ? 2000 : 0);
-
-        signal && (signal.onabort = () => {
-            console.error("@@@@@@CANCEL: exampleGetList **************");
-            clearTimeout(t);
-            reject(new Error("Cancelled"));
-        });
-    }),
+      },
+    // exampleGetList: (page = 0, count = 3) => signal => new Promise<ExampleList>((resolve, reject) => {
+    //     console.log("API CALL: exampleGetList", page, count);
+    //
+    //     // if (retryCount < 4) {
+    //     //     retryCount++;
+    //     //     throw new Error("Error in exampleGetList");
+    //     // } else {
+    //     //     retryCount = 0;
+    //     // }
+    //
+    //     if (page === 4) {
+    //         if (!isAuthenticated()) {
+    //             throw new APIError("Auth Error...", 123, 401);
+    //         }
+    //         // throw new APPError("Error in exampleGetList", 123);
+    //     }
+    //
+    //     // throw new APIError("Auth Error...", 123, 401)
+    //     // throw new APPError("APP Error...", 123);
+    //
+    //     const t = setTimeout(() => {
+    //         console.log("API CALL COMPLETE: exampleGetList");
+    //         // reject(new Error("Error in exampleGetList"))
+    //
+    //         resolve(Array.from(Array(count).keys()).map(index => {
+    //             const i = index + (page * count);
+    //             return {
+    //                 id: `item-${i + 1}`,
+    //                 name: `Item ${i + 1}`
+    //             };
+    //         }));
+    //     }, (process as any).browser ? 2000 : 0);
+    //
+    //     signal && (signal.onabort = () => {
+    //         console.error("@@@@@@CANCEL: exampleGetList **************");
+    //         clearTimeout(t);
+    //         reject(new Error("Cancelled"));
+    //     });
+    // }),
     exampleGetItem:() => signal => new Promise<ExampleItem>((resolve, reject) => {
         console.log("API CALL: exampleGetItem");
         // throw new Error("Error in exampleGetItem")

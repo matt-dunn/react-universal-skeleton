@@ -155,6 +155,13 @@ module.exports = merge(
                 cert: fs.readFileSync(path.join(context, "server", "ssl", "private.crt")),
                 ca: fs.readFileSync(path.join(context, "server", "ssl", "private.pem")),
             },
+            proxy: {
+                "/api": {
+                    "target": "https://127.0.0.1:12345",
+                    "secure": false,
+                    cookieDomainRewrite: ""
+                },
+            }
         }
     },
     partialManifest(metadata),

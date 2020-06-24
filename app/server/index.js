@@ -10,6 +10,7 @@ import trailingSlash from "express-trailing-slash";
 // import log from "llog";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 import helmet from "helmet";
 
 import key from "./ssl/private.key";
@@ -17,6 +18,9 @@ import cert from "./ssl/private.crt";
 import "abort-controller/polyfill";
 
 import ssr from "./lib/ssr";
+import api from "./lib/api";
+
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 const {log} = console;
 
@@ -33,6 +37,11 @@ const app = express();
 if (environment === "production") {
     app.use(helmet());
 }
+
+app.use(cors({
+    origin: "https://127.0.0.1:1234",
+    credentials: true
+}));
 
 app.use(trailingSlash({slash: true}));
 
@@ -52,6 +61,8 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended: false}));
 
 app.use(shrinkRay({}));
+
+api(app);
 
 app.get("/*", ssr);
 app.post("/*", ssr);
