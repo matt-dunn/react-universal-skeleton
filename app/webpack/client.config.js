@@ -161,6 +161,13 @@ module.exports = merge(
                     "secure": false,
                     cookieDomainRewrite: ""
                 },
+                "/db": {
+                    "target": "http://127.0.0.1:5984",
+                    "auth": "admin:admin",
+                    pathRewrite: {"^/db" : ""},
+                    "secure": false,
+                    cookieDomainRewrite: ""
+                },
             }
         }
     },

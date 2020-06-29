@@ -79,3 +79,55 @@ function Bootstrap<T>({languagePack, asyncData, formData, error, store, helmetCo
 }
 
 export default Bootstrap;
+
+import PouchDB from "pouchdb";
+
+(async function() {
+    const db = new PouchDB("kittens");
+
+    const dbUrl = new URL("/db/kittens", location.origin);
+    const dbRemote = new PouchDB(dbUrl.toString());
+
+    db.sync(dbRemote);
+
+
+    console.error(db, dbRemote)
+
+    console.error(await db.info())
+
+    console.error(await dbRemote.info())
+
+    const doc = {
+        "_id": "mittens",
+        "name": "Mittens",
+        "occupation": "kitten",
+        "age": 3,
+        "hobbies": [
+            "playing with balls of yarn",
+            "chasing laser pointers",
+            "lookin' hella cute"
+        ]
+    };
+
+    // try {
+    //     console.error("PUT", await db.put(doc));
+    // } catch (ex) {
+    //     console.error("PUT ERROR", ex)
+    // }
+
+    const currentDoc = await db.get("mittens");
+    console.error(currentDoc)
+
+    // await db.put({
+    //   ...currentDoc,
+    //     age: 6
+    // })
+
+    console.error("LOCAL", await db.get("mittens", {revs: true, revs_info: true}))
+    console.error("REMOTE", await dbRemote.get("mittens", {revs: true, revs_info: true}))
+
+
+    console.error(await db.info())
+
+    console.error(await dbRemote.info())
+}())
