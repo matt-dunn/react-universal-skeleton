@@ -1,10 +1,4 @@
-import jwt from "jsonwebtoken";
-
-const jwtExpirySecondsIdent = 1000
-const jwtExpirySecondsAuth = 2000
-
-const issuer = "rpi";
-const audience = "https://rpi.com"
+import {Auth} from "./Auth";
 
 const privateKEY = "-----BEGIN RSA PRIVATE KEY-----\n" +
   "MIIBOwIBAAJBAKfn49olVVaLDRd0dPpi50Wpz99QBiJ3yiIRJTFH06kBhU6qVTS0\n" +
@@ -20,10 +14,19 @@ const publicKEY = "-----BEGIN RSA PUBLIC KEY-----\n" +
   "f3tylbCJb905tcZGj68g/g6IaSGhAgMBAAE=\n" +
   "-----END RSA PUBLIC KEY-----\n";
 
+const auth = Auth({
+  publicKEY,
+  privateKEY,
+  issuer: "rpi",
+  audience: "https://rpi.com",
+  identificationTokenExpirySeconds: 100,
+  authenticationTokenExpirySeconds: 10
+});
+
 export default app =>
   app
     .post("/api/login", (req, res) => {
-      console.error("LOGIN...", req.body)
+      console.error("LOGIN...", req.body);
 
       const { username, password } = req.body;
 
@@ -35,59 +38,16 @@ export default app =>
         id: "12345",
         name: "Clem Fandango",
         email: username
-      }
+      };
 
-      const tokenIdent = jwt.sign({ id: user.id }, privateKEY, {
-        algorithm: "RS256",
-        issuer,
-        subject: user.name,
-        audience,
-        expiresIn: jwtExpirySecondsIdent,
-      })
-
-      res.cookie("i", tokenIdent, {
-        maxAge: jwtExpirySecondsIdent * 1000,
-        httpOnly: true,
-        secure: true
-      });
-
-      const tokenAuth = jwt.sign({ id: user.id }, privateKEY, {
-        algorithm: "RS256",
-        issuer,
-        subject: user.name,
-        audience,
-        expiresIn: jwtExpirySecondsAuth,
-      })
-
-      res.cookie("a", tokenAuth, {
-        maxAge: jwtExpirySecondsAuth * 1000,
-        httpOnly: true,
-        secure: true
-      });
+      auth.issueTokens(res, user);
 
       res.send(user).end();
     })
+    // .get("/api/list", auth.requireAuthenticatedUser, auth.reissueAuthenticationToken, auth.reissueIdentificationToken, (req, res) => {
+    // .get("/api/list", auth.withIdentifiedUserId, auth.reissueIdentificationToken, (req, res) => {
     .get("/api/list", (req, res) => {
-      const token = req.cookies.a
-      console.error("@@@@TOKEN", token)
-      if (token) {
-        try {
-          const payload = jwt.verify(token, publicKEY)
-          console.log("GOT PAYLOAD", payload)
-          if (!payload) {
-            return res.status(401).end();
-          }
-        } catch (e) {
-          if (e instanceof jwt.JsonWebTokenError) {
-            // if the error thrown is because the JWT is unauthorized, return a 401 error
-            return res.status(401).end()
-          }
-          // otherwise, return a bad request error
-          return res.status(400).end()
-        }
-      } else {
-        return res.status(401).end();
-      }
+      console.error("ID", req.user);
 
       const page = parseInt(req.query.page, 10);
       const count = parseInt(req.query.count, 10);
@@ -96,7 +56,7 @@ export default app =>
         const i = index + (page * count);
         return {
           id: `item-${i + 1}`,
-          name: `Item ${i + 1}`
+          name: `Item ${i + 1} - ${req.user?.id || ""}`
         };
       });
 

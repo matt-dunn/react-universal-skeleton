@@ -19,6 +19,7 @@ import "abort-controller/polyfill";
 
 import ssr from "./lib/ssr";
 import api from "./lib/api";
+import {AuthMiddleware} from "./AuthMiddleware";
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
@@ -57,6 +58,8 @@ app.use(pathname, expressStaticGzip(path.resolve(process.cwd(), process.env.TARG
 
 app.use(bodyParser.json());
 app.use(cookieParser());
+
+app.use("/api/*", AuthMiddleware);
 
 app.use(bodyParser.urlencoded({extended: false}));
 
