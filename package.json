@@ -38,6 +38,7 @@
     "pino": "^5.13.3",
     "polished": "^3.4.2",
     "pouchdb": "^7.2.1",
+    "pouchdb-find": "^7.2.1",
     "prismjs": "^1.17.1",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",

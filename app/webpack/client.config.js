@@ -21,6 +21,8 @@ const partialManifest = require("./partials/manifest");
 const partialStats = require("./partials/stats");
 const optimizationStats = require("./partials/optimization");
 
+const cookieParser = require("cookie-parser");
+
 const metadata = require("./metadata")({configType: "client"});
 const {environment, version, context, root, target, publicPath, port, hostname, availableLocales} = metadata;
 
@@ -139,6 +141,9 @@ module.exports = merge(
             return plugins;
         })(environment),
         devServer: {
+            setup: function (app) {
+                app.use(cookieParser());
+            },
             headers: {
                 "Access-Control-Allow-Origin": "*"
             },
@@ -163,10 +168,15 @@ module.exports = merge(
                 },
                 "/db": {
                     "target": "http://127.0.0.1:5984",
-                    "auth": "admin:admin",
                     pathRewrite: {"^/db" : ""},
                     "secure": false,
-                    cookieDomainRewrite: ""
+                    cookieDomainRewrite: "",
+                    onProxyReq: function(proxyReq, req) {
+                        const token = req.cookies.a;
+                        if (token) {
+                            proxyReq.setHeader("Authorization", `Bearer ${token}`);
+                        }
+                    }
                 },
             }
         }
