@@ -1,4 +1,8 @@
-export default app =>
+import { Application } from "express";
+
+import {AuthRequest} from "../AuthMiddleware";
+
+export default (app: Application) =>
   app
     .post("/api/login", (req, res) => {
       console.error("LOGIN...", req.body);
@@ -15,12 +19,16 @@ export default app =>
         email: username
       };
 
-      req.auth.issueTokens(res, user);
+      const auth = (req as AuthRequest).auth;
+
+      auth.issueTokens(res, user);
 
       res.send(user).end();
     })
     .get("/api/list", (req, res) => {
-      console.error("ID", req.user);
+      const user = (req as AuthRequest).user;
+
+      console.error("ID", user);
 
       const page = parseInt(req.query.page, 10);
       const count = parseInt(req.query.count, 10);
@@ -29,7 +37,7 @@ export default app =>
         const i = index + (page * count);
         return {
           id: `item-${i + 1}`,
-          name: `Item ${i + 1} - ${req.user?.id || ""}`
+          name: `Item ${i + 1} - ${user?.id || ""}`
         };
       });
 
