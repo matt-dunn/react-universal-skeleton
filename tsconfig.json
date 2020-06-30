@@ -24,7 +24,10 @@
       "app": ["./app/*"],
       "components": ["./components/*"],
       "mocks": ["./mocks/*"]
-    }
+    },
+    "typeRoots": [
+      "./node_modules/@types"
+    ]
   },
   "include": [
     "**/*.ts*"

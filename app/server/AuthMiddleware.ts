@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction } from "express";
+import {Request, Response, NextFunction} from "express";
 import { Ability } from "@casl/ability";
 import jwt from "jsonwebtoken";
 
@@ -12,17 +12,8 @@ type User = {
   authenticated: boolean;
 } & UserBase;
 
-type AuthCookies = {
-  i: string;
-  a: string;
-}
-
-type UserRequest = {
-  user: UserBase;
-  cookies: AuthCookies;
-  method: string;
-  path: string;
-  baseUrl: string;
+export type AuthRequest = {
+  user?: UserBase;
   auth: AuthAPI;
 } & Request
 
@@ -33,22 +24,16 @@ type AuthOptions = {
   authenticationTokenExpirySeconds: number;
 }
 
-const signToken = (privateKEY: string, expiresIn: number, user: UserBase) => {
-  return jwt.sign({id: user.id, name: user.name}, privateKEY, {
-    algorithm: "RS256",
-    subject: "web",
-    expiresIn,
-  });
-};
+const signToken = (privateKEY: string, expiresIn: number, payload: object) => jwt.sign(payload, privateKEY, {
+  algorithm: "RS256",
+  subject: "web",
+  expiresIn,
+});
 
-const verifyToken = (publicKEY: string, token: string): UserBase | undefined => {
+const verifyToken = (publicKEY: string, token: string): any => {
   if (token) {
     try {
-      const payload = jwt.verify(token, publicKEY) as UserBase;
-      return {
-        id: payload.id,
-        name: payload.name
-      };
+      return jwt.verify(token, publicKEY);
     } catch (e) {
       if (!(e instanceof jwt.JsonWebTokenError)) {
         throw e;
@@ -63,15 +48,26 @@ const IDENTITY_TOKEN_NAME = "i";
 const AUTH_TOKEN_NAME = "a";
 
 export const Auth = ({publicKEY, privateKEY, identificationTokenExpirySeconds, authenticationTokenExpirySeconds}: AuthOptions) => {
-  const getIdentityToken = (req: UserRequest) => req.cookies[IDENTITY_TOKEN_NAME];
-  const getAuthenticationToken = (req: UserRequest) => req.cookies[AUTH_TOKEN_NAME];
+  const getIdentityToken = (req: AuthRequest) => req.cookies[IDENTITY_TOKEN_NAME];
+  const getAuthenticationToken = (req: AuthRequest) => req.cookies[AUTH_TOKEN_NAME];
 
-  const issueIdentificationToken = (res: express.Response, user: UserBase) => {
+  const verifyUserToken = (token: string): UserBase | undefined => {
+    const payload = verifyToken(publicKEY, token);
+
+    if (payload) {
+      return {
+        id: payload.id,
+        name: payload.name
+      };
+    }
+  };
+
+  const issueIdentificationToken = (res: Response, user: UserBase) => {
     if (!user?.id) {
       throw new Error("User not found");
     }
 
-    const token = signToken(privateKEY, identificationTokenExpirySeconds, user);
+    const token = signToken(privateKEY, identificationTokenExpirySeconds, {id: user.id, name: user.name});
 
     res.cookie(IDENTITY_TOKEN_NAME, token, {
       maxAge: identificationTokenExpirySeconds * 1000,
@@ -82,39 +78,31 @@ export const Auth = ({publicKEY, privateKEY, identificationTokenExpirySeconds, a
     return token;
   };
 
-  const issueAuthenticationToken = (res: express.Response, user: UserBase) => {
+  const issueAuthenticationToken = (res: Response, user: UserBase) => {
     if (!user?.id) {
       throw new Error("User not found");
     }
 
-    const token = signToken(privateKEY, authenticationTokenExpirySeconds, user);
+    const token = signToken(privateKEY, authenticationTokenExpirySeconds, {id: user.id, name: user.name});
 
     res.cookie(AUTH_TOKEN_NAME, token, {
       maxAge: authenticationTokenExpirySeconds * 1000,
       httpOnly: true,
       secure: true
     });
+
+    return token;
   };
 
-  const reissueIdentificationToken = (res: Response, token: string, user: UserBase) => {
-    try {
-      jwt.verify(token, publicKEY);
+  const reissueIdentificationToken = (res: Response, user?: User) => {
+    if (user?.identified) {
       issueIdentificationToken(res, user);
-    } catch (e) {
-      if (!(e instanceof jwt.JsonWebTokenError)) {
-        throw e;
-      }
     }
   };
 
-  const reissueAuthenticationToken = (res: Response, token: string, user: UserBase) => {
-    try {
-      jwt.verify(token, publicKEY);
+  const reissueAuthenticationToken = (res: Response, user?: User) => {
+    if (user?.authenticated) {
       issueAuthenticationToken(res, user);
-    } catch (e) {
-      if (!(e instanceof jwt.JsonWebTokenError)) {
-        throw e;
-      }
     }
   };
 
@@ -123,17 +111,14 @@ export const Auth = ({publicKEY, privateKEY, identificationTokenExpirySeconds, a
     issueAuthenticationToken(res, user);
   };
 
-  const reissueTokens = (req: UserRequest, res: Response, user: UserBase) => {
-    reissueIdentificationToken(res, getIdentityToken(req), user);
-    reissueAuthenticationToken(res, getAuthenticationToken(req), user);
+  const reissueTokens = (res: Response, user?: User) => {
+    reissueIdentificationToken(res, user);
+    reissueAuthenticationToken(res, user);
   };
 
-  const getUser = (req: UserRequest): User | undefined => {
-    // console.error("I", verifyToken(publicKEY, getIdentityToken(req)));
-    // console.error("A", verifyToken(publicKEY, getAuthenticationToken(req)));
-
-    const identifiedUser = verifyToken(publicKEY, getIdentityToken(req));
-    const authorisedUser = verifyToken(publicKEY, getAuthenticationToken(req));
+  const getUser = (req: AuthRequest): User | undefined => {
+    const identifiedUser = verifyUserToken(getIdentityToken(req));
+    const authorisedUser = verifyUserToken(getAuthenticationToken(req));
 
     return (identifiedUser && {
       id: identifiedUser.id,
@@ -150,25 +135,27 @@ export const Auth = ({publicKEY, privateKEY, identificationTokenExpirySeconds, a
   };
 };
 
-type AuthAPI = ReturnType<typeof Auth>;
+type AuthAPI = {
+  getUser: (req: AuthRequest) => User | undefined;
+  issueTokens: (res: Response, user: UserBase) => void;
+  reissueTokens: (res: Response, user?: UserBase) => void;
+};
 
 type DefineAbilitiesForUser = {
   (user?: User): Ability;
 }
 
-export const AuthMiddleware = (auth: AuthAPI, defineAbilitiesForUser: DefineAbilitiesForUser) => (req: UserRequest, res: Response, next: NextFunction) => {
+export const AuthMiddleware = (auth: AuthAPI, defineAbilitiesForUser: DefineAbilitiesForUser) => (req: AuthRequest, res: Response, next: NextFunction) => {
   req.auth = auth;
 
   const user = auth.getUser(req);
 
-  const abilities = defineAbilitiesForUser(user);
+  auth.reissueTokens(res, user);
 
   const method = req.method;
   const originalUrl = req.baseUrl + req.path;
 
-  if (user) {
-    auth.reissueTokens(req, res, user);
-  }
+  const abilities = defineAbilitiesForUser(user);
 
   if (!abilities.can(method, originalUrl)) {
     if (user?.authenticated) {
@@ -177,12 +164,7 @@ export const AuthMiddleware = (auth: AuthAPI, defineAbilitiesForUser: DefineAbil
     return res.status(401).end();
   }
 
-  if (user) {
-    req.user = {
-      id: user.id,
-      name: user.name
-    };
-  }
+  req.user = user;
 
   next();
 };
