@@ -19,7 +19,7 @@ import "abort-controller/polyfill";
 
 import ssr from "./lib/ssr";
 import api from "./lib/api";
-import {AuthMiddleware, Auth} from "./AuthMiddleware";
+import {authMiddleware, Auth, abilitiesMiddleware} from "./AuthMiddleware";
 import {Ability, AbilityBuilder} from "@casl/ability";
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
@@ -84,7 +84,7 @@ const auth = Auth({
     authenticationTokenExpirySeconds
 });
 
-app.use("/api/*", AuthMiddleware(auth, (user) => {
+app.use("/api/*", authMiddleware(auth), abilitiesMiddleware((user) => {
     const { can, rules } = new AbilityBuilder();
 
     can("POST", "/api/login/");

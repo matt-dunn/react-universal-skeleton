@@ -13,7 +13,7 @@ type User = {
 } & UserBase;
 
 export type AuthRequest = {
-  user?: UserBase;
+  user?: User;
   auth: AuthAPI;
 } & Request
 
@@ -135,25 +135,28 @@ export const Auth = ({publicKEY, privateKEY, identificationTokenExpirySeconds, a
   };
 };
 
-type AuthAPI = {
-  getUser: (req: AuthRequest) => User | undefined;
-  issueTokens: (res: Response, user: UserBase) => void;
-  reissueTokens: (res: Response, user?: UserBase) => void;
-};
+type AuthAPI = ReturnType<typeof Auth>;
 
 type DefineAbilitiesForUser = {
   (user?: User): Ability;
 }
 
-export const AuthMiddleware = (auth: AuthAPI, defineAbilitiesForUser: DefineAbilitiesForUser) => (req: AuthRequest, res: Response, next: NextFunction) => {
+export const authMiddleware = (auth: AuthAPI) => (req: AuthRequest, res: Response, next: NextFunction) => {
   req.auth = auth;
 
   const user = auth.getUser(req);
 
   auth.reissueTokens(res, user);
 
+  req.user = user;
+
+  next();
+};
+
+export const abilitiesMiddleware = (defineAbilitiesForUser: DefineAbilitiesForUser) => (req: AuthRequest, res: Response, next: NextFunction) => {
   const method = req.method;
   const originalUrl = req.baseUrl + req.path;
+  const user = req.user;
 
   const abilities = defineAbilitiesForUser(user);
 
@@ -163,8 +166,6 @@ export const AuthMiddleware = (auth: AuthAPI, defineAbilitiesForUser: DefineAbil
     }
     return res.status(401).end();
   }
-
-  req.user = user;
 
   next();
 };

@@ -155,7 +155,7 @@ type Kitten = {
 
     console.error("FOUND", d);
 
-    console.error(await db.info());
+    console.error("LOCAL INFO", await db.info());
 
-    console.error(await dbRemote.info());
+    console.error("REMOTE INFO", await dbRemote.info());
 }());
