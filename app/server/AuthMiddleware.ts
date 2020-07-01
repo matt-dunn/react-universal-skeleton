@@ -141,7 +141,7 @@ type DefineAbilitiesForUser = {
   (user?: User): Ability;
 }
 
-export const authMiddleware = (auth: AuthAPI) => (req: AuthRequest, res: Response, next: NextFunction) => {
+export const createAuthMiddleware = (auth: AuthAPI) => (req: AuthRequest, res: Response, next: NextFunction) => {
   req.auth = auth;
 
   const user = auth.getUser(req);
@@ -153,7 +153,7 @@ export const authMiddleware = (auth: AuthAPI) => (req: AuthRequest, res: Respons
   next();
 };
 
-export const abilitiesMiddleware = (defineAbilitiesForUser: DefineAbilitiesForUser) => (req: AuthRequest, res: Response, next: NextFunction) => {
+export const createAbilitiesMiddleware = (defineAbilitiesForUser: DefineAbilitiesForUser) => (req: AuthRequest, res: Response, next: NextFunction) => {
   const method = req.method;
   const originalUrl = req.baseUrl + req.path;
   const user = req.user;

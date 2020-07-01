@@ -2,8 +2,8 @@ import chalk from "chalk";
 import url from "url";
 import path from "path";
 import express from "express";
-// import https from "https";
-import spdy from "spdy";
+import https from "https";
+// import spdy from "spdy";
 import expressStaticGzip from "express-static-gzip";
 import shrinkRay from "shrink-ray-current";
 import trailingSlash from "express-trailing-slash";
@@ -12,6 +12,7 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import helmet from "helmet";
+import { createProxyMiddleware } from "http-proxy-middleware";
 
 import key from "./ssl/private.key";
 import cert from "./ssl/private.crt";
@@ -19,7 +20,7 @@ import "abort-controller/polyfill";
 
 import ssr from "./lib/ssr";
 import api from "./lib/api";
-import {authMiddleware, Auth, abilitiesMiddleware} from "./AuthMiddleware";
+import {createAbilitiesMiddleware, createAuthMiddleware, Auth} from "./AuthMiddleware";
 import {Ability, AbilityBuilder} from "@casl/ability";
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
@@ -57,7 +58,6 @@ app.use(pathname, expressStaticGzip(path.resolve(process.cwd(), process.env.TARG
     }
 }));
 
-app.use(bodyParser.json());
 app.use(cookieParser());
 
 const privateKEY = "-----BEGIN RSA PRIVATE KEY-----\n" +
@@ -84,7 +84,8 @@ const auth = Auth({
     authenticationTokenExpirySeconds
 });
 
-app.use("/api/*", authMiddleware(auth), abilitiesMiddleware((user) => {
+const authMiddleware = createAuthMiddleware(auth);
+const abilitiesMiddleware = createAbilitiesMiddleware((user) => {
     const { can, rules } = new AbilityBuilder();
 
     can("POST", "/api/login/");
@@ -102,8 +103,26 @@ app.use("/api/*", authMiddleware(auth), abilitiesMiddleware((user) => {
     // });
 
     return new Ability(rules);
-}));
+});
 
+app.use("/api/*", authMiddleware, abilitiesMiddleware);
+
+const dbProxy = createProxyMiddleware({
+    "target": "http://127.0.0.1:5984",
+    pathRewrite: {"^/db" : ""},
+    "secure": false,
+    cookieDomainRewrite: "",
+    onProxyReq: function(proxyReq, req) {
+        const token = req.cookies.a;
+        if (token) {
+            proxyReq.setHeader("Authorization", `Bearer ${token}`);
+        }
+    },
+});
+
+app.use("/db", authMiddleware, dbProxy);
+
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
 app.use(shrinkRay({}));
@@ -113,7 +132,7 @@ api(app);
 app.get("/*", ssr);
 app.post("/*", ssr);
 
-export default spdy
+export default https
     .createServer({
         key,
         cert

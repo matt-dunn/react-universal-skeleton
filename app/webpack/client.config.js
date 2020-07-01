@@ -141,7 +141,7 @@ module.exports = merge(
             return plugins;
         })(environment),
         devServer: {
-            setup: function (app) {
+            before: function (app) {
                 app.use(cookieParser());
             },
             headers: {
