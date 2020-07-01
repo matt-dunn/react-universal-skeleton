@@ -31,7 +31,8 @@ export const notify = ({message, severity = Severity.info, reference}: Notificat
                 }
             </>,
             {
-                type: severity
+                type: severity,
+                toastId: reference
             },
         );
 

@@ -7,7 +7,7 @@ import {ExampleApi, ExampleItem} from "../../components/api";
 import { exampleGetItem, exampleGetList, exampleEditItem } from "./example";
 
 describe("Example actions", () => {
-    let mockAPI: ExampleApi;
+    let mockAPI: ReturnType<ExampleApi>;
 
     beforeEach(() => {
         mockAPI = {

@@ -11,8 +11,13 @@ export type Login = WrapWithAbortSignal<{
     (username: string, password: string): Promise<User>;
 }>
 
+type AuthApiOptions = {
+}
+
 export type AuthApi = {
-    login: Login;
+    (options: AuthApiOptions): {
+        login: Login;
+    };
 }
 
 // Auth mocking
@@ -20,7 +25,7 @@ export const isAuthenticated = () => {
     return (typeof window !== "undefined") && ((window as any).authenticated === true) || (typeof process !== "undefined") && ((process as any).authenticated);
 };
 
-export const AuthApi: AuthApi = {
+export const AuthApi: AuthApi = () => ({
     login: (username, password) => async signal => {
         try {
             // const url = new URL("/api/login", "https://127.0.0.1:12345");
@@ -73,4 +78,4 @@ export const AuthApi: AuthApi = {
     //         }
     //     }, 1500);
     // })
-};
+});

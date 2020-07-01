@@ -28,7 +28,11 @@ type Global = {
 
 const global = window as unknown as Global;
 
-const store = getStore(deserialize(JSON.stringify(global.__PRELOADED_STATE__)));
+const store = getStore(deserialize(JSON.stringify(global.__PRELOADED_STATE__)), {
+    ExampleApi: {
+        endpoint: ""
+    }
+});
 const error = {error: global.__ERROR_STATE__};
 const formData = FormDataState(global.__PRELOADED_FORM_STATE__);
 const asyncData = new AsyncData(global.__ASYNC_DATA_STATE__);
@@ -80,82 +84,82 @@ if (process.env.PWA === "true") {
     require("./worker").default();
 }
 
-import PouchDB from "pouchdb";
-import PouchDBFind from "pouchdb-find";
-
-PouchDB.plugin(PouchDBFind);
-
-
-type Kitten = {
-    name: string;
-    occupation: string;
-    age: number;
-    hobbies: string[];
-};
-
-(async function() {
-    const db = new PouchDB("kittens");
-
-    const dbUrl = new URL("/db/kittens", location.origin);
-    const dbRemote = new PouchDB(dbUrl.toString());
-
-    db.sync(dbRemote, {
-        live: true
-    }).on("change", function (change) {
-        console.error("@@CHANGE", change);
-    }).on("error", function (err) {
-        console.error("@@ERROR", err);
-    });
-
-
-    console.error(db, dbRemote);
-
-    console.error(await db.info());
-
-    console.error(await dbRemote.info());
-
-    const doc = {
-        "_id": "mittens",
-        "name": "Mittens",
-        "occupation": "kitten",
-        "age": 3,
-        "hobbies": [
-            "playing with balls of yarn",
-            "chasing laser pointers",
-            "lookin' hella cute"
-        ]
-    };
-
-    // try {
-    //     console.error("PUT", await db.put(doc));
-    // } catch (ex) {
-    //     console.error("PUT ERROR", ex)
-    // }
-
-    const currentDoc = await db.get<Kitten>("mittens");
-    console.error(currentDoc);
-
-    // await db.put({
-    //   ...currentDoc,
-    //     age: currentDoc.age + 1
-    // })
-
-    console.error("LOCAL", await db.get("mittens", {revs: true, revs_info: true}));
-    console.error("REMOTE", await dbRemote.get("mittens", {revs: true, revs_info: true}));
-
-    await db.createIndex({
-        index: {fields: ["name"]}
-    });
-
-    const d = await dbRemote.find({
-        selector: {
-            name: "Mittens"
-        }
-    });
-
-    console.error("FOUND", d);
-
-    console.error("LOCAL INFO", await db.info());
-
-    console.error("REMOTE INFO", await dbRemote.info());
-}());
+// import PouchDB from "pouchdb";
+// import PouchDBFind from "pouchdb-find";
+//
+// PouchDB.plugin(PouchDBFind);
+//
+//
+// type Kitten = {
+//     name: string;
+//     occupation: string;
+//     age: number;
+//     hobbies: string[];
+// };
+//
+// (async function() {
+//     const db = new PouchDB("kittens");
+//
+//     const dbUrl = new URL("/db/kittens", location.origin);
+//     const dbRemote = new PouchDB(dbUrl.toString());
+//
+//     db.sync(dbRemote, {
+//         live: true
+//     }).on("change", function (change) {
+//         console.error("@@CHANGE", change);
+//     }).on("error", function (err) {
+//         console.error("@@ERROR", err);
+//     });
+//
+//
+//     console.error(db, dbRemote);
+//
+//     console.error(await db.info());
+//
+//     console.error(await dbRemote.info());
+//
+//     const doc = {
+//         "_id": "mittens",
+//         "name": "Mittens",
+//         "occupation": "kitten",
+//         "age": 3,
+//         "hobbies": [
+//             "playing with balls of yarn",
+//             "chasing laser pointers",
+//             "lookin' hella cute"
+//         ]
+//     };
+//
+//     // try {
+//     //     console.error("PUT", await db.put(doc));
+//     // } catch (ex) {
+//     //     console.error("PUT ERROR", ex)
+//     // }
+//
+//     const currentDoc = await db.get<Kitten>("mittens");
+//     console.error(currentDoc);
+//
+//     // await db.put({
+//     //   ...currentDoc,
+//     //     age: currentDoc.age + 1
+//     // })
+//
+//     console.error("LOCAL", await db.get("mittens", {revs: true, revs_info: true}));
+//     console.error("REMOTE", await dbRemote.get("mittens", {revs: true, revs_info: true}));
+//
+//     await db.createIndex({
+//         index: {fields: ["name"]}
+//     });
+//
+//     const d = await dbRemote.find({
+//         selector: {
+//             name: "Mittens"
+//         }
+//     });
+//
+//     console.error("FOUND", d);
+//
+//     console.error("LOCAL INFO", await db.info());
+//
+//     console.error("REMOTE INFO", await dbRemote.info());
+// }());

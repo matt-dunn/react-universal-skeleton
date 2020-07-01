@@ -51,7 +51,13 @@ export default async (req, res) => {
             };
         }
 
-        const store = getStore(initialState);
+        const store = getStore(initialState, {
+            ExampleApi: {
+                endpoint: ""
+            }
+        }, {
+            req
+        });
 
         const context = {};
         const helmetContext = {};
