@@ -44,7 +44,7 @@ export const ExampleApi: ExampleApi = {
             return response.data;
         } catch (e) {
             if (e.response?.status === 401) {
-                throw new APIError("Invalid username or password", 123, 401);
+                throw new APIError("Unauthorised", 123, 401);
             }
 
             throw e;

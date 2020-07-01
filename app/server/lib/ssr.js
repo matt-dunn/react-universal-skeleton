@@ -7,6 +7,7 @@ import { renderToNodeStream } from "react-dom/server";
 import { StaticRouter } from "react-router-dom";
 import { ChunkExtractor } from "@loadable/server";
 import {set} from "lodash";
+import axios from "axios";
 
 import {serialize} from "components/state-mutate-with-status";
 import {parseFormData} from "components/actions/form";
@@ -24,6 +25,13 @@ const statsFile = path.join(process.cwd(), process.env.TARGET_CLIENT, "loadable-
 const availableLocales = process.env.AVAILABLE_LOCALES;
 
 export default async (req, res) => {
+    const interceptor = axios.interceptors.request.use((config) => {
+        if (req.headers.cookie) {
+            config.headers.Cookie = req.headers.cookie;
+        }
+        return config;
+    });
+
     try {
         const t1 = Date.now();
 
@@ -164,5 +172,7 @@ export default async (req, res) => {
         res.status(500);
         res.send("TODO: A fatal error occurred");
         res.end();
+    } finally {
+        axios.interceptors.request.eject(interceptor);
     }
 };
