@@ -6,12 +6,17 @@ import {getType, createReducer} from "typesafe-actions";
 import nextState, {ActionMeta} from "components/state-mutate-with-status/frozen";
 
 import {exampleActions as actions} from "../../actions";
-import {ExampleItem, ExampleList} from "../../components/api";
+import {ExampleItem, ExampleList, Kitten} from "../../components/api";
 
 export type ExampleState = {
     items: ExampleList;
     item?: ExampleItem;
+    kitten?: Kitten;
 }
+
+const exampleDBItemReducer = (state: ExampleState, action: FluxStandardAction<string, any, ActionMeta>): ExampleState => nextState(state, action, {
+    path: ["kitten"]
+});
 
 const exampleListReducer = (state: ExampleState, action: FluxStandardAction<string, any, ActionMeta>): ExampleState => nextState(state, action, {
     path: ["items"]
@@ -27,6 +32,8 @@ const initialState = {
 } as ExampleState;
 
 export default createReducer(initialState, {
+    [getType(actions.exampleGetDBItem)]: exampleDBItemReducer,
+    [getType(actions.exampleUpdateDBItem)]: exampleDBItemReducer,
     [getType(actions.exampleGetList)]: exampleListReducer,
     [getType(actions.exampleEditItem)]: exampleListReducer,
     [getType(actions.exampleGetItem)]: exampleItemReducer

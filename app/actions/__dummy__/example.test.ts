@@ -1,16 +1,18 @@
 import {isFunction} from "lodash";
 import {Severity} from "components/notification";
 
-import {ExampleApi, ExampleItem} from "../../components/api";
+import {ExampleApi, ExampleItem, Kitten} from "../../components/api";
 
 import { exampleGetItem, exampleGetList, exampleEditItem } from "./example";
-import {payloadCreator} from "../../../components/redux/middleware/payloadCreator";
+// import {payloadCreator} from "../../../components/redux/middleware/payloadCreator";
 
 describe("Example actions", () => {
     let mockAPI: ReturnType<ExampleApi>;
 
     beforeEach(() => {
         mockAPI = {
+            exampleGetDBItem: jest.fn().mockImplementation((id: string) => () => ({})),
+            exampleUpdateDBItem: jest.fn().mockImplementation((item: Kitten) => () => ({})),
             exampleGetList: jest.fn().mockImplementation((page?: number, count?: number) => () => `items - page=${page}, count=${count}`),
             exampleGetItem: jest.fn().mockImplementation(() => () => "item"),
             exampleEditItem: jest.fn().mockImplementation((item: ExampleItem) => () => `item - id=${item.id}, name=${item.name}`)

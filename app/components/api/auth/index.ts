@@ -40,6 +40,8 @@ export const AuthApi: AuthApi = () => ({
             (typeof window !== "undefined") && ((window as any).authenticated = true);
             (typeof process !== "undefined") && ((process as any).authenticated = response.data);
 
+            console.error("!!!!!", response.data);
+
             return response.data;
         } catch (e) {
             if (e?.response?.status === 401) {

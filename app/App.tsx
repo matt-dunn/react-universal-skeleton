@@ -27,6 +27,7 @@ const Forms = loadable(() => import(/* webpackPrefetch: true */ "./containers/Fo
 const Login = loadable(() => import(/* webpackPrefetch: true */ "./containers/Login"));
 const Locale = loadable(() => import(/* webpackPrefetch: true */ "./containers/Locale"));
 const Dashboard = loadable(() => import(/* webpackPrefetch: true */ "./containers/Dashboard"));
+const PouchDBTest = loadable(() => import(/* webpackPrefetch: true */ "./containers/PouchDBTest"));
 const LoginModal = loadable(() => import(/* webpackPrefetch: true */ "./components/Login/Modal"));
 
 import "./styles/react-responsive-ui.css";
@@ -115,6 +116,7 @@ const App = () => {
                                     <Route exact path="/forms/" component={Forms}/>
                                     <Route exact path="/locale/" component={Locale}/>
                                     <Route exact path="/dashboard/" component={Dashboard}/>
+                                    <Route exact path="/pouchdb/" component={PouchDBTest}/>
                                     <Route path="/login/:from?/" component={Login}/>
                                     <Route component={Error404}/>
                                     {/*<Redirect to="/" />*/}

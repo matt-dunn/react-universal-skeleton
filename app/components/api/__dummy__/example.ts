@@ -13,6 +13,14 @@ export type ExampleItem = {
 
 export type ExampleList = ExampleItem[];
 
+type ExampleGetDBItem = WrapWithAbortSignal<{
+    (id: string): Promise<Kitten>;
+}>
+
+type ExampleUpdateDBItem = WrapWithAbortSignal<{
+    (item: Kitten): Promise<Kitten>;
+}>
+
 type ExampleGetList = WrapWithAbortSignal<{
     (page?: number, count?: number): Promise<ExampleList>;
 }>
@@ -31,6 +39,8 @@ type ExampleApiOptions = {
 
 export type ExampleApi = {
     (options: ExampleApiOptions, context?: APIContext): {
+        exampleGetDBItem: ExampleGetDBItem;
+        exampleUpdateDBItem: ExampleUpdateDBItem;
         exampleGetList: ExampleGetList;
         exampleGetItem: ExampleGetItem;
         exampleEditItem: ExampleEditItem;
@@ -42,7 +52,7 @@ import PouchDBFind from "pouchdb-find";
 
 PouchDB.plugin(PouchDBFind);
 
-type Kitten = {
+export type Kitten = {
     name: string;
     occupation: string;
     age: number;
@@ -97,6 +107,24 @@ export const ExampleApi: ExampleApi = (options, context) => {
     const activeDB = db || dbRemote;
 
     return {
+        exampleGetDBItem: (id) => async signal => {
+            console.error("INFO", await activeDB.info());
+            const document = await activeDB.get<Kitten>(id, {revs: false, revs_info: false});
+
+            console.error("DOCUMENT", document);
+
+            return document;
+        },
+        exampleUpdateDBItem: (item) => async signal => {
+            console.error("UPDATE", item);
+
+            const response = await activeDB.put(item);
+
+            return {
+                ...item,
+                _rev: response.rev
+            };
+        },
         exampleGetList: (page = 0, count = 3) => async signal => {
             try {
                 console.error("REMOTE INFO", await dbRemote.info());

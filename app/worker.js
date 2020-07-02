@@ -1,7 +1,8 @@
 import {Workbox} from "workbox-window";
 
 export default () => {
-    if (process.env.NODE_ENV === "production") {
+    if (process.env.PWA === "true") {
+    // if (process.env.NODE_ENV === "production") {
         if ("serviceWorker" in navigator) {
             window.addEventListener("load", () => {
                 const wb = new Workbox((process.env.PUBLIC_PATH || "/") + "service-worker.js");

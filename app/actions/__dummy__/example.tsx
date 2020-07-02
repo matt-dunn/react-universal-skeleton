@@ -6,12 +6,22 @@ import {WithNotification} from "components/redux/middleware/sagaNotification";
 import {ActionMeta} from "components/state-mutate-with-status";
 import {Severity} from "components/notification";
 
-import {ExampleList, ExampleItem} from "../../components/api";
+import {ExampleList, ExampleItem, Kitten} from "../../components/api";
 import {APIPayloadCreator} from "../";
 
+const exampleGetDBItem = createAction<string, APIPayloadCreator<Promise<Kitten>>, ActionMeta<Kitten>, [string]>(
+  "@__dummy__/EXAMPLE_GET_DB_ITEM",
+  (id) => signal => ({API: {ExampleApi: {exampleGetDBItem}}}) => exampleGetDBItem(id)(signal),
+)();
+
+const exampleUpdateDBItem = createAction<string, APIPayloadCreator<Promise<Kitten>>, ActionMeta<Kitten>, [Kitten]>(
+  "@__dummy__/EXAMPLE_UPDATE_DB_ITEM",
+  (item) => signal => ({API: {ExampleApi: {exampleUpdateDBItem}}}) => exampleUpdateDBItem(item)(signal),
+)();
+
 const exampleGetList = createAction<string, APIPayloadCreator<Promise<ExampleList>>, ActionMeta<ExampleList>, [number?, number?]>(
-    "@__dummy__/EXAMPLE_GET_LIST",
-    (page, count) => signal => ({API: {ExampleApi: {exampleGetList}}}) => exampleGetList(page, count)(signal),
+  "@__dummy__/EXAMPLE_GET_LIST",
+  (page, count) => signal => ({API: {ExampleApi: {exampleGetList}}}) => exampleGetList(page, count)(signal),
 )();
 
 const exampleGetItem = createAction<string, APIPayloadCreator<Promise<ExampleItem>>, ActionMeta<ExampleItem> & WithNotification<ExampleItem>, []>(
@@ -45,4 +55,10 @@ const exampleEditItem = createAction<string, APIPayloadCreator<Promise<ExampleIt
     })
 )();
 
-export { exampleGetList, exampleGetItem, exampleEditItem };
+export {
+  exampleGetDBItem,
+  exampleUpdateDBItem,
+  exampleGetList,
+  exampleGetItem,
+  exampleEditItem
+};
