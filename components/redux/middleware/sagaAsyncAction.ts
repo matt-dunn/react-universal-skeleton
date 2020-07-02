@@ -1,133 +1,146 @@
-import {put, cancelled, fork, take, cancel} from "redux-saga/effects";
+import { put, cancelled, fork, take, cancel } from "redux-saga/effects";
 import uuid from "uuid";
-import {isFunction} from "lodash";
 import isPromise from "is-promise";
-import {Task} from "@redux-saga/types";
 
-import {StandardAction, MetaStatus, ActionMeta} from "components/state-mutate-with-status";
+import { StandardAction, MetaStatus, ActionMeta } from "components/state-mutate-with-status";
+
+type Task = {
+  /**
+   * Returns true if the task hasn't yet returned or thrown an error
+   */
+  isRunning(): boolean;
+  /**
+   * Returns true if the task has been cancelled
+   */
+  isCancelled(): boolean;
+  /**
+   * Returns task return value. `undefined` if task is still running
+   */
+  result<T = any>(): T | undefined;
+  /**
+   * Returns task thrown error. `undefined` if task is still running
+   */
+  error(): any | undefined;
+  /**
+   * Returns a Promise which is either:
+   * - resolved with task's return value
+   * - rejected with task's thrown error
+   */
+  toPromise<T = any>(): Promise<T>;
+  /**
+   * Cancels the task (If it is still running)
+   */
+  cancel(): void;
+  setContext<C extends object>(props: Partial<C>): void;
+}
 
 type Pending = {
-    [key: string]: {
-        task: Task;
-        action: StandardAction;
-    };
+  [key: string]: {
+    task: Task;
+    action: StandardAction;
+  };
 }
 
 type Done = {
-    (action: StandardAction): void;
+  (action: StandardAction): void;
 }
 
-export type PayloadCreator<A extends any[], R> =
-    R
-    |
-    {
-        (signal?: AbortSignal): {
-            (...args: A): R;
-        };
-    }
-    |
-    {
-        (signal?: AbortSignal): R;
-    }
-
-
-
 const decorateMetaWithStatus = <M extends ActionMeta>(transactionId: string, status: Partial<Omit<MetaStatus, "transactionId">>, meta?: M): M & ActionMeta => ({
-    ...meta || {} as M,
-    $status: MetaStatus({processing: false, complete: false, ...status, transactionId})
+  ...meta || {} as M,
+  $status: MetaStatus({ processing: false, complete: false, ...status, transactionId })
 });
 
 const getName = (action: StandardAction) => `${action.type}${action?.meta?.id ? `-${action.meta.id}`: ""}`;
 
-export const payloadCreator = <P extends PayloadCreator<any, any>>(response: P) => (signal?: AbortSignal) => (...args: Parameters<P | any>) => {
-    if (isFunction(response)) {
-        const ret = response(signal);
+const CANCEL_TASK_POSTFIX = "$CANCEL$";
 
-        if (isFunction(ret)) {
-            return ret(...args);
-        } else {
-            return ret;
-        }
+export const makeCancelAction = (type: string) => `${type}${CANCEL_TASK_POSTFIX}`;
+
+const isCancelAction = (action: StandardAction) => getName(action).indexOf(CANCEL_TASK_POSTFIX) !== -1;
+
+const makeCancelActionMatcher = (type: string) => new RegExp("^" + type.replace(CANCEL_TASK_POSTFIX, "").replace("*", ".*?"));
+
+function* callAsyncWithCancel (action: StandardAction, done?: Done) {
+  const transactionId = uuid.v4();
+  const controller = action.meta?.controller;
+
+  try {
+    yield put({
+      ...action,
+      payload: action?.meta?.seedPayload,
+      meta: decorateMetaWithStatus(transactionId, {
+        processing: true,
+      }, action.meta)
+    });
+
+    const payload = yield action.payload;
+
+    yield put({
+      ...action,
+      payload,
+      meta: decorateMetaWithStatus(transactionId, {
+        complete: true,
+        lastUpdated: Date.now()
+      }, action.meta)
+    });
+  } catch (error) {
+    yield put({
+      ...action,
+      payload: error,
+      error: true,
+      meta: decorateMetaWithStatus(transactionId, {
+        error,
+      }, action.meta)
+    });
+  } finally {
+    done && done(action);
+
+    if (yield cancelled()) {
+      controller?.abort();
+
+      yield put({
+        ...action,
+        payload: [],
+        meta: decorateMetaWithStatus(transactionId, {
+          cancelled: true,
+        }, action.meta)
+      });
     }
-
-    return response;
-};
-
-function* callAsyncWithCancel(action: StandardAction, done?: Done, ...args: any[]) {
-    const transactionId = uuid.v4();
-    const controller = new AbortController();
-
-    try {
-        yield put({
-            ...action,
-            payload: action?.meta?.seedPayload,
-            meta: decorateMetaWithStatus(transactionId,{
-                processing: true,
-            }, action.meta)
-        });
-
-        const payload = yield payloadCreator(action.payload)(controller.signal)(...args);
-        // TODO: refactor / allow configuration on retry
-        // const payload = yield retry(5, 1000, payloadCreator(action.payload)(controller.signal)(...args);
-
-        yield put({
-            ...action,
-            payload,
-            meta: decorateMetaWithStatus(transactionId,{
-                complete: true,
-                lastUpdated: Date.now()
-            }, action.meta)
-        });
-
-        action?.meta?.response && action?.meta?.response.resolve(payload);
-    } catch (error) {
-        yield put({
-            ...action,
-            payload: error,
-            error: true,
-            meta: decorateMetaWithStatus(transactionId,{
-                error,
-            }, action.meta)
-        });
-
-        action?.meta?.response && action?.meta?.response.reject(error);
-    } finally {
-        if (yield cancelled()) {
-            controller.abort();
-
-            yield put({
-                ...action,
-                payload: [],
-                meta: decorateMetaWithStatus(transactionId,{
-                    cancelled: true,
-                }, action.meta)
-            });
-        } else {
-            done && done(action);
-        }
-    }
+  }
 }
 
 const takeAsync = (saga: (...args: any[]) => any, ...args: any[]) => fork(function*() {
-    const pending: Pending = {};
+  const pending: Pending = {};
 
-    const done: Done = action => delete pending[getName(action)];
+  const done: Done = action => delete pending[getName(action)];
 
-    while (true) {
-        const action = yield take((action: StandardAction) => isFunction(action.payload) || isPromise(action.payload));
-        const name = getName(action);
+  while (true) {
+    const action = yield take((action: StandardAction) => isPromise(action.payload) || isCancelAction(action));
+    const name = getName(action);
 
-        if (pending[name] && name === getName(pending[name].action)) {
-            yield cancel(pending[name].task);
-        }
+    console.error("@@",name);
 
-        pending[name] = {
-            task: yield fork(saga, ...[action, done, ...args]),
-            action
-        };
+    if (isCancelAction(action)) {
+      const cancelActionMatcher = makeCancelActionMatcher(name);
+
+      const tasks = Object.entries(pending)
+        .filter(([key]) => cancelActionMatcher.test(key))
+        .map(([, action]) => action.task);
+
+      yield cancel(tasks);
+    } else {
+      if (pending[name] && name === getName(pending[name].action)) {
+        yield cancel(pending[name].task);
+      }
+
+      pending[name] = {
+        task: yield fork(saga, ...[action, done, ...args]),
+        action
+      };
     }
+  }
 });
 
-export function* sagaAsyncAction(...args: any[]) {
-    return yield takeAsync(callAsyncWithCancel, ...args);
+export function* sagaAsyncAction (...args: any[]) {
+  return yield takeAsync(callAsyncWithCancel, ...args);
 }

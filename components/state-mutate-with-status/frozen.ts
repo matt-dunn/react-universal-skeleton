@@ -1,9 +1,9 @@
 import simpleDeepFreeze from "simple-deep-freeze";
 
-import updateState, {StandardAction, Options} from "./";
+import updateState, { StandardAction, Options } from "./";
 
-const frozenUpdateState = <S, P extends S>(state: S, action: StandardAction<P>, options?: Options<P>): Readonly<S> =>
-    simpleDeepFreeze(updateState(state, action, options));
+const frozenUpdateState = <S, P extends S>(state: S, action: StandardAction<P>, options?: Options<S, P>): Readonly<S> =>
+  simpleDeepFreeze(updateState(state, action, options));
 
 export default frozenUpdateState;
 

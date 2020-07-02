@@ -56,45 +56,59 @@ export const ExampleApi: ExampleApi = (options, context) => {
     const dbUrl = new URL("/db/kittens", "https://127.0.0.1:12345"); //location.origin);
     const dbRemote = new PouchDB(dbUrl.toString(), {
         fetch: function (url, opts) {
-            if (opts?.headers && context?.req.headers.cookie) {
-                (opts.headers as any).set("Cookie", context?.req.headers.cookie);
-            }
+            // console.error("SET COOKIES", context?.req.headers.cookie);
+            (opts?.headers as any).set("Cookie", context?.req.headers.cookie);
+
             return PouchDB.fetch(url, opts);
         }
     });
 
-    if (db) {
+    if (db && dbRemote) {
         db.sync(dbRemote, {
             live: true,
             retry: true
+        }).on("active", function () {
+            console.error("@!@active");
         }).on("change", function (change) {
-            console.error("@@CHANGE", change);
+            console.error("@!@CHANGE", change);
         }).on("error", function (err) {
-            console.error("@@ERROR", err);
+            console.error("@!@ERROR", err);
+        }).on("paused", function (err) {
+            console.error("@!@paused", err);
+        }).on("denied", function (err) {
+            console.error("@!@denied", err);
         });
     }
 
     console.error("@@@@OPTIONS", options, context?.req.headers.cookie);
 
-    (async function() {
-        console.error("LOCAL", db && await db.get("mittens", {revs: false, revs_info: false}));
-        console.error("REMOTE", await dbRemote.get("mittens", {revs: false, revs_info: false}));
-    }());
+    // (async function() {
+    //     try {
+    //         console.error("LOCAL INFO", db && await db.info());
+    //         console.error("REMOTE INFO", await dbRemote.info());
+    //
+    //         console.error("LOCAL:", db && await db.get("mittens", {revs: false, revs_info: false}));
+    //         console.error("REMOTE:", await dbRemote.get("mittens", {revs: false, revs_info: false}));
+    //     } catch (ex) {
+    //         console.error("DB", ex);
+    //     }
+    // }());
 
     const activeDB = db || dbRemote;
 
     return {
         exampleGetList: (page = 0, count = 3) => async signal => {
             try {
+                console.error("REMOTE INFO", await dbRemote.info());
+                const document = await activeDB.get<Kitten>("mittens", {revs: false, revs_info: false});
+
+                console.error("DOCUMENT", dbRemote, document, context?.req.headers.cookie);
+
                 const url = new URL("/api/list", "https://127.0.0.1:12345");
                 url.searchParams.set("page", page.toString());
                 url.searchParams.set("count", count.toString());
 
                 const response = await axios.get<ExampleList>(url.toString(), {withCredentials: true});
-
-                const document = await activeDB.get<Kitten>("mittens", {revs: false, revs_info: false});
-
-                // console.error("DOCUMENT", document);
 
                 return response.data.map(item => {
                     if (item.id === "item-1") {
@@ -107,7 +121,7 @@ export const ExampleApi: ExampleApi = (options, context) => {
                     return item;
                 });
             } catch (e) {
-                if (e.response?.status === 401) {
+                if (e?.response?.status === 401) {
                     throw new APIError("Unauthorised", 123, 401);
                 }
 

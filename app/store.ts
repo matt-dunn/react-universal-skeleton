@@ -3,7 +3,7 @@ import createSagaMiddleware from "redux-saga";
 import {fork} from "redux-saga/effects";
 
 import {sagaAsyncAction} from "components/redux/middleware/sagaAsyncAction";
-import {promiseDecorator} from "components/redux/middleware/promiseDecorator";
+import { payloadCreator } from "components/redux/middleware/payloadCreator";
 import {sagaNotification} from "components/redux/middleware/sagaNotification";
 import {APIContext} from "components/api";
 
@@ -16,7 +16,7 @@ const composeEnhancers = (typeof window !== "undefined" && (window as any).__RED
 const getStore = (initialState = {}, options: APIOptions, context?: APIContext) => {
     const rootSaga = function* rootSaga() {
         yield fork(sagaNotification, notification => import("./notify").then(({notify}) => notify(notification)));
-        yield fork(sagaAsyncAction, {API: API(options, context)});
+        yield fork(sagaAsyncAction);
     };
 
     const sagaMiddleware = createSagaMiddleware();
@@ -25,7 +25,7 @@ const getStore = (initialState = {}, options: APIOptions, context?: APIContext) 
         rootReducer,
         initialState,
         composeEnhancers(applyMiddleware(
-            promiseDecorator,
+          payloadCreator({API: API(options, context)}),
             sagaMiddleware
         )),
     );

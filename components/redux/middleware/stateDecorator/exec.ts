@@ -5,12 +5,12 @@ import isPromise from "is-promise";
 import { Options } from "./index";
 
 const exec = (
-    next: Dispatch<FluxStandardAction<string, any, any>>,
-    transactionId: string,
-    originalPayload: any,
-    action: FluxStandardAction<string, any, any>,
-    dispatchOptions: Options,
-    { resolve , reject }: any = {}
+  next: Dispatch<FluxStandardAction<string, any, any>>,
+  transactionId: string,
+  originalPayload: any,
+  action: FluxStandardAction<string, any, any>,
+  dispatchOptions: Options,
+  { resolve, reject }: any = {}
 ) => {
   const { meta: { retryCount = 1, $status: { isActive = true } = {} } = {} } = action;
 
@@ -56,23 +56,23 @@ const exec = (
         retryCount,
         retry: () => {
           exec(
-              next,
-              transactionId,
-              originalPayload,
-              {
-                ...action,
-                payload: originalPayload({retryCount, ...dispatchOptions.dependencies}),
-                meta: {
-                  ...action.meta,
-                  retryCount: retryCount + 1,
-                  $status: {...(action.meta || {}).$status, isActive: true}
-                }
-              },
-              dispatchOptions,
-              {
-                resolve,
-                reject,
+            next,
+            transactionId,
+            originalPayload,
+            {
+              ...action,
+              payload: originalPayload({ retryCount, ...dispatchOptions.dependencies }),
+              meta: {
+                ...action.meta,
+                retryCount: retryCount + 1,
+                $status: { ...(action.meta || {}).$status, isActive: true }
               }
+            },
+            dispatchOptions,
+            {
+              resolve,
+              reject,
+            }
           );
         },
         cancel: () => {
@@ -103,16 +103,16 @@ const exec = (
 
       if (isPromise(ret)) {
         (ret as Promise<any>)
-            .then(ret => {
-              if (ret !== true && reject) {
-                reject(reason);
-              } else if (!reject) {
-                throw reason;
-              }
-            })
-            .catch(reason => {
+          .then(ret => {
+            if (ret !== true && reject) {
+              reject(reason);
+            } else if (!reject) {
               throw reason;
-            });
+            }
+          })
+          .catch(reason => {
+            throw reason;
+          });
       } else if (ret !== true && reject) {
         reject(reason);
       } else if (!reject) {

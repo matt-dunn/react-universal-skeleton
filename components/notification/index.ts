@@ -1,5 +1,5 @@
-import {createAction} from "typesafe-actions";
-import {ReactNode} from "react";
+import { createAction } from "typesafe-actions";
+import { ReactNode } from "react";
 
 type Action = {
     type: string;
@@ -16,6 +16,8 @@ export type Notification = {
     severity?: Severity;
     reference?: string;
     reason?: Action;
+    id?: string;
+    type?: string;
 }
 
 export type Notify = {
@@ -23,11 +25,11 @@ export type Notify = {
 }
 
 export const notifyAction = createAction(
-    "@notification/NOTIFY",
-    ({message, reference, reason, severity = Severity.info}: Notification): Notification => ({
-        message,
-        severity,
-        reference,
-        reason
-    })
+  "@notification/NOTIFY",
+  ({ message, reference, reason, severity = Severity.info }: Notification): Notification => ({
+    message,
+    severity,
+    reference,
+    reason
+  })
 )();

@@ -3,7 +3,7 @@ import {
   Dispatch, Middleware,
 } from "redux";
 
-import {ErrorLike} from "components/error";
+import { ErrorLike } from "components/error";
 
 export interface Notification { error: ErrorLike; type: string; cancel: Function; retry: Function }
 
@@ -21,10 +21,10 @@ const notification = ({ notify }: { notify: Notify }) => () => (next: Dispatch):
 
       if (isPromise(notification)) {
         return notification
-            .then(notify => notify({
-              type, cancel, retry, error: payload,
-            }))
-            .then(notify => notify || ret);
+          .then(notify => notify({
+            type, cancel, retry, error: payload,
+          }))
+          .then(notify => notify || ret);
       } else {
         return notification({
           type, cancel, retry, error: payload,

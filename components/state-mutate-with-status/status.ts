@@ -1,5 +1,4 @@
-import {WrappedPromise} from "components/wrappedPromise";
-import {errorLike, ErrorLike} from "../error";
+import { errorLike, ErrorLike } from "../error";
 
 const symbolActiveTransactions = Symbol("activeTransactions");
 export const symbolStatus = Symbol("$status");
@@ -12,7 +11,8 @@ export type ActionMeta<P = any> = {
   id?: string;
   $status?: MetaStatus;
   seedPayload?: P;
-  response?: WrappedPromise;
+  props?: any;
+  readonly controller?: AbortController;
 }
 
 type StatusBase = {

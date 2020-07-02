@@ -28,9 +28,9 @@ export const isAuthenticated = () => {
 export const AuthApi: AuthApi = () => ({
     login: (username, password) => async signal => {
         try {
-            // const url = new URL("/api/login", "https://127.0.0.1:12345");
+            const url = new URL("/api/login", ((typeof location !== "undefined") && location.origin) || "https://127.0.0.1:12345");
 
-            const response = await axios.post("/api/login", {
+            const response = await axios.post(url.toString(), {
                 username,
                 password
             });
@@ -42,7 +42,7 @@ export const AuthApi: AuthApi = () => ({
 
             return response.data;
         } catch (e) {
-            if (e.response.status === 401) {
+            if (e?.response?.status === 401) {
                 throw new APIError("Invalid username or password", 123, 401);
             }
 
