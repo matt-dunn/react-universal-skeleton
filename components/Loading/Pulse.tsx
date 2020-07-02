@@ -1,6 +1,7 @@
+import React from "react";
 import styled from "@emotion/styled";
 
-const Pulse = styled.div`
+export const Pulse = styled.div`
   @-webkit-keyframes sk-scaleout {
     0% {
       -webkit-transform: scale(0)
@@ -37,4 +38,4 @@ const Pulse = styled.div`
   }
 `;
 
-export default Pulse;
+export const PulseLoader = () => <Pulse/>;

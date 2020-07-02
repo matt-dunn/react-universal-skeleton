@@ -7,7 +7,7 @@ import {getStatus} from "components/state-mutate-with-status";
 import {ButtonGroup} from "components/Buttons";
 import {MapDataToAction} from "components/actions/form";
 import {Collections, Form, FormContainer, Submit} from "components/Form";
-import Loading from "components/Loading";
+import {Loading} from "components/Loading";
 
 import {AppState} from "../../reducers";
 import * as actions from "../../actions";

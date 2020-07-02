@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import {css} from "@emotion/core";
 import React, {useCallback} from "react";
 
-import Loading from "components/Loading";
+import {Loading} from "components/Loading";
 import {usePerformAction} from "components/actions";
 import {getStatus, DecoratedWithStatus} from "components/state-mutate-with-status";
 import PlaceHolderItem from "app/components/Placeholder/Item";

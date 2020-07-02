@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 
-const Loader = styled.div`
+export const Spinner = styled.div`
   height: 100%;
   width: 100%;
   background-size: 100%;
@@ -10,4 +10,3 @@ const Loader = styled.div`
   transform: scale(1.2);
 `;
 
-export default Loader;

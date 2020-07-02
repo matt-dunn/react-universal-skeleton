@@ -1,10 +1,10 @@
-import React, {ReactElement, ReactNode, useEffect, useRef, useState} from "react";
+import React, { ReactElement, ReactNode, useEffect, useRef, useState } from "react";
 import styled from "@emotion/styled";
 
-import Spinner from "./Spinner";
+import { Spinner } from "./Spinner";
 
 type Loader = {
-    ({height}: {height: number}): ReactElement<any>;
+    ({ height }: {height: number}): ReactElement<any>;
 };
 
 type LoadingProps = {
@@ -19,7 +19,7 @@ type LoadingProps = {
 
 const Container = styled.div<{minHeight: number}>`
   position: relative;
-  min-height: ${({minHeight}) => `${minHeight}px`};
+  min-height: ${({ minHeight }) => `${minHeight}px`};
 `;
 
 const LoaderContainer = styled.div<{height: number}>`
@@ -28,8 +28,8 @@ const LoaderContainer = styled.div<{height: number}>`
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1000;
-  height: ${({height}) => `${height}px`};
-  width: ${({height}) => `${height}px`};
+  height: ${({ height }) => `${height}px`};
+  width: ${({ height }) => `${height}px`};
 `;
 
 const ContainerInline = styled.span`
@@ -46,40 +46,40 @@ const LoaderContainerInline = styled.span`
   line-height: 1;
 `;
 
-const Loading = ({children, className, loading = true, loader, timeout = 500, height = 50, inline = false}: LoadingProps) => {
-    const [show, setShow] = useState(false);
-    const t = useRef<number>();
+export const Component = ({ children, className, loading = true, loader, timeout = 500, height = 50, inline = false }: LoadingProps) => {
+  const [show, setShow] = useState(false);
+  const t = useRef<number>();
 
-    useEffect(() => {
-        if (loading) {
-            t.current = setTimeout(() => {
-                setShow(true);
-            }, timeout);
-        } else {
-            setShow(false);
-            clearTimeout(t.current);
-        }
-
-        return () => clearTimeout(t.current);
-    }, [loading, timeout]);
-
-    const LoadingLoader = loader ? loader({height}) : <Spinner/>;
-
-    if (inline) {
-        return (
-            <ContainerInline className={className}>
-                {children}
-                {show && loading && <LoaderContainerInline>{LoadingLoader}</LoaderContainerInline>}
-            </ContainerInline>
-        );
+  useEffect(() => {
+    if (loading) {
+      t.current = setTimeout(() => {
+        setShow(true);
+      }, timeout) as unknown as number;
     } else {
-        return (
-            <Container minHeight={height} className={className}>
-                {children}
-                {show && loading && <LoaderContainer height={height}>{LoadingLoader}</LoaderContainer>}
-            </Container>
-        );
+      setShow(false);
+      clearTimeout(t.current);
     }
+
+    return () => clearTimeout(t.current);
+  }, [loading, timeout]);
+
+  const LoadingLoader = loader ? loader({ height }) : <Spinner/>;
+
+  if (inline) {
+    return (
+      <ContainerInline className={className}>
+        {children}
+        {show && loading && <LoaderContainerInline>{LoadingLoader}</LoaderContainerInline>}
+      </ContainerInline>
+    );
+  } else {
+    return (
+      <Container minHeight={height} className={className}>
+        {children}
+        {show && loading && <LoaderContainer height={height}>{LoadingLoader}</LoaderContainer>}
+      </Container>
+    );
+  }
 };
 
-export default Loading;
+export const Loading = React.memo(Component);

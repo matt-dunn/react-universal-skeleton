@@ -2,7 +2,7 @@ import React, {useMemo} from "react";
 
 import {useAsync} from "components/ssr/safePromise";
 import SanitizeHTML from "components/SanitizeHTML";
-import Loading from "components/Loading";
+import {Loading} from "components/Loading";
 
 import highlight from "./highlight";
 import {Container} from "./style";

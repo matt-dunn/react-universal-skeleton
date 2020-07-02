@@ -4,7 +4,7 @@ import {css} from "@emotion/core";
 import { Link } from "react-router-dom";
 
 import {getStatus, DecoratedWithStatus} from "components/state-mutate-with-status";
-import Loading from "components/Loading";
+import {Loading} from "components/Loading";
 import {usePerformAction} from "components/actions";
 import {ResponsiveGrid} from "components/Grid";
 
