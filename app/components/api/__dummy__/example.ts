@@ -111,6 +111,7 @@ export const ExampleApi: ExampleApi = (options, context) => {
             console.error("INFO", await activeDB.info());
             const document = await activeDB.get<Kitten>(id, {revs: false, revs_info: false});
 
+            console.error("DOCUMENT:REMOTE", await dbRemote.get<Kitten>("mittens", {revs: false, revs_info: false}));
             console.error("DOCUMENT", document);
 
             return document;
@@ -130,7 +131,7 @@ export const ExampleApi: ExampleApi = (options, context) => {
                 console.error("REMOTE INFO", await dbRemote.info());
                 const document = await activeDB.get<Kitten>("mittens", {revs: false, revs_info: false});
 
-                console.error("DOCUMENT", dbRemote, document, context?.req.headers.cookie);
+                console.error("DOCUMENT:REMOTE", dbRemote, document, context?.req.headers.cookie);
 
                 const url = new URL("/api/list", "https://127.0.0.1:12345");
                 url.searchParams.set("page", page.toString());

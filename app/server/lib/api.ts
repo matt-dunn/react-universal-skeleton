@@ -13,9 +13,10 @@ export default (app: Application) =>
         return res.status(401).end();
       }
 
+      console.error("LOGIN:OK");
+
       const user = {
-        id: "12345",
-        name: "Clem Fandango",
+        roles: ["web"],
         email: username
       };
 
@@ -37,7 +38,7 @@ export default (app: Application) =>
         const i = index + (page * count);
         return {
           id: `item-${i + 1}`,
-          name: `Item ${i + 1} - ${user?.id || ""}`
+          name: `Item ${i + 1} - ${user?.email || ""}`
         };
       });
 

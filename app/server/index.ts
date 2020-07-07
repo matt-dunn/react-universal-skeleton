@@ -77,6 +77,21 @@ const publicKEY = "-----BEGIN RSA PUBLIC KEY-----\n" +
 const identificationTokenExpirySeconds = 60 * 20;
 const authenticationTokenExpirySeconds = 60 * 10;
 
+type CouchDBUser = {
+    sub: string;
+    "_couchdb.roles": string[];
+}
+
+const toCouchDBUser = (user: UserBase): CouchDBUser => ({
+    sub: user.email,
+    "_couchdb.roles": user.roles || []
+});
+
+const fromCouchDBUser = (user: CouchDBUser): UserBase => ({
+    email: user.sub,
+    roles: user["_couchdb.roles"]
+});
+
 const auth = Auth({
     privateKEY,
     publicKEY,
@@ -90,6 +105,7 @@ const abilitiesMiddleware = createAbilitiesMiddleware((user) => {
 
     can("POST", "/api/login/");
 
+    can("GET", "/api/list/");
     if (user?.authenticated) {
         can("GET", "/api/list/");
     }

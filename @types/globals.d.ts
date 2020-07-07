@@ -19,6 +19,9 @@ declare module "*.woff2";
 
 declare module "*.md";
 
+declare module "*.key";
+declare module "*.crt";
+
 declare module "react-responsive-ui/modules/TextInput" {
     const value: any;
     export = value;
@@ -27,3 +30,5 @@ declare module "react-responsive-ui/modules/TextInput" {
 declare module "simple-deep-freeze";
 
 declare module "react-expand-collapse";
+
+declare module "express-trailing-slash";
