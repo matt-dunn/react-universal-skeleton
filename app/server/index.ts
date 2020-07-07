@@ -48,15 +48,15 @@ app.use(cors({
 
 app.use(trailingSlash({slash: true}));
 
-app.use(pathname, expressStaticGzip(path.resolve(process.cwd(), process.env.TARGET_CLIENT), {
-    dotfiles: "allow",
+app.use(pathname || "", expressStaticGzip(path.resolve(process.cwd(), process.env.TARGET_CLIENT || ""), {
+    // dotfiles: "allow",
     index: false,
     enableBrotli: true,
     orderPreference: ["br", "gz"],
-    setHeaders: function (res/*, path*/) {
+    setHeaders: function (res: any/*, path*/) {
         res.setHeader("Cache-Control", "public, max-age=31536000");
     }
-}));
+} as any));
 
 app.use(cookieParser());
 
@@ -82,30 +82,28 @@ type CouchDBUser = {
     "_couchdb.roles": string[];
 }
 
-const toCouchDBUser = (user: UserBase): CouchDBUser => ({
-    sub: user.email,
-    "_couchdb.roles": user.roles || []
-});
-
-const fromCouchDBUser = (user: CouchDBUser): UserBase => ({
-    email: user.sub,
-    roles: user["_couchdb.roles"]
-});
-
-const auth = Auth({
+const auth = Auth<CouchDBUser>({
     privateKEY,
     publicKEY,
     identificationTokenExpirySeconds,
-    authenticationTokenExpirySeconds
+    authenticationTokenExpirySeconds,
+    fromUser: (user) => ({
+        email: user.sub,
+        roles: user["_couchdb.roles"]
+    }),
+    toUser: (user) => ({
+        sub: user.email,
+        "_couchdb.roles": user.roles || []
+    })
 });
 
 const authMiddleware = createAuthMiddleware(auth);
 const abilitiesMiddleware = createAbilitiesMiddleware((user) => {
-    const { can, rules } = new AbilityBuilder();
+    const { can, rules } = new AbilityBuilder<any>();
 
     can("POST", "/api/login/");
 
-    can("GET", "/api/list/");
+    // can("GET", "/api/list/");
     if (user?.authenticated) {
         can("GET", "/api/list/");
     }
@@ -141,22 +139,27 @@ app.use("/db", authMiddleware, dbProxy);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
-app.use(shrinkRay({}));
+app.use(shrinkRay());
 
 api(app);
 
 app.get("/*", ssr);
 app.post("/*", ssr);
 
-export default https
-    .createServer({
-        key,
-        cert
-    }, app)
-    .listen(appPort, appHostname, err => {
-        if (err) {
-            log(chalk`Could not start server app on port {yellow ${appPort}} - {red ${JSON.stringify(err)}}`);
-        } else {
-            log(chalk`🔥 Server app listening on port {yellow ${appPort}}. Go to {yellow https://${appHostname}:${appPort}${pathname}}`);
-        }
-    });
+const server = https
+  .createServer({
+      key,
+      cert
+  }, app)
+  .listen({
+      port: appPort,
+      host: appHostname
+  })
+  .on("error", err => {
+      log(chalk`Could not start server app on port {yellow ${appPort}} - {red ${JSON.stringify(err)}}`);
+  })
+  .on("listening", () => {
+      log(chalk`🔥 Server app listening on port {yellow ${appPort}}. Go to {yellow https://${appHostname}:${appPort}${pathname}}`);
+  });
+
+export default server;
