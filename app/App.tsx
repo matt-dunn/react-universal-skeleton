@@ -10,12 +10,10 @@ import Header from "./components/Header";
 import { GlobalStyles } from "./styles/global";
 import { ToastifyStyles } from "./styles/toasify";
 
-import ErrorHandler, {HandleError} from "components/actions/ErrorHandler";
-
 import AuthProvider from "./components/auth";
 import {ToastContainer} from "react-toastify";
 
-import ErrorBoundary from "./components/ErrorBoundary";
+import { ErrorBoundary, HandleError } from "components/error";
 import {ErrorMain} from "./components/error/ErrorMain";
 import {ErrorGlobal} from "./components/error/ErrorGlobal";
 
@@ -71,7 +69,7 @@ const HeaderContainer = styled(Header)`
   background-color: #f5f5f5;
 `;
 
-const MainContainer = styled(ErrorBoundary)`
+const MainContainer = styled.main`
   grid-area: main;
 `;
 
@@ -108,8 +106,8 @@ const App = () => {
                     <Container>
                         <HeaderContainer/>
 
-                        <MainContainer ErrorComponent={ErrorMain}>
-                            <ErrorHandler handler={handler}>
+                        <MainContainer>
+                            <ErrorBoundary ErrorComponent={ErrorMain} handler={handler}>
                                 <Switch>
                                     <Route exact path="/" component={Home}/>
                                     <Route exact path="/data/:page?/" component={Data}/>
@@ -121,7 +119,7 @@ const App = () => {
                                     <Route component={Error404}/>
                                     {/*<Redirect to="/" />*/}
                                 </Switch>
-                            </ErrorHandler>
+                            </ErrorBoundary>
                         </MainContainer>
 
                         <FooterContainer className="align-right">
