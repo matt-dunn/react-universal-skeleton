@@ -13,6 +13,7 @@ describe("Example actions", () => {
         mockAPI = {
             exampleGetDBItem: jest.fn().mockImplementation((id: string) => () => ({})),
             exampleUpdateDBItem: jest.fn().mockImplementation((item: Kitten) => () => ({})),
+            exampleSaveDBItem: jest.fn().mockImplementation((item: Kitten) => () => ({})),
             exampleGetList: jest.fn().mockImplementation((page?: number, count?: number) => () => `items - page=${page}, count=${count}`),
             exampleGetItem: jest.fn().mockImplementation(() => () => "item"),
             exampleEditItem: jest.fn().mockImplementation((item: ExampleItem) => () => `item - id=${item.id}, name=${item.name}`)

@@ -1,14 +1,17 @@
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {connect} from "react-redux";
 import {AppState} from "../../reducers";
 import * as actions from "../../actions";
 import {Kitten} from "../../components/api";
 import TextInput from "react-responsive-ui/modules/TextInput";
 import styled from "@emotion/styled";
+import {usePerformAction} from "../../../components/actions";
+import {APIError} from "../../../components/api";
 
 type PouchDBTestProps = {
   kitten?: Kitten;
   exampleGetDBItem: (id: string) => Kitten;
+  exampleSaveDBItem: (item: Kitten) => Kitten;
   exampleUpdateDBItem: (item: Kitten) => Kitten;
 }
 
@@ -17,9 +20,16 @@ export const Container = styled.main`
   padding: 2em 1em;
 `;
 
-const PouchDBTest = ({kitten, exampleGetDBItem, exampleUpdateDBItem}: PouchDBTestProps) => {
+const PouchDBTest = ({kitten, exampleGetDBItem, exampleUpdateDBItem, exampleSaveDBItem}: PouchDBTestProps) => {
 
+  // usePerformAction(
+  //   useCallback(() => {
+  //     // exampleGetList(0, 2);
+  //     return exampleGetDBItem("mittens")
+  //   }, [exampleGetDBItem]),
+  // );
   useEffect(() => {
+    // throw new APIError("Unauthorised", 123, 401);
     exampleGetDBItem("mittens");
   }, [exampleGetDBItem]);
 
@@ -35,7 +45,7 @@ const PouchDBTest = ({kitten, exampleGetDBItem, exampleUpdateDBItem}: PouchDBTes
     setName(value);
 
     if (kitten) {
-      exampleUpdateDBItem({
+      exampleSaveDBItem({
         ...kitten,
         name: value
       });
@@ -60,6 +70,7 @@ const container = connect(
   } as PouchDBTestProps),
   {
     exampleGetDBItem: actions.exampleActions.exampleGetDBItem,
+    exampleSaveDBItem: actions.exampleActions.exampleSaveDBItem,
     exampleUpdateDBItem: actions.exampleActions.exampleUpdateDBItem,
   }
 )(PouchDBTest);

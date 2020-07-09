@@ -30,8 +30,11 @@ const global = window as unknown as Global;
 
 const store = getStore(deserialize(JSON.stringify(global.__PRELOADED_STATE__)), {
     ExampleApi: {
-        endpoint: ""
-    }
+        endpoint: "",
+        onChange: (changes => {
+            console.error("@@@@@@@*****", changes, store);
+        })
+    },
 });
 const error = {error: global.__ERROR_STATE__};
 const formData = FormDataState(global.__PRELOADED_FORM_STATE__);

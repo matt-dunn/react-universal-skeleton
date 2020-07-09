@@ -21,6 +21,10 @@ type ExampleUpdateDBItem = WrapWithAbortSignal<{
     (item: Kitten): Promise<Kitten>;
 }>
 
+type ExampleSaveDBItem = WrapWithAbortSignal<{
+    (item: Kitten): Promise<Kitten>;
+}>
+
 type ExampleGetList = WrapWithAbortSignal<{
     (page?: number, count?: number): Promise<ExampleList>;
 }>
@@ -35,12 +39,14 @@ type ExampleEditItem = WrapWithAbortSignal<{
 
 type ExampleApiOptions = {
     endpoint: string;
+    onChange?: (changes: object[]) => void;
 }
 
 export type ExampleApi = {
     (options: ExampleApiOptions, context?: APIContext): {
         exampleGetDBItem: ExampleGetDBItem;
         exampleUpdateDBItem: ExampleUpdateDBItem;
+        exampleSaveDBItem: ExampleSaveDBItem;
         exampleGetList: ExampleGetList;
         exampleGetItem: ExampleGetItem;
         exampleEditItem: ExampleEditItem;
@@ -61,10 +67,13 @@ export type Kitten = {
 
 // let retryCount = 10;
 export const ExampleApi: ExampleApi = (options, context) => {
-    const db = !context && new PouchDB("kittens");
+    const db = !context && new PouchDB("kittens", {
+        skip_setup: true
+    });
 
     const dbUrl = new URL("/db/kittens", "https://127.0.0.1:12345"); //location.origin);
     const dbRemote = new PouchDB(dbUrl.toString(), {
+        skip_setup: true,
         fetch: function (url, opts) {
             // console.error("SET COOKIES", context?.req.headers.cookie);
             (opts?.headers as any).set("Cookie", context?.req.headers.cookie);
@@ -81,6 +90,7 @@ export const ExampleApi: ExampleApi = (options, context) => {
             console.error("@!@active");
         }).on("change", function (change) {
             console.error("@!@CHANGE", change);
+            options.onChange && options.onChange(change.change.docs);
         }).on("error", function (err) {
             console.error("@!@ERROR", err);
         }).on("paused", function (err) {
@@ -88,6 +98,19 @@ export const ExampleApi: ExampleApi = (options, context) => {
         }).on("denied", function (err) {
             console.error("@!@denied", err);
         });
+
+        console.error("@@@@LISTEN TO CHANGES");
+        dbRemote.changes({
+            since: "now",
+            live: true
+        }).on("change", function (change) {
+            console.error("CHANGE", change);
+            // received a change
+        }).on("error", function (err) {
+            console.error("ERROR", err);
+            // handle errors
+        });
+        console.error("@@@@LISTEN TO CHANGES:OK");
     }
 
     console.error("@@@@OPTIONS", options, context?.req.headers.cookie);
@@ -108,7 +131,6 @@ export const ExampleApi: ExampleApi = (options, context) => {
 
     return {
         exampleGetDBItem: (id) => async signal => {
-            console.error("INFO", await activeDB.info());
             const document = await activeDB.get<Kitten>(id, {revs: false, revs_info: false});
 
             console.error("DOCUMENT:REMOTE", await dbRemote.get<Kitten>("mittens", {revs: false, revs_info: false}));
@@ -118,6 +140,11 @@ export const ExampleApi: ExampleApi = (options, context) => {
         },
         exampleUpdateDBItem: (item) => async signal => {
             console.error("UPDATE", item);
+
+            return item;
+        },
+        exampleSaveDBItem: (item) => async signal => {
+            console.error("SAVE", item);
 
             const response = await activeDB.put(item);
 
@@ -131,7 +158,7 @@ export const ExampleApi: ExampleApi = (options, context) => {
                 console.error("REMOTE INFO", await dbRemote.info());
                 const document = await activeDB.get<Kitten>("mittens", {revs: false, revs_info: false});
 
-                console.error("DOCUMENT:REMOTE", dbRemote, document, context?.req.headers.cookie);
+                console.error("DOCUMENT:REMOTE@@@", await dbRemote.get<Kitten>("mittens", {revs: false, revs_info: false}));
 
                 const url = new URL("/api/list", "https://127.0.0.1:12345");
                 url.searchParams.set("page", page.toString());
@@ -225,14 +252,22 @@ export const ExampleApi: ExampleApi = (options, context) => {
             }
 
             if (db && item.id === "item-1") {
-                db.get<Kitten>("mittens").then(doc => {
-                    db.put({
-                        ...doc,
-                        name: item.name
-                    }).then(() => {
-                        resolve(item);
-                    });
-                });
+                db.get<Kitten>("mittens")
+                  .then(doc => {
+                      db
+                        .put({
+                            ...doc,
+                            name: item.name
+                        })
+                        .then(() => {
+                            resolve(item);
+                        })
+                        .catch(reject);
+                  })
+                  .catch(err => {
+                      console.error("@@ERROR", err);
+                      reject(err);
+                  });
 
                 return;
             }

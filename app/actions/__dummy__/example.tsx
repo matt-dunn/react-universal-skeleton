@@ -19,6 +19,11 @@ const exampleUpdateDBItem = createAction<string, APIPayloadCreator<Promise<Kitte
   (item) => signal => ({API: {ExampleApi: {exampleUpdateDBItem}}}) => exampleUpdateDBItem(item)(signal),
 )();
 
+const exampleSaveDBItem = createAction<string, APIPayloadCreator<Promise<Kitten>>, ActionMeta<Kitten>, [Kitten]>(
+  "@__dummy__/EXAMPLE_SAVE_DB_ITEM",
+  (item) => signal => ({API: {ExampleApi: {exampleSaveDBItem}}}) => exampleSaveDBItem(item)(signal),
+)();
+
 const exampleGetList = createAction<string, APIPayloadCreator<Promise<ExampleList>>, ActionMeta<ExampleList>, [number?, number?]>(
   "@__dummy__/EXAMPLE_GET_LIST",
   (page, count) => signal => ({API: {ExampleApi: {exampleGetList}}}) => exampleGetList(page, count)(signal),
@@ -58,6 +63,7 @@ const exampleEditItem = createAction<string, APIPayloadCreator<Promise<ExampleIt
 export {
   exampleGetDBItem,
   exampleUpdateDBItem,
+  exampleSaveDBItem,
   exampleGetList,
   exampleGetItem,
   exampleEditItem

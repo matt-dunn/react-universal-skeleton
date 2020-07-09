@@ -33,6 +33,7 @@ const initialState = {
 
 export default createReducer(initialState, {
     [getType(actions.exampleGetDBItem)]: exampleDBItemReducer,
+    [getType(actions.exampleSaveDBItem)]: exampleDBItemReducer,
     [getType(actions.exampleUpdateDBItem)]: exampleDBItemReducer,
     [getType(actions.exampleGetList)]: exampleListReducer,
     [getType(actions.exampleEditItem)]: exampleListReducer,
