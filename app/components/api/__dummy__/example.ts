@@ -65,75 +65,103 @@ export type Kitten = {
     hobbies: string[];
 };
 
+type DBS = {
+    db?: PouchDB.Database;
+    dbRemote: PouchDB.Database;
+    activeDB: PouchDB.Database;
+}
+
 // let retryCount = 10;
 export const ExampleApi: ExampleApi = (options, context) => {
-    const db = !context && new PouchDB("kittens", {
-        skip_setup: true
-    });
+    let dbs: any;
 
-    const dbUrl = new URL("/db/kittens", "https://127.0.0.1:12345"); //location.origin);
-    const dbRemote = new PouchDB(dbUrl.toString(), {
-        skip_setup: true,
-        fetch: function (url, opts) {
-            // console.error("SET COOKIES", context?.req.headers.cookie);
-            (opts?.headers as any).set("Cookie", context?.req.headers.cookie);
-
-            return PouchDB.fetch(url, opts);
+    const getDB = (): DBS => {
+        if (dbs) {
+            return dbs;
         }
-    });
 
-    if (db && dbRemote) {
-        db.sync(dbRemote, {
-            live: true,
-            retry: true
-        }).on("active", function () {
-            console.error("@!@active");
-        }).on("change", function (change) {
-            console.error("@!@CHANGE", change);
-            options.onChange && options.onChange(change.change.docs);
-        }).on("error", function (err) {
-            console.error("@!@ERROR", err);
-        }).on("paused", function (err) {
-            console.error("@!@paused", err);
-        }).on("denied", function (err) {
-            console.error("@!@denied", err);
+        const db = !context && new PouchDB("kittens", {
+            skip_setup: true
         });
 
-        console.error("@@@@LISTEN TO CHANGES");
-        dbRemote.changes({
-            since: "now",
-            live: true
-        }).on("change", function (change) {
-            console.error("CHANGE", change);
-            // received a change
-        }).on("error", function (err) {
-            console.error("ERROR", err);
-            // handle errors
+        const dbUrl = new URL("/db/kittens", "https://127.0.0.1:12345"); //location.origin);
+        const dbRemote = new PouchDB(dbUrl.toString(), {
+            skip_setup: true,
+            fetch: function (url, opts) {
+                // console.error("SET COOKIES", context?.req.headers.cookie);
+                (opts?.headers as any).set("Cookie", context?.req.headers.cookie);
+
+                return PouchDB.fetch(url, opts);
+            }
         });
-        console.error("@@@@LISTEN TO CHANGES:OK");
-    }
 
-    console.error("@@@@OPTIONS", options, context?.req.headers.cookie);
+        if (db && dbRemote) {
+            db.sync(dbRemote, {
+                live: true,
+                retry: true
+            }).on("active", function () {
+                console.error("@!@active");
+            }).on("change", function (change) {
+                console.error("@!@CHANGE", change);
+                options.onChange && options.onChange(change.change.docs);
+            }).on("error", function (err) {
+                console.error("@!@ERROR", err);
+                if ((err as any).status === 401) {
+                    console.error("LOGIN!!!!!");
+                    db.close();
+                    dbRemote.close();
+                    dbs = undefined;
+                }
+            }).on("paused", function (err) {
+                console.error("@!@paused", err);
+            }).on("denied", function (err) {
+                console.error("@!@denied", err);
+            });
 
-    // (async function() {
-    //     try {
-    //         console.error("LOCAL INFO", db && await db.info());
-    //         console.error("REMOTE INFO", await dbRemote.info());
-    //
-    //         console.error("LOCAL:", db && await db.get("mittens", {revs: false, revs_info: false}));
-    //         console.error("REMOTE:", await dbRemote.get("mittens", {revs: false, revs_info: false}));
-    //     } catch (ex) {
-    //         console.error("DB", ex);
-    //     }
-    // }());
+            console.error("@@@@LISTEN TO CHANGES");
+            dbRemote.changes({
+                since: "now",
+                live: true
+            }).on("change", function (change) {
+                console.error("CHANGE", change);
+                // received a change
+            }).on("error", function (err) {
+                console.error("ERROR", err);
+                // handle errors
+            });
+            console.error("@@@@LISTEN TO CHANGES:OK");
+        }
 
-    const activeDB = db || dbRemote;
+        console.error("@@@@OPTIONS", options, context?.req.headers.cookie);
+
+        // (async function() {
+        //     try {
+        //         console.error("LOCAL INFO", db && await db.info());
+        //         console.error("REMOTE INFO", await dbRemote.info());
+        //
+        //         console.error("LOCAL:", db && await db.get("mittens", {revs: false, revs_info: false}));
+        //         console.error("REMOTE:", await dbRemote.get("mittens", {revs: false, revs_info: false}));
+        //     } catch (ex) {
+        //         console.error("DB", ex);
+        //     }
+        // }());
+
+        const activeDB = db || dbRemote;
+
+        dbs = {
+            activeDB,
+            db,
+            dbRemote
+        };
+
+        return dbs;
+    };
 
     return {
         exampleGetDBItem: (id) => async signal => {
-            const document = await activeDB.get<Kitten>(id, {revs: false, revs_info: false});
+            const document = await getDB().activeDB.get<Kitten>(id, {revs: false, revs_info: false});
 
-            console.error("DOCUMENT:REMOTE", await dbRemote.get<Kitten>("mittens", {revs: false, revs_info: false}));
+            console.error("DOCUMENT:REMOTE", await getDB().dbRemote.get<Kitten>("mittens", {revs: false, revs_info: false}));
             console.error("DOCUMENT", document);
 
             return document;
@@ -146,7 +174,7 @@ export const ExampleApi: ExampleApi = (options, context) => {
         exampleSaveDBItem: (item) => async signal => {
             console.error("SAVE", item);
 
-            const response = await activeDB.put(item);
+            const response = await getDB().activeDB.put(item);
 
             return {
                 ...item,
@@ -155,10 +183,10 @@ export const ExampleApi: ExampleApi = (options, context) => {
         },
         exampleGetList: (page = 0, count = 3) => async signal => {
             try {
-                console.error("REMOTE INFO", await dbRemote.info());
-                const document = await activeDB.get<Kitten>("mittens", {revs: false, revs_info: false});
+                console.error("REMOTE INFO", await getDB().dbRemote.info());
+                const document = await getDB().activeDB.get<Kitten>("mittens", {revs: false, revs_info: false});
 
-                console.error("DOCUMENT:REMOTE@@@", await dbRemote.get<Kitten>("mittens", {revs: false, revs_info: false}));
+                console.error("DOCUMENT:REMOTE@@@", await getDB().dbRemote.get<Kitten>("mittens", {revs: false, revs_info: false}));
 
                 const url = new URL("/api/list", "https://127.0.0.1:12345");
                 url.searchParams.set("page", page.toString());
@@ -250,6 +278,8 @@ export const ExampleApi: ExampleApi = (options, context) => {
             if (item.name.toLocaleLowerCase() === "item") {
                 throw new Error("Error in exampleEditItem");
             }
+
+            const db = getDB().db;
 
             if (db && item.id === "item-1") {
                 db.get<Kitten>("mittens")
