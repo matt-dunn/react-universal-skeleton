@@ -73,16 +73,16 @@ type DBS = {
 
 // let retryCount = 10;
 export const ExampleApi: ExampleApi = (options, context) => {
-    let dbs: any;
+    let dbs: DBS | undefined;
 
     const getDB = (): DBS => {
         if (dbs) {
             return dbs;
         }
 
-        const db = !context && new PouchDB("kittens", {
+        const db = (!context && new PouchDB("kittens", {
             skip_setup: true
-        });
+        })) || undefined;
 
         const dbUrl = new URL("/db/kittens", "https://127.0.0.1:12345"); //location.origin);
         const dbRemote = new PouchDB(dbUrl.toString(), {
